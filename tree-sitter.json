@@ -6,6 +6,8 @@
       "scope": "source.mips",
       "path": ".",
       "file-types": null,
+      "highlights": "queries/highlights.scm",
+      "injections": "queries/injections.scm",
       "injection-regex": "^mips$"
     }
   ],
