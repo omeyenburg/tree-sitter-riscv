@@ -25,76 +25,90 @@ module.exports = grammar({
     )),
 
     // Each statement can be a directive, label, instruction
-    _statement: $ => choice($.directive, seq($.label, optional(seq(/[\s\t]+/, $._statement))), $.instruction, token(/[a-zA-Z_]+\(.*\)/)),
+    _statement: $ => choice(
+      $.directive,
+      seq($.label, optional(seq(/[\s\t]+/, $._statement))),
+      $.instruction,
+      $.macro
+    ),
     //_statement: $ => choice($.directive, $.label, $.instruction),
 
     // A directive consists of a name beginning with a dot,
     // optionally followed by more arguments
-    directive: $ => seq(/[.][a-z_]+/, optional(seq(/[\s\t]+/, choice(
-      $.number,
-      $.string,
-      ///[^"0-9].*/
-      token(/[^\n"#0-9]+/)
-    )))),
+    directive: $ => seq($.meta, optional(seq(/[\s\t]+/, $.attributes))),
     //directive: $ => /[.][a-z]+.*/,
+    meta: $ => /[.][a-z_]+/,
+    attributes: $ => choice(
+      $._number,
+      $.string,
+      /[^\n"#0-9]+/
+    ),
 
-    // A label
-    //label: $ => seq($._identifier, ':'),
+    // Macros
+    macro: $ => token(/[a-zA-Z_]+\(.*\)/),
+
+    // Labels
     _identifier: $ => /[a-zA-Z_][a-zA-Z0-9_]*/,
     label: $ => /[a-zA-Z_][a-zA-Z0-9_]*:/,
 
-    //instruction: $ => choice(
-    //  seq($.opcode, /[\s\r\n\r;]+/),
-    //  seq($.opcode, /[\s\t]+/, $.operands)
-    //),
-    //instruction: $ => seq($.opcode, /[\s\t]+/, $.operands),
-    //instruction: $ => seq($.opcode, /[\s\t]+.*/), // operands
+    // Instructions
     instruction: $ => seq($.opcode, optional($.operands)),
-    //instruction: $ => seq($.opcode, /[^\n\r]*/),
-    opcode: $ => /[a-z]+/,
-
+    opcode: $ => /[a-z][a-z.]*/,
     operands: $ => seq($._operand, repeat(seq(',', $._operand))),
-    //operands: $ => /.*/,
 
     _operand: $ => choice(
       $.register,
       $.macro_variable,
-      $.number,
+      $._number,
       $.address,
     ),
 
     // Match any register
     // Examples: $7, $t1, $test, $zero
-    register: $ => /[$][0-9a-z]+/,
 
     // Match any macro variable
     // The starting symbol depends on the assembler in use
     // Examples: %value \\value
     macro_variable: $ => /[%\\][0-9a-zA-Z_:$%\\]+/,
 
-    // Match any immediate
-    // Examples: 124, -01, 0x3A
-    number: $ => choice(
-      /-?\d+/, 
-      /-?\d+\.\d+([eE]-?\d+)?/,
-      /-?0[xX][0-9a-fA-F]+/
-    ),
+    // Match any number
+    _number: $ => choice($.char, $.octal, $.decimal, $.hexadecimal, $.float),
 
     // Match any address
     // Examples: main, main($s4), ($v1), -0x10($a0)
     address: $ => choice(
       $._identifier,
       seq(
-        optional(choice($._identifier, $.number)),
+        optional(choice($._identifier, $._char, $._octal, $._decimal, $._hexadecimal)),
         '(',
-        $.register,
+        $._register,
         ')'
       )
     ),
 
-    string: $ => /"[^"]*"/,
-    // maybe:
-    //string: $ => /"([^"\\]|\\.)*"/,
+    // Primitives
+    _char: $ => /'[^']'/,
+    _string: $ => /"[^"]*"/,
+    _octal: $ => /-?0[0-7]*/,
+    _decimal: $ => /-?\d+/, // Would match octal and decimal
+    _hexadecimal: $ => /-?0[xX][0-9a-fA-F]+/,
+    //float: $ => /-?\d+(\.\d+)?([eE]-?\d+)?/, // Would match decimal and float
+    _float: $ => choice(
+      seq(
+        choice(/-?\d+\.?\d*/, /-?\d*\.\d+/),
+        optional(/[eE]-?\d+/)
+      ),
+      /-?\d+[eE]-?\d+/
+    ),
+    _register: $ => /[$][0-9a-z]+/,
+
+    char: $ => $._char,
+    string: $ => $._string,
+    octal: $ => $._octal,
+    decimal: $ => $._decimal,
+    hexadecimal: $ => $._hexadecimal,
+    float: $ => $._float,
+    register: $ => $._register,
 
     // Comments
     line_comment: $ => token(seq('#', /.*/)),

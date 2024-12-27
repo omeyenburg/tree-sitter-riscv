@@ -94,11 +94,8 @@
           "name": "instruction"
         },
         {
-          "type": "TOKEN",
-          "content": {
-            "type": "PATTERN",
-            "value": "[a-zA-Z_]+\\(.*\\)"
-          }
+          "type": "SYMBOL",
+          "name": "macro"
         }
       ]
     },
@@ -106,8 +103,8 @@
       "type": "SEQ",
       "members": [
         {
-          "type": "PATTERN",
-          "value": "[.][a-z_]+"
+          "type": "SYMBOL",
+          "name": "meta"
         },
         {
           "type": "CHOICE",
@@ -120,24 +117,8 @@
                   "value": "[\\s\\t]+"
                 },
                 {
-                  "type": "CHOICE",
-                  "members": [
-                    {
-                      "type": "SYMBOL",
-                      "name": "number"
-                    },
-                    {
-                      "type": "SYMBOL",
-                      "name": "string"
-                    },
-                    {
-                      "type": "TOKEN",
-                      "content": {
-                        "type": "PATTERN",
-                        "value": "[^\\n\"#0-9]+"
-                      }
-                    }
-                  ]
+                  "type": "SYMBOL",
+                  "name": "attributes"
                 }
               ]
             },
@@ -147,6 +128,34 @@
           ]
         }
       ]
+    },
+    "meta": {
+      "type": "PATTERN",
+      "value": "[.][a-z_]+"
+    },
+    "attributes": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "_number"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "string"
+        },
+        {
+          "type": "PATTERN",
+          "value": "[^\\n\"#0-9]+"
+        }
+      ]
+    },
+    "macro": {
+      "type": "TOKEN",
+      "content": {
+        "type": "PATTERN",
+        "value": "[a-zA-Z_]+\\(.*\\)"
+      }
     },
     "_identifier": {
       "type": "PATTERN",
@@ -179,7 +188,7 @@
     },
     "opcode": {
       "type": "PATTERN",
-      "value": "[a-z]+"
+      "value": "[a-z][a-z.]*"
     },
     "operands": {
       "type": "SEQ",
@@ -219,7 +228,7 @@
         },
         {
           "type": "SYMBOL",
-          "name": "number"
+          "name": "_number"
         },
         {
           "type": "SYMBOL",
@@ -227,28 +236,32 @@
         }
       ]
     },
-    "register": {
-      "type": "PATTERN",
-      "value": "[$][0-9a-z]+"
-    },
     "macro_variable": {
       "type": "PATTERN",
       "value": "[%\\\\][0-9a-zA-Z_:$%\\\\]+"
     },
-    "number": {
+    "_number": {
       "type": "CHOICE",
       "members": [
         {
-          "type": "PATTERN",
-          "value": "-?\\d+"
+          "type": "SYMBOL",
+          "name": "char"
         },
         {
-          "type": "PATTERN",
-          "value": "-?\\d+\\.\\d+([eE]-?\\d+)?"
+          "type": "SYMBOL",
+          "name": "octal"
         },
         {
-          "type": "PATTERN",
-          "value": "-?0[xX][0-9a-fA-F]+"
+          "type": "SYMBOL",
+          "name": "decimal"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "hexadecimal"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "float"
         }
       ]
     },
@@ -274,7 +287,19 @@
                     },
                     {
                       "type": "SYMBOL",
-                      "name": "number"
+                      "name": "_char"
+                    },
+                    {
+                      "type": "SYMBOL",
+                      "name": "_octal"
+                    },
+                    {
+                      "type": "SYMBOL",
+                      "name": "_decimal"
+                    },
+                    {
+                      "type": "SYMBOL",
+                      "name": "_hexadecimal"
                     }
                   ]
                 },
@@ -289,7 +314,7 @@
             },
             {
               "type": "SYMBOL",
-              "name": "register"
+              "name": "_register"
             },
             {
               "type": "STRING",
@@ -299,9 +324,96 @@
         }
       ]
     },
-    "string": {
+    "_char": {
+      "type": "PATTERN",
+      "value": "'[^']'"
+    },
+    "_string": {
       "type": "PATTERN",
       "value": "\"[^\"]*\""
+    },
+    "_octal": {
+      "type": "PATTERN",
+      "value": "-?0[0-7]*"
+    },
+    "_decimal": {
+      "type": "PATTERN",
+      "value": "-?\\d+"
+    },
+    "_hexadecimal": {
+      "type": "PATTERN",
+      "value": "-?0[xX][0-9a-fA-F]+"
+    },
+    "_float": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "SEQ",
+          "members": [
+            {
+              "type": "CHOICE",
+              "members": [
+                {
+                  "type": "PATTERN",
+                  "value": "-?\\d+\\.?\\d*"
+                },
+                {
+                  "type": "PATTERN",
+                  "value": "-?\\d*\\.\\d+"
+                }
+              ]
+            },
+            {
+              "type": "CHOICE",
+              "members": [
+                {
+                  "type": "PATTERN",
+                  "value": "[eE]-?\\d+"
+                },
+                {
+                  "type": "BLANK"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "PATTERN",
+          "value": "-?\\d+[eE]-?\\d+"
+        }
+      ]
+    },
+    "_register": {
+      "type": "PATTERN",
+      "value": "[$][0-9a-z]+"
+    },
+    "char": {
+      "type": "SYMBOL",
+      "name": "_char"
+    },
+    "string": {
+      "type": "SYMBOL",
+      "name": "_string"
+    },
+    "octal": {
+      "type": "SYMBOL",
+      "name": "_octal"
+    },
+    "decimal": {
+      "type": "SYMBOL",
+      "name": "_decimal"
+    },
+    "hexadecimal": {
+      "type": "SYMBOL",
+      "name": "_hexadecimal"
+    },
+    "float": {
+      "type": "SYMBOL",
+      "name": "_float"
+    },
+    "register": {
+      "type": "SYMBOL",
+      "name": "_register"
     },
     "line_comment": {
       "type": "TOKEN",

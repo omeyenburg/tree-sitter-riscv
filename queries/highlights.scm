@@ -1,5 +1,6 @@
 ;; Highlight directives
-(directive) @keyword
+(meta) @keyword
+(attributes) @property.builtin
 
 ;; Highlight labels
 (label) @label
@@ -10,30 +11,32 @@
 ;; Highlight registers
 (register) @variable.builtin
 
-;; Highlight macro variables
-(macro_variable) @variable.builtin
-
-;; Highlight numbers
-(number) @number
-
-;; Highlight numbers
-;(string) @string
+;; Highlight macros
+(macro) @property.builtin
+(macro_variable) @property.builtin
 
 ;; Highlight addresses
-(address) @variable.builtin
+(address) @variable.parameter
 
-; Comments
+;; Highlight primitives
+(char) @number
+(float) @number
+(octal) @number
+(decimal) @number
+(hexadecimal) @number
+(string) @string
+
+;; Highlight errors
+(ERROR) @lsp.type.unresolvedReference
+
+;; Highlight comments
 [
   (line_comment)
   (block_comment)
 ] @comment @spell
 
-; Operators & Punctuation
-[
-  "("
-  ")"
-] @punctuation.bracket
-
+;; Highlight punctuation
 [
   ","
+  ";"
 ] @punctuation.delimiter

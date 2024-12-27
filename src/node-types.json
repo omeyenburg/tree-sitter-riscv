@@ -2,24 +2,10 @@
   {
     "type": "address",
     "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": false,
-      "types": [
-        {
-          "type": "number",
-          "named": true
-        },
-        {
-          "type": "register",
-          "named": true
-        }
-      ]
-    }
+    "fields": {}
   },
   {
-    "type": "directive",
+    "type": "attributes",
     "named": true,
     "fields": {},
     "children": {
@@ -27,7 +13,23 @@
       "required": false,
       "types": [
         {
-          "type": "number",
+          "type": "char",
+          "named": true
+        },
+        {
+          "type": "decimal",
+          "named": true
+        },
+        {
+          "type": "float",
+          "named": true
+        },
+        {
+          "type": "hexadecimal",
+          "named": true
+        },
+        {
+          "type": "octal",
           "named": true
         },
         {
@@ -36,6 +38,45 @@
         }
       ]
     }
+  },
+  {
+    "type": "char",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "decimal",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "directive",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "attributes",
+          "named": true
+        },
+        {
+          "type": "meta",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "float",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "hexadecimal",
+    "named": true,
+    "fields": {}
   },
   {
     "type": "instruction",
@@ -57,7 +98,7 @@
     }
   },
   {
-    "type": "number",
+    "type": "octal",
     "named": true,
     "fields": {}
   },
@@ -74,11 +115,27 @@
           "named": true
         },
         {
+          "type": "char",
+          "named": true
+        },
+        {
+          "type": "decimal",
+          "named": true
+        },
+        {
+          "type": "float",
+          "named": true
+        },
+        {
+          "type": "hexadecimal",
+          "named": true
+        },
+        {
           "type": "macro_variable",
           "named": true
         },
         {
-          "type": "number",
+          "type": "octal",
           "named": true
         },
         {
@@ -87,6 +144,11 @@
         }
       ]
     }
+  },
+  {
+    "type": "register",
+    "named": true,
+    "fields": {}
   },
   {
     "type": "source_file",
@@ -108,9 +170,18 @@
         {
           "type": "label",
           "named": true
+        },
+        {
+          "type": "macro",
+          "named": true
         }
       ]
     }
+  },
+  {
+    "type": "string",
+    "named": true,
+    "fields": {}
   },
   {
     "type": "\n",
@@ -145,19 +216,19 @@
     "named": true
   },
   {
+    "type": "macro",
+    "named": true
+  },
+  {
     "type": "macro_variable",
     "named": true
   },
   {
+    "type": "meta",
+    "named": true
+  },
+  {
     "type": "opcode",
-    "named": true
-  },
-  {
-    "type": "register",
-    "named": true
-  },
-  {
-    "type": "string",
     "named": true
   }
 ]

@@ -31,10 +31,4 @@
     "rust": true,
     "swift": true
   },
-  "theme": {
-    "keyword": "purple",
-    "function": "blue",
-    "type": "green",
-    "number": "brown"
-  }
 }
