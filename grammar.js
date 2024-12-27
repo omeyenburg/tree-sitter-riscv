@@ -27,7 +27,7 @@ module.exports = grammar({
     // Each statement can be a directive, label, instruction
     _statement: $ => choice(
       $.directive,
-      seq($.label, optional(seq(/[\s\t]+/, $._statement))),
+      seq($.label, optional($._statement)),
       $.instruction,
       $.macro
     ),

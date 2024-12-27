@@ -70,17 +70,8 @@
               "type": "CHOICE",
               "members": [
                 {
-                  "type": "SEQ",
-                  "members": [
-                    {
-                      "type": "PATTERN",
-                      "value": "[\\s\\t]+"
-                    },
-                    {
-                      "type": "SYMBOL",
-                      "name": "_statement"
-                    }
-                  ]
+                  "type": "SYMBOL",
+                  "name": "_statement"
                 },
                 {
                   "type": "BLANK"
