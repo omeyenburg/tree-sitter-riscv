@@ -10,7 +10,7 @@
 module.exports = grammar({
   name: "mips",
   extras: $ => [
-      /\s|\t/,
+      /[ \t]/,
       $.line_comment,
       $.block_comment,
   ],
@@ -31,12 +31,10 @@ module.exports = grammar({
       $.instruction,
       $.macro
     ),
-    //_statement: $ => choice($.directive, $.label, $.instruction),
 
     // A directive consists of a name beginning with a dot,
     // optionally followed by more arguments
-    directive: $ => seq($.meta, optional(seq(/[\s\t]+/, $.attributes))),
-    //directive: $ => /[.][a-z]+.*/,
+    directive: $ => seq($.meta, optional(seq(/[ \t]+/, $.attributes))),
     meta: $ => /[.][a-z_]+/,
     attributes: $ => choice(
       $._number,
@@ -48,23 +46,18 @@ module.exports = grammar({
     macro: $ => token(/[a-zA-Z_]+\(.*\)/),
 
     // Labels
-    _identifier: $ => /[a-zA-Z_][a-zA-Z0-9_]*/,
     label: $ => /[a-zA-Z_][a-zA-Z0-9_]*:/,
 
     // Instructions
-    instruction: $ => seq($.opcode, optional($.operands)),
-    opcode: $ => /[a-z][a-z.]*/,
-    operands: $ => seq($._operand, repeat(seq(',', $._operand))),
-
+    instruction: $ => seq($.opcode, optional(seq(/[ \t]+/, $.operands))),
+    opcode: $ => /[a-z][a-z0-9.]*/,
+    operands: $ => seq($._operand, repeat(seq(choice(",", / +/), $._operand))),
     _operand: $ => choice(
       $.register,
       $.macro_variable,
       $._number,
       $.address,
     ),
-
-    // Match any register
-    // Examples: $7, $t1, $test, $zero
 
     // Match any macro variable
     // The starting symbol depends on the assembler in use
@@ -92,8 +85,7 @@ module.exports = grammar({
     _octal: $ => /-?0[0-7]*/,
     _decimal: $ => /-?\d+/, // Would match octal and decimal
     _hexadecimal: $ => /-?0[xX][0-9a-fA-F]+/,
-    //float: $ => /-?\d+(\.\d+)?([eE]-?\d+)?/, // Would match decimal and float
-    _float: $ => choice(
+    _float: $ => choice( // Would match decimal and float
       seq(
         choice(/-?\d+\.?\d*/, /-?\d*\.\d+/),
         optional(/[eE]-?\d+/)
@@ -101,6 +93,7 @@ module.exports = grammar({
       /-?\d+[eE]-?\d+/
     ),
     _register: $ => /[$][0-9a-z]+/,
+    _identifier: $ => /[a-zA-Z_][a-zA-Z0-9_]*/,
 
     char: $ => $._char,
     string: $ => $._string,
