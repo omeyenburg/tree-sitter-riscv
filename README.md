@@ -41,3 +41,7 @@ cp ./queries/* $XDG_CONFIG_HOME/nvim/queries/mips/
 
 ## Alternatives
 If you are looking for a more general grammar for assembly, check out [tree-sitter-asm](https://github.com/RubixDev/tree-sitter-asm) which supports features of other instruction sets, yet it lacks some specific features of MIPS.
+
+## Ressources
+https://www.cs.cornell.edu/courses/cs3410/2008fa/MIPS_Vol2.pdf
+http://www.cs.unibo.it/~solmi/teaching/arch_2002-2003/AssemblyLanguageProgDoc.pdf
