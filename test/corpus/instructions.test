@@ -1,0 +1,279 @@
+==========
+Instruction without arguments
+==========
+nop
+---
+(program
+    (instruction
+        (opcode)))
+
+==========
+Instruction with casual register
+==========
+jr $t0
+---
+(program
+  (instruction
+    (opcode)
+    (operands
+      (register))))
+
+==========
+Instruction with numeric register
+==========
+jr $0
+---
+(program
+  (instruction
+    (opcode)
+    (operands
+      (register))))
+
+==========
+Instruction with $zero register
+==========
+jr $zero
+---
+(program
+  (instruction
+    (opcode)
+    (operands
+      (register))))
+
+==========
+Instruction with two digit numeric register
+==========
+jr $31
+---
+(program
+  (instruction
+    (opcode)
+    (operands
+      (register))))
+
+==========
+Instruction with two letter register
+==========
+jr $gp
+---
+(program
+  (instruction
+    (opcode)
+    (operands
+      (register))))
+
+==========
+Instruction with float register
+==========
+jr $f31
+---
+(program
+  (instruction
+    (opcode)
+    (operands
+      (register))))
+
+==========
+Instruction with multiple space-separated arguments
+==========
+add  $t0 $t1 	 $t2
+---
+(program
+  (instruction
+    (opcode)
+    (operands
+      (register)
+      (register)
+      (register))))
+
+==========
+Instruction with multiple comma-separated arguments
+==========
+add	$t0,$t1 	,	 $t2
+---
+(program
+  (instruction
+    (opcode)
+    (operands
+      (register)
+      (register)
+      (register))))
+
+==========
+Instruction with decimal value
+==========
+li $t0, 100
+---
+(program
+  (instruction
+    (opcode)
+    (operands
+      (register)
+      (decimal))))
+
+==========
+Instruction with signed integer value
+==========
+li $t0, -100
+---
+(program
+  (instruction
+    (opcode)
+    (operands
+      (register)
+      (decimal))))
+
+==========
+Instruction with octal value
+==========
+li $t0, 012
+---
+(program
+  (instruction
+    (opcode)
+    (operands
+      (register)
+      (octal))))
+
+==========
+Instruction with decimal value with leading zero
+==========
+li $t0, 089
+---
+(program
+  (instruction
+    (opcode)
+    (operands
+      (register)
+      (decimal))))
+
+==========
+Instruction with hexadecimal value
+==========
+li $t0, 0x0314
+---
+(program
+  (instruction
+    (opcode)
+    (operands
+      (register)
+      (decimal))))
+
+==========
+Instruction with signed hexadecimal value
+==========
+li $t0, -0x0123456789ABCDEFabcdef
+---
+(program
+  (instruction
+    (opcode)
+    (operands
+      (register)
+      (decimal))))
+
+==========
+Instruction with char value
+==========
+li $t0, 'A'
+---
+(program
+  (instruction
+    (opcode)
+    (operands
+      (register)
+      (char))))
+
+==========
+Instruction with float value
+==========
+li.s $f5, 3.14
+---
+(program
+  (instruction
+    (opcode)
+    (operands
+      (register)
+      (float))))
+
+==========
+Instruction with float value starting with dot
+==========
+li.s $f5, .5
+---
+(program
+  (instruction
+    (opcode)
+    (operands
+      (register)
+      (float))))
+
+==========
+Instruction with float value ending with dot
+==========
+li.s $f5, -1.
+---
+(program
+  (instruction
+    (opcode)
+    (operands
+      (register)
+      (float))))
+
+==========
+Instruction with label address
+==========
+j test
+---
+(program
+  (instruction
+    (opcode)
+    (operands
+      (address))))
+
+==========
+Instruction with register address
+==========
+lw $t0, ($s0)
+---
+(program
+  (instruction
+    (opcode)
+    (operands
+      (register)
+      (address))))
+
+==========
+Instruction with decimal offset address
+==========
+lw $t0, -100($s0)
+---
+(program
+  (instruction
+    (opcode)
+    (operands
+      (register)
+      (address))))
+
+==========
+Instruction with label offset address
+==========
+lw $t0, test($s0)
+---
+(program
+  (instruction
+    (opcode)
+    (operands
+      (register)
+      (address))))
+
+==========
+Instruction with label and decimal offset address
+==========
+lw $t0, test+100($s0)
+---
+(program
+  (instruction
+    (opcode)
+    (operands
+      (register)
+      (address))))

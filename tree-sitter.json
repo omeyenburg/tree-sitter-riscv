@@ -12,7 +12,7 @@
     }
   ],
   "metadata": {
-    "version": "0.1.0",
+    "version": "0.1.1",
     "license": "MIT",
     "description": "A syntax parser for the MIPS Instruction Set Architecture.",
     "authors": [
@@ -32,5 +32,5 @@
     "python": true,
     "rust": true,
     "swift": true
-  },
+  }
 }

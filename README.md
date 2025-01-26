@@ -45,3 +45,4 @@ If you are looking for a more general grammar for assembly, check out [tree-sitt
 ## Ressources
 https://www.cs.cornell.edu/courses/cs3410/2008fa/MIPS_Vol2.pdf
 http://www.cs.unibo.it/~solmi/teaching/arch_2002-2003/AssemblyLanguageProgDoc.pdf
+https://en.wikibooks.org/wiki/MIPS_Assembly/Instruction_Formats#Opcodes

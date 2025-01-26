@@ -1,0 +1,103 @@
+==========
+Basic directive
+==========
+.text
+---
+(program
+  (directive
+    (meta)))
+
+==========
+Basic label
+==========
+test:
+---
+(program
+  (label))
+
+==========
+Combined label and directive
+==========
+test: .text
+---
+(program
+  (label)
+  (directive
+    (meta)))
+
+==========
+Directive with decimal
+==========
+.word 314
+---
+(program
+  (directive
+    (meta)
+    (attributes
+      (decimal))))
+
+==========
+Directive with octal
+==========
+.word 0123
+---
+(program
+  (directive
+    (meta)
+    (attributes
+      (octal))))
+
+==========
+Directive with hexadecimal
+==========
+.word 0x01abCD
+---
+(program
+  (directive
+    (meta)
+    (attributes
+      (hexadecimal))))
+
+==========
+Directive with char
+==========
+.word 'a'
+---
+(program
+  (directive
+    (meta)
+    (attributes
+      (char))))
+
+==========
+Directive with float
+==========
+.float 0.213
+---
+(program
+  (directive
+    (meta)
+    (attributes
+      (float))))
+
+==========
+Directive with string
+==========
+.asciiz "123"
+---
+(program
+  (directive
+    (meta)
+    (attributes
+      (string))))
+
+==========
+Directive with multiple arguments
+==========
+.set test "test" 123
+---
+(program
+  (directive
+    (meta)
+    (attributes
+      (string))))
