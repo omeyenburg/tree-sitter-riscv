@@ -1,5 +1,7 @@
 # tree-sitter-mips
 
+NOTE: This project is still very unstable and likely to experience severe changes in the future.
+
 [Tree-sitter](https://github.com/tree-sitter/tree-sitter) grammar for the MIPS assembly language.
 
 <img src="https://github.com/user-attachments/assets/f5f2332e-72c8-40b0-b452-98d741cada66" width="600">
