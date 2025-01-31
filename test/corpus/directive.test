@@ -21,7 +21,7 @@ Directive with decimal
 ==========
 Directive with octal
 ==========
-.word 0123
+.word 012
 ---
 (program
   (directive

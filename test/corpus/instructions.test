@@ -76,7 +76,7 @@ jr $f31
 ==========
 Instruction with multiple space-separated arguments
 ==========
-add  $t0 $t1 	 $t2
+add $t0 $t1 $t2
 ---
 (program
   (instruction
@@ -89,7 +89,7 @@ add  $t0 $t1 	 $t2
 ==========
 Instruction with multiple comma-separated arguments
 ==========
-add	$t0,$t1 	,	 $t2
+add $t0,$t1,$t2
 ---
 (program
   (instruction
@@ -270,6 +270,54 @@ lw $t0, test($s0)
 Instruction with label and decimal offset address
 ==========
 lw $t0, test+100($s0)
+---
+(program
+  (instruction
+    (opcode)
+    (operands
+      (register)
+      (address))))
+
+==========
+Instruction with label and hexadecimal offset address
+==========
+lw $t0, test+0x123($s0)
+---
+(program
+  (instruction
+    (opcode)
+    (operands
+      (register)
+      (address))))
+
+==========
+Instruction with label and octal offset address
+==========
+lw $t0, test+012($s0)
+---
+(program
+  (instruction
+    (opcode)
+    (operands
+      (register)
+      (address))))
+
+==========
+Instruction with label and decimal offset address
+==========
+lw $t0, test+100($s0)
+---
+(program
+  (instruction
+    (opcode)
+    (operands
+      (register)
+      (address))))
+
+==========
+Instruction with label and char offset address
+==========
+lw $t0, test+'a'($s0)
 ---
 (program
   (instruction

@@ -1,0 +1,327 @@
+==========
+Empty line
+==========
+
+---
+(program)
+
+==========
+Lines of whitespace without content
+==========
+ 
+	
+;
+---
+(program)
+
+==========
+Instruction with multiple operands and comma, whitespace and comment
+==========
+li	 $t0  	 , 	   1	# comment
+---
+(program
+  (instruction
+    (opcode)
+    (operands
+      (register)
+      (decimal)))
+  (comment))
+
+==========
+Instruction with multiple operands without comma
+==========
+li	$t0	1
+---
+(program
+  (instruction
+    (opcode)
+    (operands
+      (register)
+      (decimal))))
+
+==========
+Basic label
+==========
+test:
+---
+(program
+  (label))
+
+==========
+Chained label without space
+==========
+test:test:
+---
+(program
+  (label)
+  (label))
+
+==========
+Chained label with space
+==========
+test: test:
+---
+(program
+  (label)
+  (label))
+
+==========
+Chained label with tab
+==========
+test:	test:
+---
+(program
+  (label)
+  (label))
+
+==========
+Combined label and instruction without space
+==========
+test:nop
+---
+(program
+  (label)
+  (instruction
+    (opcode)))
+
+==========
+Combined label and instruction with space
+==========
+test: nop
+---
+(program
+  (label)
+  (instruction
+    (opcode)))
+
+==========
+Combined label and instruction with tab
+==========
+test:	nop
+---
+(program
+  (label)
+  (instruction
+    (opcode)))
+
+==========
+Combined label and directive without space
+==========
+test:.text
+---
+(program
+  (label)
+  (directive
+    (meta)))
+
+==========
+Combined label and directive with space
+==========
+test: .text
+---
+(program
+  (label)
+  (directive
+    (meta)))
+
+==========
+Combined label and directive with tab
+==========
+test:	.text
+---
+(program
+  (label)
+  (directive
+    (meta)))
+
+==========
+Label with leading space
+==========
+  test:
+---
+(program
+  (label))
+
+==========
+Label with leading tab
+==========
+	test:
+---
+(program
+  (label))
+
+==========
+Label with trailing space
+==========
+test:  
+---
+(program
+  (label))
+
+==========
+Label with trailing tab
+==========
+test:	
+---
+(program
+  (label))
+
+==========
+Instruction without operands with leading space
+==========
+  nop
+---
+(program
+  (instruction
+    (opcode)))
+
+==========
+Instruction without operands with leading tab
+==========
+	nop
+---
+(program
+  (instruction
+    (opcode)))
+
+==========
+Instruction without operands with trailing space
+==========
+nop  
+---
+(program
+  (instruction
+    (opcode)))
+
+==========
+Instruction without operands with trailing tab
+==========
+nop	
+---
+(program
+  (instruction
+    (opcode)))
+
+==========
+Instruction with operands with leading space
+==========
+  j $t0
+---
+(program
+  (instruction
+    (opcode)
+    (operands
+      (register))))
+
+==========
+Instruction with operands with leading tab
+==========
+	j $t0
+---
+(program
+  (instruction
+    (opcode)
+    (operands
+      (register))))
+
+==========
+Instruction with operands with trailing space
+==========
+j $t0  
+---
+(program
+  (instruction
+    (opcode)
+    (operands
+      (register))))
+
+==========
+Instruction with operands with trailing tab
+==========
+j $t0	
+---
+(program
+  (instruction
+    (opcode)
+    (operands
+      (register))))
+
+==========
+Directive without attributes with leading space
+==========
+  .text
+---
+(program
+  (directive
+    (meta)))
+
+==========
+Directive without attributes with leading tab
+==========
+	.text
+---
+(program
+  (directive
+    (meta)))
+
+==========
+Directive without attributes with trailing space
+==========
+.text  
+---
+(program
+  (directive
+    (meta)))
+
+==========
+Directive without attributes with trailing tab
+==========
+.text	
+---
+(program
+  (directive
+    (meta)))
+
+==========
+Directive with attributes with leading space
+==========
+  .word 123
+---
+(program
+  (directive
+    (meta)
+    (attributes
+      (decimal))))
+
+==========
+Directive with attributes with leading tab
+==========
+	.word 123
+---
+(program
+  (directive
+    (meta)
+    (attributes
+      (decimal))))
+
+==========
+Directive with attributes with trailing space
+==========
+.word 123  
+---
+(program
+  (directive
+    (meta)
+    (attributes
+      (decimal))))
+
+==========
+Directive with attributes with trailing tab
+==========
+.word 123	
+---
+(program
+  (directive
+    (meta)
+    (attributes
+      (decimal))))
