@@ -84,3 +84,29 @@ li	$t0	1
     (operands
       (register)
       (decimal))))
+
+==========
+Mars macro definition
+==========
+.macro inc(%rs %rt)
+    addiu %rs, %rt, 1
+.end_macro
+
+inc($t0, $t1)
+---
+(program
+  (directive
+    (meta)
+    (attributes
+      (attribute)
+      (attribute)
+      (attribute)))
+  (instruction
+    (opcode)
+    (operands
+      (macro_variable)
+      (macro_variable)
+      (decimal)))
+  (directive
+    (meta))
+  (macro))

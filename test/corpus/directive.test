@@ -10,7 +10,7 @@ Basic directive
 ==========
 Directive with decimal
 ==========
-.word 314
+.word 123
 ---
 (program
   (directive
@@ -82,4 +82,6 @@ Directive with multiple arguments
   (directive
     (meta)
     (attributes
-      (string))))
+      (attribute)
+      (string)
+      (decimal))))
