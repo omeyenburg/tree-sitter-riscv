@@ -22,13 +22,15 @@ module.exports = grammar({
   ],
 
   rules: {
-    program: $ => seq(repeat($._statement), optional(choice(
-      $.directive,
-      $.instruction,
-      $.macro,
-      $.label,
-      $.comment
-    ))),
+    program: $ => seq(
+      seq(repeat($._statement), optional(choice(
+        $.directive,
+        $.instruction,
+        $.macro,
+        $.label
+      ))),
+      optional($.comment)
+    ),
 
     /*
     NOTE: allowed:
@@ -53,6 +55,9 @@ module.exports = grammar({
         ),
         choice(";", seq(optional($.comment), "\n"))
       ),
+      //seq($.instruction, $.comment, "\n"),
+      //seq($.instruction, ";"),
+      //seq($.instruction, "\n"),
       $.label,
       seq($.comment, "\n")
     )),
@@ -77,7 +82,7 @@ module.exports = grammar({
     instruction: $ => choice(
       $.opcode,
       seq($.opcode, / |\t/, $.operands),
-      seq($.opcode, $.comment),
+      //seq($.opcode, $.comment),
     ),
 
     opcode: $ => token(/[a-z][a-z0-9.]*/),

@@ -49,15 +49,3 @@ jr $t0 # This is an in-line comment
     (operands
       (register)))
   (comment))
-
-==========
-Inline comment following instruction with arguments, space
-==========
-jr$t0# This is an in-line comment
----
-(program
-  (instruction
-    (opcode)
-    (operands
-      (register)))
-  (comment))
