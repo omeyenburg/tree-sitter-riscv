@@ -7,7 +7,7 @@ Line comment
   (comment))
 
 ==========
-Inline comment following instruction without arguments, no space
+Inline comment following instruction without operands, no space
 ==========
 nop# This is an in-line comment
 ---
@@ -17,7 +17,7 @@ nop# This is an in-line comment
   (comment))
 
 ==========
-Inline comment following instruction without arguments, space
+Inline comment following instruction without operands, space
 ==========
 nop # This is an in-line comment
 ---
@@ -27,7 +27,7 @@ nop # This is an in-line comment
   (comment))
 
 ==========
-Inline comment following instruction with arguments, no space
+Inline comment following instruction with operands, no space
 ==========
 jr $t0# This is an in-line comment
 ---
@@ -39,7 +39,7 @@ jr $t0# This is an in-line comment
   (comment))
 
 ==========
-Inline comment following instruction with arguments, space
+Inline comment following instruction with operands, space
 ==========
 jr $t0 # This is an in-line comment
 ---
@@ -48,4 +48,42 @@ jr $t0 # This is an in-line comment
     (opcode)
     (operands
       (register)))
+  (comment))
+
+
+==========
+Inline comment following directive without arguments
+==========
+.text # comment
+---
+(program
+  (directive
+    (meta))
+  (comment))
+
+==========
+Inline comment following directive with single argument
+==========
+.align 4 # comment
+---
+(program
+  (directive
+    (meta)
+    (attributes
+      (decimal)))
+  (comment))
+
+==========
+Inline comment following directive with multiple arguments
+==========
+.word 1, 2, 3, 4 # comment
+---
+(program
+  (directive
+    (meta)
+    (attributes
+      (decimal)
+      (decimal)
+      (decimal)
+      (decimal)))
   (comment))

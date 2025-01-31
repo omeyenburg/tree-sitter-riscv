@@ -59,3 +59,28 @@ test: .text
   (label)
   (directive
     (meta)))
+
+==========
+Instruction with multiple operands and comma, whitespace and comment
+==========
+li	 $t0  	 , 	   1	# comment
+---
+(program
+  (instruction
+    (opcode)
+    (operands
+      (register)
+      (decimal)))
+  (comment))
+
+==========
+Instruction with multiple operands without comma
+==========
+li	$t0	1
+---
+(program
+  (instruction
+    (opcode)
+    (operands
+      (register)
+      (decimal))))
