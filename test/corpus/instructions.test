@@ -157,7 +157,7 @@ li $t0, 0x0314
     (opcode)
     (operands
       (register)
-      (decimal))))
+      (hexadecimal))))
 
 ==========
 Instruction with signed hexadecimal value
@@ -169,7 +169,7 @@ li $t0, -0x0123456789ABCDEFabcdef
     (opcode)
     (operands
       (register)
-      (decimal))))
+      (hexadecimal))))
 
 ==========
 Instruction with char value

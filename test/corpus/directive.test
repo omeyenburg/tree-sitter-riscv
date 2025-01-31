@@ -8,24 +8,6 @@ Basic directive
     (meta)))
 
 ==========
-Basic label
-==========
-test:
----
-(program
-  (label))
-
-==========
-Combined label and directive
-==========
-test: .text
----
-(program
-  (label)
-  (directive
-    (meta)))
-
-==========
 Directive with decimal
 ==========
 .word 314

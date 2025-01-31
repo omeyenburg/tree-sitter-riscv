@@ -2,7 +2,6 @@
 Line comment
 ==========
 # This is a comment
-
 ---
 (program
   (comment))
@@ -11,7 +10,6 @@ Line comment
 Inline comment following instruction without arguments, no space
 ==========
 nop# This is an in-line comment
-
 ---
 (program
   (instruction
@@ -31,7 +29,7 @@ nop # This is an in-line comment
 ==========
 Inline comment following instruction with arguments, no space
 ==========
-jr $t0# This is an in-line comment 
+jr $t0# This is an in-line comment
 ---
 (program
   (instruction
@@ -43,7 +41,7 @@ jr $t0# This is an in-line comment
 ==========
 Inline comment following instruction with arguments, space
 ==========
-jr $t0 # This is an in-line comment 
+jr $t0 # This is an in-line comment
 ---
 (program
   (instruction
@@ -55,7 +53,7 @@ jr $t0 # This is an in-line comment
 ==========
 Inline comment following instruction with arguments, space
 ==========
-jr$t0# This is an in-line comment 
+jr$t0# This is an in-line comment
 ---
 (program
   (instruction

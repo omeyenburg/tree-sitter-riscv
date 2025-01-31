@@ -24,8 +24,9 @@ module.exports = grammar({
   rules: {
     program: $ => seq(repeat($._statement), optional(choice(
       $.directive,
-      $.label,
       $.instruction,
+      $.macro,
+      $.label,
       $.comment
     ))),
 
@@ -37,10 +38,11 @@ module.exports = grammar({
     any(\n)any
     any_except_comment(;)any
     */
+
     comment: $ => /[ \t]*#.*/,
 
     // Statement
-    _statement: $ => prec(2, choice(
+    _statement: $ => prec(1, choice(
       ";",
       "\n",
       seq(
@@ -49,10 +51,7 @@ module.exports = grammar({
           $.instruction,
           $.macro,
         ),
-        choice(
-          ";",
-          seq(optional($.comment), "\n")
-        )
+        choice(";", seq(optional($.comment), "\n"))
       ),
       $.label,
       seq($.comment, "\n")
@@ -65,7 +64,7 @@ module.exports = grammar({
     attributes: $ => choice(
       $._number,
       $.string,
-      token(/[^\n"#0-9]+/)
+      /[^\n"#0-9]+/
     ),
 
     // Macros
