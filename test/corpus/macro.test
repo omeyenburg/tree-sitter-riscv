@@ -1,8 +1,34 @@
 ==========
-Mars macro definition
+Macro definition and usage (Mars)
 ==========
 .macro inc(%rs %rt)
     addiu %rs, %rt, 1
+.end_macro
+
+inc($t0, $t1)
+---
+(program
+  (directive
+    (meta)
+    (attributes
+      (attribute)
+      (attribute)
+      (attribute)))
+  (instruction
+    (opcode)
+    (operands
+      (macro_variable)
+      (macro_variable)
+      (decimal)))
+  (directive
+    (meta))
+  (macro))
+
+==========
+Macro definition and usage (Spim)
+==========
+.macro inc(\rs \rt)
+    addiu \rs, \rt, 1
 .end_macro
 
 inc($t0, $t1)

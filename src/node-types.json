@@ -9,9 +9,13 @@
     "named": true,
     "fields": {},
     "children": {
-      "multiple": false,
-      "required": false,
+      "multiple": true,
+      "required": true,
       "types": [
+        {
+          "type": "attribute",
+          "named": true
+        },
         {
           "type": "char",
           "named": true
@@ -86,10 +90,6 @@
       "multiple": true,
       "required": true,
       "types": [
-        {
-          "type": "comment",
-          "named": true
-        },
         {
           "type": "opcode",
           "named": true
@@ -212,12 +212,20 @@
     "named": false
   },
   {
+    "type": "+",
+    "named": false
+  },
+  {
     "type": ",",
     "named": false
   },
   {
     "type": ";",
     "named": false
+  },
+  {
+    "type": "attribute",
+    "named": true
   },
   {
     "type": "comment",

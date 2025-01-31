@@ -252,7 +252,7 @@ nop
 ==========
 Instruction with operands with leading space
 ==========
-  j $t0
+  jr $t0
 ---
 (program
   (instruction
@@ -263,7 +263,7 @@ Instruction with operands with leading space
 ==========
 Instruction with operands with leading tab
 ==========
-	j $t0
+	jr $t0
 ---
 (program
   (instruction
@@ -274,7 +274,7 @@ Instruction with operands with leading tab
 ==========
 Instruction with operands with trailing space
 ==========
-j $t0  
+jr $t0  
 ---
 (program
   (instruction
@@ -285,7 +285,7 @@ j $t0
 ==========
 Instruction with operands with trailing tab
 ==========
-j $t0	
+jr $t0	
 ---
 (program
   (instruction
@@ -374,6 +374,102 @@ Directive with attributes with trailing tab
       (decimal))))
 
 ==========
+Label with semicolon
+==========
+test:;
+---
+(program
+  (label))
+
+==========
+Label with space before semicolon
+==========
+test: ;
+---
+(program
+  (label))
+
+==========
+Instruction without operands with semicolon
+==========
+nop;
+---
+(program
+  (instruction
+    (opcode)))
+
+==========
+Instruction without operands with space before semicolon
+==========
+nop ;
+---
+(program
+  (instruction
+    (opcode)))
+
+==========
+Instruction with operands with semicolon
+==========
+jr $t0;
+---
+(program
+  (instruction
+    (opcode)
+    (operands
+      (register))))
+
+==========
+Instruction with operands with space before semicolon
+==========
+jr $t0 ;
+---
+(program
+  (instruction
+    (opcode)
+    (operands
+      (register))))
+
+==========
+Directive without attributes with semicolon
+==========
+.word;
+---
+(program
+  (directive
+    (meta)))
+
+==========
+Directive without attributes with space before semicolon
+==========
+.word ;
+---
+(program
+  (directive
+    (meta)))
+
+==========
+Directive with attributes with semicolon
+==========
+.word 123;
+---
+(program
+  (directive
+    (meta)
+    (attributes
+      (decimal))))
+
+==========
+Directive with attributes with space before semicolon
+==========
+.word 123 ;
+---
+(program
+  (directive
+    (meta)
+    (attributes
+      (decimal))))
+
+==========
 Number without context
 :error
 ==========
@@ -392,4 +488,12 @@ Register without context
 :error
 ==========
 $t0
+---
+
+==========
+Register on new line after opcode
+:error
+==========
+li 
+    $t0, 1
 ---
