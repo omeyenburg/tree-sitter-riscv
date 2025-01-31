@@ -24,7 +24,7 @@ module.exports = grammar({
         $.directive,
         $.instruction,
         $.macro,
-        $.label
+        $._label
       )),
       optional($.comment)
     ),
@@ -41,7 +41,7 @@ module.exports = grammar({
         ),
         choice(";", seq(optional($.comment), "\n"))
       ),
-      $.label,
+      $._label,
       seq($.comment, "\n")
     )),
 
@@ -81,6 +81,10 @@ module.exports = grammar({
     macro: $ => token(/[a-zA-Z_]+\([^#]*\)/),
 
     // Labels
+    _label: $ => seq(
+      $.label,
+      repeat(choice(" ", "\t")) // Allow trailing space
+    ),
     label: $ => token(/[a-zA-Z_][a-zA-Z0-9_]*:/),
 
     // Instructions
@@ -88,7 +92,7 @@ module.exports = grammar({
       seq($.opcode),
       seq(
         $.opcode,
-        / |\t/,
+        /,| |\t/,
         optional($.operands) // Allow trailing space without operands
       )
     ),

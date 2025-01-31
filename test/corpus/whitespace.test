@@ -15,20 +15,67 @@ Lines of whitespace without content
 (program)
 
 ==========
-Instruction with multiple operands and comma, whitespace and comment
+Instruction with comma-separated operands
 ==========
-li	 $t0  	 , 	   1	# comment
+li $t0,1
 ---
 (program
   (instruction
     (opcode)
     (operands
       (register)
-      (decimal)))
-  (comment))
+      (decimal))))
 
 ==========
-Instruction with multiple operands without comma
+Instruction with comma-separated opcode
+==========
+li,$t0,1
+---
+(program
+  (instruction
+    (opcode)
+    (operands
+      (register)
+      (decimal))))
+
+==========
+Instruction with commas surrounded with space
+==========
+li , $t0 , 1
+---
+(program
+  (instruction
+    (opcode)
+    (operands
+      (register)
+      (decimal))))
+
+==========
+Instruction with commas surrounded with tabs
+==========
+li	,	$t0	,	1
+---
+(program
+  (instruction
+    (opcode)
+    (operands
+      (register)
+      (decimal))))
+
+==========
+Instruction with space-separated operands
+==========
+li $t0 1
+---
+(program
+  (instruction
+    (opcode)
+    (operands
+      (register)
+      (decimal))))
+
+==========
+Instruction with tab-separated operands
 ==========
 li	$t0	1
 ---
@@ -184,7 +231,7 @@ Instruction without operands with leading tab
   (instruction
     (opcode)))
 
-==========
+=========
 Instruction without operands with trailing space
 ==========
 nop  
@@ -325,3 +372,24 @@ Directive with attributes with trailing tab
     (meta)
     (attributes
       (decimal))))
+
+==========
+Number without context
+:error
+==========
+123
+---
+
+==========
+String without context
+:error
+==========
+123
+---
+
+==========
+Register without context
+:error
+==========
+$t0
+---
