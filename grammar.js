@@ -10,16 +10,16 @@
 module.exports = grammar({
   name: "mips",
 
-  // The default ignores whitespace
-  // Overwrite the extras default to handle whitespace explicitly
+  // The default ignores whitespace.
+  // Overwrite the extras default to manage
+  // whitespace and new lines explicitly.
   extras: $ => [
     / |\t/,
-    //#.*\n/, // ignored cuz unnamed
   ],
 
-  //conflicts: $ => [
-  //  [$._statement, $._last_statement],
-  //],
+  conflicts: $ => [
+    [$.instruction]
+  ],
 
   rules: {
     program: $ => seq(repeat($._statement), optional(choice(
@@ -28,21 +28,6 @@ module.exports = grammar({
       $.instruction,
       $.comment
     ))),
-    //program: $ => optional(seq(
-    //  //optional($._statement),
-    //  //optional($._statement_wrapper),
-    //  //optional($._comment_wrapper),
-    //  //repeat(seq(
-    //  //  choice('\n', ';'),
-    //  //  optional($._statement),
-    //  //  //optional($._statement_wrapper),
-    //  //  //optional($._comment_wrapper)
-    //  //)),
-    //  repeat(seq($._whitespace, $._statement, $._whitespace)),
-    //  //optional($._last_statement) // This is so that normal statements may always end with \n and ;
-    //)),
-
-    //_whitespace: $ => token(/[ \t]*/),
 
     /*
     NOTE: allowed:
@@ -52,85 +37,9 @@ module.exports = grammar({
     any(\n)any
     any_except_comment(;)any
     */
+    comment: $ => /[ \t]*#.*/,
 
     // Statement
-    //_statement_wrapper: $ => seq(optional(/\s+/), $._statement),
-    //statement: $ => /[^\s#]*/,
-
-    // Comment
-    //_comment_wrapper: $ => seq(repeat(" "), $.comment),
-    comment: $ => /#.*/,
-
-    // Each statement can be a directive, label, instruction
-    //_statement: $ => choice(
-    //  $.directive,
-    //  $.instruction,
-    //  $.macro,
-    //  seq($.label, /\s*/, optional($._statement)),
-    //),
-
-    // Each statement can be a directive, label, instruction
-    //_statement: $ => choice(
-    //  $.directive,
-    //  $.instruction,
-    //  $.macro,
-    //  seq($.label, /\s*/, optional($._statement)),
-    //),
-
-    //_statement: $ => prec(2, choice(
-    //  ";",
-    //  "\n",
-    //  seq($.directive, choice(";", "\n")),
-    //  seq($.instruction, choice(";", seq(optional($.comment), "\n"))),
-    //  seq($.macro, choice(";", "\n")),
-    //  $.label, // explicit space: optional
-    //  seq($.comment, "\n")
-    //)),
-
-    //_statement: $ => choice(
-    //  ";",
-    //  "\n",
-    //  seq($.directive, choice(";", "\n")),
-    //  seq($.instruction, choice(";", "\n")),
-    //  //seq($.instruction, choice(";", seq(token(repeat(choice(" ", "\t"))), optional($.comment), "\n"))),
-    //  seq($.macro, choice(";", "\n")),
-    //  $.label, // explicit space: optional
-    //  seq($.comment, "\n")
-    //),
-
-    //_statement: $ => prec(2, choice(
-    //  ";",
-    //  "\n",
-    //  seq($.directive, choice(";", "\n")),
-    //  seq($.instruction, choice(";", "\n")),
-    //  //seq($.instruction, choice(";", seq(token(repeat(choice(" ", "\t"))), optional($.comment), "\n"))),
-    //  seq($.macro, choice(";", "\n")),
-    //  //seq(
-    //  //  choice(
-    //  //    $.directive,
-    //  //    $.instruction,
-    //  //    $.macro,
-    //  //  ),
-    //  //  //token(repeat(choice(" ", "\t")))
-    //  //  //$._whitespace,
-    //  //  choice(
-    //  //    ";",
-    //  //    //"\n"
-    //  //    seq(optional($.comment), "\n")
-    //  //  )
-    //  //),
-    //  $.label, // explicit space: optional
-    //  seq($.comment, "\n")
-    //)),
-
-    //_last_statement: $ => choice(
-    //  $.directive,
-    //  $.instruction,
-    //  $.macro,
-    //  $.label,
-    //  $.comment
-    //),
-
     _statement: $ => prec(2, choice(
       ";",
       "\n",
@@ -149,14 +58,6 @@ module.exports = grammar({
       seq($.comment, "\n")
     )),
 
-    //_last_statement: $ => choice(
-    //  $.directive,
-    //  $.instruction,
-    //  $.macro,
-    //  $.label,
-    //  $.comment
-    //),
-
     // A directive consists of a name beginning with a dot,
     // optionally followed by more arguments
     directive: $ => seq($.meta, optional(seq(/[ \t]+/, $.attributes))),
@@ -174,24 +75,21 @@ module.exports = grammar({
     label: $ => token(/[a-zA-Z_][a-zA-Z0-9_]*:/),
 
     // Instructions
-    //instruction: $ => seq($.opcode, optional(seq(/ +/, $.operands))),
-    instruction: $ => seq($.opcode, token(/[ \t]+/), $.operands),
-
     instruction: $ => choice(
-      seq($.opcode, repeat1(choice(" ", "\t")), $.operands), // /[ \t]+/,
       $.opcode,
+      seq($.opcode, / |\t/, $.operands),
+      seq($.opcode, $.comment),
     ),
 
-    //instruction: $ => seq($.opcode, optional($.operands)),
-    //instruction: $ => $.opcode,
     opcode: $ => token(/[a-z][a-z0-9.]*/),
-    operands: $ => seq($._operand), // repeat(seq(" ", $._operand))
-    //operands: $ => seq($._operand, repeat(choice(
-    //  seq(/[ \t]*,[ \t]*/, $._operand),
-    //  seq(/[ \t]+/, $._operand),
-    //))),
-    //operands: $ => $._operand,
-    //operands: $ => seq($._operand, repeat(seq(optional(","), $._operand))),
+
+    operands: $ => seq($._operand, repeat(seq(/ |,|\t/, $._operand))),
+    operands: $ => seq($._operand, repeat(choice(
+      seq(" ", optional(","), $._operand),
+      seq("\t",optional(","), $._operand),
+      seq(",", $._operand)
+    ))),
+
     _operand: $ => choice(
       $.register,
       $.macro_variable,
