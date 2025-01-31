@@ -12,29 +12,37 @@ module.exports = grammar({
 
   // The default ignores whitespace
   // Overwrite the extras default to handle whitespace explicitly
-  extras: $ => [],
+  extras: $ => [
+    / |\t/,
+    //#.*\n/, // ignored cuz unnamed
+  ],
 
   //conflicts: $ => [
   //  [$._statement, $._last_statement],
   //],
 
   rules: {
-    // TODO: write a function to simplify this
-    program: $ => optional(seq(
-      //optional($._statement),
-      //optional($._statement_wrapper),
-      //optional($._comment_wrapper),
-      //repeat(seq(
-      //  choice('\n', ';'),
-      //  optional($._statement),
-      //  //optional($._statement_wrapper),
-      //  //optional($._comment_wrapper)
-      //)),
-      repeat(seq($._whitespace, $._statement, $._whitespace)),
-      //optional($._last_statement) // This is so that normal statements may always end with \n and ;
-    )),
+    program: $ => seq(repeat($._statement), optional(choice(
+      $.directive,
+      $.label,
+      $.instruction,
+      $.comment
+    ))),
+    //program: $ => optional(seq(
+    //  //optional($._statement),
+    //  //optional($._statement_wrapper),
+    //  //optional($._comment_wrapper),
+    //  //repeat(seq(
+    //  //  choice('\n', ';'),
+    //  //  optional($._statement),
+    //  //  //optional($._statement_wrapper),
+    //  //  //optional($._comment_wrapper)
+    //  //)),
+    //  repeat(seq($._whitespace, $._statement, $._whitespace)),
+    //  //optional($._last_statement) // This is so that normal statements may always end with \n and ;
+    //)),
 
-    _whitespace: $ => token(/[ \t]*/),
+    //_whitespace: $ => token(/[ \t]*/),
 
     /*
     NOTE: allowed:
@@ -126,10 +134,18 @@ module.exports = grammar({
     _statement: $ => prec(2, choice(
       ";",
       "\n",
-      seq($.directive, choice(";", "\n")),
-      seq($.instruction, choice(";", seq(optional($.comment), "\n"))),
-      seq($.macro, choice(";", "\n")),
-      $.label, // explicit space: optional
+      seq(
+        choice(
+          $.directive,
+          $.instruction,
+          $.macro,
+        ),
+        choice(
+          ";",
+          seq(optional($.comment), "\n")
+        )
+      ),
+      $.label,
       seq($.comment, "\n")
     )),
 

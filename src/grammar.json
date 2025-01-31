@@ -3,44 +3,45 @@
   "name": "mips",
   "rules": {
     "program": {
-      "type": "CHOICE",
+      "type": "SEQ",
       "members": [
         {
-          "type": "SEQ",
-          "members": [
-            {
-              "type": "REPEAT",
-              "content": {
-                "type": "SEQ",
-                "members": [
-                  {
-                    "type": "SYMBOL",
-                    "name": "_whitespace"
-                  },
-                  {
-                    "type": "SYMBOL",
-                    "name": "_statement"
-                  },
-                  {
-                    "type": "SYMBOL",
-                    "name": "_whitespace"
-                  }
-                ]
-              }
-            }
-          ]
+          "type": "REPEAT",
+          "content": {
+            "type": "SYMBOL",
+            "name": "_statement"
+          }
         },
         {
-          "type": "BLANK"
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "CHOICE",
+              "members": [
+                {
+                  "type": "SYMBOL",
+                  "name": "directive"
+                },
+                {
+                  "type": "SYMBOL",
+                  "name": "label"
+                },
+                {
+                  "type": "SYMBOL",
+                  "name": "instruction"
+                },
+                {
+                  "type": "SYMBOL",
+                  "name": "comment"
+                }
+              ]
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
         }
       ]
-    },
-    "_whitespace": {
-      "type": "TOKEN",
-      "content": {
-        "type": "PATTERN",
-        "value": "[ \\t]*"
-      }
     },
     "comment": {
       "type": "PATTERN",
@@ -64,30 +65,21 @@
             "type": "SEQ",
             "members": [
               {
-                "type": "SYMBOL",
-                "name": "directive"
-              },
-              {
                 "type": "CHOICE",
                 "members": [
                   {
-                    "type": "STRING",
-                    "value": ";"
+                    "type": "SYMBOL",
+                    "name": "directive"
                   },
                   {
-                    "type": "STRING",
-                    "value": "\n"
+                    "type": "SYMBOL",
+                    "name": "instruction"
+                  },
+                  {
+                    "type": "SYMBOL",
+                    "name": "macro"
                   }
                 ]
-              }
-            ]
-          },
-          {
-            "type": "SEQ",
-            "members": [
-              {
-                "type": "SYMBOL",
-                "name": "instruction"
               },
               {
                 "type": "CHOICE",
@@ -116,28 +108,6 @@
                         "value": "\n"
                       }
                     ]
-                  }
-                ]
-              }
-            ]
-          },
-          {
-            "type": "SEQ",
-            "members": [
-              {
-                "type": "SYMBOL",
-                "name": "macro"
-              },
-              {
-                "type": "CHOICE",
-                "members": [
-                  {
-                    "type": "STRING",
-                    "value": ";"
-                  },
-                  {
-                    "type": "STRING",
-                    "value": "\n"
                   }
                 ]
               }
@@ -496,7 +466,12 @@
       "name": "_register"
     }
   },
-  "extras": [],
+  "extras": [
+    {
+      "type": "PATTERN",
+      "value": " |\\t"
+    }
+  ],
   "conflicts": [],
   "precedences": [],
   "externals": [],
