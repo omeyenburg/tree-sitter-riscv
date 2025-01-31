@@ -1,7 +1,5 @@
 # tree-sitter-mips
 
-NOTE: This project is still very unstable and likely to experience severe changes in the future.
-
 [Tree-sitter](https://github.com/tree-sitter/tree-sitter) grammar for the MIPS assembly language.
 
 <img src="https://github.com/user-attachments/assets/f5f2332e-72c8-40b0-b452-98d741cada66" width="600">
@@ -44,7 +42,7 @@ cp ./queries/* $XDG_CONFIG_HOME/nvim/queries/mips/
 ## Alternatives
 If you are looking for a more general grammar for assembly, check out [tree-sitter-asm](https://github.com/RubixDev/tree-sitter-asm) which supports features of other instruction sets, yet it lacks some specific features of MIPS.
 
-## Ressources
-https://www.cs.cornell.edu/courses/cs3410/2008fa/MIPS_Vol2.pdf
-http://www.cs.unibo.it/~solmi/teaching/arch_2002-2003/AssemblyLanguageProgDoc.pdf
-https://en.wikibooks.org/wiki/MIPS_Assembly/Instruction_Formats#Opcodes
+## Further resources
+- https://www.cs.cornell.edu/courses/cs3410/2008fa/MIPS_Vol2.pdf
+- http://www.cs.unibo.it/~solmi/teaching/arch_2002-2003/AssemblyLanguageProgDoc.pdf
+- https://en.wikibooks.org/wiki/MIPS_Assembly/Instruction_Formats
