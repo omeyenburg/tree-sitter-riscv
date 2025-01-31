@@ -17,10 +17,6 @@ module.exports = grammar({
     / |\t/,
   ],
 
-  //conflicts: $ => [
-  //  [$.instruction],
-  //],
-
   rules: {
     program: $ => seq(
       repeat($._statement),
@@ -41,7 +37,7 @@ module.exports = grammar({
         choice(
           $.directive,
           $.instruction,
-          $.macro,
+          $.macro
         ),
         choice(";", seq(optional($.comment), "\n"))
       ),
@@ -56,13 +52,20 @@ module.exports = grammar({
 
     // A directive consists of a name beginning with a dot,
     // optionally followed by more arguments
-    directive: $ => seq($.meta, optional(seq(/[ \t]+/, $.attributes))),
-    meta: $ => token(/[.][a-z_]+/),
+    directive: $ => seq($.meta, optional( seq(
+      /[ \t]+/,
+      optional($.attributes) // Allow trailing space without attributes
+    ))),
 
+    meta: $ => token(/[.][a-z_]+/),
+    _attrsep: $ => token(choice(",", "(", ")")),
     attributes: $ => seq($._attribute, repeat(choice(
-      seq(" ", optional(","), $._attribute),
-      seq("\t",optional(","), $._attribute),
-      seq(",", $._attribute)
+      seq(" ", optional($._attrsep), $._attribute),
+      seq("\t", optional($._attrsep), $._attribute),
+      seq($._attrsep, $._attribute),
+      $._attrsep,
+      " ", // Allow trailing space after attributes
+      "\t"
     ))),
 
     _attribute: $ => choice(
@@ -72,7 +75,7 @@ module.exports = grammar({
     ),
 
     // Decreased priority in favor of number and string
-    attribute: $ => token(prec(-1, /[^\s]+/)),
+    attribute: $ => token(prec(-1, /[^\s,)(]+/)),
 
     // Macros
     macro: $ => token(/[a-zA-Z_]+\([^#]*\)/),
@@ -82,25 +85,32 @@ module.exports = grammar({
 
     // Instructions
     instruction: $ => choice(
-      $.opcode,
-      seq($.opcode, / |\t/, $.operands),
-      //seq($.opcode, $.comment),
+      seq($.opcode),
+      seq(
+        $.opcode,
+        / |\t/,
+        optional($.operands) // Allow trailing space without operands
+      )
     ),
 
     opcode: $ => token(/[a-z][a-z0-9.]*/),
 
     operands: $ => seq($._operand, repeat(seq(/ |,|\t/, $._operand))),
-    operands: $ => seq($._operand, repeat(choice(
-      seq(" ", optional(","), $._operand),
-      seq("\t",optional(","), $._operand),
-      seq(",", $._operand)
-    ))),
+    operands: $ => seq(
+      $._operand,
+      repeat(choice(
+        seq(" ", optional(","), $._operand),
+        seq("\t",optional(","), $._operand),
+        seq(",", $._operand)
+      )),
+      optional(choice(" ", "\t")) // Allow trailing space with operands
+    ),
 
     _operand: $ => choice(
       $.register,
       $.macro_variable,
       $._number,
-      $.address,
+      $.address
     ),
 
     // Match any macro variable
@@ -151,6 +161,6 @@ module.exports = grammar({
     decimal: $ => $._decimal,
     hexadecimal: $ => $._hexadecimal,
     float: $ => $._float,
-    register: $ => $._register,
+    register: $ => $._register
   }
 })
