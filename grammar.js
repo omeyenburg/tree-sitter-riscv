@@ -17,31 +17,21 @@ module.exports = grammar({
     / |\t/,
   ],
 
-  conflicts: $ => [
-    [$.instruction]
-  ],
+  //conflicts: $ => [
+  //  [$.instruction],
+  //],
 
   rules: {
     program: $ => seq(
-      seq(repeat($._statement), optional(choice(
+      repeat($._statement),
+      optional(choice(
         $.directive,
         $.instruction,
         $.macro,
         $.label
-      ))),
+      )),
       optional($.comment)
     ),
-
-    /*
-    NOTE: allowed:
-    any
-    label:(space)any
-    any(space)#comment
-    any(\n)any
-    any_except_comment(;)any
-    */
-
-    comment: $ => /[ \t]*#.*/,
 
     // Statement
     _statement: $ => prec(1, choice(
@@ -55,22 +45,34 @@ module.exports = grammar({
         ),
         choice(";", seq(optional($.comment), "\n"))
       ),
-      //seq($.instruction, $.comment, "\n"),
-      //seq($.instruction, ";"),
-      //seq($.instruction, "\n"),
       $.label,
       seq($.comment, "\n")
     )),
+
+    // Line comment
+    // Starts with a hash symbol
+    // Optionally prefixed with whitespace
+    comment: $ => /\s*#.*/,
 
     // A directive consists of a name beginning with a dot,
     // optionally followed by more arguments
     directive: $ => seq($.meta, optional(seq(/[ \t]+/, $.attributes))),
     meta: $ => token(/[.][a-z_]+/),
-    attributes: $ => choice(
+
+    attributes: $ => seq($._attribute, repeat(choice(
+      seq(" ", optional(","), $._attribute),
+      seq("\t",optional(","), $._attribute),
+      seq(",", $._attribute)
+    ))),
+
+    _attribute: $ => choice(
       $._number,
       $.string,
-      /[^\n"#0-9]+/
+      $.attribute
     ),
+
+    // Decreased priority in favor of number and string
+    attribute: $ => token(prec(-1, /[^\s]+/)),
 
     // Macros
     macro: $ => token(/[a-zA-Z_]+\([^#]*\)/),
@@ -110,11 +112,17 @@ module.exports = grammar({
     _number: $ => choice($.char, $.octal, $.decimal, $.hexadecimal, $.float),
 
     // Match any address
-    // Examples: main, main($s4), ($v1), -0x10($a0)
+    // Examples: main, main($s4), value+4($s1), ($v1), -0x10($a0)
     address: $ => choice(
       $._identifier,
       seq(
-        optional(choice($._identifier, $._char, $._octal, $._decimal, $._hexadecimal)),
+        optional(choice(
+          $._identifier,
+          seq(
+            optional(seq($._identifier, "+")),
+            choice($._char, $._octal, $._decimal, $._hexadecimal)
+          )
+        )),
         '(',
         $._register,
         ')'
