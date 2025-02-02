@@ -48,7 +48,7 @@ module.exports = grammar({
     // Line comment
     // Starts with a hash symbol
     // Optionally prefixed with whitespace
-    comment: $ => /\s*#.*/,
+    comment: $ => /#.*/,
 
     // A directive consists of a name beginning with a dot,
     // optionally followed by more arguments
@@ -57,7 +57,7 @@ module.exports = grammar({
       optional($.attributes) // Allow trailing space without attributes
     ))),
 
-    meta: $ => token(/[.][a-z_]+/),
+    meta: $ => /[.][a-z_]+/,
     _attrsep: $ => token(choice(",", "(", ")")),
     attributes: $ => seq($._attribute, repeat(choice(
       seq(" ", optional($._attrsep), $._attribute),
@@ -78,14 +78,14 @@ module.exports = grammar({
     attribute: $ => token(prec(-1, /[^\s,)(]+/)),
 
     // Macros
-    macro: $ => token(/[a-zA-Z_]+\([^#]*\)/),
+    macro: $ => /[a-zA-Z_]+\([^#]*\)/,
 
     // Labels
     _label: $ => seq(
       $.label,
       repeat(choice(" ", "\t")) // Allow trailing space
     ),
-    label: $ => token(/[a-zA-Z_][a-zA-Z0-9_]*:/),
+    label: $ => /[a-zA-Z_][a-zA-Z0-9_]*:/,
 
     // Instructions
     instruction: $ => choice(
@@ -97,9 +97,8 @@ module.exports = grammar({
       )
     ),
 
-    opcode: $ => token(/[a-z][a-z0-9.]*/),
+    opcode: $ => /[a-z][a-z0-9.]*/,
 
-    operands: $ => seq($._operand, repeat(seq(/ |,|\t/, $._operand))),
     operands: $ => seq(
       $._operand,
       repeat(choice(
@@ -120,7 +119,7 @@ module.exports = grammar({
     // Match any macro variable
     // The starting symbol depends on the assembler in use
     // Examples: %value \\value
-    macro_variable: $ => token(/[%\\][0-9a-zA-Z_:$%\\]+/),
+    macro_variable: $ => /[%\\][0-9a-zA-Z_:$%\\]+/,
 
     // Match any number
     _number: $ => choice($.char, $.octal, $.decimal, $.hexadecimal, $.float),
