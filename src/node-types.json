@@ -2,7 +2,58 @@
   {
     "type": "address",
     "named": true,
-    "fields": {}
+    "fields": {
+      "base": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "macro_variable",
+            "named": true
+          },
+          {
+            "type": "register",
+            "named": true
+          }
+        ]
+      },
+      "label": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      },
+      "offset": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "char",
+            "named": true
+          },
+          {
+            "type": "decimal",
+            "named": true
+          },
+          {
+            "type": "float",
+            "named": true
+          },
+          {
+            "type": "hexadecimal",
+            "named": true
+          },
+          {
+            "type": "octal",
+            "named": true
+          }
+        ]
+      }
+    }
   },
   {
     "type": "attributes",
@@ -253,6 +304,10 @@
   },
   {
     "type": "comment",
+    "named": true
+  },
+  {
+    "type": "identifier",
     "named": true
   },
   {

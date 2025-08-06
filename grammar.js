@@ -8,7 +8,7 @@
 // @ts-check
 
 module.exports = grammar({
-  name: "mips",
+  name: 'mips',
 
   // The default ignores whitespace.
   // Overwrite the extras default to manage
@@ -22,8 +22,8 @@ module.exports = grammar({
       repeat($._statement),
       optional(choice(
         $.directive,
-        $.instruction,
         $.macro,
+        $.instruction,
         $._label
       )),
       optional($.comment)
@@ -31,41 +31,41 @@ module.exports = grammar({
 
     // Statement
     _statement: $ => prec(1, choice(
-      ";",
-      "\n",
+      ';',
+      '\n',
       seq(
         choice(
           $.directive,
+          $.macro,
           $.instruction,
-          $.macro
         ),
-        choice(";", seq(optional($.comment), "\n"))
+        choice(';', seq(optional($.comment), '\n'))
       ),
       $._label,
-      seq($.comment, "\n")
+      seq($.comment, '\n')
     )),
 
-    // Line comment
-    // Starts with a hash symbol
+    // Line comment starts with a hash symbol
     // Optionally prefixed with whitespace
     comment: $ => /#.*/,
 
     // A directive consists of a name beginning with a dot,
     // optionally followed by more arguments
-    directive: $ => seq(field("mnemonic", $.mnemonic), optional( seq(
+    directive: $ => seq(field('mnemonic', $.mnemonic), optional( seq(
       /[ \t]+/,
-      optional(field("attributes", $.attributes)) // Allow trailing space without attributes
+      optional(field('attributes', $.attributes)) // Allow trailing space without attributes
     ))),
 
+    // Cannot be token, because this would break punctiuation queries
+    _attrsep: $ => choice(',', '(', ')'),
     mnemonic: $ => /[.][a-z_]+/,
-    _attrsep: $ => token(choice(",", "(", ")")),
     attributes: $ => seq($._attribute, repeat(choice(
-      seq(" ", optional($._attrsep), $._attribute),
-      seq("\t", optional($._attrsep), $._attribute),
+      seq(' ', optional($._attrsep), $._attribute),
+      seq('\t', optional($._attrsep), $._attribute),
       seq($._attrsep, $._attribute),
       $._attrsep,
-      " ", // Allow trailing space after attributes
-      "\t"
+      ' ', // Allow trailing space after attributes
+      '\t'
     ))),
 
     _attribute: $ => choice(
@@ -83,7 +83,7 @@ module.exports = grammar({
     // Labels
     _label: $ => seq(
       $.label,
-      repeat(choice(" ", "\t")) // Allow trailing space
+      repeat(choice(' ', '\t')) // Allow trailing space
     ),
     label: $ => /[a-zA-Z_][a-zA-Z0-9_]*:/,
 
@@ -91,9 +91,9 @@ module.exports = grammar({
     instruction: $ => choice(
       seq($.opcode),
       seq(
-        field("opcode", $.opcode),
+        field('opcode', $.opcode),
         /,| |\t/,
-        optional(field("operands", $.operands)) // Allow trailing space without operands
+        optional(field('operands', $.operands)) // Allow trailing space without operands
       )
     ),
 
@@ -102,11 +102,11 @@ module.exports = grammar({
     operands: $ => seq(
       $._operand,
       repeat(choice(
-        seq(" ", optional(","), $._operand),
-        seq("\t",optional(","), $._operand),
-        seq(",", $._operand)
+        seq(' ', optional(','), $._operand),
+        seq('\t',optional(','), $._operand),
+        seq(',', $._operand)
       )),
-      optional(choice(" ", "\t")) // Allow trailing space with operands
+      optional(choice(' ', '\t')) // Allow trailing space with operands
     ),
 
     _operand: $ => choice(
@@ -119,20 +119,33 @@ module.exports = grammar({
     // Match any number
     _number: $ => choice($.char, $.octal, $.decimal, $.hexadecimal, $.float),
 
+    // To mark negative offset
+    negative: $ => $._number,
+
     // Match any address
-    // Examples: main, main($s4), value+4($s1), ($v1), -0x10($a0)
+    // Examples: main, main($s4), value+4($s1), value-1, ($v1), -0x10($a0)
     address: $ => choice(
-      $._identifier,
+      seq(
+        field('label', $.identifier),
+        optional(choice(
+          seq('+', field('offset', $._number)),
+          field('offset', $._number)
+        ))
+      ),
       seq(
         optional(choice(
-          $._identifier,
+          field('label', $.identifier),
           seq(
-            optional(seq($._identifier, "+")),
-            choice($._char, $._octal, $._decimal, $._hexadecimal)
+            optional(seq(field('label', $.identifier), '+')),
+            field('offset', $._number)
+          ),
+          seq(
+            field('label', $.identifier),
+            field('offset', $._number)
           )
         )),
         '(',
-        $._register,
+        field('base', choice($.register, $.macro_variable)),
         ')'
       )
     ),
@@ -143,14 +156,14 @@ module.exports = grammar({
     _octal: $ => /-?0[0-7]*/,
     _decimal: $ => /-?\d+/, // Would match octal and decimal
     _hexadecimal: $ => /-?0[xX][0-9a-fA-F]+/,
-    _float: $ => choice( // Would match decimal and float
+    _float: $ => token(choice( // Would match decimal and float
       seq(
         choice(/-?\d+\.?\d*/, /-?\d*\.\d+/),
         optional(/[eE]-?\d+/)
       ),
       /-?\d+[eE]-?\d+/
-    ),
-    _identifier: $ => /[a-zA-Z_][a-zA-Z0-9_]*/,
+    )),
+    identifier: $ => /[a-zA-Z_][a-zA-Z0-9_]*/,
     _register: $ => token(seq('$', choice(
       // General purpose names
       'zero', 'at', 'gp', 'sp', 'fp', 'ra',
@@ -171,6 +184,6 @@ module.exports = grammar({
     // Match any macro variable
     // The starting symbol depends on the assembler in use
     // Examples: %value \\value
-    macro_variable: $ => token(/[%$][0-9a-zA-Z_:$%\\]+/),
+    macro_variable: $ => /[%$][0-9a-zA-Z_:$%\\]+/,
   }
 })
