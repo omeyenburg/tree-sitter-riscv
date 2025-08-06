@@ -150,7 +150,7 @@
       "members": [
         {
           "type": "SYMBOL",
-          "name": "meta"
+          "name": "mnemonic"
         },
         {
           "type": "CHOICE",
@@ -183,7 +183,7 @@
         }
       ]
     },
-    "meta": {
+    "mnemonic": {
       "type": "PATTERN",
       "value": "[.][a-z_]+"
     },
@@ -750,5 +750,6 @@
   "precedences": [],
   "externals": [],
   "inline": [],
-  "supertypes": []
+  "supertypes": [],
+  "reserved": {}
 }

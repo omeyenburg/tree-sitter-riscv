@@ -52,12 +52,12 @@ module.exports = grammar({
 
     // A directive consists of a name beginning with a dot,
     // optionally followed by more arguments
-    directive: $ => seq($.meta, optional( seq(
+    directive: $ => seq($.mnemonic, optional( seq(
       /[ \t]+/,
       optional($.attributes) // Allow trailing space without attributes
     ))),
 
-    meta: $ => /[.][a-z_]+/,
+    mnemonic: $ => /[.][a-z_]+/,
     _attrsep: $ => token(choice(",", "(", ")")),
     attributes: $ => seq($._attribute, repeat(choice(
       seq(" ", optional($._attrsep), $._attribute),
