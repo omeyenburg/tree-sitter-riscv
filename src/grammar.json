@@ -541,10 +541,6 @@
         }
       ]
     },
-    "macro_variable": {
-      "type": "PATTERN",
-      "value": "[%$][0-9a-zA-Z_:$%\\\\]+"
-    },
     "_number": {
       "type": "CHOICE",
       "members": [
@@ -777,7 +773,7 @@
               },
               {
                 "type": "PATTERN",
-                "value": "f?([0-9]|1[0-9]|2[0-9]|3[0-1])"
+                "value": "f?([12]?[0-9]|3[0-1])"
               }
             ]
           }
@@ -811,6 +807,13 @@
     "register": {
       "type": "SYMBOL",
       "name": "_register"
+    },
+    "macro_variable": {
+      "type": "TOKEN",
+      "content": {
+        "type": "PATTERN",
+        "value": "[%$][0-9a-zA-Z_:$%\\\\]+"
+      }
     }
   },
   "extras": [
