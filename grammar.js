@@ -89,7 +89,7 @@ module.exports = grammar({
 
     // Instructions
     instruction: $ => choice(
-      seq($.opcode),
+      field("opcode", $.opcode),
       seq(
         field('opcode', $.opcode),
         /,| |\t/,
