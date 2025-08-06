@@ -6,9 +6,13 @@
     flake-utils.url = "github:numtide/flake-utils";
   };
 
-  outputs = { self, nixpkgs, flake-utils }:
-    flake-utils.lib.eachDefaultSystem (system:
-      let
+  outputs = {
+    nixpkgs,
+    flake-utils,
+    ...
+  }:
+    flake-utils.lib.eachDefaultSystem (
+      system: let
         pkgs = nixpkgs.legacyPackages.${system};
       in {
         devShells.default = pkgs.mkShell {
@@ -16,9 +20,11 @@
             tree-sitter
             nodejs
           ];
+
+          shellHook = ''
+            export SHELL=${pkgs.bashInteractive}/bin/bash
+          '';
         };
       }
     );
 }
-
-# vim: sw=2 sts=2 et
