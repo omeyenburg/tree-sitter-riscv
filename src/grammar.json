@@ -149,8 +149,12 @@
       "type": "SEQ",
       "members": [
         {
-          "type": "SYMBOL",
-          "name": "mnemonic"
+          "type": "FIELD",
+          "name": "mnemonic",
+          "content": {
+            "type": "SYMBOL",
+            "name": "mnemonic"
+          }
         },
         {
           "type": "CHOICE",
@@ -166,8 +170,12 @@
                   "type": "CHOICE",
                   "members": [
                     {
-                      "type": "SYMBOL",
-                      "name": "attributes"
+                      "type": "FIELD",
+                      "name": "attributes",
+                      "content": {
+                        "type": "SYMBOL",
+                        "name": "attributes"
+                      }
                     },
                     {
                       "type": "BLANK"
@@ -376,8 +384,12 @@
           "type": "SEQ",
           "members": [
             {
-              "type": "SYMBOL",
-              "name": "opcode"
+              "type": "FIELD",
+              "name": "opcode",
+              "content": {
+                "type": "SYMBOL",
+                "name": "opcode"
+              }
             },
             {
               "type": "PATTERN",
@@ -387,8 +399,12 @@
               "type": "CHOICE",
               "members": [
                 {
-                  "type": "SYMBOL",
-                  "name": "operands"
+                  "type": "FIELD",
+                  "name": "operands",
+                  "content": {
+                    "type": "SYMBOL",
+                    "name": "operands"
+                  }
                 },
                 {
                   "type": "BLANK"
@@ -527,7 +543,7 @@
     },
     "macro_variable": {
       "type": "PATTERN",
-      "value": "[%\\\\][0-9a-zA-Z_:$%\\\\]+"
+      "value": "%[0-9a-zA-Z_:$%\\\\]+"
     },
     "_number": {
       "type": "CHOICE",

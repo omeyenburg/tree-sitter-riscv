@@ -56,20 +56,27 @@
   {
     "type": "directive",
     "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": true,
-      "types": [
-        {
-          "type": "attributes",
-          "named": true
-        },
-        {
-          "type": "mnemonic",
-          "named": true
-        }
-      ]
+    "fields": {
+      "attributes": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "attributes",
+            "named": true
+          }
+        ]
+      },
+      "mnemonic": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "mnemonic",
+            "named": true
+          }
+        ]
+      }
     }
   },
   {
@@ -85,17 +92,34 @@
   {
     "type": "instruction",
     "named": true,
-    "fields": {},
+    "fields": {
+      "opcode": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "opcode",
+            "named": true
+          }
+        ]
+      },
+      "operands": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "operands",
+            "named": true
+          }
+        ]
+      }
+    },
     "children": {
-      "multiple": true,
-      "required": true,
+      "multiple": false,
+      "required": false,
       "types": [
         {
           "type": "opcode",
-          "named": true
-        },
-        {
-          "type": "operands",
           "named": true
         }
       ]

@@ -52,9 +52,9 @@ module.exports = grammar({
 
     // A directive consists of a name beginning with a dot,
     // optionally followed by more arguments
-    directive: $ => seq($.mnemonic, optional( seq(
+    directive: $ => seq(field("mnemonic", $.mnemonic), optional( seq(
       /[ \t]+/,
-      optional($.attributes) // Allow trailing space without attributes
+      optional(field("attributes", $.attributes)) // Allow trailing space without attributes
     ))),
 
     mnemonic: $ => /[.][a-z_]+/,
@@ -91,9 +91,9 @@ module.exports = grammar({
     instruction: $ => choice(
       seq($.opcode),
       seq(
-        $.opcode,
+        field("opcode", $.opcode),
         /,| |\t/,
-        optional($.operands) // Allow trailing space without operands
+        optional(field("operands", $.operands)) // Allow trailing space without operands
       )
     ),
 
@@ -119,7 +119,7 @@ module.exports = grammar({
     // Match any macro variable
     // The starting symbol depends on the assembler in use
     // Examples: %value \\value
-    macro_variable: $ => /[%\\][0-9a-zA-Z_:$%\\]+/,
+    macro_variable: $ => /%[0-9a-zA-Z_:$%\\]+/,
 
     // Match any number
     _number: $ => choice($.char, $.octal, $.decimal, $.hexadecimal, $.float),

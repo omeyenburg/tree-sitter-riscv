@@ -13,10 +13,10 @@
 #define ALIAS_COUNT 0
 #define TOKEN_COUNT 30
 #define EXTERNAL_TOKEN_COUNT 0
-#define FIELD_COUNT 0
+#define FIELD_COUNT 4
 #define MAX_ALIAS_SEQUENCE_LENGTH 6
 #define MAX_RESERVED_WORD_SET_SIZE 0
-#define PRODUCTION_ID_COUNT 1
+#define PRODUCTION_ID_COUNT 5
 #define SUPERTYPE_COUNT 0
 
 enum ts_symbol_identifiers {
@@ -401,6 +401,41 @@ static const TSSymbolMetadata ts_symbol_metadata[] = {
   },
 };
 
+enum ts_field_identifiers {
+  field_attributes = 1,
+  field_mnemonic = 2,
+  field_opcode = 3,
+  field_operands = 4,
+};
+
+static const char * const ts_field_names[] = {
+  [0] = NULL,
+  [field_attributes] = "attributes",
+  [field_mnemonic] = "mnemonic",
+  [field_opcode] = "opcode",
+  [field_operands] = "operands",
+};
+
+static const TSMapSlice ts_field_map_slices[PRODUCTION_ID_COUNT] = {
+  [1] = {.index = 0, .length = 1},
+  [2] = {.index = 1, .length = 1},
+  [3] = {.index = 2, .length = 2},
+  [4] = {.index = 4, .length = 2},
+};
+
+static const TSFieldMapEntry ts_field_map_entries[] = {
+  [0] =
+    {field_mnemonic, 0},
+  [1] =
+    {field_opcode, 0},
+  [2] =
+    {field_attributes, 2},
+    {field_mnemonic, 0},
+  [4] =
+    {field_opcode, 0},
+    {field_operands, 2},
+};
+
 static const TSSymbol ts_alias_sequences[PRODUCTION_ID_COUNT][MAX_ALIAS_SEQUENCE_LENGTH] = {
   [0] = {0},
 };
@@ -501,6 +536,7 @@ static bool ts_lex(TSLexer *lexer, TSStateId state) {
         '"', 37,
         '#', 30,
         '$', 47,
+        '%', 48,
         '\'', 38,
         '(', 63,
         ')', 64,
@@ -515,8 +551,6 @@ static bool ts_lex(TSLexer *lexer, TSStateId state) {
       );
       if (lookahead == '\t' ||
           lookahead == ' ') SKIP(0);
-      if (lookahead == '%' ||
-          lookahead == '\\') ADVANCE(48);
       if (('1' <= lookahead && lookahead <= '9')) ADVANCE(71);
       if (('a' <= lookahead && lookahead <= 'z')) ADVANCE(57);
       if (('A' <= lookahead && lookahead <= 'Z') ||
@@ -705,6 +739,7 @@ static bool ts_lex(TSLexer *lexer, TSStateId state) {
         '\n', 29,
         '#', 31,
         '$', 15,
+        '%', 16,
         '\'', 17,
         '(', 63,
         ',', 60,
@@ -715,8 +750,6 @@ static bool ts_lex(TSLexer *lexer, TSStateId state) {
       );
       if (lookahead == '\t' ||
           lookahead == ' ') SKIP(23);
-      if (lookahead == '%' ||
-          lookahead == '\\') ADVANCE(16);
       if (('1' <= lookahead && lookahead <= '9')) ADVANCE(72);
       if (('A' <= lookahead && lookahead <= 'Z') ||
           lookahead == '_' ||
@@ -2466,7 +2499,7 @@ static const TSParseActionEntry ts_parse_actions[] = {
   [11] = {.entry = {.count = 1, .reusable = true}}, SHIFT(57),
   [13] = {.entry = {.count = 1, .reusable = true}}, SHIFT(18),
   [15] = {.entry = {.count = 1, .reusable = false}}, SHIFT(55),
-  [17] = {.entry = {.count = 1, .reusable = true}}, REDUCE(sym_instruction, 2, 0, 0),
+  [17] = {.entry = {.count = 1, .reusable = true}}, REDUCE(sym_instruction, 2, 0, 2),
   [19] = {.entry = {.count = 1, .reusable = true}}, SHIFT(30),
   [21] = {.entry = {.count = 1, .reusable = true}}, SHIFT(69),
   [23] = {.entry = {.count = 1, .reusable = true}}, SHIFT(22),
@@ -2492,7 +2525,7 @@ static const TSParseActionEntry ts_parse_actions[] = {
   [63] = {.entry = {.count = 1, .reusable = false}}, SHIFT(29),
   [65] = {.entry = {.count = 1, .reusable = false}}, SHIFT(42),
   [67] = {.entry = {.count = 2, .reusable = false}}, REDUCE(aux_sym_attributes_repeat1, 1, 0, 0), SHIFT_REPEAT(14),
-  [70] = {.entry = {.count = 1, .reusable = true}}, REDUCE(sym_directive, 2, 0, 0),
+  [70] = {.entry = {.count = 1, .reusable = true}}, REDUCE(sym_directive, 2, 0, 1),
   [72] = {.entry = {.count = 1, .reusable = false}}, SHIFT(31),
   [74] = {.entry = {.count = 1, .reusable = true}}, SHIFT(51),
   [76] = {.entry = {.count = 1, .reusable = true}}, SHIFT(54),
@@ -2586,17 +2619,17 @@ static const TSParseActionEntry ts_parse_actions[] = {
   [265] = {.entry = {.count = 1, .reusable = true}}, REDUCE(sym_instruction, 1, 0, 0),
   [267] = {.entry = {.count = 1, .reusable = false}}, REDUCE(sym_instruction, 1, 0, 0),
   [269] = {.entry = {.count = 1, .reusable = true}}, SHIFT(2),
-  [271] = {.entry = {.count = 1, .reusable = true}}, REDUCE(sym_directive, 1, 0, 0),
-  [273] = {.entry = {.count = 1, .reusable = false}}, REDUCE(sym_directive, 1, 0, 0),
+  [271] = {.entry = {.count = 1, .reusable = true}}, REDUCE(sym_directive, 1, 0, 1),
+  [273] = {.entry = {.count = 1, .reusable = false}}, REDUCE(sym_directive, 1, 0, 1),
   [275] = {.entry = {.count = 1, .reusable = true}}, SHIFT(9),
   [277] = {.entry = {.count = 1, .reusable = true}}, SHIFT(21),
   [279] = {.entry = {.count = 1, .reusable = true}}, SHIFT(66),
   [281] = {.entry = {.count = 1, .reusable = true}}, SHIFT(71),
   [283] = {.entry = {.count = 1, .reusable = false}}, SHIFT(71),
-  [285] = {.entry = {.count = 1, .reusable = true}}, REDUCE(sym_directive, 3, 0, 0),
+  [285] = {.entry = {.count = 1, .reusable = true}}, REDUCE(sym_directive, 3, 0, 3),
   [287] = {.entry = {.count = 1, .reusable = true}}, REDUCE(sym_program, 2, 0, 0),
   [289] = {.entry = {.count = 1, .reusable = true}}, SHIFT(64),
-  [291] = {.entry = {.count = 1, .reusable = true}}, REDUCE(sym_instruction, 3, 0, 0),
+  [291] = {.entry = {.count = 1, .reusable = true}}, REDUCE(sym_instruction, 3, 0, 4),
   [293] = {.entry = {.count = 1, .reusable = true}}, SHIFT(10),
   [295] = {.entry = {.count = 1, .reusable = true}}, SHIFT(75),
   [297] = {.entry = {.count = 1, .reusable = true}}, REDUCE(sym_program, 3, 0, 0),
@@ -2640,6 +2673,9 @@ TS_PUBLIC const TSLanguage *tree_sitter_mips(void) {
     .small_parse_table_map = ts_small_parse_table_map,
     .parse_actions = ts_parse_actions,
     .symbol_names = ts_symbol_names,
+    .field_names = ts_field_names,
+    .field_map_slices = ts_field_map_slices,
+    .field_map_entries = ts_field_map_entries,
     .symbol_metadata = ts_symbol_metadata,
     .public_symbol_map = ts_symbol_map,
     .alias_map = ts_non_terminal_alias_map,
