@@ -5,7 +5,7 @@ Basic directive
 ---
 (program
   (directive
-    (meta)))
+    (mnemonic)))
 
 ==========
 Directive with decimal
@@ -14,7 +14,7 @@ Directive with decimal
 ---
 (program
   (directive
-    (meta)
+    (mnemonic)
     (attributes
       (decimal))))
 
@@ -25,7 +25,7 @@ Directive with octal
 ---
 (program
   (directive
-    (meta)
+    (mnemonic)
     (attributes
       (octal))))
 
@@ -36,7 +36,7 @@ Directive with hexadecimal
 ---
 (program
   (directive
-    (meta)
+    (mnemonic)
     (attributes
       (hexadecimal))))
 
@@ -47,7 +47,7 @@ Directive with char
 ---
 (program
   (directive
-    (meta)
+    (mnemonic)
     (attributes
       (char))))
 
@@ -58,7 +58,7 @@ Directive with float
 ---
 (program
   (directive
-    (meta)
+    (mnemonic)
     (attributes
       (float))))
 
@@ -69,7 +69,7 @@ Directive with string
 ---
 (program
   (directive
-    (meta)
+    (mnemonic)
     (attributes
       (string))))
 
@@ -80,7 +80,7 @@ Directive with multiple arguments
 ---
 (program
   (directive
-    (meta)
+    (mnemonic)
     (attributes
       (attribute)
       (string)

@@ -159,7 +159,7 @@ test:.text
 (program
   (label)
   (directive
-    (meta)))
+    (mnemonic)))
 
 ==========
 Combined label and directive with space
@@ -169,7 +169,7 @@ test: .text
 (program
   (label)
   (directive
-    (meta)))
+    (mnemonic)))
 
 ==========
 Combined label and directive with tab
@@ -179,7 +179,7 @@ test:	.text
 (program
   (label)
   (directive
-    (meta)))
+    (mnemonic)))
 
 ==========
 Label with leading space
@@ -300,7 +300,7 @@ Directive without attributes with leading space
 ---
 (program
   (directive
-    (meta)))
+    (mnemonic)))
 
 ==========
 Directive without attributes with leading tab
@@ -309,7 +309,7 @@ Directive without attributes with leading tab
 ---
 (program
   (directive
-    (meta)))
+    (mnemonic)))
 
 ==========
 Directive without attributes with trailing space
@@ -318,7 +318,7 @@ Directive without attributes with trailing space
 ---
 (program
   (directive
-    (meta)))
+    (mnemonic)))
 
 ==========
 Directive without attributes with trailing tab
@@ -327,7 +327,7 @@ Directive without attributes with trailing tab
 ---
 (program
   (directive
-    (meta)))
+    (mnemonic)))
 
 ==========
 Directive with attributes with leading space
@@ -336,7 +336,7 @@ Directive with attributes with leading space
 ---
 (program
   (directive
-    (meta)
+    (mnemonic)
     (attributes
       (decimal))))
 
@@ -347,7 +347,7 @@ Directive with attributes with leading tab
 ---
 (program
   (directive
-    (meta)
+    (mnemonic)
     (attributes
       (decimal))))
 
@@ -358,7 +358,7 @@ Directive with attributes with trailing space
 ---
 (program
   (directive
-    (meta)
+    (mnemonic)
     (attributes
       (decimal))))
 
@@ -369,7 +369,7 @@ Directive with attributes with trailing tab
 ---
 (program
   (directive
-    (meta)
+    (mnemonic)
     (attributes
       (decimal))))
 
@@ -436,7 +436,7 @@ Directive without attributes with semicolon
 ---
 (program
   (directive
-    (meta)))
+    (mnemonic)))
 
 ==========
 Directive without attributes with space before semicolon
@@ -445,7 +445,7 @@ Directive without attributes with space before semicolon
 ---
 (program
   (directive
-    (meta)))
+    (mnemonic)))
 
 ==========
 Directive with attributes with semicolon
@@ -454,7 +454,7 @@ Directive with attributes with semicolon
 ---
 (program
   (directive
-    (meta)
+    (mnemonic)
     (attributes
       (decimal))))
 
@@ -465,7 +465,7 @@ Directive with attributes with space before semicolon
 ---
 (program
   (directive
-    (meta)
+    (mnemonic)
     (attributes
       (decimal))))
 

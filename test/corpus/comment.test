@@ -58,7 +58,7 @@ Inline comment following directive without arguments
 ---
 (program
   (directive
-    (meta))
+    (mnemonic))
   (comment))
 
 ==========
@@ -68,7 +68,7 @@ Inline comment following directive with single argument
 ---
 (program
   (directive
-    (meta)
+    (mnemonic)
     (attributes
       (decimal)))
   (comment))
@@ -80,7 +80,7 @@ Inline comment following directive with multiple arguments
 ---
 (program
   (directive
-    (meta)
+    (mnemonic)
     (attributes
       (decimal)
       (decimal)
