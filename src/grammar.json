@@ -543,7 +543,7 @@
     },
     "macro_variable": {
       "type": "PATTERN",
-      "value": "%[0-9a-zA-Z_:$%\\\\]+"
+      "value": "[%$][0-9a-zA-Z_:$%\\\\]+"
     },
     "_number": {
       "type": "CHOICE",
@@ -719,13 +719,70 @@
         }
       ]
     },
-    "_register": {
-      "type": "PATTERN",
-      "value": "[$][0-9a-z]+"
-    },
     "_identifier": {
       "type": "PATTERN",
       "value": "[a-zA-Z_][a-zA-Z0-9_]*"
+    },
+    "_register": {
+      "type": "TOKEN",
+      "content": {
+        "type": "SEQ",
+        "members": [
+          {
+            "type": "STRING",
+            "value": "$"
+          },
+          {
+            "type": "CHOICE",
+            "members": [
+              {
+                "type": "STRING",
+                "value": "zero"
+              },
+              {
+                "type": "STRING",
+                "value": "at"
+              },
+              {
+                "type": "STRING",
+                "value": "gp"
+              },
+              {
+                "type": "STRING",
+                "value": "sp"
+              },
+              {
+                "type": "STRING",
+                "value": "fp"
+              },
+              {
+                "type": "STRING",
+                "value": "ra"
+              },
+              {
+                "type": "PATTERN",
+                "value": "[vk][01]"
+              },
+              {
+                "type": "PATTERN",
+                "value": "[ac][0-3]"
+              },
+              {
+                "type": "PATTERN",
+                "value": "t[0-9]"
+              },
+              {
+                "type": "PATTERN",
+                "value": "s[0-8]"
+              },
+              {
+                "type": "PATTERN",
+                "value": "f?([0-9]|1[0-9]|2[0-9]|3[0-1])"
+              }
+            ]
+          }
+        ]
+      }
     },
     "char": {
       "type": "SYMBOL",

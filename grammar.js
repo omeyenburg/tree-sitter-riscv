@@ -119,7 +119,7 @@ module.exports = grammar({
     // Match any macro variable
     // The starting symbol depends on the assembler in use
     // Examples: %value \\value
-    macro_variable: $ => /%[0-9a-zA-Z_:$%\\]+/,
+    macro_variable: $ => /[%$][0-9a-zA-Z_:$%\\]+/,
 
     // Match any number
     _number: $ => choice($.char, $.octal, $.decimal, $.hexadecimal, $.float),
@@ -155,8 +155,15 @@ module.exports = grammar({
       ),
       /-?\d+[eE]-?\d+/
     ),
-    _register: $ => /[$][0-9a-z]+/,
     _identifier: $ => /[a-zA-Z_][a-zA-Z0-9_]*/,
+    _register: $ => token(seq('$', choice(
+      // General purpose names
+      'zero', 'at', 'gp', 'sp', 'fp', 'ra',
+      /[vk][01]/, /[ac][0-3]/, /t[0-9]/, /s[0-8]/,
+
+      // Numeric GPRs & Floating-point
+      /f?([0-9]|1[0-9]|2[0-9]|3[0-1])/,
+    ))),
 
     char: $ => $._char,
     string: $ => $._string,
