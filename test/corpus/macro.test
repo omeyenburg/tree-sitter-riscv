@@ -1,19 +1,19 @@
 ==========
-Macro definition and usage (Mars)
+Macro definition and usage (GNU as)
 ==========
-.macro inc(%rs %rt)
-    addiu %rs, %rt, 1
+.macro inc \rs \rt
+    addiu \rs, \rt, 1
 .end_macro
 
-inc($t0, $t1)
+inc $t0, $t1
 ---
 (program
   (directive
     (mnemonic)
     (attributes
-      (attribute)
-      (attribute)
-      (attribute)))
+      (identifier)
+      (macro_variable)
+      (macro_variable)))
   (instruction
     (opcode)
     (operands
@@ -22,4 +22,68 @@ inc($t0, $t1)
       (decimal)))
   (directive
     (mnemonic))
-  (macro))
+  (instruction
+    (opcode)
+    (operands
+      (register)
+     (register))))
+
+==========
+Macro definition and usage (Mars)
+==========
+.macro inc %rs %rt
+    addiu %rs, %rt, 1
+.end_macro
+
+inc $t0, $t1
+---
+(program
+  (directive
+    (mnemonic)
+    (attributes
+      (identifier)
+      (macro_variable)
+      (macro_variable)))
+  (instruction
+    (opcode)
+    (operands
+      (macro_variable)
+      (macro_variable)
+      (decimal)))
+  (directive
+    (mnemonic))
+  (instruction
+    (opcode)
+    (operands
+      (register)
+      (register))))
+
+==========
+Macro definition and usage with dollar sign
+==========
+.macro inc $rs $rt
+    addiu $rs, $rt, 1
+.end_macro
+
+inc $t0, $t1
+---
+(program
+  (directive
+    (mnemonic)
+    (attributes
+      (identifier)
+      (macro_variable)
+      (macro_variable)))
+  (instruction
+    (opcode)
+    (operands
+      (macro_variable)
+      (macro_variable)
+      (decimal)))
+  (directive
+    (mnemonic))
+  (instruction
+    (opcode)
+    (operands
+      (register)
+      (register))))
