@@ -4,6 +4,7 @@
 
 enum TokenType {
     _OPERAND_SEPARATOR,
+    MODULO,
 };
 
 void* tree_sitter_mips_external_scanner_create() {
@@ -26,8 +27,8 @@ static bool is_operator_start(int32_t c) {
 }
 
 static bool is_operand_start(int32_t c) {
-    return iswalnum(c) || c == '_' || c == '$' || c == '.' || c == '\'' || c == '"' ||
-           c == '(' || c == ')' || c == '-';
+    return iswalnum(c) || c == '_' || c == '\\' || c == '%' || c == '$' || c == '.' ||
+           c == '\'' || c == '"' || c == '(' || c == ')' || c == '-';
 }
 
 bool tree_sitter_mips_external_scanner_scan(void* payload,

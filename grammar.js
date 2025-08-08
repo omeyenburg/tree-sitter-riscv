@@ -72,33 +72,6 @@ module.exports = grammar({
     _label: $ => seq($.label, /[ \t]*/),
     label: $ => token(prec(2, /[a-zA-Z_][a-zA-Z0-9_]*:/)),
 
-    // instruction: $ => choice(
-    //   field("opcode", $.opcode),
-    //   seq(
-    //     field('opcode', $.opcode),
-    //     /[ \t]+/,
-    //     field('operands', $.operands)
-    //   )
-    // ),
-
-    // instruction: $ => seq(
-    //   field('opcode', $.opcode),
-    //   optional(seq(/[ \t]+/, field('operands', $.operands)))
-    // ),
-    // opcode: $ => token(/[a-z][a-z0-9.]*/),
-    // operands: $ => seq(
-    //   $._operand,
-    //   repeat(seq(
-    //     choice(',', $._operand_separator),
-    //     $._operand
-    //   )),
-    //   optional($._operand_separator)
-    // ),
-    // _operand: $ => choice(
-    //   $.register,
-    //   $._expression
-    // ),
-
     instruction: $ => seq(
       field('opcode', $.opcode),
       optional(seq(
@@ -138,7 +111,6 @@ module.exports = grammar({
       $.float,
     ),
 
-    // Standard binary expressions - no special space handling
     binary_expression: $ => choice(
       prec.left(1, seq($._expression, '||', $._expression)),
       prec.left(2, seq($._expression, '&&', $._expression)),
@@ -181,16 +153,19 @@ module.exports = grammar({
       ),
       /-?\d+[eE]-?\d+/
     )),
+
     register: $ => token(seq('$', choice(
       'zero', 'at', 'gp', 'sp', 'fp', 'ra',
       /[vk][01]/, /[ac][0-3]/, /t[0-9]/, /s[0-8]/,
       /f?([12]?[0-9]|3[0-1])/,
     ))),
+
     macro_variable: $ => /[%$\\][0-9a-zA-Z_:$%\\]+/,
     identifier: $ => /[a-zA-Z_][a-zA-Z0-9_]*/,
 
-    // Match any address
-    // Examples: main, main($s4), value+4($s1), value-1, ($v1), -0x10($a0)
+    // Match addresses
+    // Examples: main($s4), value+4($s1), ($v1), -0x10($a0)
+    // Does not match expression-like addresses: main, main+2
     address: $ => prec(1, seq(
       optional(field("offset", $._expression)),
       '(', field('base', choice($.register, $.macro_variable)), ')'
