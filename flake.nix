@@ -19,6 +19,7 @@
           buildInputs = with pkgs; [
             tree-sitter
             nodejs
+            pkgsCross.mipsel-linux-gnu.buildPackages.gcc
           ];
 
           shellHook = ''
