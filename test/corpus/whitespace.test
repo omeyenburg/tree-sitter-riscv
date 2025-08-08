@@ -27,9 +27,9 @@ li $t0,1
       (decimal))))
 
 ==========
-Instruction with comma-separated opcode
+Instruction with commas and space-separated
 ==========
-li,$t0,1
+li $t0 , 1
 ---
 (program
   (instruction
@@ -39,21 +39,9 @@ li,$t0,1
       (decimal))))
 
 ==========
-Instruction with commas surrounded with space
+Instruction with commas and tab-separated
 ==========
-li , $t0 , 1
----
-(program
-  (instruction
-    (opcode)
-    (operands
-      (register)
-      (decimal))))
-
-==========
-Instruction with commas surrounded with tabs
-==========
-li	,	$t0	,	1
+li	$t0	,	1
 ---
 (program
   (instruction
@@ -468,6 +456,20 @@ Directive with attributes with space before semicolon
     (mnemonic)
     (attributes
       (decimal))))
+
+==========
+Instruction opcode separated with comma from arguments
+:error
+==========
+li,$t0,1
+---
+
+==========
+Instruction opcode separated with comma and spaces from arguments
+:error
+==========
+li , $t0, 1
+---
 
 ==========
 Number without context
