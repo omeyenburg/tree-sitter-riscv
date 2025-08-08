@@ -1,0 +1,115 @@
+==========
+Basic instruction
+==========
+syscall
+---
+(program
+  (instruction
+    opcode: (opcode)))
+
+==========
+Instruction with register address
+==========
+la $t0, ($s0)
+---
+(program
+  (instruction
+    opcode: (opcode)
+    operands: (operands
+      (register)
+      (address
+        base: (register)))))
+
+==========
+Instruction with decimal offset address
+==========
+la $t0, -100($s0)
+---
+(program
+  (instruction
+    opcode: (opcode)
+    operands: (operands
+      (register)
+      (address
+        offset: (decimal)
+        base: (register)))))
+
+==========
+Instruction with label offset address
+==========
+la $t0, test($s0)
+---
+(program
+  (instruction
+    opcode: (opcode)
+    operands: (operands
+      (register)
+      (address
+        offset: (identifier)
+        base: (register)))))
+
+==========
+Instruction with label and decimal offset address
+==========
+la $t0, test+100($s0)
+---
+(program
+  (instruction
+    opcode: (opcode)
+    operands: (operands
+      (register)
+      (address
+        offset: (binary_expression
+          left: (identifier)
+          right: (decimal))
+        base: (register)))))
+
+==========
+Basic directive
+==========
+.text
+---
+(program
+  (directive
+    mnemonic: (mnemonic)))
+
+==========
+Directive with decimal
+==========
+.word 123
+---
+(program
+  (directive
+    mnemonic: (mnemonic)
+    attributes: (attributes
+      (decimal))))
+
+==========
+Parenthesized expression
+==========
+add $t0, (base+4), $t1
+---
+(program
+  (instruction
+    opcode: (opcode)
+    operands: (operands
+      (register)
+      (parenthesized_expression
+        argument: (binary_expression
+          left: (identifier)
+          right: (decimal)))
+      (register))))
+
+==========
+Unary expression
+==========
+add $t0, -base, $t1
+---
+(program
+  (instruction
+    opcode: (opcode)
+    operands: (operands
+      (register)
+      (unary_expression
+        argument: (identifier))
+      (register))))
