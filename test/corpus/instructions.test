@@ -220,7 +220,7 @@ li.s $f5, -1.
       (float))))
 
 ==========
-Instruction with label address
+Instruction with identifier
 ==========
 j test
 ---
@@ -228,103 +228,7 @@ j test
   (instruction
     (opcode)
     (operands
-      (address))))
-
-==========
-Instruction with register address
-==========
-la $t0, ($s0)
----
-(program
-  (instruction
-    (opcode)
-    (operands
-      (register)
-      (address))))
-
-==========
-Instruction with decimal offset address
-==========
-la $t0, -100($s0)
----
-(program
-  (instruction
-    (opcode)
-    (operands
-      (register)
-      (address))))
-
-==========
-Instruction with label offset address
-==========
-la $t0, test($s0)
----
-(program
-  (instruction
-    (opcode)
-    (operands
-      (register)
-      (address))))
-
-==========
-Instruction with label and decimal offset address
-==========
-la $t0, test+100($s0)
----
-(program
-  (instruction
-    (opcode)
-    (operands
-      (register)
-      (address))))
-
-==========
-Instruction with label and hexadecimal offset address
-==========
-la $t0, test+0x123($s0)
----
-(program
-  (instruction
-    (opcode)
-    (operands
-      (register)
-      (address))))
-
-==========
-Instruction with label and octal offset address
-==========
-la $t0, test+012($s0)
----
-(program
-  (instruction
-    (opcode)
-    (operands
-      (register)
-      (address))))
-
-==========
-Instruction with label and decimal offset address
-==========
-la $t0, test+100($s0)
----
-(program
-  (instruction
-    (opcode)
-    (operands
-      (register)
-      (address))))
-
-==========
-Instruction with label and char offset address
-==========
-la $t0, test+'a'($s0)
----
-(program
-  (instruction
-    (opcode)
-    (operands
-      (register)
-      (address))))
+      (identifier))))
 
 ==========
 Instruction without space between opcode and register

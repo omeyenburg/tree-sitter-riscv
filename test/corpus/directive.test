@@ -82,6 +82,19 @@ Directive with multiple arguments
   (directive
     (mnemonic)
     (attributes
-      (attribute)
+      (identifier)
+      (string)
+      (decimal))))
+
+==========
+Directive with multiple comma-separated arguments
+==========
+.set test,"test",123
+---
+(program
+  (directive
+    (mnemonic)
+    (attributes
+      (identifier)
       (string)
       (decimal))))
