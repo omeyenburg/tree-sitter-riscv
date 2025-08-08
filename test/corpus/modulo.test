@@ -1,0 +1,108 @@
+==========
+Instruction with modulo expression without spaces
+==========
+li $t0 4%2
+---
+(program
+  (instruction
+    (opcode)
+    (operands
+      (register)
+      (binary_expression
+        (decimal)
+        (decimal)))))
+
+==========
+Instruction with modulo expression with space after operator
+==========
+li $t0 4%2
+---
+(program
+  (instruction
+    (opcode)
+    (operands
+      (register)
+      (binary_expression
+        (decimal)
+        (decimal)))))
+
+==========
+Instruction with modulo expression with space after operator
+==========
+li $t0 4% 2
+---
+(program
+  (instruction
+    (opcode)
+    (operands
+      (register)
+      (binary_expression
+        (decimal)
+        (decimal)))))
+
+==========
+Instruction with modulo expression with spaces around operator (edge case with special treatment using extra node)
+==========
+li $t0 4 % 2
+---
+(program
+  (instruction
+    (opcode)
+    (operands
+      (register)
+      (decimal)
+      (modulo)
+      (decimal))))
+
+==========
+Instruction with modulo expression without spaces between decimal and macro variable
+==========
+li $t0 4%%2
+---
+(program
+  (instruction
+    (opcode)
+    (operands
+      (register)
+      (binary_expression
+        (decimal)
+        (macro_variable)))))
+
+==========
+Instruction without parenthesized modulo expression
+==========
+li $t0 (4 % 2)
+---
+(program
+  (instruction
+    (opcode)
+    (operands
+      (register)
+      (parenthesized_expression
+        (binary_expression
+          (decimal)
+          (decimal))))))
+
+==========
+Instruction without modulo expression and macro variable instead
+==========
+li 4 %2
+---
+(program
+  (instruction
+    (opcode)
+    (operands
+      (decimal)
+      (macro_variable))))
+
+==========
+Instruction without modulo expression and two macro variables instead
+==========
+li %4 %2
+---
+(program
+  (instruction
+    (opcode)
+    (operands
+      (macro_variable)
+      (macro_variable))))
