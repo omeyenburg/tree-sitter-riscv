@@ -1,26 +1,21 @@
-;; Highlight directives
-(meta) @keyword
-(attribute) @tag
+;; Directives
+(mnemonic) @keyword
+(attribute) @operator
 
-;; Highlight labels
-(label) @function
-
-;; Highlight opcodes
-(opcode) @function.builtin
-
-;; Highlight registers
-(register) @variable.builtin
-
-;; Highlight macros
+;; Labels
 [
-  (macro)
-  (macro_variable)
-] @tag
+  (label)
+  (identifier)
+] @label
 
-;; Highlight addresses
-(address) @variable.parameter
+;; Macro variables
+(macro_variable) @label
 
-;; Highlight primitives
+;; Instructions
+(opcode) @function
+(register) @parameter
+
+;; Primitives
 [
   (char)
   (float)
@@ -28,16 +23,46 @@
   (decimal)
   (hexadecimal)
 ] @number
+
+;; String
 (string) @string
 
-;; Highlight errors
+;; Errors
 (ERROR) @error
+(ERROR (_) @error)
 
-;; Highlight comments
+;; Comments
 (comment) @comment
 
-; Highlight punctuation
+;; Punctuation
 [
   ","
   ";"
+  "("
+  ")"
 ] @punctuation.delimiter
+
+;; Operator
+[
+  "|"
+  "||"
+  "&"
+  "&&"
+  "^"
+  "<"
+  "<<"
+  ">"
+  ">>"
+  "+"
+  "-"
+  "*"
+  "/"
+  "~"
+  "!"
+  "=="
+  "!="
+  "<="
+  ">="
+  "%"
+  (modulo)
+] @operator
