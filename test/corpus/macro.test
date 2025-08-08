@@ -1,35 +1,5 @@
 ==========
-Macro definition and usage (GNU as)
-==========
-.macro inc \rs \rt
-    addiu \rs, \rt, 1
-.end_macro
-
-inc $t0, $t1
----
-(program
-  (directive
-    (mnemonic)
-    (attributes
-      (identifier)
-      (macro_variable)
-      (macro_variable)))
-  (instruction
-    (opcode)
-    (operands
-      (macro_variable)
-      (macro_variable)
-      (decimal)))
-  (directive
-    (mnemonic))
-  (instruction
-    (opcode)
-    (operands
-      (register)
-     (register))))
-
-==========
-Macro definition and usage (Mars)
+Macro definition and usage with percent (%) prefix
 ==========
 .macro inc %rs %rt
     addiu %rs, %rt, 1
@@ -59,7 +29,37 @@ inc $t0, $t1
       (register))))
 
 ==========
-Macro definition and usage with dollar sign
+Macro definition and usage with backslash (\) prefix
+==========
+.macro inc \rs \rt
+    addiu \rs, \rt, 1
+.end_macro
+
+inc $t0, $t1
+---
+(program
+  (directive
+    (mnemonic)
+    (attributes
+      (identifier)
+      (macro_variable)
+      (macro_variable)))
+  (instruction
+    (opcode)
+    (operands
+      (macro_variable)
+      (macro_variable)
+      (decimal)))
+  (directive
+    (mnemonic))
+  (instruction
+    (opcode)
+    (operands
+      (register)
+     (register))))
+
+==========
+Macro definition and usage with dollar ($) prefix
 ==========
 .macro inc $rs $rt
     addiu $rs, $rt, 1
@@ -87,3 +87,83 @@ inc $t0, $t1
     (operands
       (register)
       (register))))
+
+==========
+Mixed prefixes in macro definition
+==========
+.macro $a \b %c $\ $% \$ \% %$ $\
+---
+(program
+  (directive
+    (mnemonic)
+    (attributes
+      (macro_variable)
+      (macro_variable)
+      (macro_variable)
+      (macro_variable)
+      (macro_variable)
+      (macro_variable)
+      (macro_variable)
+      (macro_variable)
+      (macro_variable))))
+
+==========
+Mixed prefixes in instruction
+==========
+inst $a \b %c $\ $% \$ \% %$ $\
+---
+(program
+  (instruction
+    (opcode)
+    (operands
+      (macro_variable)
+      (macro_variable)
+      (macro_variable)
+      (macro_variable)
+      (macro_variable)
+      (macro_variable)
+      (macro_variable)
+      (macro_variable)
+      (macro_variable))))
+
+==========
+Address with macro_variable as register with percent (%) prefix
+==========
+lw $t0, 4(%x)
+---
+(program
+  (instruction
+    (opcode)
+    (operands
+      (register)
+      (address
+        (decimal)
+        (macro_variable)))))
+
+==========
+Address with macro_variable as register with backslash (\) prefix
+==========
+lw $t0, 4(\x)
+---
+(program
+  (instruction
+    (opcode)
+    (operands
+      (register)
+      (address
+        (decimal)
+        (macro_variable)))))
+
+==========
+Address with macro_variable as register with dollar ($) prefix
+==========
+lw $t0, 4($x)
+---
+(program
+  (instruction
+    (opcode)
+    (operands
+      (register)
+      (address
+        (decimal)
+        (macro_variable)))))
