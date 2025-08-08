@@ -106,6 +106,10 @@
           "named": true
         },
         {
+          "type": "modulo",
+          "named": true
+        },
+        {
           "type": "octal",
           "named": true
         },
@@ -312,6 +316,10 @@
         },
         {
           "type": "macro_variable",
+          "named": true
+        },
+        {
+          "type": "modulo",
           "named": true
         },
         {
@@ -591,6 +599,10 @@
   },
   {
     "type": "mnemonic",
+    "named": true
+  },
+  {
+    "type": "modulo",
     "named": true
   },
   {

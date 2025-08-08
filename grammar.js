@@ -64,10 +64,12 @@ module.exports = grammar({
     _attribute: $ => choice(
       $._expression,
       $.string,
+      $.modulo,
       $.attribute,
     ),
 
-    attribute: $ => token(prec(-1, /[^\s,)(]+/)),
+    modulo: $ => token(prec(-1, '%')),
+    attribute: $ => token(prec(-2, /[^\s,)(]+/)),
 
     _label: $ => seq($.label, /[ \t]*/),
     label: $ => token(prec(2, /[a-zA-Z_][a-zA-Z0-9_]*:/)),
@@ -91,7 +93,8 @@ module.exports = grammar({
     _operand: $ => choice(
       $.register,
       $.address,
-      $._expression
+      $._expression,
+      $.modulo
     ),
 
     _expression: $ => choice(

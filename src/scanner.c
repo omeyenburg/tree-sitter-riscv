@@ -3,8 +3,7 @@
 #include <wctype.h>
 
 enum TokenType {
-    _OPERAND_SEPARATOR,
-    MODULO,
+    _OPERAND_SEPARATOR
 };
 
 void* tree_sitter_mips_external_scanner_create() {

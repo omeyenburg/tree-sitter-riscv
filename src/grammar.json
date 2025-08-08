@@ -253,15 +253,30 @@
         },
         {
           "type": "SYMBOL",
+          "name": "modulo"
+        },
+        {
+          "type": "SYMBOL",
           "name": "attribute"
         }
       ]
+    },
+    "modulo": {
+      "type": "TOKEN",
+      "content": {
+        "type": "PREC",
+        "value": -1,
+        "content": {
+          "type": "STRING",
+          "value": "%"
+        }
+      }
     },
     "attribute": {
       "type": "TOKEN",
       "content": {
         "type": "PREC",
-        "value": -1,
+        "value": -2,
         "content": {
           "type": "PATTERN",
           "value": "[^\\s,)(]+"
@@ -409,6 +424,10 @@
         {
           "type": "SYMBOL",
           "name": "_expression"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "modulo"
         }
       ]
     },
