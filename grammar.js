@@ -10,11 +10,12 @@
 module.exports = grammar({
   name: 'mips',
 
-  // The default ignores whitespace.
-  // Overwrite the extras default to manage
-  // whitespace and new lines explicitly.
+  externals: $ => [
+    $._operand_separator,
+  ],
+
   extras: $ => [
-    / |\t/,
+    /[ \t]/,
   ],
 
   rules: {
@@ -22,21 +23,18 @@ module.exports = grammar({
       repeat($._statement),
       optional(choice(
         $.directive,
-        $.macro,
         $.instruction,
         $._label
       )),
       optional($.comment)
     ),
 
-    // Statement
     _statement: $ => prec(1, choice(
       ';',
       '\n',
       seq(
         choice(
           $.directive,
-          $.macro,
           $.instruction,
         ),
         choice(';', seq(optional($.comment), '\n'))
@@ -45,145 +43,157 @@ module.exports = grammar({
       seq($.comment, '\n')
     )),
 
-    // Line comment starts with a hash symbol
-    // Optionally prefixed with whitespace
     comment: $ => /#.*/,
 
-    // A directive consists of a name beginning with a dot,
-    // optionally followed by more arguments
-    directive: $ => seq(field('mnemonic', $.mnemonic), optional( seq(
-      /[ \t]+/,
-      optional(field('attributes', $.attributes)) // Allow trailing space without attributes
-    ))),
-
-    // Cannot be token, because this would break punctiuation queries
-    _attrsep: $ => choice(',', '(', ')'),
-    mnemonic: $ => /[.][a-z_]+/,
-    attributes: $ => seq($._attribute, repeat(choice(
-      seq(' ', optional($._attrsep), $._attribute),
-      seq('\t', optional($._attrsep), $._attribute),
-      seq($._attrsep, $._attribute),
-      $._attrsep,
-      ' ', // Allow trailing space after attributes
-      '\t'
-    ))),
-
+    directive: $ => seq(
+      field('mnemonic', $.mnemonic),
+      optional(seq(
+        /[ \t]+/,
+        optional(field('attributes', $.attributes))
+      ))
+    ),
+    mnemonic: $ => token(prec(1, /[.][a-z_]+/)),
+    attributes: $ => seq(
+      $._attribute,
+      repeat(seq(
+        choice(',', $._operand_separator),
+        $._attribute
+      )),
+      optional($._operand_separator)
+    ),
     _attribute: $ => choice(
-      $._number,
+      $._expression,
       $.string,
-      $.attribute
+      $.attribute,
     ),
 
-    // Decreased priority in favor of number and string
     attribute: $ => token(prec(-1, /[^\s,)(]+/)),
 
-    // Macros
-    macro: $ => /[a-zA-Z_]+\([^#]*\)/,
+    _label: $ => seq($.label, /[ \t]*/),
+    label: $ => token(prec(2, /[a-zA-Z_][a-zA-Z0-9_]*:/)),
 
-    // Labels
-    _label: $ => seq(
-      $.label,
-      repeat(choice(' ', '\t')) // Allow trailing space
+    // instruction: $ => choice(
+    //   field("opcode", $.opcode),
+    //   seq(
+    //     field('opcode', $.opcode),
+    //     /[ \t]+/,
+    //     field('operands', $.operands)
+    //   )
+    // ),
+
+    // instruction: $ => seq(
+    //   field('opcode', $.opcode),
+    //   optional(seq(/[ \t]+/, field('operands', $.operands)))
+    // ),
+    // opcode: $ => token(/[a-z][a-z0-9.]*/),
+    // operands: $ => seq(
+    //   $._operand,
+    //   repeat(seq(
+    //     choice(',', $._operand_separator),
+    //     $._operand
+    //   )),
+    //   optional($._operand_separator)
+    // ),
+    // _operand: $ => choice(
+    //   $.register,
+    //   $._expression
+    // ),
+
+    instruction: $ => seq(
+      field('opcode', $.opcode),
+      optional(seq(
+        /[ \t]+/,
+        optional(field('operands', $.operands))
+      ))
     ),
-    label: $ => /[a-zA-Z_][a-zA-Z0-9_]*:/,
-
-    // Instructions
-    instruction: $ => choice(
-      field("opcode", $.opcode),
-      seq(
-        field('opcode', $.opcode),
-        /,| |\t/,
-        optional(field('operands', $.operands)) // Allow trailing space without operands
-      )
-    ),
-
-    opcode: $ => /[a-z][a-z0-9.]*/,
-
+    opcode: $ => token(prec(1, /[a-z][a-z0-9.]*/)),
     operands: $ => seq(
       $._operand,
-      repeat(choice(
-        seq(' ', optional(','), $._operand),
-        seq('\t',optional(','), $._operand),
-        seq(',', $._operand)
+      repeat(seq(
+        choice(',', $._operand_separator),
+        $._operand
       )),
-      optional(choice(' ', '\t')) // Allow trailing space with operands
+      optional($._operand_separator)
     ),
-
     _operand: $ => choice(
       $.register,
+      $.address,
+      $._expression
+    ),
+
+    _expression: $ => choice(
+      $.binary_expression,
+      $.unary_expression,
+      $.parenthesized_expression,
+      $._primary_expression
+    ),
+
+    _primary_expression: $ => choice(
       $.macro_variable,
-      $._number,
-      $.address
+      $.identifier,
+      $.char,
+      $.octal,
+      $.decimal,
+      $.hexadecimal,
+      $.float,
     ),
 
-    // Match any number
-    _number: $ => choice($.char, $.octal, $.decimal, $.hexadecimal, $.float),
-
-    // To mark negative offset
-    negative: $ => $._number,
-
-    // Match any address
-    // Examples: main, main($s4), value+4($s1), value-1, ($v1), -0x10($a0)
-    address: $ => choice(
-      seq(
-        field('label', $.identifier),
-        optional(choice(
-          seq('+', field('offset', $._number)),
-          field('offset', $._number)
-        ))
-      ),
-      seq(
-        optional(choice(
-          field('label', $.identifier),
-          seq(
-            optional(seq(field('label', $.identifier), '+')),
-            field('offset', $._number)
-          ),
-          seq(
-            field('label', $.identifier),
-            field('offset', $._number)
-          )
-        )),
-        '(',
-        field('base', choice($.register, $.macro_variable)),
-        ')'
-      )
+    // Standard binary expressions - no special space handling
+    binary_expression: $ => choice(
+      prec.left(1, seq($._expression, '||', $._expression)),
+      prec.left(2, seq($._expression, '&&', $._expression)),
+      prec.left(3, seq($._expression, '|', $._expression)),
+      prec.left(4, seq($._expression, '^', $._expression)),
+      prec.left(5, seq($._expression, '&', $._expression)),
+      prec.left(6, seq($._expression, '==', $._expression)),
+      prec.left(6, seq($._expression, '!=', $._expression)),
+      prec.left(7, seq($._expression, '<', $._expression)),
+      prec.left(7, seq($._expression, '>', $._expression)),
+      prec.left(7, seq($._expression, '<=', $._expression)),
+      prec.left(7, seq($._expression, '>=', $._expression)),
+      prec.left(8, seq($._expression, '<<', $._expression)),
+      prec.left(8, seq($._expression, '>>', $._expression)),
+      prec.left(9, seq($._expression, '+', $._expression)),
+      prec.left(9, seq($._expression, '-', $._expression)),
+      prec.left(10, seq($._expression, '*', $._expression)),
+      prec.left(10, seq($._expression, '/', $._expression)),
+      prec.left(10, seq($._expression, '%', $._expression)),
     ),
+
+    unary_expression: $ => choice(
+      prec.right(11, seq('-', $._expression)),
+      prec.right(11, seq('~', $._expression)),
+      prec.right(11, seq('!', $._expression)),
+    ),
+
+    parenthesized_expression: $ => seq('(', $._expression, ')'),
 
     // Primitives
-    _char: $ => /'[^']'/,
-    _string: $ => /"[^"]*"/,
-    _octal: $ => /-?0[0-7]*/,
-    _decimal: $ => /-?\d+/, // Would match octal and decimal
-    _hexadecimal: $ => /-?0[xX][0-9a-fA-F]+/,
-    _float: $ => token(choice( // Would match decimal and float
+    char: $ => /'[^']'/,
+    string: $ => /"[^"]*"/,
+    octal: $ => /-?0[0-7]*/,
+    decimal: $ => /-?\d+/,
+    hexadecimal: $ => /-?0[xX][0-9a-fA-F]+/,
+    float: $ => token(choice(
       seq(
         choice(/-?\d+\.?\d*/, /-?\d*\.\d+/),
         optional(/[eE]-?\d+/)
       ),
       /-?\d+[eE]-?\d+/
     )),
-    identifier: $ => /[a-zA-Z_][a-zA-Z0-9_]*/,
-    _register: $ => token(seq('$', choice(
-      // General purpose names
+    register: $ => token(seq('$', choice(
       'zero', 'at', 'gp', 'sp', 'fp', 'ra',
       /[vk][01]/, /[ac][0-3]/, /t[0-9]/, /s[0-8]/,
-
-      // Numeric GPRs & Floating-point
       /f?([12]?[0-9]|3[0-1])/,
     ))),
+    macro_variable: $ => /[%$\\][0-9a-zA-Z_:$%\\]+/,
+    identifier: $ => /[a-zA-Z_][a-zA-Z0-9_]*/,
 
-    char: $ => $._char,
-    string: $ => $._string,
-    octal: $ => $._octal,
-    decimal: $ => $._decimal,
-    hexadecimal: $ => $._hexadecimal,
-    float: $ => $._float,
-    register: $ => $._register,
-
-    // Match any macro variable
-    // The starting symbol depends on the assembler in use
-    // Examples: %value \\value
-    macro_variable: $ => /[%$][0-9a-zA-Z_:$%\\]+/,
+    // Match any address
+    // Examples: main, main($s4), value+4($s1), value-1, ($v1), -0x10($a0)
+    address: $ => prec(1, seq(
+      optional(field("offset", $._expression)),
+      '(', field('base', choice($.register, $.macro_variable)), ')'
+    )),
   }
 })
