@@ -146,8 +146,8 @@ module.exports = grammar({
     _expression_argument: $ => field("argument", $._expression),
 
     // Primitives
-    char: $ => /'\\?[^']'/,
-    string: $ => /"[^"]*"/,
+    char: $ => /'(?:\\.|[^'\\])'/,
+    string: $ => /"(?:\\.|[^"\\])*"/,
     octal: $ => /-?0[0-7]*/,
     decimal: $ => /-?\d+/,
     hexadecimal: $ => /-?0[xX][0-9a-fA-F]+/,
