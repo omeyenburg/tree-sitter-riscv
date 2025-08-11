@@ -8,6 +8,24 @@ nop
         (opcode)))
 
 ==========
+Instruction with uppercase opcode
+==========
+NOP
+---
+(program
+    (instruction
+        (opcode)))
+
+==========
+Instruction with underscore in opcode
+==========
+_NOP
+---
+(program
+    (instruction
+        (opcode)))
+
+==========
 Instruction with casual register
 ==========
 jr $t0
