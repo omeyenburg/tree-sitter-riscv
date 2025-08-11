@@ -58,7 +58,7 @@ Inline comment following directive without arguments
 ---
 (program
   (directive
-    (mnemonic))
+    (control_mnemonic))
   (comment))
 
 ==========
@@ -68,8 +68,8 @@ Inline comment following directive with single argument
 ---
 (program
   (directive
-    (mnemonic)
-    (attributes
+    (control_mnemonic)
+    (control_operands
       (decimal)))
   (comment))
 
@@ -80,10 +80,79 @@ Inline comment following directive with multiple arguments
 ---
 (program
   (directive
-    (mnemonic)
-    (attributes
+    (integer_mnemonic)
+    (integer_operands
       (decimal)
       (decimal)
       (decimal)
       (decimal)))
   (comment))
+
+==========
+Comment in multiline directive
+==========
+mat_A: .word 1 02 '3'
+             2 01 '2'# comment
+             3 02 '1'
+---
+(program
+  (label)
+  (directive
+    (integer_mnemonic)
+    (integer_operands
+      (decimal)
+      (octal)
+      (char)
+      (decimal)
+      (octal)
+      (char)
+      (comment)
+      (decimal)
+      (octal)
+      (char))))
+
+==========
+Comment in multiline directive with space before
+==========
+mat_A: .word 1 02 '3'
+             2 01 '2' # comment
+             3 02 '1'
+---
+(program
+  (label)
+  (directive
+    (integer_mnemonic)
+    (integer_operands
+      (decimal)
+      (octal)
+      (char)
+      (decimal)
+      (octal)
+      (char)
+      (comment)
+      (decimal)
+      (octal)
+      (char))))
+
+==========
+Comment in multiline directive with tab before
+==========
+mat_A: .word 1 02 '3'
+             2 01 '2'	# comment
+             3 02 '1'
+---
+(program
+  (label)
+  (directive
+    (integer_mnemonic)
+    (integer_operands
+      (decimal)
+      (octal)
+      (char)
+      (decimal)
+      (octal)
+      (char)
+      (comment)
+      (decimal)
+      (octal)
+      (char))))

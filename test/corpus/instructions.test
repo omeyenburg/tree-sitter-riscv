@@ -232,7 +232,7 @@ li.s $f5, -1.
       (float))))
 
 ==========
-Instruction with identifier
+Instruction with symbol
 ==========
 j test
 ---
@@ -240,7 +240,7 @@ j test
   (instruction
     (opcode)
     (operands
-      (identifier))))
+      (symbol))))
 
 ==========
 Instruction without space between opcode and register

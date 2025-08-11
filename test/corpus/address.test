@@ -36,7 +36,7 @@ la $t0, test($s0)
     (operands
       (register)
       (address
-        (identifier)
+        (symbol)
         (register)))))
 
 ==========
@@ -51,7 +51,7 @@ la $t0, test+100($s0)
       (register)
       (address
         (binary_expression
-          (identifier)
+          (symbol)
           (decimal))
         (register)))))
 
@@ -67,7 +67,7 @@ la $t0, test+0x123($s0)
       (register)
       (address
         (binary_expression
-          (identifier)
+          (symbol)
           (hexadecimal))
         (register)))))
 
@@ -83,7 +83,7 @@ la $t0, test+012($s0)
       (register)
       (address
         (binary_expression
-          (identifier)
+          (symbol)
           (octal))
         (register)))))
 
@@ -99,7 +99,7 @@ la $t0, test+'a'($s0)
       (register)
       (address
         (binary_expression
-          (identifier)
+          (symbol)
           (char))
         (register)))))
 
@@ -115,7 +115,7 @@ la $t0, test-100($s0)
       (register)
       (address
         (binary_expression
-          (identifier)
+          (symbol)
           (decimal))
         (register)))))
 
@@ -131,7 +131,7 @@ la $t0, test-0x12($s0)
       (register)
       (address
         (binary_expression
-          (identifier)
+          (symbol)
           (hexadecimal))
         (register)))))
 
@@ -147,7 +147,7 @@ la $t0, test-012($s0)
       (register)
       (address
         (binary_expression
-          (identifier)
+          (symbol)
           (octal))
         (register)))))
 
@@ -163,7 +163,7 @@ la $t0, test-'a'($s0)
       (register)
       (address
         (binary_expression
-          (identifier)
+          (symbol)
           (char))
         (register)))))
 
@@ -181,5 +181,5 @@ la $t0, (1+test)($s0)
         (parenthesized_expression
           (binary_expression
             (decimal)
-            (identifier)))
+            (symbol)))
         (register)))))

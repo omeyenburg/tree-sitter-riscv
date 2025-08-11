@@ -5,7 +5,7 @@ Basic directive
 ---
 (program
   (directive
-    (mnemonic)))
+    (control_mnemonic)))
 
 ==========
 Directive with decimal
@@ -14,8 +14,69 @@ Directive with decimal
 ---
 (program
   (directive
-    (mnemonic)
-    (attributes
+    (integer_mnemonic)
+    (integer_operands
+      (decimal))))
+
+==========
+Directive with multiple space-separated decimals
+==========
+.word 1 2 3
+---
+(program
+  (directive
+    (integer_mnemonic)
+    (integer_operands
+      (decimal)
+      (decimal)
+      (decimal))))
+
+==========
+Directive with integer values over multiple lines
+==========
+mat_A: .word 1 02 '3'
+             2 01 '2'
+             3 02 '1'
+---
+(program
+  (label)
+  (directive
+    (integer_mnemonic)
+    (integer_operands
+      (decimal)
+      (octal)
+      (char)
+      (decimal)
+      (octal)
+      (char)
+      (decimal)
+      (octal)
+      (char))))
+
+==========
+Directive with multiple comma-separated decimals
+==========
+.word 1, 2, 3
+---
+(program
+  (directive
+    (integer_mnemonic)
+    (integer_operands
+      (decimal)
+      (decimal)
+      (decimal))))
+
+==========
+Directive with multiple decimals and trailing space
+==========
+.word 1 2 3 
+---
+(program
+  (directive
+    (integer_mnemonic)
+    (integer_operands
+      (decimal)
+      (decimal)
       (decimal))))
 
 ==========
@@ -25,8 +86,8 @@ Directive with octal
 ---
 (program
   (directive
-    (mnemonic)
-    (attributes
+    (integer_mnemonic)
+    (integer_operands
       (octal))))
 
 ==========
@@ -36,8 +97,8 @@ Directive with hexadecimal
 ---
 (program
   (directive
-    (mnemonic)
-    (attributes
+    (integer_mnemonic)
+    (integer_operands
       (hexadecimal))))
 
 ==========
@@ -47,8 +108,8 @@ Directive with char
 ---
 (program
   (directive
-    (mnemonic)
-    (attributes
+    (integer_mnemonic)
+    (integer_operands
       (char))))
 
 ==========
@@ -58,8 +119,8 @@ Directive with float
 ---
 (program
   (directive
-    (mnemonic)
-    (attributes
+    (float_mnemonic)
+    (float_operands
       (float))))
 
 ==========
@@ -69,9 +130,8 @@ Directive with string
 ---
 (program
   (directive
-    (mnemonic)
-    (attributes
-      (string))))
+    (string_mnemonic)
+    (string)))
 
 ==========
 Directive with string containing escaped characters
@@ -80,9 +140,8 @@ Directive with string containing escaped characters
 ---
 (program
   (directive
-    (mnemonic)
-    (attributes
-      (string))))
+    (string_mnemonic)
+    (string)))
 
 ==========
 Directive with multiple arguments
@@ -91,9 +150,9 @@ Directive with multiple arguments
 ---
 (program
   (directive
-    (mnemonic)
-    (attributes
-      (identifier)
+    (control_mnemonic)
+    (control_operands
+      (symbol)
       (string)
       (decimal))))
 
@@ -104,8 +163,8 @@ Directive with multiple comma-separated arguments
 ---
 (program
   (directive
-    (mnemonic)
-    (attributes
-      (identifier)
+    (control_mnemonic)
+    (control_operands
+      (symbol)
       (string)
       (decimal))))

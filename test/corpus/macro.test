@@ -9,9 +9,9 @@ inc $t0, $t1
 ---
 (program
   (directive
-    (mnemonic)
-    (attributes
-      (identifier)
+    (macro_mnemonic)
+    (symbol)
+    (macro_parameters
       (macro_variable)
       (macro_variable)))
   (instruction
@@ -21,7 +21,7 @@ inc $t0, $t1
       (macro_variable)
       (decimal)))
   (directive
-    (mnemonic))
+    (control_mnemonic))
   (instruction
     (opcode)
     (operands
@@ -39,9 +39,9 @@ inc $t0, $t1
 ---
 (program
   (directive
-    (mnemonic)
-    (attributes
-      (identifier)
+    (macro_mnemonic)
+    (symbol)
+    (macro_parameters
       (macro_variable)
       (macro_variable)))
   (instruction
@@ -51,7 +51,7 @@ inc $t0, $t1
       (macro_variable)
       (decimal)))
   (directive
-    (mnemonic))
+    (control_mnemonic))
   (instruction
     (opcode)
     (operands
@@ -69,9 +69,9 @@ inc $t0, $t1
 ---
 (program
   (directive
-    (mnemonic)
-    (attributes
-      (identifier)
+    (macro_mnemonic)
+    (symbol)
+    (macro_parameters
       (macro_variable)
       (macro_variable)))
   (instruction
@@ -81,7 +81,7 @@ inc $t0, $t1
       (macro_variable)
       (decimal)))
   (directive
-    (mnemonic))
+    (control_mnemonic))
   (instruction
     (opcode)
     (operands
@@ -91,12 +91,13 @@ inc $t0, $t1
 ==========
 Mixed prefixes in macro definition
 ==========
-.macro $a \b %c $\ $% \$ \% %$ $\
+.macro test $a \b %c $\ $% \$ \% %$ $\
 ---
 (program
   (directive
-    (mnemonic)
-    (attributes
+    (macro_mnemonic)
+    (symbol)
+    (macro_parameters
       (macro_variable)
       (macro_variable)
       (macro_variable)
@@ -104,6 +105,32 @@ Mixed prefixes in macro definition
       (macro_variable)
       (macro_variable)
       (macro_variable)
+      (macro_variable)
+      (macro_variable))))
+
+==========
+Macro definition with parentheses without space before
+==========
+.macro inc(%rs %rt)
+---
+(program
+  (directive
+    (macro_mnemonic)
+    (symbol)
+    (macro_parameters
+      (macro_variable)
+      (macro_variable))))
+
+==========
+Macro definition with parentheses with space before
+==========
+.macro inc (%rs %rt)
+---
+(program
+  (directive
+    (macro_mnemonic)
+    (symbol)
+    (macro_parameters
       (macro_variable)
       (macro_variable))))
 

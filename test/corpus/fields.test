@@ -45,7 +45,7 @@ la $t0, test($s0)
     operands: (operands
       (register)
       (address
-        offset: (identifier)
+        offset: (symbol)
         base: (register)))))
 
 ==========
@@ -60,7 +60,7 @@ la $t0, test+100($s0)
       (register)
       (address
         offset: (binary_expression
-          left: (identifier)
+          left: (symbol)
           right: (decimal))
         base: (register)))))
 
@@ -71,7 +71,7 @@ Basic directive
 ---
 (program
   (directive
-    mnemonic: (mnemonic)))
+    mnemonic: (control_mnemonic)))
 
 ==========
 Directive with decimal
@@ -80,8 +80,8 @@ Directive with decimal
 ---
 (program
   (directive
-    mnemonic: (mnemonic)
-    attributes: (attributes
+    mnemonic: (integer_mnemonic)
+    operands: (integer_operands
       (decimal))))
 
 ==========
@@ -96,7 +96,7 @@ add $t0, (base+4), $t1
       (register)
       (parenthesized_expression
         argument: (binary_expression
-          left: (identifier)
+          left: (symbol)
           right: (decimal)))
       (register))))
 
@@ -111,5 +111,5 @@ add $t0, -base, $t1
     operands: (operands
       (register)
       (unary_expression
-        argument: (identifier))
+        argument: (symbol))
       (register))))
