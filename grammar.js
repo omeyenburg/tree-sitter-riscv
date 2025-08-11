@@ -12,10 +12,19 @@ module.exports = grammar({
 
   externals: $ => [
     $._operand_separator,
+    $._line_separator,
+    $._data_separator,
   ],
 
   extras: $ => [
     /[ \t]/,
+    $.comment,
+  ],
+
+  conflicts: $ => [
+    [$.macro_parameters],
+    [$.control_operands],
+    [$.integer_operands],
   ],
 
   rules: {
@@ -32,12 +41,9 @@ module.exports = grammar({
     _statement: $ => prec(1, choice(
       ';',
       '\n',
-      seq(
-        choice(
-          $.directive,
-          $.instruction,
-        ),
-        choice(';', seq(optional($.comment), '\n'))
+      choice(
+        seq($.directive, choice(';', seq(optional($.comment), $._line_separator))),
+        seq($.instruction, choice(';', seq(optional($.comment), '\n'))),
       ),
       $._label,
       seq($.comment, '\n')
@@ -45,31 +51,136 @@ module.exports = grammar({
 
     comment: $ => /#.*/,
 
-    directive: $ => seq(
-      field('mnemonic', $.mnemonic),
-      optional(seq(
-        /[ \t]+/,
-        optional(field('attributes', $.attributes))
-      ))
+    // directive: $ => seq(
+    //   field('mnemonic', $.mnemonic),
+    //   optional(seq(
+    //     /[ \t]+/,
+    //     optional(field('attributes', $.attributes))
+    //   ))
+    // ),
+    // mnemonic: $ => token(prec(1, /[.][a-z_]+/)),
+    // attributes: $ => seq(
+    //   $._attribute,
+    //   repeat(seq(
+    //     choice(',', $._operand_separator),
+    //     $._attribute
+    //   )),
+    //   optional($._operand_separator)
+    // ),
+    // _attribute: $ => choice(
+    //   $._expression,
+    //   $.string,
+    //   $.modulo,
+    //   $.attribute,
+    // ),
+
+    _space_sep: $ => /[ \t]+/,
+    _optional_space_sep: $ => /[ \t]*/,
+    _sep: $ => token(choice(/[ \t]+/, /[ \t]*,[ \t]*/)),
+
+    directive: $ => seq(choice(
+      $._macro_directive,
+      $._integer_directive,
+      $._float_directive,
+      $._string_directive,
+      $._control_directive,
+    )),
+
+    macro_mnemonic: $ => ".macro",
+    integer_mnemonic: $ => choice(
+      ".word",
+      ".half",
+      ".hword",
+      ".byte",
+      ".dword",
     ),
-    mnemonic: $ => token(prec(1, /[.][a-z_]+/)),
-    attributes: $ => seq(
-      $._attribute,
-      repeat(seq(
-        choice(',', $._operand_separator),
-        $._attribute
+    float_mnemonic: $ => choice(
+      ".float",
+      ".double",
+    ),
+    string_mnemonic: $ => choice(
+      ".ascii",
+      ".asciiz",
+      ".string",
+    ),
+    control_mnemonic: $ => prec(-1, /\.[a-z_]+/),
+
+    // looks hacky but works
+    _macro_directive: $ => seq(
+      field("mnemonic", $.macro_mnemonic),
+      $._space_sep,
+      field("name", $.symbol),
+      optional(choice(
+        seq(optional($._space_sep), "(", field("parameters", $.macro_parameters), optional(choice(" ", "\t")), ")"),
+        seq($._space_sep, field("parameters", $.macro_parameters)),
       )),
-      optional($._operand_separator)
     ),
-    _attribute: $ => choice(
+    macro_parameters: $ => seq($._macro_parameter, repeat(seq(choice(" ", "\t", seq(optional(choice(" ", "\t")), ",")), $._macro_parameter))),
+    _macro_parameter: $ => choice(
+      $.macro_variable,
+      $.symbol,
+    ),
+
+    _integer_directive: $ => seq(
+      field("mnemonic", $.integer_mnemonic),
+      $._space_sep,
+      field("operands", $.integer_operands),
+      optional(repeat(choice("\n", " ", "\t")))
+    ),
+    integer_operands: $ => seq(
+      $._expression,
+      repeat(seq(
+        choice(
+          " ",
+          "\t",
+          /[ \t]*,[ \t]*/,
+          seq(optional(choice(" ", "\t")), optional($.comment), $._data_separator)
+        ),
+        $._expression
+      )),
+    ),
+
+    _float_directive: $ => seq(
+      field("mnemonic", $.float_mnemonic),
+      $._space_sep,
+      field("operands", $.float_operands),
+      repeat(choice(' ', '\t'))
+    ),
+    float_operands: $ => seq(
+      $.float,
+      repeat(seq(
+        choice(
+          /[ \t]+/,
+          /[ \t]*,[ \t]*/,
+          $._data_separator
+        ),
+        $.float
+      )),
+    ),
+
+    _string_directive: $ => seq(
+      field("mnemonic", $.string_mnemonic),
+      $._space_sep,
+      field("string", $.string),
+    ),
+
+    _control_directive: $ => seq(
+      field("mnemonic", $.control_mnemonic),
+      optional(choice(seq(
+        $._space_sep,
+        field("operands", $.control_operands),
+        optional($._sep),
+      ), /[ \t]+/,))
+    ),
+    control_operands: $ => seq($._control_operand, repeat(seq($._sep, $._control_operand))),
+    _control_operand: $ => choice(
       $._expression,
       $.string,
-      $.modulo,
       $.attribute,
     ),
 
+    attribute: $ => token(prec(-2, /[^\s,()]+/)),
     modulo: $ => token(prec(-1, '%')),
-    attribute: $ => token(prec(-2, /[^\s,)(]+/)),
 
     _label: $ => seq($.label, /[ \t]*/),
     label: $ => token(prec(2, /[a-zA-Z_][a-zA-Z0-9_]*:/)),
@@ -106,7 +217,7 @@ module.exports = grammar({
 
     _primary_expression: $ => choice(
       $.macro_variable,
-      $.identifier,
+      $.symbol,
       $.char,
       $.octal,
       $.decimal,
@@ -166,7 +277,7 @@ module.exports = grammar({
     ))),
 
     macro_variable: $ => /[%$\\][0-9a-zA-Z_:$%\\]+/,
-    identifier: $ => /[a-zA-Z_][a-zA-Z0-9_]*/,
+    symbol: $ => /[a-zA-Z_][a-zA-Z0-9_]*/,
 
     // Match addresses
     // Examples: main($s4), value+4($s1), ($v1), -0x10($a0)
