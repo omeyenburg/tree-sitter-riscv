@@ -172,11 +172,11 @@
       "type": "PATTERN",
       "value": "#.*"
     },
-    "_space_sep": {
+    "_whitespace": {
       "type": "PATTERN",
       "value": "[ \\t]+"
     },
-    "_sep": {
+    "_directive_operand_separator": {
       "type": "CHOICE",
       "members": [
         {
@@ -232,7 +232,7 @@
         },
         {
           "type": "SYMBOL",
-          "name": "_space_sep"
+          "name": "_whitespace"
         },
         {
           "type": "FIELD",
@@ -256,7 +256,7 @@
                       "members": [
                         {
                           "type": "SYMBOL",
-                          "name": "_space_sep"
+                          "name": "_whitespace"
                         },
                         {
                           "type": "BLANK"
@@ -307,7 +307,7 @@
                   "members": [
                     {
                       "type": "SYMBOL",
-                      "name": "_space_sep"
+                      "name": "_whitespace"
                     },
                     {
                       "type": "FIELD",
@@ -422,7 +422,7 @@
         },
         {
           "type": "SYMBOL",
-          "name": "_space_sep"
+          "name": "_whitespace"
         },
         {
           "type": "FIELD",
@@ -580,7 +580,7 @@
         },
         {
           "type": "SYMBOL",
-          "name": "_space_sep"
+          "name": "_whitespace"
         },
         {
           "type": "FIELD",
@@ -672,7 +672,7 @@
         },
         {
           "type": "SYMBOL",
-          "name": "_space_sep"
+          "name": "_whitespace"
         },
         {
           "type": "FIELD",
@@ -723,7 +723,7 @@
                   "members": [
                     {
                       "type": "SYMBOL",
-                      "name": "_space_sep"
+                      "name": "_whitespace"
                     },
                     {
                       "type": "FIELD",
@@ -738,7 +738,7 @@
                       "members": [
                         {
                           "type": "SYMBOL",
-                          "name": "_sep"
+                          "name": "_directive_operand_separator"
                         },
                         {
                           "type": "BLANK"
@@ -782,7 +782,7 @@
             "members": [
               {
                 "type": "SYMBOL",
-                "name": "_sep"
+                "name": "_directive_operand_separator"
               },
               {
                 "type": "SYMBOL",
@@ -805,30 +805,6 @@
           "name": "string"
         }
       ]
-    },
-    "_label": {
-      "type": "SEQ",
-      "members": [
-        {
-          "type": "SYMBOL",
-          "name": "label"
-        },
-        {
-          "type": "PATTERN",
-          "value": "[ \\t]*"
-        }
-      ]
-    },
-    "label": {
-      "type": "TOKEN",
-      "content": {
-        "type": "PREC",
-        "value": 2,
-        "content": {
-          "type": "PATTERN",
-          "value": "[a-zA-Z_][a-zA-Z0-9_]*:"
-        }
-      }
     },
     "instruction": {
       "type": "SEQ",
@@ -980,15 +956,6 @@
           "type": "SYMBOL",
           "name": "parenthesized_expression"
         },
-        {
-          "type": "SYMBOL",
-          "name": "_primary_expression"
-        }
-      ]
-    },
-    "_primary_expression": {
-      "type": "CHOICE",
-      "members": [
         {
           "type": "SYMBOL",
           "name": "macro_variable"
@@ -1402,7 +1369,7 @@
         },
         {
           "type": "PREC_LEFT",
-          "value": 10,
+          "value": 20,
           "content": {
             "type": "SEQ",
             "members": [
@@ -1671,6 +1638,30 @@
     "symbol": {
       "type": "PATTERN",
       "value": "[a-zA-Z_][a-zA-Z0-9_]*"
+    },
+    "_label": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "label"
+        },
+        {
+          "type": "PATTERN",
+          "value": "[ \\t]*"
+        }
+      ]
+    },
+    "label": {
+      "type": "TOKEN",
+      "content": {
+        "type": "PREC",
+        "value": 2,
+        "content": {
+          "type": "PATTERN",
+          "value": "[a-zA-Z_][a-zA-Z0-9_]*:"
+        }
+      }
     },
     "address": {
       "type": "PREC",
