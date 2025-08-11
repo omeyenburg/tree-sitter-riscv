@@ -35,8 +35,7 @@ jobs:
       - name: Set up tree-sitter
         uses: tree-sitter/setup-action/cli@v2
         with:
-          tree-sitter-ref: 0.25.6
-          rust-toolchain: stable
+          tree-sitter-ref: v0.25.6
       - name: Set up examples
         run: |-
           git clone https://github.com/erenulas/mips-assembly-examples --single-branch --depth=1 --filter=blob:none
