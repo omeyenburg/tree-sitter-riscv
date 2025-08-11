@@ -168,3 +168,32 @@ Directive with multiple comma-separated arguments
       (symbol)
       (string)
       (decimal))))
+
+==========
+Directive with assignment
+==========
+.set test=123
+---
+(program
+  (directive
+    (control_mnemonic)
+    (control_operands
+      (binary_expression
+        (symbol)
+        (decimal)))))
+
+==========
+Directive with multiple assignments
+==========
+.set test=123 OTHER='a'
+---
+(program
+  (directive
+    (control_mnemonic)
+    (control_operands
+      (binary_expression
+        (symbol)
+        (decimal))
+      (binary_expression
+        (symbol)
+        (char)))))

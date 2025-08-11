@@ -170,6 +170,32 @@ test:	.text
     (control_mnemonic)))
 
 ==========
+Directive with space in assignment
+==========
+.set test = 123
+---
+(program
+  (directive
+    (control_mnemonic)
+    (control_operands
+      (binary_expression
+        (symbol)
+        (decimal)))))
+
+==========
+Directive with tabs in assignment
+==========
+.set test	=	123
+---
+(program
+  (directive
+    (control_mnemonic)
+    (control_operands
+      (binary_expression
+        (symbol)
+        (decimal)))))
+
+==========
 Label with leading space
 ==========
   test:
