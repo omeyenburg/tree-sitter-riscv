@@ -12,6 +12,7 @@ module.exports = grammar({
 
   externals: $ => [
     $._operand_separator,
+    $._operator_separator,
     $._line_separator,
     $._data_separator,
   ],
@@ -51,32 +52,8 @@ module.exports = grammar({
 
     comment: $ => /#.*/,
 
-    // directive: $ => seq(
-    //   field('mnemonic', $.mnemonic),
-    //   optional(seq(
-    //     /[ \t]+/,
-    //     optional(field('attributes', $.attributes))
-    //   ))
-    // ),
-    // mnemonic: $ => token(prec(1, /[.][a-z_]+/)),
-    // attributes: $ => seq(
-    //   $._attribute,
-    //   repeat(seq(
-    //     choice(',', $._operand_separator),
-    //     $._attribute
-    //   )),
-    //   optional($._operand_separator)
-    // ),
-    // _attribute: $ => choice(
-    //   $._expression,
-    //   $.string,
-    //   $.modulo,
-    //   $.attribute,
-    // ),
-
     _space_sep: $ => /[ \t]+/,
-    _optional_space_sep: $ => /[ \t]*/,
-    _sep: $ => token(choice(/[ \t]+/, /[ \t]*,[ \t]*/)),
+    _sep: $ => choice(/[ \t]+/, /[ \t]*,[ \t]*/),
 
     directive: $ => seq(choice(
       $._macro_directive,
@@ -161,15 +138,18 @@ module.exports = grammar({
       ), /[ \t]+/)),
     ),
     control_mnemonic: $ => prec(-1, /\.[a-z_]+/),
-    control_operands: $ => seq($._control_operand, repeat(seq($._sep, $._control_operand))),
+    control_operands: $ => seq(
+      $._control_operand,
+      repeat(seq(
+        $._sep,
+        $._control_operand,
+      )),
+    ),
     _control_operand: $ => choice(
+      // $.assignment_expression,
       $._expression,
       $.string,
-      $.attribute,
     ),
-
-    attribute: $ => token(prec(-2, /[^\s,()]+/)),
-    modulo: $ => token(prec(-1, '%')),
 
     _label: $ => seq($.label, /[ \t]*/),
     label: $ => token(prec(2, /[a-zA-Z_][a-zA-Z0-9_]*:/)),
@@ -196,6 +176,8 @@ module.exports = grammar({
       $._expression,
       $.modulo,
     ),
+
+    modulo: $ => token(prec(-1, '%')),
 
     _expression: $ => choice(
       $.binary_expression,
@@ -233,10 +215,12 @@ module.exports = grammar({
       prec.left(10, seq($._left_expression, '*', $._right_expression)),
       prec.left(10, seq($._left_expression, '/', $._right_expression)),
       prec.left(10, seq($._left_expression, '%', $._right_expression)),
+      prec.left(10, seq($._left_expression, '=', $._right_expression)),
     ),
-    _left_expression: $ => prec(1, field('left', $._expression)),
+    _left_expression: $ => prec(1, seq(field('left', $._expression), optional($._operator_separator))),
     _right_expression: $ => field('right', $._expression),
 
+    // assignment_expression: $ => prec(20, seq(field("left", $.symbol), optional($._operator_separator), '=', field("right", $._expression))),
     parenthesized_expression: $ => seq('(', $._expression_argument, ')'),
     unary_expression: $ => choice(
       prec.right(11, seq('-', $._expression_argument)),

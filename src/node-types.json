@@ -177,10 +177,6 @@
       "required": true,
       "types": [
         {
-          "type": "attribute",
-          "named": true
-        },
-        {
           "type": "binary_expression",
           "named": true
         },
@@ -749,6 +745,10 @@
     "named": false
   },
   {
+    "type": "=",
+    "named": false
+  },
+  {
     "type": "==",
     "named": false
   },
@@ -767,10 +767,6 @@
   {
     "type": "^",
     "named": false
-  },
-  {
-    "type": "attribute",
-    "named": true
   },
   {
     "type": "char",
