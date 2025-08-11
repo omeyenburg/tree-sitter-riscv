@@ -161,7 +161,7 @@ module.exports = grammar({
         optional(field('operands', $.operands)),
       )),
     ),
-    opcode: $ => token(prec(1, /[a-z][a-z0-9.]*/)),
+    opcode: $ => token(prec(1, /[a-zA-Z_][a-zA-Z0-9_.]*/)),
     operands: $ => seq(
       $._operand,
       repeat(seq(
