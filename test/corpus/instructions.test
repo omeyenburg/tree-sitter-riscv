@@ -184,6 +184,18 @@ li $t0, 'A'
       (char))))
 
 ==========
+Instruction with escaped char value
+==========
+li $t6 '\n'
+---
+(program
+  (instruction
+    (opcode)
+    (operands
+      (register)
+      (char))))
+
+==========
 Instruction with float value
 ==========
 li.s $f5, 3.14
