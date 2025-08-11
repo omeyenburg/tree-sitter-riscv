@@ -1,11 +1,16 @@
-;; Directives
-(mnemonic) @keyword
-(attribute) @operator
+;; Mnemonics for directives
+[
+  (macro_mnemonic)
+  (integer_mnemonic)
+  (float_mnemonic)
+  (string_mnemonic)
+  (control_mnemonic)
+] @keyword
 
-;; Labels
+;; Labels & symbols
 [
   (label)
-  (identifier)
+  (symbol)
 ] @label
 
 ;; Macro variables
@@ -64,5 +69,6 @@
   "<="
   ">="
   "%"
+  "="
   (modulo)
 ] @operator
