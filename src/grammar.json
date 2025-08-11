@@ -226,73 +226,6 @@
         }
       ]
     },
-    "macro_mnemonic": {
-      "type": "STRING",
-      "value": ".macro"
-    },
-    "integer_mnemonic": {
-      "type": "CHOICE",
-      "members": [
-        {
-          "type": "STRING",
-          "value": ".word"
-        },
-        {
-          "type": "STRING",
-          "value": ".half"
-        },
-        {
-          "type": "STRING",
-          "value": ".hword"
-        },
-        {
-          "type": "STRING",
-          "value": ".byte"
-        },
-        {
-          "type": "STRING",
-          "value": ".dword"
-        }
-      ]
-    },
-    "float_mnemonic": {
-      "type": "CHOICE",
-      "members": [
-        {
-          "type": "STRING",
-          "value": ".float"
-        },
-        {
-          "type": "STRING",
-          "value": ".double"
-        }
-      ]
-    },
-    "string_mnemonic": {
-      "type": "CHOICE",
-      "members": [
-        {
-          "type": "STRING",
-          "value": ".ascii"
-        },
-        {
-          "type": "STRING",
-          "value": ".asciiz"
-        },
-        {
-          "type": "STRING",
-          "value": ".string"
-        }
-      ]
-    },
-    "control_mnemonic": {
-      "type": "PREC",
-      "value": -1,
-      "content": {
-        "type": "PATTERN",
-        "value": "\\.[a-z_]+"
-      }
-    },
     "_macro_directive": {
       "type": "SEQ",
       "members": [
@@ -401,6 +334,10 @@
           ]
         }
       ]
+    },
+    "macro_mnemonic": {
+      "type": "STRING",
+      "value": ".macro"
     },
     "macro_parameters": {
       "type": "SEQ",
@@ -532,6 +469,31 @@
         }
       ]
     },
+    "integer_mnemonic": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "STRING",
+          "value": ".word"
+        },
+        {
+          "type": "STRING",
+          "value": ".half"
+        },
+        {
+          "type": "STRING",
+          "value": ".hword"
+        },
+        {
+          "type": "STRING",
+          "value": ".byte"
+        },
+        {
+          "type": "STRING",
+          "value": ".dword"
+        }
+      ]
+    },
     "integer_operands": {
       "type": "SEQ",
       "members": [
@@ -653,6 +615,19 @@
         }
       ]
     },
+    "float_mnemonic": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "STRING",
+          "value": ".float"
+        },
+        {
+          "type": "STRING",
+          "value": ".double"
+        }
+      ]
+    },
     "float_operands": {
       "type": "SEQ",
       "members": [
@@ -716,6 +691,23 @@
         }
       ]
     },
+    "string_mnemonic": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "STRING",
+          "value": ".ascii"
+        },
+        {
+          "type": "STRING",
+          "value": ".asciiz"
+        },
+        {
+          "type": "STRING",
+          "value": ".string"
+        }
+      ]
+    },
     "_control_directive": {
       "type": "SEQ",
       "members": [
@@ -774,6 +766,14 @@
           ]
         }
       ]
+    },
+    "control_mnemonic": {
+      "type": "PREC",
+      "value": -1,
+      "content": {
+        "type": "PATTERN",
+        "value": "\\.[a-z_]+"
+      }
     },
     "control_operands": {
       "type": "SEQ",
