@@ -74,6 +74,17 @@ Directive with string
       (string))))
 
 ==========
+Directive with string containing escaped characters
+==========
+.asciiz "12\n34\"56"
+---
+(program
+  (directive
+    (mnemonic)
+    (attributes
+      (string))))
+
+==========
 Directive with multiple arguments
 ==========
 .set test "test" 123
