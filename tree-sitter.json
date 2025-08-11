@@ -7,7 +7,7 @@
       "path": ".",
       "file-types": null,
       "highlights": "queries/highlights.scm",
-      "injections": "queries/injections.scm",
+      "indents": "queries/indents.scm",
       "injection-regex": "^mips$"
     }
   ],
