@@ -1,0 +1,44 @@
+==========
+Simple opcode
+==========
+foo
+---
+(program
+    (instruction
+        (opcode)))
+
+==========
+Uppercase opcode
+==========
+FOO
+---
+(program
+    (instruction
+        (opcode)))
+
+==========
+Opcode starting with underscore
+==========
+_foo
+---
+(program
+    (instruction
+        (opcode)))
+
+==========
+Opcode containing underscore
+==========
+foo_bar
+---
+(program
+    (instruction
+        (opcode)))
+
+==========
+Opcode containing dot
+==========
+foo.bar
+---
+(program
+    (instruction
+        (opcode)))

@@ -1,0 +1,20 @@
+==========
+Instruction with invalid float literal (missing exponent)
+:error
+==========
+foo 1e
+---
+
+==========
+Instruction with invalid float literal (malformed mantissa)
+:error
+==========
+foo .e+1
+---
+
+==========
+Instruction with invalid float literal (malformed exponent)
+:error
+==========
+foo 1e+
+---

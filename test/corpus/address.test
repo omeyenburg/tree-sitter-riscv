@@ -1,5 +1,5 @@
 ==========
-Instruction with register address
+Instruction with register address without offset
 ==========
 la $t0, ($s0)
 ---
@@ -40,7 +40,7 @@ la $t0, test($s0)
         (register)))))
 
 ==========
-Instruction with label and decimal offset address
+Instruction with address using simple expression offset
 ==========
 la $t0, test+100($s0)
 ---
@@ -56,121 +56,9 @@ la $t0, test+100($s0)
         (register)))))
 
 ==========
-Instruction with label and hexadecimal offset address
+Instruction with address using parenthesized expression offset
 ==========
-la $t0, test+0x123($s0)
----
-(program
-  (instruction
-    (opcode)
-    (operands
-      (register)
-      (address
-        (binary_expression
-          (symbol)
-          (hexadecimal))
-        (register)))))
-
-==========
-Instruction with label and octal offset address
-==========
-la $t0, test+012($s0)
----
-(program
-  (instruction
-    (opcode)
-    (operands
-      (register)
-      (address
-        (binary_expression
-          (symbol)
-          (octal))
-        (register)))))
-
-==========
-Instruction with label and char offset address
-==========
-la $t0, test+'a'($s0)
----
-(program
-  (instruction
-    (opcode)
-    (operands
-      (register)
-      (address
-        (binary_expression
-          (symbol)
-          (char))
-        (register)))))
-
-==========
-Instruction with label and negative decimal offset address
-==========
-la $t0, test-100($s0)
----
-(program
-  (instruction
-    (opcode)
-    (operands
-      (register)
-      (address
-        (binary_expression
-          (symbol)
-          (decimal))
-        (register)))))
-
-==========
-Instruction with label and negative hexadecimal offset address
-==========
-la $t0, test-0x12($s0)
----
-(program
-  (instruction
-    (opcode)
-    (operands
-      (register)
-      (address
-        (binary_expression
-          (symbol)
-          (hexadecimal))
-        (register)))))
-
-==========
-Instruction with label and negative hexadecimal offset address
-==========
-la $t0, test-012($s0)
----
-(program
-  (instruction
-    (opcode)
-    (operands
-      (register)
-      (address
-        (binary_expression
-          (symbol)
-          (octal))
-        (register)))))
-
-==========
-Instruction with label and negative char offset address
-==========
-la $t0, test-'a'($s0)
----
-(program
-  (instruction
-    (opcode)
-    (operands
-      (register)
-      (address
-        (binary_expression
-          (symbol)
-          (char))
-        (register)))))
-
-==========
-Instruction with address with parenthesized offset
-==========
-la $t0, (1+test)($s0)
+la $t0, (test+0x123)($s0)
 ---
 (program
   (instruction
@@ -180,6 +68,20 @@ la $t0, (1+test)($s0)
       (address
         (parenthesized_expression
           (binary_expression
-            (decimal)
-            (symbol)))
+            (symbol)
+            (hexadecimal)))
+        (register)))))
+
+==========
+Instruction with address using label offset
+==========
+la $t0, test($s0)
+---
+(program
+  (instruction
+    (opcode)
+    (operands
+      (register)
+      (address
+        (symbol)
         (register)))))

@@ -1,0 +1,89 @@
+==========
+Empty file
+==========
+---
+(program)
+
+==========
+Empty line
+==========
+
+---
+(program)
+
+==========
+Multiple empty lines
+==========
+
+---
+(program)
+
+==========
+Single space
+==========
+ 
+---
+(program)
+
+==========
+Single tab
+==========
+	
+---
+(program)
+
+==========
+Single semicolon
+==========
+;
+---
+(program)
+
+==========
+Space before semicolon
+==========
+ ;
+---
+(program)
+
+==========
+Tab before semicolon
+==========
+	;
+---
+(program)
+
+==========
+Multiple semicolons
+==========
+;;
+---
+(program)
+
+==========
+Space-separated semicolons
+==========
+; ;
+---
+(program)
+
+==========
+Tab-separated semicolons
+==========
+;	;
+---
+(program)
+
+==========
+Single semicolon with trailing space
+==========
+; 
+---
+(program)
+
+==========
+Single semicolon with trailing tab
+==========
+;	
+---
+(program)

@@ -1,0 +1,76 @@
+==========
+Instruction with simple register
+==========
+foo $t0
+---
+(program
+  (instruction
+    (opcode)
+    (operands
+      (register))))
+
+==========
+Instruction with $0 numeric register
+==========
+foo $0
+---
+(program
+  (instruction
+    (opcode)
+    (operands
+      (register))))
+
+==========
+Instruction with $31 numeric register
+==========
+foo $31
+---
+(program
+  (instruction
+    (opcode)
+    (operands
+      (register))))
+
+==========
+Instruction with $gp register
+==========
+foo $gp
+---
+(program
+  (instruction
+    (opcode)
+    (operands
+      (register))))
+
+==========
+Instruction with $zero register
+==========
+foo $zero
+---
+(program
+  (instruction
+    (opcode)
+    (operands
+      (register))))
+
+==========
+Instruction with $f0 float register
+==========
+foo $f0
+---
+(program
+  (instruction
+    (opcode)
+    (operands
+      (register))))
+
+==========
+Instruction with $f31 float register
+==========
+foo $f31
+---
+(program
+  (instruction
+    (opcode)
+    (operands
+      (register))))

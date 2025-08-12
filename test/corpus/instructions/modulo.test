@@ -1,7 +1,7 @@
 ==========
 Instruction with modulo expression without spaces
 ==========
-li $t0 4%2
+foo $t0 4%2
 ---
 (program
   (instruction
@@ -15,7 +15,7 @@ li $t0 4%2
 ==========
 Instruction with modulo expression with space after operator
 ==========
-li $t0 4%2
+foo $t0 4%2
 ---
 (program
   (instruction
@@ -29,7 +29,7 @@ li $t0 4%2
 ==========
 Instruction with modulo expression with space after operator
 ==========
-li $t0 4% 2
+foo $t0 4% 2
 ---
 (program
   (instruction
@@ -43,7 +43,7 @@ li $t0 4% 2
 ==========
 Instruction with modulo expression with spaces around operator (edge case with special treatment using extra node)
 ==========
-li $t0 4 % 2
+foo $t0 4 % 2
 ---
 (program
   (instruction
@@ -57,7 +57,7 @@ li $t0 4 % 2
 ==========
 Instruction with modulo expression without spaces between decimal and macro variable
 ==========
-li $t0 4%%2
+foo $t0 4%%2
 ---
 (program
   (instruction
@@ -71,7 +71,7 @@ li $t0 4%%2
 ==========
 Instruction without parenthesized modulo expression
 ==========
-li $t0 (4 % 2)
+foo $t0 (4 % 2)
 ---
 (program
   (instruction
@@ -86,7 +86,7 @@ li $t0 (4 % 2)
 ==========
 Instruction without modulo expression and macro variable instead
 ==========
-li 4 %2
+foo 4 %2
 ---
 (program
   (instruction
@@ -98,7 +98,7 @@ li 4 %2
 ==========
 Instruction without modulo expression and two macro variables instead
 ==========
-li %4 %2
+foo %4 %2
 ---
 (program
   (instruction

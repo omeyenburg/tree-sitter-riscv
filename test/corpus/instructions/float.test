@@ -1,0 +1,87 @@
+==========
+Instruction with simple float value
+==========
+foo 3.14
+---
+(program
+  (instruction
+    (opcode)
+    (operands
+      (float))))
+
+==========
+Instruction with negative float value
+==========
+foo -3.14
+---
+(program
+  (instruction
+    (opcode)
+    (operands
+      (float))))
+
+==========
+Instruction with float value starting with decimal point
+==========
+foo .14
+---
+(program
+  (instruction
+    (opcode)
+    (operands
+      (float))))
+
+==========
+Instruction with float value ending with decimal point
+==========
+foo 3.
+---
+(program
+  (instruction
+    (opcode)
+    (operands
+      (float))))
+
+==========
+Instruction with float value without decimal point in exponential notation (lowercase e)
+==========
+foo 1e10
+---
+(program
+  (instruction
+    (opcode)
+    (operands
+      (float))))
+
+==========
+Instruction with float value in exponential notation (uppercase E)
+==========
+foo 1E-10
+---
+(program
+  (instruction
+    (opcode)
+    (operands
+      (float))))
+
+==========
+Instruction with negative float value in exponential notation
+==========
+foo -3.5e+5
+---
+(program
+  (instruction
+    (opcode)
+    (operands
+      (float))))
+
+==========
+Instruction with float value starting with decimal point in exponential notation
+==========
+foo .5e2
+---
+(program
+  (instruction
+    (opcode)
+    (operands
+      (float))))

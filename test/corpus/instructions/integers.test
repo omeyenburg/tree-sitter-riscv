@@ -1,0 +1,98 @@
+==========
+Instruction with decimal value
+==========
+foo 100
+---
+(program
+  (instruction
+    (opcode)
+    (operands
+      (decimal))))
+
+==========
+Instruction with signed integer value
+==========
+foo -100
+---
+(program
+  (instruction
+    (opcode)
+    (operands
+      (decimal))))
+
+==========
+Instruction with octal value
+==========
+foo 012
+---
+(program
+  (instruction
+    (opcode)
+    (operands
+      (octal))))
+
+==========
+Instruction with decimal value with leading zero
+==========
+foo 089
+---
+(program
+  (instruction
+    (opcode)
+    (operands
+      (decimal))))
+
+==========
+Instruction with hexadecimal value
+==========
+foo 0x0314
+---
+(program
+  (instruction
+    (opcode)
+    (operands
+      (hexadecimal))))
+
+==========
+Instruction with signed hexadecimal value
+==========
+foo -0x0123456789ABCDEFabcdef
+---
+(program
+  (instruction
+    (opcode)
+    (operands
+      (hexadecimal))))
+
+==========
+Instruction with char value
+==========
+foo 'A'
+---
+(program
+  (instruction
+    (opcode)
+    (operands
+      (char))))
+
+==========
+Instruction with escaped symbol
+==========
+foo '\n'
+---
+(program
+  (instruction
+    (opcode)
+    (operands
+      (char))))
+
+==========
+Instruction with escaped single quote
+==========
+foo '\''
+---
+(program
+  (instruction
+    (opcode)
+    (operands
+      (char))))

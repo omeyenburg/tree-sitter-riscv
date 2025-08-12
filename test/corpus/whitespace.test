@@ -1,20 +1,4 @@
 ==========
-Empty line
-==========
-
----
-(program)
-
-==========
-Lines of whitespace without content
-==========
- 
-	
-;
----
-(program)
-
-==========
 Instruction with comma-separated operands
 ==========
 li $t0,1
@@ -482,46 +466,3 @@ Directive with attributes with space before semicolon
     (integer_mnemonic)
     (integer_operands
       (decimal))))
-
-==========
-Instruction opcode separated with comma from arguments
-:error
-==========
-li,$t0,1
----
-
-==========
-Instruction opcode separated with comma and spaces from arguments
-:error
-==========
-li , $t0, 1
----
-
-==========
-Number without context
-:error
-==========
-123
----
-
-==========
-String without context
-:error
-==========
-123
----
-
-==========
-Register without context
-:error
-==========
-$t0
----
-
-==========
-Register on new line after opcode
-:error
-==========
-li 
-    $t0, 1
----
