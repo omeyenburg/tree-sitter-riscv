@@ -26,6 +26,7 @@ module.exports = grammar({
     [$.macro_parameters],
     [$.control_operands],
     [$.integer_operands],
+    [$._operand, $._expression_argument],
   ],
 
   rules: {
@@ -156,9 +157,15 @@ module.exports = grammar({
 
     instruction: $ => seq(
       field('opcode', $.opcode),
-      optional(seq(
-        /[ \t]+/,
-        optional(field('operands', $.operands)),
+      optional(choice(
+        $.call_expression,
+        seq(
+          /[ \t]+/,
+          optional(field('operands', choice(
+            $.operands,
+            $.call_expression,
+          ))),
+        ),
       )),
     ),
     opcode: $ => token(prec(1, /[a-zA-Z_][a-zA-Z0-9_.]*/)),
@@ -175,6 +182,14 @@ module.exports = grammar({
       $._expression,
       $.float,
       $.modulo,
+    ),
+
+    call_expression: $ => seq(
+      '(',
+      optional(seq(
+        field('arguments', $.operands)
+      )),
+      ')'
     ),
 
     // Standalone fallback, because it gets in trouble with macro_variable
