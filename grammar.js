@@ -173,6 +173,7 @@ module.exports = grammar({
       $.register,
       $.address,
       $._expression,
+      $.float,
       $.modulo,
     ),
 
@@ -189,7 +190,6 @@ module.exports = grammar({
       $.octal,
       $.decimal,
       $.hexadecimal,
-      $.float,
     ),
 
     binary_expression: $ => choice(
@@ -233,9 +233,9 @@ module.exports = grammar({
     float: $ => token(choice(
       seq(
         choice(/-?\d+\.?\d*/, /-?\d*\.\d+/),
-        optional(/[eE]-?\d+/),
+        optional(/[eE][+-]?\d+/),
       ),
-      /-?\d+[eE]-?\d+/,
+      /-?\d+[eE][+-]?\d+/,
     )),
 
     register: $ => token(seq('$', choice(

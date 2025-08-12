@@ -34,10 +34,6 @@
             "named": true
           },
           {
-            "type": "float",
-            "named": true
-          },
-          {
             "type": "hexadecimal",
             "named": true
           },
@@ -86,10 +82,6 @@
             "named": true
           },
           {
-            "type": "float",
-            "named": true
-          },
-          {
             "type": "hexadecimal",
             "named": true
           },
@@ -129,10 +121,6 @@
           },
           {
             "type": "decimal",
-            "named": true
-          },
-          {
-            "type": "float",
             "named": true
           },
           {
@@ -186,10 +174,6 @@
         },
         {
           "type": "decimal",
-          "named": true
-        },
-        {
-          "type": "float",
           "named": true
         },
         {
@@ -379,10 +363,6 @@
           "named": true
         },
         {
-          "type": "float",
-          "named": true
-        },
-        {
           "type": "hexadecimal",
           "named": true
         },
@@ -512,10 +492,6 @@
             "named": true
           },
           {
-            "type": "float",
-            "named": true
-          },
-          {
             "type": "hexadecimal",
             "named": true
           },
@@ -594,10 +570,6 @@
           },
           {
             "type": "decimal",
-            "named": true
-          },
-          {
-            "type": "float",
             "named": true
           },
           {

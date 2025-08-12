@@ -926,6 +926,10 @@
         },
         {
           "type": "SYMBOL",
+          "name": "float"
+        },
+        {
+          "type": "SYMBOL",
           "name": "modulo"
         }
       ]
@@ -979,10 +983,6 @@
         {
           "type": "SYMBOL",
           "name": "hexadecimal"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "float"
         }
       ]
     },
@@ -1554,7 +1554,7 @@
                 "members": [
                   {
                     "type": "PATTERN",
-                    "value": "[eE]-?\\d+"
+                    "value": "[eE][+-]?\\d+"
                   },
                   {
                     "type": "BLANK"
@@ -1565,7 +1565,7 @@
           },
           {
             "type": "PATTERN",
-            "value": "-?\\d+[eE]-?\\d+"
+            "value": "-?\\d+[eE][+-]?\\d+"
           }
         ]
       }
