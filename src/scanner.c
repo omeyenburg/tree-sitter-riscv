@@ -53,7 +53,7 @@ bool tree_sitter_mips_external_scanner_scan(void* payload,
         // If no space found, can't be a separator
         if (found_space) {
             // If we hit end of line, semicolon, or comment - not an operand separator
-            if (!(lexer->lookahead == '\n' || lexer->lookahead == ';' ||
+            if (!(lexer->lookahead == '\r' || lexer->lookahead == '\n' || lexer->lookahead == ';' ||
                   lexer->lookahead == '#')) {
                 // If we see an operator, this space is part of an expression, not a
                 // separator
@@ -81,6 +81,11 @@ bool tree_sitter_mips_external_scanner_scan(void* payload,
     }
 
     if (valid_symbols[_LINE_SEPARATOR] && valid_symbols[_DATA_SEPARATOR]) {
+        if (lexer->lookahead == '\r') {
+            lexer->advance(lexer, false);
+            if (lexer->eof(lexer)) return false;
+        }
+
         if (lexer->lookahead == '\n') {
             lexer->advance(lexer, false);
 
@@ -103,6 +108,11 @@ bool tree_sitter_mips_external_scanner_scan(void* payload,
             return true;
         }
     } else if (valid_symbols[_LINE_SEPARATOR]) {
+        if (lexer->lookahead == '\r') {
+            lexer->advance(lexer, false);
+            if (lexer->eof(lexer)) return false;
+        }
+
         if (lexer->lookahead == '\n') {
             lexer->advance(lexer, false);
             lexer->result_symbol = _LINE_SEPARATOR;
@@ -110,6 +120,11 @@ bool tree_sitter_mips_external_scanner_scan(void* payload,
             return true;
         }
     } else if (valid_symbols[_DATA_SEPARATOR]) {
+        if (lexer->lookahead == '\r') {
+            lexer->advance(lexer, false);
+            if (lexer->eof(lexer)) return false;
+        }
+
         if (lexer->lookahead == '\n') {
             lexer->advance(lexer, false);
             lexer->result_symbol = _DATA_SEPARATOR;

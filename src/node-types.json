@@ -50,6 +50,10 @@
             "named": true
           },
           {
+            "type": "register",
+            "named": true
+          },
+          {
             "type": "symbol",
             "named": true
           },
@@ -98,6 +102,10 @@
             "named": true
           },
           {
+            "type": "register",
+            "named": true
+          },
+          {
             "type": "symbol",
             "named": true
           },
@@ -137,6 +145,10 @@
           },
           {
             "type": "parenthesized_expression",
+            "named": true
+          },
+          {
+            "type": "register",
             "named": true
           },
           {
@@ -190,6 +202,10 @@
         },
         {
           "type": "parenthesized_expression",
+          "named": true
+        },
+        {
+          "type": "register",
           "named": true
         },
         {
@@ -379,6 +395,10 @@
           "named": true
         },
         {
+          "type": "register",
+          "named": true
+        },
+        {
           "type": "symbol",
           "named": true
         },
@@ -508,6 +528,10 @@
             "named": true
           },
           {
+            "type": "register",
+            "named": true
+          },
+          {
             "type": "symbol",
             "named": true
           },
@@ -589,6 +613,10 @@
             "named": true
           },
           {
+            "type": "register",
+            "named": true
+          },
+          {
             "type": "symbol",
             "named": true
           },
@@ -606,6 +634,10 @@
   },
   {
     "type": "\n",
+    "named": false
+  },
+  {
+    "type": "\r",
     "named": false
   },
   {

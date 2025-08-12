@@ -18,7 +18,7 @@ module.exports = grammar({
   ],
 
   extras: $ => [
-    /[ \t]/,
+    /[ \t\r]/,
     $.comment,
   ],
 
@@ -41,10 +41,11 @@ module.exports = grammar({
 
     _statement: $ => prec(1, choice(
       ';',
+      '\r',
       '\n',
       choice(
         seq($.directive, choice(';', seq(optional($.comment), $._line_separator))),
-        seq($.instruction, choice(';', seq(optional($.comment), '\n'))),
+        seq($.instruction, choice(';', seq(optional($.comment), optional('\r'), '\n'))),
       ),
       $._label,
       seq($.comment, '\n'),
@@ -170,7 +171,6 @@ module.exports = grammar({
       optional($._operand_separator),
     ),
     _operand: $ => choice(
-      $.register,
       $.address,
       $._expression,
       $.float,
@@ -185,6 +185,7 @@ module.exports = grammar({
       $.unary_expression,
       $.parenthesized_expression,
       $.macro_variable,
+      $.register,
       $.symbol,
       $.char,
       $.octal,

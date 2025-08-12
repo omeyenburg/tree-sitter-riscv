@@ -63,6 +63,10 @@
           },
           {
             "type": "STRING",
+            "value": "\r"
+          },
+          {
+            "type": "STRING",
             "value": "\n"
           },
           {
@@ -130,6 +134,18 @@
                               {
                                 "type": "SYMBOL",
                                 "name": "comment"
+                              },
+                              {
+                                "type": "BLANK"
+                              }
+                            ]
+                          },
+                          {
+                            "type": "CHOICE",
+                            "members": [
+                              {
+                                "type": "STRING",
+                                "value": "\r"
                               },
                               {
                                 "type": "BLANK"
@@ -268,12 +284,20 @@
                       "value": "("
                     },
                     {
-                      "type": "FIELD",
-                      "name": "parameters",
-                      "content": {
-                        "type": "SYMBOL",
-                        "name": "macro_parameters"
-                      }
+                      "type": "CHOICE",
+                      "members": [
+                        {
+                          "type": "FIELD",
+                          "name": "parameters",
+                          "content": {
+                            "type": "SYMBOL",
+                            "name": "macro_parameters"
+                          }
+                        },
+                        {
+                          "type": "BLANK"
+                        }
+                      ]
                     },
                     {
                       "type": "CHOICE",
@@ -914,10 +938,6 @@
       "members": [
         {
           "type": "SYMBOL",
-          "name": "register"
-        },
-        {
-          "type": "SYMBOL",
           "name": "address"
         },
         {
@@ -963,6 +983,10 @@
         {
           "type": "SYMBOL",
           "name": "macro_variable"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "register"
         },
         {
           "type": "SYMBOL",
@@ -1717,7 +1741,7 @@
   "extras": [
     {
       "type": "PATTERN",
-      "value": "[ \\t]"
+      "value": "[ \\t\\r]"
     },
     {
       "type": "SYMBOL",
