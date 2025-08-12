@@ -102,7 +102,7 @@ module.exports = grammar({
         ),
         $._expression,
       )),
-      optional(seq($._data_separator, $.comment)),
+      optional(repeat($._data_separator)),
     ),
 
     _float_directive: $ => seq(
@@ -123,7 +123,7 @@ module.exports = grammar({
         ),
         $.float,
       )),
-      optional(seq($._data_separator, $.comment)),
+      optional(repeat($._data_separator)),
     ),
     _float_operand: $ => choice($.float, $.macro_variable),
 
