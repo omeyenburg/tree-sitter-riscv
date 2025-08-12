@@ -1,6 +1,6 @@
-// src/scanner.c
+#include "tree_sitter/parser.h"
+
 #include <ctype.h>
-#include <tree_sitter/parser.h>
 #include <wctype.h>
 
 enum TokenType {
