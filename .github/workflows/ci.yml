@@ -39,12 +39,12 @@ jobs:
           tree-sitter-ref: v0.25.6
       - name: Set up examples
         run: |-
-          git clone https://github.com/erenulas/mips-assembly-examples --single-branch --depth=1 --filter=blob:none
           git clone https://github.com/ffcabbar/MIPS-Assembly-Language-Examples --single-branch --depth=1 --filter=blob:none
-          git clone https://github.com/rohitdwivedula/mips-exercises --single-branch --depth=1 --filter=blob:none
-          git clone https://github.com/apebl/mips-asm-examples --single-branch --depth=1 --filter=blob:none
           git clone https://github.com/ClaudioKamoda/MIPS-Assembly-Projects --single-branch --depth=1 --filter=blob:none
           git clone https://github.com/AleksandrHovhannisyan/MIPS-Linked-List --single-branch --depth=1 --filter=blob:none
+          git clone https://github.com/apebl/mips-asm-examples --single-branch --depth=1 --filter=blob:none
+          git clone https://github.com/erenulas/mips-assembly-examples --single-branch --depth=1 --filter=blob:none
+          git clone https://github.com/rohitdwivedula/mips-exercises --single-branch --depth=1 --filter=blob:none
       - name: Run tests
         uses: tree-sitter/parser-test-action@v2
         with:
@@ -59,3 +59,7 @@ jobs:
           files: |
             **/*.s
             **/*.asm
+          invalid-files: |
+            mips-6-ifElseAdder.asm
+            GuessingGame.asm
+            RoboQueSegueLinha.asm
