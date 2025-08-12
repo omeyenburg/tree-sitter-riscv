@@ -50,7 +50,7 @@ module.exports = grammar({
         seq($.instruction, choice(';', seq(optional($.comment), optional('\r'), '\n'))),
       ),
       $._label,
-      seq($.comment, '\n'),
+      seq($.comment, optional('\r'), '\n'),
     )),
 
     comment: $ => /#.*/,
@@ -88,7 +88,7 @@ module.exports = grammar({
       field('mnemonic', $.integer_mnemonic),
       $._whitespace,
       field('operands', $.integer_operands),
-      optional(repeat(choice('\n', ' ', '\t'))),
+      optional(repeat(choice('\r', '\n', ' ', '\t'))),
     ),
     integer_mnemonic: $ => choice('.word', '.half', '.hword', '.byte', '.dword'),
     integer_operands: $ => seq(
@@ -109,7 +109,7 @@ module.exports = grammar({
       field('mnemonic', $.float_mnemonic),
       $._whitespace,
       field('operands', $.float_operands),
-      repeat(choice(' ', '\t')),
+      optional(repeat(choice('\r', '\n', ' ', '\t'))),
     ),
     float_mnemonic: $ => choice('.float', '.double'),
     float_operands: $ => seq(
@@ -125,17 +125,19 @@ module.exports = grammar({
       )),
       optional(seq($._data_separator, $.comment)),
     ),
+    _float_operand: $ => choice($.float, $.macro_variable),
 
     _string_directive: $ => seq(
       field('mnemonic', $.string_mnemonic),
       $._whitespace,
-      field('string', $.string),
+      field('string', $._string_operand),
     ),
     string_mnemonic: $ => choice(
       '.ascii',
       '.asciiz',
       '.string',
     ),
+    _string_operand: $ => choice($.string, $.macro_variable),
 
     // Catch-all directive
     _control_directive: $ => seq(

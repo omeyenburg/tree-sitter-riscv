@@ -312,6 +312,10 @@
         "required": false,
         "types": [
           {
+            "type": "macro_variable",
+            "named": true
+          },
+          {
             "type": "string",
             "named": true
           }

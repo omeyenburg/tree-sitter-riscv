@@ -176,6 +176,18 @@
                 "name": "comment"
               },
               {
+                "type": "CHOICE",
+                "members": [
+                  {
+                    "type": "STRING",
+                    "value": "\r"
+                  },
+                  {
+                    "type": "BLANK"
+                  }
+                ]
+              },
+              {
                 "type": "STRING",
                 "value": "\n"
               }
@@ -466,6 +478,10 @@
                 "members": [
                   {
                     "type": "STRING",
+                    "value": "\r"
+                  },
+                  {
+                    "type": "STRING",
                     "value": "\n"
                   },
                   {
@@ -636,20 +652,36 @@
           }
         },
         {
-          "type": "REPEAT",
-          "content": {
-            "type": "CHOICE",
-            "members": [
-              {
-                "type": "STRING",
-                "value": " "
-              },
-              {
-                "type": "STRING",
-                "value": "\t"
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "REPEAT",
+              "content": {
+                "type": "CHOICE",
+                "members": [
+                  {
+                    "type": "STRING",
+                    "value": "\r"
+                  },
+                  {
+                    "type": "STRING",
+                    "value": "\n"
+                  },
+                  {
+                    "type": "STRING",
+                    "value": " "
+                  },
+                  {
+                    "type": "STRING",
+                    "value": "\t"
+                  }
+                ]
               }
-            ]
-          }
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
         }
       ]
     },
@@ -767,6 +799,19 @@
         }
       ]
     },
+    "_float_operand": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "float"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "macro_variable"
+        }
+      ]
+    },
     "_string_directive": {
       "type": "SEQ",
       "members": [
@@ -787,7 +832,7 @@
           "name": "string",
           "content": {
             "type": "SYMBOL",
-            "name": "string"
+            "name": "_string_operand"
           }
         }
       ]
@@ -806,6 +851,19 @@
         {
           "type": "STRING",
           "value": ".string"
+        }
+      ]
+    },
+    "_string_operand": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "string"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "macro_variable"
         }
       ]
     },
