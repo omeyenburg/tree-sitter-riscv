@@ -991,7 +991,7 @@
               "members": [
                 {
                   "type": "SYMBOL",
-                  "name": "call_expression"
+                  "name": "_call_expression"
                 },
                 {
                   "type": "SEQ",
@@ -1015,7 +1015,7 @@
                               },
                               {
                                 "type": "SYMBOL",
-                                "name": "call_expression"
+                                "name": "_call_expression"
                               }
                             ]
                           }
@@ -1118,7 +1118,7 @@
         }
       ]
     },
-    "call_expression": {
+    "_call_expression": {
       "type": "SEQ",
       "members": [
         {
@@ -1129,17 +1129,12 @@
           "type": "CHOICE",
           "members": [
             {
-              "type": "SEQ",
-              "members": [
-                {
-                  "type": "FIELD",
-                  "name": "arguments",
-                  "content": {
-                    "type": "SYMBOL",
-                    "name": "operands"
-                  }
-                }
-              ]
+              "type": "FIELD",
+              "name": "arguments",
+              "content": {
+                "type": "SYMBOL",
+                "name": "operands"
+              }
             },
             {
               "type": "BLANK"

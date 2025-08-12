@@ -191,11 +191,20 @@ module.exports = grammar({
       $.modulo,
     ),
 
+    // Support macro-style calling.
+    // Examples: `exit(0)`, `for($t0, 0, 3)`
     _call_expression: $ => seq('(', optional(field('arguments', $.operands)), ')'),
 
-    // Standalone fallback, because it gets in trouble with macro_variable
+    // Standalone fallback, because it gets in trouble with macro_variable.
+    // Used as operand in instruction.
+    // Example: `2 % 5` but not `2%5` or `2% 5`
     modulo: $ => token(prec(-1, '%')),
 
+    // Matches primitives, registers, macro variables and compound expressions.
+    // Does not match floats, floats are not accepted in expressions, but only
+    // as standalone operands or in directives.
+    // Examples: `1`, `%var + 3`, `(label + 7)`
+    // TODO: Why does this match registers?
     _expression: $ => choice(
       $.binary_expression,
       $.unary_expression,
@@ -241,12 +250,13 @@ module.exports = grammar({
     ),
     _expression_argument: $ => field('argument', $._expression),
 
-    // Primitives
+    // Primitive data types.
     char: $ => /'(?:\\.|[^'\\])'/,
     string: $ => /"(?:\\.|[^"\\])*"/,
     octal: $ => /-?0[0-7]*/,
     decimal: $ => /-?\d+/,
     hexadecimal: $ => /-?0[xX][0-9a-fA-F]+/,
+
     float: $ => token(choice(
       seq(
         choice(/-?\d+\.?\d*/, /-?\d*\.\d+/),
@@ -261,19 +271,18 @@ module.exports = grammar({
       /f?([12]?[0-9]|3[0-1])/,
     ))),
 
-    // Macro variables can start with percent, dollar and backslash
+    // Macro variables can start with percent, dollar and backslash.
     // Lower precedence than registers, because they overlap.
     macro_variable: $ => /[%$\\][0-9a-zA-Z_:$%\\]+/,
 
-    // Bare identifier without colon
+    // Bare identifier without colon.
     symbol: $ => /[a-zA-Z_][a-zA-Z0-9_]*/,
 
-    // identifier with colon
+    // identifier with colon.
     _label: $ => seq($.label, /[ \t]*/),
     label: $ => token(prec(2, /[a-zA-Z_][a-zA-Z0-9_]*:/)),
 
-    // Match addresses
-    // Examples: main($s4), value+4($s1), ($v1), -0x10($a0)
+    // Examples: `main($s4)`, `value+4($s1)`, `($v1)`, `-0x10($a0)`
     // Cannot match expression-like addresses: main, main+2
     address: $ => prec(1, seq(
       optional(field('offset', $._expression)),

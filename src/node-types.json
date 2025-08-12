@@ -164,22 +164,6 @@
     }
   },
   {
-    "type": "call_expression",
-    "named": true,
-    "fields": {
-      "arguments": {
-        "multiple": false,
-        "required": false,
-        "types": [
-          {
-            "type": "operands",
-            "named": true
-          }
-        ]
-      }
-    }
-  },
-  {
     "type": "control_mnemonic",
     "named": true,
     "fields": {}
@@ -351,6 +335,16 @@
     "type": "instruction",
     "named": true,
     "fields": {
+      "arguments": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "operands",
+            "named": true
+          }
+        ]
+      },
       "opcode": {
         "multiple": false,
         "required": true,
@@ -362,12 +356,16 @@
         ]
       },
       "operands": {
-        "multiple": false,
+        "multiple": true,
         "required": false,
         "types": [
           {
-            "type": "call_expression",
-            "named": true
+            "type": "(",
+            "named": false
+          },
+          {
+            "type": ")",
+            "named": false
           },
           {
             "type": "operands",
@@ -375,16 +373,6 @@
           }
         ]
       }
-    },
-    "children": {
-      "multiple": false,
-      "required": false,
-      "types": [
-        {
-          "type": "call_expression",
-          "named": true
-        }
-      ]
     }
   },
   {
