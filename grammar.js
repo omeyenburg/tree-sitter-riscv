@@ -70,7 +70,7 @@ module.exports = grammar({
       $._whitespace,
       field('name', $.symbol),
       optional(choice(
-        seq(optional($._whitespace), '(', field('parameters', $.macro_parameters), optional(choice(' ', '\t')), ')'),
+        seq(optional($._whitespace), '(', optional(field('parameters', $.macro_parameters)), optional(choice(' ', '\t')), ')'),
         seq($._whitespace, field('parameters', $.macro_parameters)),
       )),
     ),
