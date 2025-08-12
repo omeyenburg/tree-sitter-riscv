@@ -164,6 +164,22 @@
     }
   },
   {
+    "type": "call_expression",
+    "named": true,
+    "fields": {
+      "arguments": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "operands",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
     "type": "control_mnemonic",
     "named": true,
     "fields": {}
@@ -317,6 +333,10 @@
       "required": true,
       "types": [
         {
+          "type": "comment",
+          "named": true
+        },
+        {
           "type": "float",
           "named": true
         }
@@ -342,11 +362,25 @@
         "required": false,
         "types": [
           {
+            "type": "call_expression",
+            "named": true
+          },
+          {
             "type": "operands",
             "named": true
           }
         ]
       }
+    },
+    "children": {
+      "multiple": false,
+      "required": false,
+      "types": [
+        {
+          "type": "call_expression",
+          "named": true
+        }
+      ]
     }
   },
   {
@@ -478,6 +512,10 @@
         },
         {
           "type": "register",
+          "named": true
+        },
+        {
+          "type": "string",
           "named": true
         },
         {

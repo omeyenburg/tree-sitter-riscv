@@ -26,6 +26,7 @@ module.exports = grammar({
     [$.macro_parameters],
     [$.control_operands],
     [$.integer_operands],
+    [$.float_operands],
     [$._operand, $._expression_argument],
   ],
 
@@ -101,6 +102,7 @@ module.exports = grammar({
         ),
         $._expression,
       )),
+      optional(seq($._data_separator, $.comment)),
     ),
 
     _float_directive: $ => seq(
@@ -114,12 +116,14 @@ module.exports = grammar({
       $.float,
       repeat(seq(
         choice(
-          /[ \t]+/,
+          ' ',
+          '\t',
           /[ \t]*,[ \t]*/,
-          $._data_separator,
+          seq(optional(choice(' ', '\t')), optional($.comment), $._data_separator),
         ),
         $.float,
       )),
+      optional(seq($._data_separator, $.comment)),
     ),
 
     _string_directive: $ => seq(
@@ -181,6 +185,7 @@ module.exports = grammar({
       $.address,
       $._expression,
       $.float,
+      $.string,
       $.modulo,
     ),
 
