@@ -131,6 +131,7 @@ module.exports = grammar({
       field('mnemonic', $.string_mnemonic),
       $._whitespace,
       field('string', $._string_operand),
+      /[ \t]*/,
     ),
     string_mnemonic: $ => choice(
       '.ascii',
@@ -161,6 +162,7 @@ module.exports = grammar({
       $.string,
     ),
 
+    // NOTE: Mars does also allow this: %macro()
     instruction: $ => seq(
       field('opcode', $.opcode),
       optional(choice(

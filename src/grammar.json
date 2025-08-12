@@ -834,6 +834,10 @@
             "type": "SYMBOL",
             "name": "_string_operand"
           }
+        },
+        {
+          "type": "PATTERN",
+          "value": "[ \\t]*"
         }
       ]
     },
