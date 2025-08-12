@@ -60,6 +60,6 @@ jobs:
             **/*.s
             **/*.asm
           invalid-files: |
-            mips-6-ifElseAdder.asm
-            GuessingGame.asm
-            RoboQueSegueLinha.asm
+            MIPS-Assembly-Language-Examples/mips-6-ifElseAdder.asm
+            MIPS-Assembly-Projects/GuessingGame.asm
+            MIPS-Assembly-Projects/RoboQueSegueLinha.asm
