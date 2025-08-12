@@ -164,12 +164,12 @@ module.exports = grammar({
     instruction: $ => seq(
       field('opcode', $.opcode),
       optional(choice(
-        $.call_expression,
+        $._call_expression,
         seq(
           /[ \t]+/,
           optional(field('operands', choice(
             $.operands,
-            $.call_expression,
+            $._call_expression,
           ))),
         ),
       )),
@@ -191,13 +191,7 @@ module.exports = grammar({
       $.modulo,
     ),
 
-    call_expression: $ => seq(
-      '(',
-      optional(seq(
-        field('arguments', $.operands)
-      )),
-      ')'
-    ),
+    _call_expression: $ => seq('(', optional(field('arguments', $.operands)), ')'),
 
     // Standalone fallback, because it gets in trouble with macro_variable
     modulo: $ => token(prec(-1, '%')),
