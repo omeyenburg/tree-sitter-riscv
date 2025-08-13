@@ -1,20 +1,49 @@
 ==========
-Instruction with invalid float literal (missing exponent)
+[instructions/error] instruction with invalid float literal (missing exponent)
 :error
 ==========
 foo 1e
 ---
 
 ==========
-Instruction with invalid float literal (malformed mantissa)
+[instructions/error] instruction with invalid float literal (malformed mantissa)
 :error
 ==========
 foo .e+1
 ---
 
 ==========
-Instruction with invalid float literal (malformed exponent)
+[instructions/error] instruction with invalid float literal (malformed exponent)
 :error
 ==========
 foo 1e+
+---
+
+==========
+[instructions/error] register on new line after opcode
+:error
+==========
+li 
+    $t0, 1
+---
+
+==========
+[instructions/error] instruction without space between opcode and register
+:error
+==========
+li$t0, 0
+---
+
+==========
+[instructions/error] instruction opcode separated with comma from arguments
+:error
+==========
+li,$t0,1
+---
+
+==========
+[instructions/error] instruction opcode separated with comma and spaces from arguments
+:error
+==========
+li , $t0, 1
 ---

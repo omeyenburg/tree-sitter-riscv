@@ -1,5 +1,5 @@
 ==========
-Instruction with decimal value
+[instructions/integer] instruction with decimal value
 ==========
 foo 100
 ---
@@ -10,7 +10,7 @@ foo 100
       (decimal))))
 
 ==========
-Instruction with signed integer value
+[instructions/integer] instruction with signed integer value
 ==========
 foo -100
 ---
@@ -21,7 +21,7 @@ foo -100
       (decimal))))
 
 ==========
-Instruction with octal value
+[instructions/integer] instruction with octal value
 ==========
 foo 012
 ---
@@ -32,7 +32,7 @@ foo 012
       (octal))))
 
 ==========
-Instruction with decimal value with leading zero
+[instructions/integer] instruction with decimal value with leading zero
 ==========
 foo 089
 ---
@@ -43,7 +43,7 @@ foo 089
       (decimal))))
 
 ==========
-Instruction with hexadecimal value
+[instructions/integer] instruction with hexadecimal value
 ==========
 foo 0x0314
 ---
@@ -54,7 +54,7 @@ foo 0x0314
       (hexadecimal))))
 
 ==========
-Instruction with signed hexadecimal value
+[instructions/integer] instruction with signed hexadecimal value
 ==========
 foo -0x0123456789ABCDEFabcdef
 ---
@@ -65,7 +65,7 @@ foo -0x0123456789ABCDEFabcdef
       (hexadecimal))))
 
 ==========
-Instruction with char value
+[instructions/integer] instruction with char value
 ==========
 foo 'A'
 ---
@@ -76,7 +76,7 @@ foo 'A'
       (char))))
 
 ==========
-Instruction with escaped symbol
+[instructions/integer] instruction with escaped symbol
 ==========
 foo '\n'
 ---
@@ -87,7 +87,7 @@ foo '\n'
       (char))))
 
 ==========
-Instruction with escaped single quote
+[instructions/integer] instruction with escaped single quote
 ==========
 foo '\''
 ---

@@ -1,0 +1,41 @@
+==========
+[program/comment] simple comment
+==========
+# foo
+---
+(program
+  (comment))
+
+==========
+[program/comment] space before comment
+==========
+ # foo
+---
+(program
+  (comment))
+
+==========
+[program/comment] tab before comment
+==========
+	# foo
+---
+(program
+  (comment))
+
+==========
+[program/comment] new line after comment
+==========
+# foo
+
+---
+(program
+  (comment))
+
+==========
+[program/comment] CRLF after comment
+==========
+# foo
+
+---
+(program
+  (comment))

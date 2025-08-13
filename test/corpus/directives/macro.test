@@ -1,5 +1,5 @@
 ==========
-Macro definition and usage with percent (%) prefix
+[directives/macro] macro definition and usage with percent (%) prefix
 ==========
 .macro inc %rs %rt
     addiu %rs, %rt, 1
@@ -29,7 +29,7 @@ inc $t0, $t1
       (register))))
 
 ==========
-Macro definition and usage with backslash (\) prefix
+[directives/macro] macro definition and usage with backslash (\) prefix
 ==========
 .macro inc \rs \rt
     addiu \rs, \rt, 1
@@ -59,7 +59,7 @@ inc $t0, $t1
      (register))))
 
 ==========
-Macro definition and usage with dollar ($) prefix
+[directives/macro] macro definition and usage with dollar ($) prefix
 ==========
 .macro inc $rs $rt
     addiu $rs, $rt, 1
@@ -89,7 +89,7 @@ inc $t0, $t1
       (register))))
 
 ==========
-Mixed prefixes in macro definition
+[directives/macro] mixed prefixes in macro definition
 ==========
 .macro test $a \b %c $\ $% \$ \% %$ $\
 ---
@@ -109,7 +109,7 @@ Mixed prefixes in macro definition
       (macro_variable))))
 
 ==========
-Macro definition with parentheses without space before
+[directives/macro] macro definition with parentheses without space before
 ==========
 .macro inc(%rs %rt)
 ---
@@ -122,7 +122,7 @@ Macro definition with parentheses without space before
       (macro_variable))))
 
 ==========
-Macro definition with parentheses with space before
+[directives/macro] macro definition with parentheses with space before
 ==========
 .macro inc (%rs %rt)
 ---
@@ -135,7 +135,7 @@ Macro definition with parentheses with space before
       (macro_variable))))
 
 ==========
-Mixed prefixes in instruction
+[directives/macro] mixed prefixes in instruction
 ==========
 inst $a \b %c $\ $% \$ \% %$ $\
 ---
@@ -154,7 +154,7 @@ inst $a \b %c $\ $% \$ \% %$ $\
       (macro_variable))))
 
 ==========
-Address with macro_variable as register with percent (%) prefix
+[directives/macro] address with macro_variable as register with percent (%) prefix
 ==========
 lw $t0, 4(%x)
 ---
@@ -168,7 +168,7 @@ lw $t0, 4(%x)
         (macro_variable)))))
 
 ==========
-Address with macro_variable as register with backslash (\) prefix
+[directives/macro] address with macro_variable as register with backslash (\) prefix
 ==========
 lw $t0, 4(\x)
 ---
@@ -182,7 +182,7 @@ lw $t0, 4(\x)
         (macro_variable)))))
 
 ==========
-Address with macro_variable as register with dollar ($) prefix
+[directives/macro] address with macro_variable as register with dollar ($) prefix
 ==========
 lw $t0, 4($x)
 ---

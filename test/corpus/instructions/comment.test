@@ -1,0 +1,43 @@
+==========
+[instructions/comment] inline comment following instruction without operands, no space
+==========
+nop# This is an in-line comment
+---
+(program
+  (instruction
+    (opcode))
+  (comment))
+
+==========
+[instructions/comment] inline comment following instruction without operands, space
+==========
+nop # This is an in-line comment
+---
+(program
+  (instruction
+    (opcode))
+  (comment))
+
+==========
+[instructions/comment] inline comment following instruction with operands, no space
+==========
+jr $t0# This is an in-line comment
+---
+(program
+  (instruction
+    (opcode)
+    (operands
+      (register)))
+  (comment))
+
+==========
+[instructions/comment] inline comment following instruction with operands, space
+==========
+jr $t0 # This is an in-line comment
+---
+(program
+  (instruction
+    (opcode)
+    (operands
+      (register)))
+  (comment))

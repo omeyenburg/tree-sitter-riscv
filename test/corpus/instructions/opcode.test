@@ -1,5 +1,5 @@
 ==========
-Simple opcode
+[instructions/opcode] basic opcode
 ==========
 foo
 ---
@@ -8,7 +8,7 @@ foo
         (opcode)))
 
 ==========
-Uppercase opcode
+[instructions/opcode] uppercase opcode
 ==========
 FOO
 ---
@@ -17,7 +17,7 @@ FOO
         (opcode)))
 
 ==========
-Opcode starting with underscore
+[instructions/opcode] opcode starting with underscore
 ==========
 _foo
 ---
@@ -26,7 +26,7 @@ _foo
         (opcode)))
 
 ==========
-Opcode containing underscore
+[instructions/opcode] opcode containing underscore
 ==========
 foo_bar
 ---
@@ -35,7 +35,7 @@ foo_bar
         (opcode)))
 
 ==========
-Opcode containing dot
+[instructions/opcode] opcode containing dot
 ==========
 foo.bar
 ---

@@ -1,0 +1,28 @@
+==========
+[directives/assignments] simple assignment
+==========
+.set test=123
+---
+(program
+  (directive
+    (control_mnemonic)
+    (control_operands
+      (binary_expression
+        (symbol)
+        (decimal)))))
+
+==========
+[directives/assignment] multiple assignments
+==========
+.set test=123 OTHER='a'
+---
+(program
+  (directive
+    (control_mnemonic)
+    (control_operands
+      (binary_expression
+        (symbol)
+        (decimal))
+      (binary_expression
+        (symbol)
+        (char)))))

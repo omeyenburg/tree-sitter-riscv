@@ -1,0 +1,25 @@
+==========
+[directives/arguments] multiple arguments
+==========
+.set test "test" 123
+---
+(program
+  (directive
+    (control_mnemonic)
+    (control_operands
+      (symbol)
+      (string)
+      (decimal))))
+
+==========
+[directives/arguments] comma-separated arguments
+==========
+.set test,"test",123
+---
+(program
+  (directive
+    (control_mnemonic)
+    (control_operands
+      (symbol)
+      (string)
+      (decimal))))

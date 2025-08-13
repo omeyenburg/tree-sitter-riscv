@@ -1,0 +1,29 @@
+==========
+[labels/instruction] combined label and instruction without space
+==========
+foo:bar
+---
+(program
+  (label)
+  (instruction
+    (opcode)))
+
+==========
+[labels/instruction] combined label and instruction with space
+==========
+foo: bar
+---
+(program
+  (label)
+  (instruction
+    (opcode)))
+
+==========
+[labels/instruction] combined label and instruction with tab
+==========
+foo:	bar
+---
+(program
+  (label)
+  (instruction
+    (opcode)))

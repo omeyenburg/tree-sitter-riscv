@@ -1,0 +1,29 @@
+==========
+[labels/directive] combined label and directive without space
+==========
+foo:.bar
+---
+(program
+  (label)
+  (directive
+    (control_mnemonic)))
+
+==========
+[labels/directive] combined label and directive with space
+==========
+foo: .bar
+---
+(program
+  (label)
+  (directive
+    (control_mnemonic)))
+
+==========
+[labels/directive] combined label and directive with tab
+==========
+foo:	.bar
+---
+(program
+  (label)
+  (directive
+    (control_mnemonic)))

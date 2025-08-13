@@ -1,58 +1,33 @@
 ==========
-Line comment
+[directives/comment] comment on new line after integer directive
 ==========
-# This is a comment
+.word 1 2
+# comment
 ---
 (program
+  (directive
+    (integer_mnemonic)
+    (integer_operands
+      (decimal)
+      (decimal)))
   (comment))
 
 ==========
-Inline comment following instruction without operands, no space
+[directives/comment] comment on new line after float directive
 ==========
-nop# This is an in-line comment
+.float 1.2 2.3
+# comment
 ---
 (program
-  (instruction
-    (opcode))
+  (directive
+    (float_mnemonic)
+    (float_operands
+      (float)
+      (float)))
   (comment))
 
 ==========
-Inline comment following instruction without operands, space
-==========
-nop # This is an in-line comment
----
-(program
-  (instruction
-    (opcode))
-  (comment))
-
-==========
-Inline comment following instruction with operands, no space
-==========
-jr $t0# This is an in-line comment
----
-(program
-  (instruction
-    (opcode)
-    (operands
-      (register)))
-  (comment))
-
-==========
-Inline comment following instruction with operands, space
-==========
-jr $t0 # This is an in-line comment
----
-(program
-  (instruction
-    (opcode)
-    (operands
-      (register)))
-  (comment))
-
-
-==========
-Inline comment following directive without arguments
+[directives/comment] inline comment following directive without arguments
 ==========
 .text # comment
 ---
@@ -62,7 +37,7 @@ Inline comment following directive without arguments
   (comment))
 
 ==========
-Inline comment following directive with single argument
+[directives/comment] inline comment following directive with single argument
 ==========
 .align 4 # comment
 ---
@@ -74,7 +49,7 @@ Inline comment following directive with single argument
   (comment))
 
 ==========
-Inline comment following directive with multiple arguments
+[directives/comment] inline comment following directive with multiple arguments
 ==========
 .word 1, 2, 3, 4 # comment
 ---
@@ -89,7 +64,7 @@ Inline comment following directive with multiple arguments
   (comment))
 
 ==========
-Comment in multiline directive
+[directives/comment] comment in multiline directive
 ==========
 mat_A: .word 1 2 3# comment
              4 5 6
@@ -108,7 +83,7 @@ mat_A: .word 1 2 3# comment
       (decimal))))
 
 ==========
-Comment in multiline directive with space before
+[directives/comment] comment in multiline directive with space before
 ==========
 mat_A: .word 1 2 3 # comment
              4 5 6
@@ -127,7 +102,7 @@ mat_A: .word 1 2 3 # comment
       (decimal))))
 
 ==========
-Comment in multiline directive with tab before
+[directives/comment] comment in multiline directive with tab before
 ==========
 mat_A: .word 1 2 3	# comment
              4 5 6
@@ -146,7 +121,7 @@ mat_A: .word 1 2 3	# comment
       (decimal))))
 
 ==========
-Comment after multiline directive
+[directives/comment] comment after multiline directive
 ==========
 mat_A: .word 1 2 3
              4 5 6# comment
@@ -165,7 +140,7 @@ mat_A: .word 1 2 3
   (comment))
 
 ==========
-Comment after multiline directive with space before
+[directives/comment] comment after multiline directive with space before
 ==========
 mat_A: .word 1 2 3
              4 5 6 # comment
@@ -184,7 +159,7 @@ mat_A: .word 1 2 3
   (comment))
 
 ==========
-Comment in multiline directive with tab before
+[directives/comment] comment in multiline directive with tab before
 ==========
 mat_A: .word 1 2 3
              4 5 6	# comment

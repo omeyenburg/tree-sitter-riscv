@@ -1,0 +1,29 @@
+==========
+[directives/string] basic string directive
+==========
+.asciiz "foo"
+---
+(program
+  (directive
+    (string_mnemonic)
+    (string)))
+
+==========
+[directives/string] string containing escaped character
+==========
+.asciiz "\n"
+---
+(program
+  (directive
+    (string_mnemonic)
+    (string)))
+
+==========
+[directives/string] string containing escaped quote
+==========
+.asciiz "\""
+---
+(program
+  (directive
+    (string_mnemonic)
+    (string)))

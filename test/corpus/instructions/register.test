@@ -1,5 +1,5 @@
 ==========
-Instruction with simple register
+[instructions/register] instruction with simple register
 ==========
 foo $t0
 ---
@@ -10,7 +10,7 @@ foo $t0
       (register))))
 
 ==========
-Instruction with $0 numeric register
+[instructions/register] instruction with $0 numeric register
 ==========
 foo $0
 ---
@@ -21,7 +21,7 @@ foo $0
       (register))))
 
 ==========
-Instruction with $31 numeric register
+[instructions/register] instruction with $31 numeric register
 ==========
 foo $31
 ---
@@ -32,7 +32,7 @@ foo $31
       (register))))
 
 ==========
-Instruction with $gp register
+[instructions/register] instruction with $gp register
 ==========
 foo $gp
 ---
@@ -43,7 +43,7 @@ foo $gp
       (register))))
 
 ==========
-Instruction with $zero register
+[instructions/register] instruction with $zero register
 ==========
 foo $zero
 ---
@@ -54,7 +54,7 @@ foo $zero
       (register))))
 
 ==========
-Instruction with $f0 float register
+[instructions/register] instruction with $f0 float register
 ==========
 foo $f0
 ---
@@ -65,7 +65,7 @@ foo $f0
       (register))))
 
 ==========
-Instruction with $f31 float register
+[instructions/register] instruction with $f31 float register
 ==========
 foo $f31
 ---

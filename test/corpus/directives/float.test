@@ -1,0 +1,10 @@
+==========
+[directives/float] basic directive
+==========
+.float 1.23
+---
+(program
+  (directive
+    (float_mnemonic)
+    (float_operands
+      (float))))

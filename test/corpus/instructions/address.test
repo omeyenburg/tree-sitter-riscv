@@ -1,5 +1,5 @@
 ==========
-Instruction with register address without offset
+[instructions/address] instruction with register address without offset
 ==========
 la $t0, ($s0)
 ---
@@ -12,7 +12,7 @@ la $t0, ($s0)
         (register)))))
 
 ==========
-Instruction with decimal offset address
+[instructions/address] instruction with decimal offset address
 ==========
 la $t0, -100($s0)
 ---
@@ -26,7 +26,7 @@ la $t0, -100($s0)
         (register)))))
 
 ==========
-Instruction with label offset address
+[instructions/address] instruction with label offset address
 ==========
 la $t0, test($s0)
 ---
@@ -40,7 +40,7 @@ la $t0, test($s0)
         (register)))))
 
 ==========
-Instruction with address using simple expression offset
+[instructions/address] instruction with address using simple expression offset
 ==========
 la $t0, test+100($s0)
 ---
@@ -56,7 +56,7 @@ la $t0, test+100($s0)
         (register)))))
 
 ==========
-Instruction with address using parenthesized expression offset
+[instructions/address] instruction with address using parenthesized expression offset
 ==========
 la $t0, (test+0x123)($s0)
 ---
@@ -73,7 +73,7 @@ la $t0, (test+0x123)($s0)
         (register)))))
 
 ==========
-Instruction with address using label offset
+[instructions/address] instruction with address using label offset
 ==========
 la $t0, test($s0)
 ---

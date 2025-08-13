@@ -1,0 +1,66 @@
+==========
+[labels/whitespace] basic label
+==========
+test:
+---
+(program
+  (label))
+
+==========
+[labels/whitespace] chained label without space
+==========
+test:test:
+---
+(program
+  (label)
+  (label))
+
+==========
+[labels/whitespace] chained label with space
+==========
+test: test:
+---
+(program
+  (label)
+  (label))
+
+==========
+[labels/whitespace] chained label with tab
+==========
+test:	test:
+---
+(program
+  (label)
+  (label))
+
+==========
+[labels/whitespace] label with leading space
+==========
+  test:
+---
+(program
+  (label))
+
+==========
+[labels/whitespace] label with leading tab
+==========
+	test:
+---
+(program
+  (label))
+
+==========
+[labels/whitespace] label with trailing space
+==========
+test:  
+---
+(program
+  (label))
+
+==========
+[labels/whitespace] label with trailing tab
+==========
+test:	
+---
+(program
+  (label))

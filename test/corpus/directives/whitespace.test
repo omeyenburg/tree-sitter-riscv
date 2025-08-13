@@ -1,0 +1,106 @@
+==========
+[directives/whitespace] CRLF after directive with directive in next line
+==========
+.word 1
+.text
+---
+(program
+  (directive
+    (integer_mnemonic)
+    (integer_operands
+      (decimal)))
+  (directive
+    (control_mnemonic)))
+
+==========
+[directives/whitespace] CRLF after directive with indented directive in next line
+==========
+	.word 1
+	.text
+---
+(program
+  (directive
+    (integer_mnemonic)
+    (integer_operands
+      (decimal)))
+  (directive
+    (control_mnemonic)))
+
+==========
+[directives/whitespace] CRLF after multiline directive
+==========
+.word 1 2 3
+      4 5 6
+---
+(program
+  (directive
+    (integer_mnemonic)
+    (integer_operands
+      (decimal)
+      (decimal)
+      (decimal)
+      (decimal)
+      (decimal)
+      (decimal))))
+
+==========
+[directives/whitespace] trailing space after string directive before new line
+==========
+.asciiz "foo" 
+
+---
+(program
+  (directive
+    (string_mnemonic)
+    (string)))
+
+==========
+[directives/whitespace] trailing tab after string directive before new line
+==========
+.asciiz "foo"	
+
+---
+(program
+  (directive
+    (string_mnemonic)
+    (string)))
+
+==========
+[directives/whitespace] directive without attributes with semicolon
+==========
+.text;
+---
+(program
+  (directive
+    (control_mnemonic)))
+
+==========
+[directives/whitespace] directive without attributes with space before semicolon
+==========
+.text ;
+---
+(program
+  (directive
+    (control_mnemonic)))
+
+==========
+[directives/whitespace] directive with attributes with semicolon
+==========
+.word 123;
+---
+(program
+  (directive
+    (integer_mnemonic)
+    (integer_operands
+      (decimal))))
+
+==========
+[directives/whitespace] directive with attributes with space before semicolon
+==========
+.word 123 ;
+---
+(program
+  (directive
+    (integer_mnemonic)
+    (integer_operands
+      (decimal))))

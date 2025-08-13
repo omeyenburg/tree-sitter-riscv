@@ -1,0 +1,8 @@
+==========
+[directives/control] basic control directive
+==========
+.text
+---
+(program
+  (directive
+    (control_mnemonic)))

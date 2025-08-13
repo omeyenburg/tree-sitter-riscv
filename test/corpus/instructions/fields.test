@@ -1,5 +1,5 @@
 ==========
-Basic instruction
+[instructions/fields] basic instruction
 ==========
 syscall
 ---
@@ -8,7 +8,7 @@ syscall
     opcode: (opcode)))
 
 ==========
-Instruction with register address
+[instructions/fields] instruction with register address
 ==========
 la $t0, ($s0)
 ---
@@ -21,7 +21,7 @@ la $t0, ($s0)
         base: (register)))))
 
 ==========
-Instruction with decimal offset address
+[instructions/fields] instruction with decimal offset address
 ==========
 la $t0, -100($s0)
 ---
@@ -35,7 +35,7 @@ la $t0, -100($s0)
         base: (register)))))
 
 ==========
-Instruction with label offset address
+[instructions/fields] instruction with label offset address
 ==========
 la $t0, test($s0)
 ---
@@ -49,7 +49,7 @@ la $t0, test($s0)
         base: (register)))))
 
 ==========
-Instruction with label and decimal offset address
+[instructions/fields] instruction with label and decimal offset address
 ==========
 la $t0, test+100($s0)
 ---
@@ -65,27 +65,7 @@ la $t0, test+100($s0)
         base: (register)))))
 
 ==========
-Basic directive
-==========
-.text
----
-(program
-  (directive
-    mnemonic: (control_mnemonic)))
-
-==========
-Directive with decimal
-==========
-.word 123
----
-(program
-  (directive
-    mnemonic: (integer_mnemonic)
-    operands: (integer_operands
-      (decimal))))
-
-==========
-Parenthesized expression
+[instructions/fields] parenthesized expression
 ==========
 add $t0, (base+4), $t1
 ---
@@ -101,7 +81,7 @@ add $t0, (base+4), $t1
       (register))))
 
 ==========
-Unary expression
+[instructions/fields] unary expression
 ==========
 add $t0, -base, $t1
 ---

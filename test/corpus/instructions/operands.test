@@ -1,7 +1,7 @@
 ==========
-Instruction with multiple space-separated arguments
+[instructions/operands] instruction with multiple space-separated arguments
 ==========
-add $t0 $t1 $t2
+foo $t0 $t1 $t2
 ---
 (program
   (instruction
@@ -12,9 +12,9 @@ add $t0 $t1 $t2
       (register))))
 
 ==========
-Instruction with multiple comma-separated arguments
+[instructions/operands] instruction with multiple comma-separated arguments
 ==========
-add $t0,$t1,$t2
+foo $t0,$t1,$t2
 ---
 (program
   (instruction
@@ -25,9 +25,9 @@ add $t0,$t1,$t2
       (register))))
 
 ==========
-Instruction with symbol
+[instructions/operands] instruction with symbol
 ==========
-j test
+foo bar
 ---
 (program
   (instruction

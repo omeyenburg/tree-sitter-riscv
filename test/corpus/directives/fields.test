@@ -1,0 +1,19 @@
+==========
+[directives/fields] basic directive
+==========
+.foo
+---
+(program
+  (directive
+    mnemonic: (control_mnemonic)))
+
+==========
+[directives/fields] decimal argument
+==========
+.word 123
+---
+(program
+  (directive
+    mnemonic: (integer_mnemonic)
+    operands: (integer_operands
+      (decimal))))

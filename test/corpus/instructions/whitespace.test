@@ -1,0 +1,301 @@
+==========
+[instructions/whitespace] comma-separated operands
+==========
+foo 1,2
+---
+(program
+  (instruction
+    (opcode)
+    (operands
+      (decimal)
+      (decimal))))
+
+==========
+[instructions/whitespace] space-separated operands
+==========
+foo 1 2
+---
+(program
+  (instruction
+    (opcode)
+    (operands
+      (decimal)
+      (decimal))))
+
+==========
+[instructions/whitespace] tab-separated operands
+==========
+foo	1	2
+---
+(program
+  (instruction
+    (opcode)
+    (operands
+      (decimal)
+      (decimal))))
+
+==========
+[instructions/whitespace] comma separated operands with spaces
+==========
+foo 1 , 2
+---
+(program
+  (instruction
+    (opcode)
+    (operands
+      (decimal)
+      (decimal))))
+
+==========
+[instructions/whitespace] comma separated operands with tabs
+==========
+foo	1	,	2
+---
+(program
+  (instruction
+    (opcode)
+    (operands
+      (decimal)
+      (decimal))))
+
+==========
+[instructions/whitespace] directive with space in assignment
+==========
+.set test = 123
+---
+(program
+  (directive
+    (control_mnemonic)
+    (control_operands
+      (binary_expression
+        (symbol)
+        (decimal)))))
+
+==========
+[instructions/whitespace] directive with tabs in assignment
+==========
+.set test	=	123
+---
+(program
+  (directive
+    (control_mnemonic)
+    (control_operands
+      (binary_expression
+        (symbol)
+        (decimal)))))
+
+==========
+[instructions/whitespace] instruction without operands with leading space
+==========
+  nop
+---
+(program
+  (instruction
+    (opcode)))
+
+==========
+[instructions/whitespace] instruction without operands with leading tab
+==========
+	nop
+---
+(program
+  (instruction
+    (opcode)))
+
+=========
+[instructions/whitespace] instruction without operands with trailing space
+==========
+nop  
+---
+(program
+  (instruction
+    (opcode)))
+
+==========
+[instructions/whitespace] instruction without operands with trailing tab
+==========
+nop	
+---
+(program
+  (instruction
+    (opcode)))
+
+==========
+[instructions/whitespace] instruction with operands with leading space
+==========
+  jr $t0
+---
+(program
+  (instruction
+    (opcode)
+    (operands
+      (register))))
+
+==========
+[instructions/whitespace] instruction with operands with leading tab
+==========
+	jr $t0
+---
+(program
+  (instruction
+    (opcode)
+    (operands
+      (register))))
+
+==========
+[instructions/whitespace] instruction with operands with trailing space
+==========
+jr $t0  
+---
+(program
+  (instruction
+    (opcode)
+    (operands
+      (register))))
+
+==========
+[instructions/whitespace] instruction with operands with trailing tab
+==========
+jr $t0	
+---
+(program
+  (instruction
+    (opcode)
+    (operands
+      (register))))
+
+==========
+[instructions/whitespace] directive without attributes with leading space
+==========
+  .text
+---
+(program
+  (directive
+    (control_mnemonic)))
+
+==========
+[instructions/whitespace] directive without attributes with leading tab
+==========
+	.text
+---
+(program
+  (directive
+    (control_mnemonic)))
+
+==========
+[instructions/whitespace] directive without attributes with trailing space
+==========
+.text  
+---
+(program
+  (directive
+    (control_mnemonic)))
+
+==========
+[instructions/whitespace] directive without attributes with trailing tab
+==========
+.text	
+---
+(program
+  (directive
+    (control_mnemonic)))
+
+==========
+[instructions/whitespace] directive with attributes with leading space
+==========
+  .word 123
+---
+(program
+  (directive
+    (integer_mnemonic)
+    (integer_operands
+      (decimal))))
+
+==========
+[instructions/whitespace] directive with attributes with leading tab
+==========
+	.word 123
+---
+(program
+  (directive
+    (integer_mnemonic)
+    (integer_operands
+      (decimal))))
+
+==========
+[instructions/whitespace] directive with attributes with trailing space
+==========
+.word 123  
+---
+(program
+  (directive
+    (integer_mnemonic)
+    (integer_operands
+      (decimal))))
+
+==========
+[instructions/whitespace] directive with attributes with trailing tab
+==========
+.word 123	
+---
+(program
+  (directive
+    (integer_mnemonic)
+    (integer_operands
+      (decimal))))
+
+==========
+[instructions/whitespace] label with semicolon
+==========
+test:;
+---
+(program
+  (label))
+
+==========
+[instructions/whitespace] label with space before semicolon
+==========
+test: ;
+---
+(program
+  (label))
+
+==========
+[instructions/whitespace] instruction without operands with semicolon
+==========
+nop;
+---
+(program
+  (instruction
+    (opcode)))
+
+==========
+[instructions/whitespace] instruction without operands with space before semicolon
+==========
+nop ;
+---
+(program
+  (instruction
+    (opcode)))
+
+==========
+[instructions/whitespace] instruction with operands with semicolon
+==========
+jr $t0;
+---
+(program
+  (instruction
+    (opcode)
+    (operands
+      (register))))
+
+==========
+[instructions/whitespace] instruction with operands with space before semicolon
+==========
+jr $t0 ;
+---
+(program
+  (instruction
+    (opcode)
+    (operands
+      (register))))

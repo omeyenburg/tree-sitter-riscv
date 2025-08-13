@@ -1,0 +1,6 @@
+==========
+[labels/error] space before colon
+:error
+==========
+foo :
+---
