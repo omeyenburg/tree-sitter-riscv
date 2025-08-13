@@ -29,7 +29,15 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, windows-latest] # skip: macos-14
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        include:
+          # Swift disabled on Ubuntu due to setup-swift@v2 bug #694
+          - os: ubuntu-latest
+            test-swift: false
+          - os: windows-latest
+            test-swift: true
+          - os: macos-latest
+            test-swift: true
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -52,7 +60,7 @@ jobs:
           test-node: true
           test-python: true
           test-go: true
-          test-swift: true
+          test-swift: ${{ matrix.test-swift }}
       - name: Parse examples
         uses: tree-sitter/parse-action@v4
         with:
