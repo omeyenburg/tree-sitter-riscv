@@ -44,7 +44,8 @@ jobs:
       - name: Set up tree-sitter
         uses: tree-sitter/setup-action/cli@v2
         with:
-          tree-sitter-ref: v0.25.6
+          # Match version of tree-sitter-cli. Using 0.25.x breaks swift.
+          tree-sitter-ref: v0.24.7
       - name: Set up examples
         run: |-
           git clone https://github.com/ffcabbar/MIPS-Assembly-Language-Examples --single-branch --depth=1 --filter=blob:none
