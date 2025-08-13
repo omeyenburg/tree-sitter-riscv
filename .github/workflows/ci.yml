@@ -29,14 +29,14 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
+        os: [ubuntu-latest, windows-latest, macos-14]
         include:
           # Swift disabled on Ubuntu due to setup-swift@v2 bug #694
           - os: ubuntu-latest
             test-swift: false
           - os: windows-latest
             test-swift: true
-          - os: macos-latest
+          - os: macos-14
             test-swift: true
     steps:
       - name: Checkout repository
