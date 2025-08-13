@@ -7,7 +7,6 @@ on:
       - grammar.js
       - src/**
       - test/**
-      - queries/**
       - bindings/**
       - binding.gyp
   pull_request:
@@ -30,14 +29,6 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-latest, windows-latest, macos-14]
-        include:
-          # Swift disabled on Ubuntu due to setup-swift@v2 bug #694
-          - os: ubuntu-latest
-            test-swift: false
-          - os: windows-latest
-            test-swift: true
-          - os: macos-14
-            test-swift: true
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -61,7 +52,9 @@ jobs:
           test-node: true
           test-python: true
           test-go: true
-          test-swift: ${{ matrix.test-swift }}
+          test-swift: ${{ matrix.os == 'macos-14' }}
+          # Swift disabled on Ubuntu due to setup-swift@v2 bug #694.
+          # Swift is skipped on Windows.
       - name: Parse examples
         uses: tree-sitter/parse-action@v4
         with:
