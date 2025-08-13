@@ -1,25 +1,23 @@
 ==========
-[directives/arguments] multiple arguments
+[directives/arguments] multiple symbols
 ==========
-.set test "test" 123
+.foo bar baz
 ---
 (program
   (directive
     (control_mnemonic)
     (control_operands
       (symbol)
-      (string)
-      (decimal))))
+      (symbol))))
 
 ==========
-[directives/arguments] comma-separated arguments
+[directives/arguments] comma-separated symbols
 ==========
-.set test,"test",123
+.foo bar baz
 ---
 (program
   (directive
     (control_mnemonic)
     (control_operands
       (symbol)
-      (string)
-      (decimal))))
+      (symbol))))
