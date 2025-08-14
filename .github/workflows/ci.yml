@@ -28,7 +28,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, windows-latest, macos-14]
+        os: [ubuntu-latest, windows-latest, macos-latest]
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -52,7 +52,7 @@ jobs:
           test-node: true
           test-python: true
           test-go: true
-          test-swift: ${{ matrix.os == 'macos-14' }}
+          test-swift: ${{ matrix.os == 'macos-latest' }}
           # Swift disabled on Ubuntu due to setup-swift@v2 bug #694.
           # Swift is skipped on Windows.
       - name: Parse examples
