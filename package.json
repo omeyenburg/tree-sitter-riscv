@@ -1,6 +1,6 @@
 {
   "name": "tree-sitter-mips",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "A syntax parser for the MIPS Instruction Set Architecture.",
   "repository": "github:tree-sitter/tree-sitter-mips",
   "license": "MIT",
