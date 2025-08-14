@@ -1,0 +1,27 @@
+==========
+[directives/error] assignment with float
+:error
+==========
+.foo bar=3.14
+---
+
+==========
+[directives/error] assignment with string
+:error
+==========
+.foo bar="baz"
+---
+
+==========
+[directives/error] interger directive without values
+:error
+==========
+.word
+---
+
+==========
+[directives/error] float directive without values
+:error
+==========
+.float
+---

@@ -29,7 +29,7 @@
 ==========
 [directives/comment] inline comment following directive without arguments
 ==========
-.text # comment
+.foo # comment
 ---
 (program
   (directive
@@ -39,7 +39,7 @@
 ==========
 [directives/comment] inline comment following directive with single argument
 ==========
-.align 4 # comment
+.foo 4 # comment
 ---
 (program
   (directive
@@ -51,14 +51,12 @@
 ==========
 [directives/comment] inline comment following directive with multiple arguments
 ==========
-.word 1, 2, 3, 4 # comment
+.word 1, 2 # comment
 ---
 (program
   (directive
     (integer_mnemonic)
     (integer_operands
-      (decimal)
-      (decimal)
       (decimal)
       (decimal)))
   (comment))
@@ -66,73 +64,61 @@
 ==========
 [directives/comment] comment in multiline directive
 ==========
-mat_A: .word 1 2 3# comment
-             4 5 6
+.word 1 2# comment
+      3 4
 ---
 (program
-  (label)
   (directive
     (integer_mnemonic)
     (integer_operands
       (decimal)
       (decimal)
-      (decimal)
       (comment)
-      (decimal)
       (decimal)
       (decimal))))
 
 ==========
 [directives/comment] comment in multiline directive with space before
 ==========
-mat_A: .word 1 2 3 # comment
-             4 5 6
+.word 1 2 # comment
+      3 4
 ---
 (program
-  (label)
   (directive
     (integer_mnemonic)
     (integer_operands
       (decimal)
       (decimal)
-      (decimal)
       (comment)
-      (decimal)
       (decimal)
       (decimal))))
 
 ==========
 [directives/comment] comment in multiline directive with tab before
 ==========
-mat_A: .word 1 2 3	# comment
-             4 5 6
+.word 1 2	# comment
+      3 4
 ---
 (program
-  (label)
   (directive
     (integer_mnemonic)
     (integer_operands
       (decimal)
       (decimal)
-      (decimal)
       (comment)
-      (decimal)
       (decimal)
       (decimal))))
 
 ==========
 [directives/comment] comment after multiline directive
 ==========
-mat_A: .word 1 2 3
-             4 5 6# comment
+.word 1 2
+      3 4# comment
 ---
 (program
-  (label)
   (directive
     (integer_mnemonic)
     (integer_operands
-      (decimal)
-      (decimal)
       (decimal)
       (decimal)
       (decimal)
@@ -142,16 +128,13 @@ mat_A: .word 1 2 3
 ==========
 [directives/comment] comment after multiline directive with space before
 ==========
-mat_A: .word 1 2 3
-             4 5 6 # comment
+.word 1 2
+      3 4 # comment
 ---
 (program
-  (label)
   (directive
     (integer_mnemonic)
     (integer_operands
-      (decimal)
-      (decimal)
       (decimal)
       (decimal)
       (decimal)
@@ -159,18 +142,32 @@ mat_A: .word 1 2 3
   (comment))
 
 ==========
-[directives/comment] comment in multiline directive with tab before
+[directives/comment] comment after multiline directive with tab before
 ==========
-mat_A: .word 1 2 3
-             4 5 6	# comment
+.word 1 2
+      3 4	# comment
 ---
 (program
-  (label)
   (directive
     (integer_mnemonic)
     (integer_operands
       (decimal)
       (decimal)
+      (decimal)
+      (decimal)))
+  (comment))
+
+==========
+[directives/comment] comment on new line after multiline directive
+==========
+.word 1 2
+      3 4
+# comment
+---
+(program
+  (directive
+    (integer_mnemonic)
+    (integer_operands
       (decimal)
       (decimal)
       (decimal)

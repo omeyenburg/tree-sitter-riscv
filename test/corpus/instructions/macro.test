@@ -1,0 +1,162 @@
+==========
+[directives/macro] multiple macro variables with percent (%) prefic separated with space
+==========
+foo %bar %baz
+---
+(program
+  (instruction
+    (opcode)
+    (operands
+      (macro_variable)
+      (macro_variable))))
+
+==========
+[directives/macro] multiple macro variables with percent (%) prefic separated with tab
+==========
+foo %bar	%baz
+---
+(program
+  (instruction
+    (opcode)
+    (operands
+      (macro_variable)
+      (macro_variable))))
+
+==========
+[directives/macro] multiple macro variables with percent (%) prefic separated with comma
+==========
+foo %bar,%baz
+---
+(program
+  (instruction
+    (opcode)
+    (operands
+      (macro_variable)
+      (macro_variable))))
+
+==========
+[directives/macro] multiple macro variables with backslash (\) prefic separated with space
+==========
+foo \bar \baz
+---
+(program
+  (instruction
+    (opcode)
+    (operands
+      (macro_variable)
+      (macro_variable))))
+
+==========
+[directives/macro] multiple macro variables with backslash (\) prefic separated with tab
+==========
+foo \bar	\baz
+---
+(program
+  (instruction
+    (opcode)
+    (operands
+      (macro_variable)
+      (macro_variable))))
+
+==========
+[directives/macro] multiple macro variables with backslash (\) prefic separated with comma
+==========
+foo \bar,\baz
+---
+(program
+  (instruction
+    (opcode)
+    (operands
+      (macro_variable)
+      (macro_variable))))
+
+==========
+[directives/macro] multiple macro variables with dollar ($) prefic separated with space
+==========
+foo $bar $baz
+---
+(program
+  (instruction
+    (opcode)
+    (operands
+      (macro_variable)
+      (macro_variable))))
+
+==========
+[directives/macro] multiple macro variables with dollar ($) prefic separated with tab
+==========
+foo $bar	$baz
+---
+(program
+  (instruction
+    (opcode)
+    (operands
+      (macro_variable)
+      (macro_variable))))
+
+==========
+[directives/macro] multiple macro variables with dollar ($) prefic separated with comma
+==========
+foo $bar,$baz
+---
+(program
+  (instruction
+    (opcode)
+    (operands
+      (macro_variable)
+      (macro_variable))))
+
+==========
+[directives/macro] mixed prefixes in instruction
+==========
+foo $\ $% \$ \% %$ $\
+---
+(program
+  (instruction
+    (opcode)
+    (operands
+      (macro_variable)
+      (macro_variable)
+      (macro_variable)
+      (macro_variable)
+      (macro_variable)
+      (macro_variable))))
+
+==========
+[directives/macro] address with macro_variable as register with percent (%) prefix
+==========
+foo 4(%x)
+---
+(program
+  (instruction
+    (opcode)
+    (operands
+      (address
+        (decimal)
+        (macro_variable)))))
+
+==========
+[directives/macro] address with macro_variable as register with backslash (\) prefix
+==========
+foo 4(\x)
+---
+(program
+  (instruction
+    (opcode)
+    (operands
+      (address
+        (decimal)
+        (macro_variable)))))
+
+==========
+[directives/macro] address with macro_variable as register with dollar ($) prefix
+==========
+foo 4($x)
+---
+(program
+  (instruction
+    (opcode)
+    (operands
+      (address
+        (decimal)
+        (macro_variable)))))

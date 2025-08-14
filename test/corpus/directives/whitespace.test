@@ -2,7 +2,7 @@
 [directives/whitespace] CRLF after directive with directive in next line
 ==========
 .word 1
-.text
+.foo
 ---
 (program
   (directive
@@ -16,7 +16,7 @@
 [directives/whitespace] CRLF after directive with indented directive in next line
 ==========
 	.word 1
-	.text
+	.foo
 ---
 (program
   (directive
@@ -29,15 +29,13 @@
 ==========
 [directives/whitespace] CRLF after multiline directive
 ==========
-.word 1 2 3
-      4 5 6
+.word 1 2
+      3 4
 ---
 (program
   (directive
     (integer_mnemonic)
     (integer_operands
-      (decimal)
-      (decimal)
       (decimal)
       (decimal)
       (decimal)
@@ -68,7 +66,7 @@
 ==========
 [directives/whitespace] directive without attributes with semicolon
 ==========
-.text;
+.foo;
 ---
 (program
   (directive
@@ -77,7 +75,7 @@
 ==========
 [directives/whitespace] directive without attributes with space before semicolon
 ==========
-.text ;
+.foo ;
 ---
 (program
   (directive

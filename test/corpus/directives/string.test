@@ -1,7 +1,27 @@
 ==========
-[directives/string] basic string directive
+[directives/string] string directive using ascii mnemonic
+==========
+.ascii "foo"
+---
+(program
+  (directive
+    (string_mnemonic)
+    (string)))
+
+==========
+[directives/string] string directive using asciiz mnemonic
 ==========
 .asciiz "foo"
+---
+(program
+  (directive
+    (string_mnemonic)
+    (string)))
+
+==========
+[directives/string] string directive using string mnemonic
+==========
+.string "foo"
 ---
 (program
   (directive

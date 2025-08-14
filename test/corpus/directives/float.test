@@ -1,10 +1,61 @@
 ==========
-[directives/float] basic directive
+[directives/float] float directive with single value
 ==========
-.float 1.23
+.float 3.14
 ---
 (program
   (directive
     (float_mnemonic)
     (float_operands
+      (float))))
+
+==========
+[directives/float] float directive with multiple values
+==========
+.float 3.14 2.71
+---
+(program
+  (directive
+    (float_mnemonic)
+    (float_operands
+      (float)
+      (float))))
+
+==========
+[directives/float] float directive over multiple lines
+==========
+.float 3.14
+       2.71
+---
+(program
+  (directive
+    (float_mnemonic)
+    (float_operands
+      (float)
+      (float))))
+
+==========
+[directives/float] float directive over multiple lines with trailing spaces
+==========
+.float 3.14 
+       2.71 
+---
+(program
+  (directive
+    (float_mnemonic)
+    (float_operands
+      (float)
+      (float))))
+
+==========
+[directives/float] float directive over multiple lines with trailing tabs
+==========
+.float 3.14	
+       2.71	
+---
+(program
+  (directive
+    (float_mnemonic)
+    (float_operands
+      (float)
       (float))))

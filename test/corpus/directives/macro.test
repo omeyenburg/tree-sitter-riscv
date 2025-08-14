@@ -1,11 +1,7 @@
 ==========
-[directives/macro] macro definition and usage with percent (%) prefix
+[directives/macro] macro definition with percent (%) prefix
 ==========
-.macro inc %rs %rt
-    addiu %rs, %rt, 1
-.end_macro
-
-inc $t0, $t1
+.macro foo %bar %baz
 ---
 (program
   (directive
@@ -13,29 +9,12 @@ inc $t0, $t1
     (symbol)
     (macro_parameters
       (macro_variable)
-      (macro_variable)))
-  (instruction
-    (opcode)
-    (operands
-      (macro_variable)
-      (macro_variable)
-      (decimal)))
-  (directive
-    (control_mnemonic))
-  (instruction
-    (opcode)
-    (operands
-      (register)
-      (register))))
+      (macro_variable))))
 
 ==========
-[directives/macro] macro definition and usage with backslash (\) prefix
+[directives/macro] macro definition with backslash (\) prefix
 ==========
-.macro inc \rs \rt
-    addiu \rs, \rt, 1
-.end_macro
-
-inc $t0, $t1
+.macro foo \bar \baz
 ---
 (program
   (directive
@@ -43,29 +22,12 @@ inc $t0, $t1
     (symbol)
     (macro_parameters
       (macro_variable)
-      (macro_variable)))
-  (instruction
-    (opcode)
-    (operands
-      (macro_variable)
-      (macro_variable)
-      (decimal)))
-  (directive
-    (control_mnemonic))
-  (instruction
-    (opcode)
-    (operands
-      (register)
-     (register))))
+      (macro_variable))))
 
 ==========
-[directives/macro] macro definition and usage with dollar ($) prefix
+[directives/macro] macro definition with dollar ($) prefix
 ==========
-.macro inc $rs $rt
-    addiu $rs, $rt, 1
-.end_macro
-
-inc $t0, $t1
+.macro foo \bar \baz
 ---
 (program
   (directive
@@ -73,34 +35,18 @@ inc $t0, $t1
     (symbol)
     (macro_parameters
       (macro_variable)
-      (macro_variable)))
-  (instruction
-    (opcode)
-    (operands
-      (macro_variable)
-      (macro_variable)
-      (decimal)))
-  (directive
-    (control_mnemonic))
-  (instruction
-    (opcode)
-    (operands
-      (register)
-      (register))))
+      (macro_variable))))
 
 ==========
-[directives/macro] mixed prefixes in macro definition
+[directives/macro] macro definition with mixed prefixes
 ==========
-.macro test $a \b %c $\ $% \$ \% %$ $\
+.macro foo $\ $% \$ \% %$ $\
 ---
 (program
   (directive
     (macro_mnemonic)
     (symbol)
     (macro_parameters
-      (macro_variable)
-      (macro_variable)
-      (macro_variable)
       (macro_variable)
       (macro_variable)
       (macro_variable)
@@ -111,7 +57,7 @@ inc $t0, $t1
 ==========
 [directives/macro] macro definition with parentheses without space before
 ==========
-.macro inc(%rs %rt)
+.macro foo(%bar %baz)
 ---
 (program
   (directive
@@ -124,7 +70,7 @@ inc $t0, $t1
 ==========
 [directives/macro] macro definition with parentheses with space before
 ==========
-.macro inc (%rs %rt)
+.macro foo (%bar %baz)
 ---
 (program
   (directive
@@ -135,62 +81,14 @@ inc $t0, $t1
       (macro_variable))))
 
 ==========
-[directives/macro] mixed prefixes in instruction
+[directives/macro] macro definition with parentheses and comma separation
 ==========
-inst $a \b %c $\ $% \$ \% %$ $\
+.macro foo(%bar, %baz)
 ---
 (program
-  (instruction
-    (opcode)
-    (operands
-      (macro_variable)
-      (macro_variable)
-      (macro_variable)
-      (macro_variable)
-      (macro_variable)
-      (macro_variable)
-      (macro_variable)
+  (directive
+    (macro_mnemonic)
+    (symbol)
+    (macro_parameters
       (macro_variable)
       (macro_variable))))
-
-==========
-[directives/macro] address with macro_variable as register with percent (%) prefix
-==========
-lw $t0, 4(%x)
----
-(program
-  (instruction
-    (opcode)
-    (operands
-      (register)
-      (address
-        (decimal)
-        (macro_variable)))))
-
-==========
-[directives/macro] address with macro_variable as register with backslash (\) prefix
-==========
-lw $t0, 4(\x)
----
-(program
-  (instruction
-    (opcode)
-    (operands
-      (register)
-      (address
-        (decimal)
-        (macro_variable)))))
-
-==========
-[directives/macro] address with macro_variable as register with dollar ($) prefix
-==========
-lw $t0, 4($x)
----
-(program
-  (instruction
-    (opcode)
-    (operands
-      (register)
-      (address
-        (decimal)
-        (macro_variable)))))

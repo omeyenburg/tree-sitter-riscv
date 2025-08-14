@@ -1,7 +1,7 @@
 ==========
-[directives/assignments] simple assignment
+[directives/assignments] assignment with decimal
 ==========
-.set test=123
+.foo bar=123
 ---
 (program
   (directive
@@ -12,9 +12,22 @@
         (decimal)))))
 
 ==========
+[directives/assignments] assignment with char
+==========
+.foo bar='a'
+---
+(program
+  (directive
+    (control_mnemonic)
+    (control_operands
+      (binary_expression
+        (symbol)
+        (char)))))
+
+==========
 [directives/assignment] multiple assignments
 ==========
-.set test=123 OTHER='a'
+.foo bar=1 baz=2
 ---
 (program
   (directive
@@ -25,4 +38,30 @@
         (decimal))
       (binary_expression
         (symbol)
-        (char)))))
+        (decimal)))))
+
+==========
+[directives/assignment] assignment with spaces around equals
+==========
+.foo bar = 1
+---
+(program
+  (directive
+    (control_mnemonic)
+    (control_operands
+      (binary_expression
+        (symbol)
+        (decimal)))))
+
+==========
+[directives/assignment] assignment with tabs around equals
+==========
+.foo bar	=	1
+---
+(program
+  (directive
+    (control_mnemonic)
+    (control_operands
+      (binary_expression
+        (symbol)
+        (decimal)))))
