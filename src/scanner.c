@@ -14,15 +14,15 @@ void* tree_sitter_mips_external_scanner_create() {
     return NULL;
 }
 
-void tree_sitter_mips_external_scanner_destroy(void* payload) {}
+void tree_sitter_mips_external_scanner_destroy(void* _payload) {}
 
-unsigned tree_sitter_mips_external_scanner_serialize(void* payload, char* buffer) {
+unsigned tree_sitter_mips_external_scanner_serialize(void* _payload, char* _buffer) {
     return 0;
 }
 
-void tree_sitter_mips_external_scanner_deserialize(void* payload,
-                                                   const char* buffer,
-                                                   unsigned length) {}
+void tree_sitter_mips_external_scanner_deserialize(void* _payload,
+                                                   const char* _buffer,
+                                                   unsigned _length) {}
 
 static bool is_operator_start(int32_t c) {
     return c == '+' || c == '-' || c == '*' || c == '/' || c == '&' || c == '|' ||
@@ -34,7 +34,7 @@ static bool is_operand_start(int32_t c) {
            c == '\'' || c == '"' || c == '(' || c == ')' || c == '-';
 }
 
-bool tree_sitter_mips_external_scanner_scan(void* payload,
+bool tree_sitter_mips_external_scanner_scan(void* _payload,
                                             TSLexer* lexer,
                                             const bool* valid_symbols) {
     if (lexer->eof(lexer)) return false;
