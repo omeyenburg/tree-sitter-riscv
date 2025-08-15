@@ -1,5 +1,5 @@
 ==========
-[directives/macro] multiple macro variables with percent (%) prefic separated with space
+[instructions/macro] multiple macro variables with percent (%) prefic separated with space
 ==========
 foo %bar %baz
 ---
@@ -11,7 +11,7 @@ foo %bar %baz
       (macro_variable))))
 
 ==========
-[directives/macro] multiple macro variables with percent (%) prefic separated with tab
+[instructions/macro] multiple macro variables with percent (%) prefic separated with tab
 ==========
 foo %bar	%baz
 ---
@@ -23,7 +23,7 @@ foo %bar	%baz
       (macro_variable))))
 
 ==========
-[directives/macro] multiple macro variables with percent (%) prefic separated with comma
+[instructions/macro] multiple macro variables with percent (%) prefic separated with comma
 ==========
 foo %bar,%baz
 ---
@@ -35,7 +35,7 @@ foo %bar,%baz
       (macro_variable))))
 
 ==========
-[directives/macro] multiple macro variables with backslash (\) prefic separated with space
+[instructions/macro] multiple macro variables with backslash (\) prefic separated with space
 ==========
 foo \bar \baz
 ---
@@ -47,7 +47,7 @@ foo \bar \baz
       (macro_variable))))
 
 ==========
-[directives/macro] multiple macro variables with backslash (\) prefic separated with tab
+[instructions/macro] multiple macro variables with backslash (\) prefic separated with tab
 ==========
 foo \bar	\baz
 ---
@@ -59,7 +59,7 @@ foo \bar	\baz
       (macro_variable))))
 
 ==========
-[directives/macro] multiple macro variables with backslash (\) prefic separated with comma
+[instructions/macro] multiple macro variables with backslash (\) prefic separated with comma
 ==========
 foo \bar,\baz
 ---
@@ -71,7 +71,7 @@ foo \bar,\baz
       (macro_variable))))
 
 ==========
-[directives/macro] multiple macro variables with dollar ($) prefic separated with space
+[instructions/macro] multiple macro variables with dollar ($) prefic separated with space
 ==========
 foo $bar $baz
 ---
@@ -83,7 +83,7 @@ foo $bar $baz
       (macro_variable))))
 
 ==========
-[directives/macro] multiple macro variables with dollar ($) prefic separated with tab
+[instructions/macro] multiple macro variables with dollar ($) prefic separated with tab
 ==========
 foo $bar	$baz
 ---
@@ -95,7 +95,7 @@ foo $bar	$baz
       (macro_variable))))
 
 ==========
-[directives/macro] multiple macro variables with dollar ($) prefic separated with comma
+[instructions/macro] multiple macro variables with dollar ($) prefic separated with comma
 ==========
 foo $bar,$baz
 ---
@@ -107,7 +107,7 @@ foo $bar,$baz
       (macro_variable))))
 
 ==========
-[directives/macro] mixed prefixes in instruction
+[instructions/macro] mixed prefixes in instruction
 ==========
 foo $\ $% \$ \% %$ $\
 ---
@@ -123,7 +123,7 @@ foo $\ $% \$ \% %$ $\
       (macro_variable))))
 
 ==========
-[directives/macro] address with macro_variable as register with percent (%) prefix
+[instructions/macro] address with macro_variable as register with percent (%) prefix
 ==========
 foo 4(%x)
 ---
@@ -136,7 +136,7 @@ foo 4(%x)
         (macro_variable)))))
 
 ==========
-[directives/macro] address with macro_variable as register with backslash (\) prefix
+[instructions/macro] address with macro_variable as register with backslash (\) prefix
 ==========
 foo 4(\x)
 ---
@@ -149,7 +149,7 @@ foo 4(\x)
         (macro_variable)))))
 
 ==========
-[directives/macro] address with macro_variable as register with dollar ($) prefix
+[instructions/macro] address with macro_variable as register with dollar ($) prefix
 ==========
 foo 4($x)
 ---
@@ -160,3 +160,14 @@ foo 4($x)
       (address
         (decimal)
         (macro_variable)))))
+
+==========
+[instructions/macro] macro call with string
+==========
+foo("bar")
+---
+(program
+  (instruction
+    (opcode)
+    (operands
+      (string))))

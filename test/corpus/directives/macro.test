@@ -92,3 +92,35 @@
     (macro_parameters
       (macro_variable)
       (macro_variable))))
+
+==========
+[directives/macro] integer directive with macro variable
+==========
+.word %foo
+---
+(program
+  (directive
+    (integer_mnemonic)
+    (integer_operands
+      (macro_variable))))
+
+==========
+[directives/macro] float directive with macro variable
+==========
+.float %foo
+---
+(program
+  (directive
+    (float_mnemonic)
+    (float_operands
+      (macro_variable))))
+
+==========
+[directives/macro] string directive with macro variable
+==========
+.asciiz %foo
+---
+(program
+  (directive
+    (string_mnemonic)
+    (macro_variable)))
