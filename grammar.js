@@ -201,7 +201,7 @@ module.exports = grammar({
       $.string,
     ),
 
-    // NOTE: Mars does also allow this: %macro()
+    // NOTE: Mars also allow this: %macro()
     instruction: $ => seq(
       field('opcode', $.opcode),
       optional(choice(
@@ -209,10 +209,10 @@ module.exports = grammar({
         seq(
           optional($._whitespace),
           choice($.block_comment, $._whitespace),
-          optional(field('operands', choice(
-            $.operands,
+          optional(choice(
+            field('operands', $.operands),
             $._call_expression,
-          ))),
+          )),
         ),
       )),
     ),
@@ -235,7 +235,7 @@ module.exports = grammar({
 
     // Support macro-style calling.
     // Examples: `exit(0)`, `for($t0, 0, 3)`
-    _call_expression: $ => seq('(', optional(field('arguments', $.operands)), ')'),
+    _call_expression: $ => seq('(', optional($.block_comment), optional(field('operands', $.operands)), optional($.block_comment), ')'),
 
     // Standalone fallback, because it gets in trouble with macro_variable.
     // Used as operand in instruction.

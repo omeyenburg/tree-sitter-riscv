@@ -54,10 +54,6 @@
             "named": true
           },
           {
-            "type": "register",
-            "named": true
-          },
-          {
             "type": "symbol",
             "named": true
           },
@@ -110,10 +106,6 @@
             "named": true
           },
           {
-            "type": "register",
-            "named": true
-          },
-          {
             "type": "symbol",
             "named": true
           },
@@ -157,10 +149,6 @@
           },
           {
             "type": "parenthesized_expression",
-            "named": true
-          },
-          {
-            "type": "register",
             "named": true
           },
           {
@@ -222,10 +210,6 @@
         },
         {
           "type": "parenthesized_expression",
-          "named": true
-        },
-        {
-          "type": "register",
           "named": true
         },
         {
@@ -373,16 +357,6 @@
     "type": "instruction",
     "named": true,
     "fields": {
-      "arguments": {
-        "multiple": false,
-        "required": false,
-        "types": [
-          {
-            "type": "operands",
-            "named": true
-          }
-        ]
-      },
       "opcode": {
         "multiple": false,
         "required": true,
@@ -394,17 +368,9 @@
         ]
       },
       "operands": {
-        "multiple": true,
+        "multiple": false,
         "required": false,
         "types": [
-          {
-            "type": "(",
-            "named": false
-          },
-          {
-            "type": ")",
-            "named": false
-          },
           {
             "type": "operands",
             "named": true
@@ -413,7 +379,7 @@
       }
     },
     "children": {
-      "multiple": false,
+      "multiple": true,
       "required": false,
       "types": [
         {
@@ -478,10 +444,6 @@
         },
         {
           "type": "preprocessor",
-          "named": true
-        },
-        {
-          "type": "register",
           "named": true
         },
         {
@@ -575,10 +537,6 @@
           "named": true
         },
         {
-          "type": "register",
-          "named": true
-        },
-        {
           "type": "string",
           "named": true
         },
@@ -631,10 +589,6 @@
           },
           {
             "type": "parenthesized_expression",
-            "named": true
-          },
-          {
-            "type": "register",
             "named": true
           },
           {
@@ -732,10 +686,6 @@
           },
           {
             "type": "parenthesized_expression",
-            "named": true
-          },
-          {
-            "type": "register",
             "named": true
           },
           {

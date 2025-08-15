@@ -1200,21 +1200,21 @@
                       "type": "CHOICE",
                       "members": [
                         {
-                          "type": "FIELD",
-                          "name": "operands",
-                          "content": {
-                            "type": "CHOICE",
-                            "members": [
-                              {
+                          "type": "CHOICE",
+                          "members": [
+                            {
+                              "type": "FIELD",
+                              "name": "operands",
+                              "content": {
                                 "type": "SYMBOL",
                                 "name": "operands"
-                              },
-                              {
-                                "type": "SYMBOL",
-                                "name": "_call_expression"
                               }
-                            ]
-                          }
+                            },
+                            {
+                              "type": "SYMBOL",
+                              "name": "_call_expression"
+                            }
+                          ]
                         },
                         {
                           "type": "BLANK"
@@ -1329,12 +1329,36 @@
           "type": "CHOICE",
           "members": [
             {
+              "type": "SYMBOL",
+              "name": "block_comment"
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
+        },
+        {
+          "type": "CHOICE",
+          "members": [
+            {
               "type": "FIELD",
-              "name": "arguments",
+              "name": "operands",
               "content": {
                 "type": "SYMBOL",
                 "name": "operands"
               }
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
+        },
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "block_comment"
             },
             {
               "type": "BLANK"
@@ -1376,10 +1400,6 @@
         {
           "type": "SYMBOL",
           "name": "macro_variable"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "register"
         },
         {
           "type": "SYMBOL",
