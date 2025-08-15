@@ -189,7 +189,8 @@ bool tree_sitter_mips_external_scanner_scan(void* _payload,
                 lexer->mark_end(lexer);
                 return valid_symbols[_DIVISION_OPERATOR];
             }
-        } else if (lexer->lookahead == '#' && valid_symbols[LINE_COMMENT]) {
+        } else if (lexer->lookahead == '#' &&
+                   (valid_symbols[LINE_COMMENT] || valid_symbols[PREPROCESSOR])) {
             TokenChecker tokens[] = {
                 createTokenChecker("include"),
                 createTokenChecker("define"),
@@ -209,14 +210,15 @@ bool tree_sitter_mips_external_scanner_scan(void* _payload,
             lexer->advance(lexer, false);
 
             int i;
-            for (i = 0; !(lexer->eof(lexer) || lexer->lookahead == '\r' || lexer->lookahead == '\n'); i++) {
+            for (i = 0; !(lexer->eof(lexer) || lexer->lookahead == ' ' || lexer->lookahead == '\t' ||
+                          lexer->lookahead == '\r' || lexer->lookahead == '\n');
+                 i++) {
                 for (int j = 0; j < sizeof(tokens) / sizeof(TokenChecker); j++) {
                     TokenChecker* token = tokens + j;
                     if (token->valid) {
                         if (i < token->len && lexer->lookahead != token->str[i]) {
                             token->valid = false;
-                        } else if (i == token->len && (lexer->lookahead != ' ' ||
-                                                       lexer->lookahead == '\t')) {
+                        } else if (i == token->len) {
                             token->valid = false;
                         }
                     }
@@ -227,11 +229,33 @@ bool tree_sitter_mips_external_scanner_scan(void* _payload,
 
             for (int j = 0; j < sizeof(tokens) / sizeof(TokenChecker); j++) {
                 TokenChecker token = tokens[j];
-                if (token.valid && i >= token.len) {
+                if (token.valid && i == token.len) {
+                    bool backslash = false;
+                    while (!lexer->eof(lexer)) {
+                        if (lexer->lookahead == '\\') {
+                            backslash = true;
+                        } else if (lexer->lookahead == '\r' && !backslash) {
+                            break;
+                        } else if (lexer->lookahead == '\n') {
+                            if (backslash) {
+                                backslash = false;
+                            } else {
+                                break;
+                            }
+                        }
+
+                        lexer->advance(lexer, false);
+                    }
+
                     lexer->result_symbol = PREPROCESSOR;
                     lexer->mark_end(lexer);
                     return valid_symbols[PREPROCESSOR];
                 }
+            }
+
+            while (!lexer->eof(lexer) && lexer->lookahead != '\r' &&
+                   lexer->lookahead != '\n') {
+                lexer->advance(lexer, false);
             }
 
             lexer->result_symbol = LINE_COMMENT;
