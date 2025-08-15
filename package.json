@@ -47,10 +47,18 @@
   "scripts": {
     "install": "node-gyp-build",
     "lint": "eslint grammar.js",
-    "format": "eslint grammar.js --fix",
+    "lint:fix": "eslint grammar.js --fix",
     "prestart": "tree-sitter build --wasm",
     "start": "tree-sitter playground",
-    "test": "node --test bindings/node/*_test.js"
+    "generate": "tree-sitter generate",
+    "test": "tree-sitter test",
+    "test:node": "node --test bindings/node/*_test.js",
+    "parse": "parse() { tree-sitter parse <(printf \"$1\"); }; parse",
+    "parse:file": "tree-sitter parse",
+    "g": "tree-sitter generate",
+    "t": "tree-sitter test",
+    "p": "parse() { tree-sitter parse <(printf \"$1\"); }; parse",
+    "gp": "parse() { tree-sitter parse <(printf \"$1\"); }; tree-sitter generate; parse"
   },
   "tree-sitter": [
     {
