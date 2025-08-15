@@ -125,3 +125,12 @@
 ---
 (program
   (line_comment))
+
+==========
+[program/preprocessor] multiline preprocessor statement
+==========
+#define foo bar \
+            baz
+---
+(program
+  (preprocessor))

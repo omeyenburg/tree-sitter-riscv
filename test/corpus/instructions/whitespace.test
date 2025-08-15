@@ -245,22 +245,6 @@ jr $t0
       (decimal))))
 
 ==========
-[instructions/whitespace] label with semicolon
-==========
-test:;
----
-(program
-  (label))
-
-==========
-[instructions/whitespace] label with space before semicolon
-==========
-test: ;
----
-(program
-  (label))
-
-==========
 [instructions/whitespace] instruction without operands with semicolon
 ==========
 nop;

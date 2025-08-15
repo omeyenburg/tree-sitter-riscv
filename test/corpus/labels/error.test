@@ -4,3 +4,31 @@
 ==========
 foo :
 ---
+
+==========
+[labels/error] local label without digits
+:error
+==========
+.L:
+---
+
+==========
+[labels/error] local label reference without digits
+:error
+==========
+foo .L
+---
+
+==========
+[labels/error] local label reference with colon
+:error
+==========
+foo .L123:
+---
+
+==========
+[labels/error] global numeric label with leading 0
+:error
+==========
+012:
+---

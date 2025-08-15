@@ -4,7 +4,7 @@
 foo:bar
 ---
 (program
-  (label)
+  (global_label)
   (instruction
     (opcode)))
 
@@ -14,7 +14,7 @@ foo:bar
 foo: bar
 ---
 (program
-  (label)
+  (global_label)
   (instruction
     (opcode)))
 
@@ -24,6 +24,6 @@ foo: bar
 foo:	bar
 ---
 (program
-  (label)
+  (global_label)
   (instruction
     (opcode)))
