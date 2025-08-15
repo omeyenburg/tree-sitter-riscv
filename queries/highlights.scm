@@ -7,9 +7,14 @@
   (control_mnemonic)
 ] @keyword
 
+(preprocessor) @keyword
+
 ;; Labels & symbols
 [
-  (label)
+  (local_label)
+  (global_label)
+  (local_numeric_label)
+  (global_numeric_label)
   (symbol)
 ] @label
 
@@ -37,7 +42,10 @@
 (ERROR (_) @error)
 
 ;; Comments
-(comment) @comment
+[
+  (line_comment)
+  (block_comment)
+] @comment
 
 ;; Punctuation
 [
@@ -61,7 +69,6 @@
   "+"
   "-"
   "*"
-  "/"
   "~"
   "!"
   "=="
@@ -70,5 +77,6 @@
   ">="
   "%"
   "="
-  (modulo)
+  (modulo_operator)
+  (division_operator)
 ] @operator
