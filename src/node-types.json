@@ -233,6 +233,14 @@
           "named": true
         },
         {
+          "type": "section_symbol",
+          "named": true
+        },
+        {
+          "type": "section_type",
+          "named": true
+        },
+        {
           "type": "string",
           "named": true
         },
@@ -674,6 +682,16 @@
         }
       ]
     }
+  },
+  {
+    "type": "section_symbol",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "section_type",
+    "named": true,
+    "fields": {}
   },
   {
     "type": "string_mnemonic",

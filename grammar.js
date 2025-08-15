@@ -199,6 +199,8 @@ module.exports = grammar({
     _control_operand: $ => choice(
       $._expression,
       $.string,
+      $.section_symbol,
+      $.section_type,
     ),
 
     // NOTE: Mars also allow this: %macro()
@@ -321,6 +323,10 @@ module.exports = grammar({
 
     // Symbol includes label references
     symbol: $ => /[a-zA-Z_][a-zA-Z0-9_]*/,
+
+    // Specific symbols for .section directive
+    section_symbol: $ => prec(-5, /\.[a-z]+/),
+    section_type: $ => prec(-5, /@[a-z]+/),
 
     local_label_reference: $ => /[0-9][fb]/,
 
