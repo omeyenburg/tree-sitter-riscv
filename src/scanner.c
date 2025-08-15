@@ -201,13 +201,15 @@ bool tree_sitter_mips_external_scanner_scan(void* _payload,
                 createTokenChecker("elif"),
                 createTokenChecker("endif"),
                 createTokenChecker("error"),
+                createTokenChecker("warning"),
                 createTokenChecker("pragma"),
+                createTokenChecker("line"),
             };
 
-            int i = 0;
-            do {
-                lexer->advance(lexer, false);
+            lexer->advance(lexer, false);
 
+            int i;
+            for (i = 0; !(lexer->eof(lexer) || lexer->lookahead == '\r' || lexer->lookahead == '\n'); i++) {
                 for (int j = 0; j < sizeof(tokens) / sizeof(TokenChecker); j++) {
                     TokenChecker* token = tokens + j;
                     if (token->valid) {
@@ -219,13 +221,13 @@ bool tree_sitter_mips_external_scanner_scan(void* _payload,
                         }
                     }
                 }
-                i++;
-            } while (!(lexer->eof(lexer) || lexer->lookahead == '\r' ||
-                       lexer->lookahead == '\n'));
+
+                lexer->advance(lexer, false);
+            }
 
             for (int j = 0; j < sizeof(tokens) / sizeof(TokenChecker); j++) {
                 TokenChecker token = tokens[j];
-                if (token.valid && i > token.len) {
+                if (token.valid && i >= token.len) {
                     lexer->result_symbol = PREPROCESSOR;
                     lexer->mark_end(lexer);
                     return valid_symbols[PREPROCESSOR];
