@@ -181,6 +181,10 @@
           "named": true
         },
         {
+          "type": "block_comment",
+          "named": true
+        },
+        {
           "type": "char",
           "named": true
         },
@@ -305,6 +309,16 @@
           }
         ]
       }
+    },
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "block_comment",
+          "named": true
+        }
+      ]
     }
   },
   {
@@ -321,11 +335,19 @@
       "required": true,
       "types": [
         {
-          "type": "comment",
+          "type": "block_comment",
           "named": true
         },
         {
           "type": "float",
+          "named": true
+        },
+        {
+          "type": "line_comment",
+          "named": true
+        },
+        {
+          "type": "preprocessor",
           "named": true
         }
       ]
@@ -373,6 +395,16 @@
           }
         ]
       }
+    },
+    "children": {
+      "multiple": false,
+      "required": false,
+      "types": [
+        {
+          "type": "block_comment",
+          "named": true
+        }
+      ]
     }
   },
   {
@@ -393,11 +425,11 @@
           "named": true
         },
         {
-          "type": "char",
+          "type": "block_comment",
           "named": true
         },
         {
-          "type": "comment",
+          "type": "char",
           "named": true
         },
         {
@@ -406,6 +438,10 @@
         },
         {
           "type": "hexadecimal",
+          "named": true
+        },
+        {
+          "type": "line_comment",
           "named": true
         },
         {
@@ -418,6 +454,10 @@
         },
         {
           "type": "parenthesized_expression",
+          "named": true
+        },
+        {
+          "type": "preprocessor",
           "named": true
         },
         {
@@ -444,6 +484,10 @@
       "required": true,
       "types": [
         {
+          "type": "block_comment",
+          "named": true
+        },
+        {
           "type": "macro_variable",
           "named": true
         },
@@ -468,6 +512,10 @@
         },
         {
           "type": "binary_expression",
+          "named": true
+        },
+        {
+          "type": "block_comment",
           "named": true
         },
         {
@@ -583,7 +631,7 @@
       "required": false,
       "types": [
         {
-          "type": "comment",
+          "type": "block_comment",
           "named": true
         },
         {
@@ -596,6 +644,14 @@
         },
         {
           "type": "label",
+          "named": true
+        },
+        {
+          "type": "line_comment",
+          "named": true
+        },
+        {
+          "type": "preprocessor",
           "named": true
         }
       ]
@@ -759,10 +815,6 @@
     "named": false
   },
   {
-    "type": "/",
-    "named": false
-  },
-  {
     "type": ";",
     "named": false
   },
@@ -803,11 +855,11 @@
     "named": false
   },
   {
-    "type": "char",
+    "type": "block_comment",
     "named": true
   },
   {
-    "type": "comment",
+    "type": "char",
     "named": true
   },
   {
@@ -824,6 +876,10 @@
   },
   {
     "type": "label",
+    "named": true
+  },
+  {
+    "type": "line_comment",
     "named": true
   },
   {
@@ -844,6 +900,10 @@
   },
   {
     "type": "opcode",
+    "named": true
+  },
+  {
+    "type": "preprocessor",
     "named": true
   },
   {

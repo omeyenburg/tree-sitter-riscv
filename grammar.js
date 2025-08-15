@@ -15,17 +15,29 @@ module.exports = grammar({
     $._operator_separator,
     $._line_separator,
     $._data_separator,
+    $.line_comment,
+    $.block_comment,
+    $.preprocessor,
+    $._division_operator,
   ],
 
   extras: $ => [
     /[ \t\r]/,
-    $.comment,
+    $.block_comment,
+  ],
+
+  inline: $ => [
+    $._whitespace,
   ],
 
   conflicts: $ => [
     [$.macro_parameters],
     [$.control_operands],
     [$.integer_operands],
+    [$.operands],
+    [$.instruction],
+    [$._statement],
+    [$._control_directive],
     [$.float_operands],
     [$._operand, $._expression_argument],
   ],
@@ -38,26 +50,39 @@ module.exports = grammar({
         $.instruction,
         $._label,
       )),
-      optional($.comment),
+      optional($._comment),
     ),
 
     _statement: $ => prec(1, choice(
       ';',
       '\r',
       '\n',
+      $.block_comment,
       choice(
-        seq($.directive, choice(';', seq(optional($.comment), $._line_separator))),
-        seq($.instruction, choice(';', seq(optional($.comment), optional('\r'), '\n'))),
+        seq($.directive, choice(
+          ';',
+          seq(optional($.line_comment), $._line_separator),
+          seq($.block_comment, optional($._line_separator)),
+        )),
+        seq($.instruction, choice(
+          ';',
+          seq(optional($.line_comment), optional('\r'), '\n'),
+          seq($.block_comment, optional('\r'), optional('\n')),
+        )),
       ),
       $._label,
-      seq($.comment, optional('\r'), '\n'),
+      seq($._comment, optional('\r'), '\n'),
     )),
 
-    comment: $ => /#.*/,
+    _comment: $ => choice(
+      $.line_comment,
+      $.block_comment,
+      $.preprocessor,
+    ),
     _whitespace: $ => /[ \t]+/,
 
     // TODO: Why is this not just _operand_separator?
-    _directive_operand_separator: $ => choice(/[ \t]+/, /[ \t]*,[ \t]*/),
+    _directive_operand_separator: $ => choice(/[ \t]+/, /[ \t]*,[ \t]*/, $.block_comment),
 
     directive: $ => seq(choice(
       $._macro_directive,
@@ -69,15 +94,27 @@ module.exports = grammar({
 
     _macro_directive: $ => seq(
       field('mnemonic', $.macro_mnemonic),
-      $._whitespace,
+      optional($._whitespace),
+      choice($.block_comment, $._whitespace),
       field('name', $.symbol),
       optional(choice(
-        seq(optional($._whitespace), '(', optional(field('parameters', $.macro_parameters)), optional(choice(' ', '\t')), ')'),
+        seq(optional($._whitespace), '(', optional($.block_comment), optional(field('parameters', $.macro_parameters)), optional(choice(' ', '\t', $.block_comment)), ')'),
         seq($._whitespace, field('parameters', $.macro_parameters)),
       )),
     ),
     macro_mnemonic: $ => '.macro',
-    macro_parameters: $ => seq($._macro_parameter, repeat(seq(choice(' ', '\t', seq(optional(choice(' ', '\t')), ',')), $._macro_parameter))),
+    macro_parameters: $ => seq(
+      $._macro_parameter,
+      repeat(seq(
+        choice(
+          ' ',
+          '\t',
+          $.block_comment,
+          seq(optional(choice(' ', '\t', $.block_comment)), ',', optional($.block_comment)),
+        ),
+        $._macro_parameter,
+      ),
+    )),
     _macro_parameter: $ => choice(
       $.macro_variable,
       $.symbol,
@@ -86,7 +123,8 @@ module.exports = grammar({
     // Operands can be on multiple lines
     _integer_directive: $ => seq(
       field('mnemonic', $.integer_mnemonic),
-      $._whitespace,
+      optional($._whitespace),
+      choice($.block_comment, $._whitespace),
       field('operands', $.integer_operands),
       optional(repeat(choice('\r', '\n', ' ', '\t'))),
     ),
@@ -98,7 +136,7 @@ module.exports = grammar({
           ' ',
           '\t',
           /[ \t]*,[ \t]*/,
-          seq(optional(choice(' ', '\t')), optional($.comment), $._data_separator),
+          seq(optional(choice(' ', '\t')), optional($._comment), choice($._data_separator, $.block_comment)),
         ),
         $._expression,
       )),
@@ -119,7 +157,7 @@ module.exports = grammar({
           ' ',
           '\t',
           /[ \t]*,[ \t]*/,
-          seq(optional(choice(' ', '\t')), optional($.comment), $._data_separator),
+          seq(optional(choice(' ', '\t')), optional($._comment), $._data_separator),
         ),
         $.float,
       )),
@@ -144,7 +182,8 @@ module.exports = grammar({
     _control_directive: $ => seq(
       field('mnemonic', $.control_mnemonic),
       optional(choice(seq(
-        $._whitespace,
+        optional($._whitespace),
+        choice($.block_comment, $._whitespace),
         field('operands', $.control_operands),
         optional($._directive_operand_separator),
       ), /[ \t]+/)),
@@ -168,7 +207,8 @@ module.exports = grammar({
       optional(choice(
         $._call_expression,
         seq(
-          /[ \t]+/,
+          optional($._whitespace),
+          choice($.block_comment, $._whitespace),
           optional(field('operands', choice(
             $.operands,
             $._call_expression,
@@ -180,7 +220,7 @@ module.exports = grammar({
     operands: $ => seq(
       $._operand,
       repeat(seq(
-        choice(',', $._operand_separator),
+        choice(',', $._operand_separator, $.block_comment),
         $._operand,
       )),
       optional($._operand_separator),
@@ -237,7 +277,7 @@ module.exports = grammar({
       prec.left(9, seq($._left_expression, '+', $._right_expression)),
       prec.left(9, seq($._left_expression, '-', $._right_expression)),
       prec.left(10, seq($._left_expression, '*', $._right_expression)),
-      prec.left(10, seq($._left_expression, '/', $._right_expression)),
+      prec.left(10, seq($._left_expression, $._division_operator, $._right_expression)),
       prec.left(10, seq($._left_expression, '%', $._right_expression)),
       prec.left(20, seq($._left_expression, '=', $._right_expression)),
     ),
