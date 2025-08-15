@@ -5,6 +5,7 @@ on:
     branches: [main]
     paths:
       - grammar.js
+      - queries/**
       - src/**
       - test/**
       - bindings/**
@@ -12,6 +13,7 @@ on:
   pull_request:
     paths:
       - grammar.js
+      - queries/**
       - src/**
       - test/**
       - bindings/**
