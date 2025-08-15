@@ -51,7 +51,7 @@ foo $t0 4 % 2
     (operands
       (register)
       (decimal)
-      (modulo)
+      (modulo_operator)
       (decimal))))
 
 ==========
