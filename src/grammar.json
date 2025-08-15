@@ -1322,7 +1322,7 @@
         },
         {
           "type": "SYMBOL",
-          "name": "modulo"
+          "name": "modulo_operator"
         }
       ]
     },
@@ -1379,7 +1379,7 @@
         }
       ]
     },
-    "modulo": {
+    "modulo_operator": {
       "type": "TOKEN",
       "content": {
         "type": "PREC",
@@ -1794,7 +1794,7 @@
               },
               {
                 "type": "SYMBOL",
-                "name": "_division_operator"
+                "name": "division_operator"
               },
               {
                 "type": "SYMBOL",
@@ -2329,7 +2329,7 @@
     },
     {
       "type": "SYMBOL",
-      "name": "_division_operator"
+      "name": "division_operator"
     }
   ],
   "inline": [

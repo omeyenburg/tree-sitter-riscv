@@ -18,7 +18,7 @@ module.exports = grammar({
     $.line_comment,
     $.block_comment,
     $.preprocessor,
-    $._division_operator,
+    $.division_operator,
   ],
 
   extras: $ => [
@@ -114,7 +114,7 @@ module.exports = grammar({
         ),
         $._macro_parameter,
       ),
-    )),
+      )),
     _macro_parameter: $ => choice(
       $.macro_variable,
       $.symbol,
@@ -232,7 +232,7 @@ module.exports = grammar({
       $._expression,
       $.float,
       $.string,
-      $.modulo,
+      $.modulo_operator,
     ),
 
     // Support macro-style calling.
@@ -242,7 +242,7 @@ module.exports = grammar({
     // Standalone fallback, because it gets in trouble with macro_variable.
     // Used as operand in instruction.
     // Example: `2 % 5` but not `2%5` or `2% 5`
-    modulo: $ => token(prec(-1, '%')),
+    modulo_operator: $ => token(prec(-1, '%')),
 
     // Matches primitives, registers, macro variables and compound expressions.
     // Does not match floats, floats are not accepted in expressions, but only
@@ -281,7 +281,7 @@ module.exports = grammar({
       prec.left(9, seq($._left_expression, '+', $._right_expression)),
       prec.left(9, seq($._left_expression, '-', $._right_expression)),
       prec.left(10, seq($._left_expression, '*', $._right_expression)),
-      prec.left(10, seq($._left_expression, $._division_operator, $._right_expression)),
+      prec.left(10, seq($._left_expression, $.division_operator, $._right_expression)),
       prec.left(10, seq($._left_expression, '%', $._right_expression)),
       prec.left(20, seq($._left_expression, '=', $._right_expression)),
     ),
