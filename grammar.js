@@ -332,7 +332,7 @@ module.exports = grammar({
     // Cannot match expression-like addresses: main, main+2
     address: $ => prec(1, seq(
       optional(field('offset', $._expression)),
-      '(', field('base', choice($.register, $.macro_variable)), ')',
+      '(', field('base', choice($.register, $.macro_variable, $.symbol)), ')',
     )),
   },
 });

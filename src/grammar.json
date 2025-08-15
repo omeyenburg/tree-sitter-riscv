@@ -1403,6 +1403,10 @@
         },
         {
           "type": "SYMBOL",
+          "name": "register"
+        },
+        {
+          "type": "SYMBOL",
           "name": "symbol"
         },
         {
@@ -2179,6 +2183,10 @@
                 {
                   "type": "SYMBOL",
                   "name": "macro_variable"
+                },
+                {
+                  "type": "SYMBOL",
+                  "name": "symbol"
                 }
               ]
             }
