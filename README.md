@@ -27,7 +27,7 @@ To use `tree-sitter-mips` in NeoVim, the plugin [nvim-treesitter](https://github
             generate_requires_npm = false,
             requires_generate_from_grammar = false,
         },
-        filetype = {'asm', 'vmasm'},
+        filetype = { 'asm', 'vmasm' },
     }
   ```
 2. Run `:TSInstall mips` to install the parser.
@@ -121,7 +121,7 @@ This parser works with `tree-sitter` version `0.23.0` or higher.
 To use it in your project, add these dependencies to your `Cargo.toml`:
 ```toml
 tree-sitter = "0.25.8" # or any version >= 0.23.0
-tree-sitter-mips = "0.1.3"
+tree-sitter-mips = "0.1.4"
 ```
 
 <details>
@@ -153,7 +153,7 @@ This parser is compatible with Go>=1.22.
 To use it in your project, add these dependencies to your `go.mod`:
 ```gomod
 require github.com/tree-sitter/go-tree-sitter v0.24.0
-require github.com/omeyenburg/tree-sitter-mips v0.1.3
+require github.com/omeyenburg/tree-sitter-mips v0.1.4
 ```
 
 <details>

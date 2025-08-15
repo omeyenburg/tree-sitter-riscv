@@ -1,6 +1,6 @@
 {
   "name": "tree-sitter-mips",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "A syntax parser for the MIPS Instruction Set Architecture.",
   "repository": "github:tree-sitter/tree-sitter-mips",
   "license": "MIT",
@@ -55,6 +55,7 @@
     "test:node": "node --test bindings/node/*_test.js",
     "parse": "parse() { tree-sitter parse <(printf \"$1\"); }; parse",
     "parse:file": "tree-sitter parse",
+    "version": "grep $(jq -r '.metadata.version' tree-sitter.json) * -r --exclude-dir=node_modules/ --exclude-dir=target --exclude-dir=build --exclude-dir=test --exclude-dir=bindings",
     "g": "tree-sitter generate",
     "t": "tree-sitter test",
     "p": "parse() { tree-sitter parse <(printf \"$1\"); }; parse",
