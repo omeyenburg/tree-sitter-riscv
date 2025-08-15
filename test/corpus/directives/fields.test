@@ -1,14 +1,18 @@
 ==========
-[directives/fields] basic directive
+[directives/fields] macro directive
 ==========
-.foo
+.macro foo(%bar, %baz)
 ---
 (program
   (directive
-    mnemonic: (control_mnemonic)))
+    mnemonic: (macro_mnemonic)
+    name: (symbol)
+    parameters: (macro_parameters
+      (macro_variable)
+      (macro_variable))))
 
 ==========
-[directives/fields] decimal argument
+[directives/fields] integer directive
 ==========
 .word 123
 ---
@@ -17,3 +21,35 @@
     mnemonic: (integer_mnemonic)
     operands: (integer_operands
       (decimal))))
+
+==========
+[directives/fields] integer directive
+==========
+.double 1.2
+---
+(program
+  (directive
+    mnemonic: (float_mnemonic)
+    operands: (float_operands
+      (float))))
+
+==========
+[directives/fields] string directive
+==========
+.string "foo"
+---
+(program
+  (directive
+    mnemonic: (string_mnemonic)
+    string: (string)))
+
+==========
+[directives/fields] control directive
+==========
+.foo bar
+---
+(program
+  (directive
+    mnemonic: (control_mnemonic)
+    operands: (control_operands
+      (symbol))))

@@ -64,7 +64,7 @@
     (string)))
 
 ==========
-[directives/whitespace] directive without attributes with semicolon
+[directives/whitespace] directive without operands with semicolon
 ==========
 .foo;
 ---
@@ -73,7 +73,7 @@
     (control_mnemonic)))
 
 ==========
-[directives/whitespace] directive without attributes with space before semicolon
+[directives/whitespace] space after mnemonic before semicolon
 ==========
 .foo ;
 ---
@@ -82,7 +82,7 @@
     (control_mnemonic)))
 
 ==========
-[directives/whitespace] directive with attributes with semicolon
+[directives/whitespace] semicolon after operands
 ==========
 .word 123;
 ---
@@ -93,7 +93,7 @@
       (decimal))))
 
 ==========
-[directives/whitespace] directive with attributes with space before semicolon
+[directives/whitespace] space after operands before semicolon
 ==========
 .word 123 ;
 ---
@@ -102,3 +102,40 @@
     (integer_mnemonic)
     (integer_operands
       (decimal))))
+
+
+==========
+[directives/whitespace] space before mnemonic
+==========
+  .foo
+---
+(program
+  (directive
+    (control_mnemonic)))
+
+==========
+[directives/whitespace] tab before mnemonic
+==========
+	.foo
+---
+(program
+  (directive
+    (control_mnemonic)))
+
+==========
+[directives/whitespace] trailing spaces after mnemonic
+==========
+.foo  
+---
+(program
+  (directive
+    (control_mnemonic)))
+
+==========
+[directives/whitespace] trailing tab after mnemonic
+==========
+.foo	
+---
+(program
+  (directive
+    (control_mnemonic)))

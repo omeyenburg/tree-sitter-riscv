@@ -1,63 +1,46 @@
 ==========
 [instructions/fields] basic instruction
 ==========
-syscall
+foo
 ---
 (program
   (instruction
     opcode: (opcode)))
 
 ==========
-[instructions/fields] instruction with register address
+[instructions/fields] address
 ==========
-la $t0, ($s0)
+foo ($s0)
 ---
 (program
   (instruction
     opcode: (opcode)
     operands: (operands
-      (register)
       (address
         base: (register)))))
 
 ==========
-[instructions/fields] instruction with decimal offset address
+[instructions/fields] address with offset
 ==========
-la $t0, -100($s0)
+foo -10($s0)
 ---
 (program
   (instruction
     opcode: (opcode)
     operands: (operands
-      (register)
       (address
         offset: (decimal)
         base: (register)))))
 
 ==========
-[instructions/fields] instruction with label offset address
+[instructions/fields] address with label and offset
 ==========
-la $t0, test($s0)
+foo bar-10($s0)
 ---
 (program
   (instruction
     opcode: (opcode)
     operands: (operands
-      (register)
-      (address
-        offset: (symbol)
-        base: (register)))))
-
-==========
-[instructions/fields] instruction with label and decimal offset address
-==========
-la $t0, test+100($s0)
----
-(program
-  (instruction
-    opcode: (opcode)
-    operands: (operands
-      (register)
       (address
         offset: (binary_expression
           left: (symbol)
@@ -65,31 +48,52 @@ la $t0, test+100($s0)
         base: (register)))))
 
 ==========
-[instructions/fields] parenthesized expression
+[instructions/fields] simple expression
 ==========
-add $t0, (base+4), $t1
+foo bar+4
 ---
 (program
   (instruction
     opcode: (opcode)
     operands: (operands
-      (register)
+      (binary_expression
+        left: (symbol)
+        right: (decimal)))))
+
+==========
+[instructions/fields] parenthesized expression
+==========
+foo (bar+4)
+---
+(program
+  (instruction
+    opcode: (opcode)
+    operands: (operands
       (parenthesized_expression
         argument: (binary_expression
           left: (symbol)
-          right: (decimal)))
-      (register))))
+          right: (decimal))))))
 
 ==========
 [instructions/fields] unary expression
 ==========
-add $t0, -base, $t1
+foo -bar
 ---
 (program
   (instruction
     opcode: (opcode)
     operands: (operands
-      (register)
       (unary_expression
-        argument: (symbol))
-      (register))))
+        argument: (symbol)))))
+
+==========
+[instructions/fields] call expression
+==========
+foo(bar, baz)
+---
+(program
+  (instruction
+    opcode: (opcode)
+    operands: (operands
+      (symbol)
+      (symbol))))

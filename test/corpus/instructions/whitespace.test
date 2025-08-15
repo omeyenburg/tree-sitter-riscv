@@ -59,71 +59,45 @@ foo	1	,	2
       (decimal))))
 
 ==========
-[instructions/whitespace] directive with space in assignment
+[instructions/whitespace] space before opcode
 ==========
-.set test = 123
----
-(program
-  (directive
-    (control_mnemonic)
-    (control_operands
-      (binary_expression
-        (symbol)
-        (decimal)))))
-
-==========
-[instructions/whitespace] directive with tabs in assignment
-==========
-.set test	=	123
----
-(program
-  (directive
-    (control_mnemonic)
-    (control_operands
-      (binary_expression
-        (symbol)
-        (decimal)))))
-
-==========
-[instructions/whitespace] instruction without operands with leading space
-==========
-  nop
+  foo
 ---
 (program
   (instruction
     (opcode)))
 
 ==========
-[instructions/whitespace] instruction without operands with leading tab
+[instructions/whitespace] tab before opcode
 ==========
-	nop
+	foo
 ---
 (program
   (instruction
     (opcode)))
 
 =========
-[instructions/whitespace] instruction without operands with trailing space
+[instructions/whitespace] trailing spaces after opcode
 ==========
-nop  
+foo  
 ---
 (program
   (instruction
     (opcode)))
 
 ==========
-[instructions/whitespace] instruction without operands with trailing tab
+[instructions/whitespace] trailing tab after opcode
 ==========
-nop	
+foo	
 ---
 (program
   (instruction
     (opcode)))
 
 ==========
-[instructions/whitespace] instruction with operands with leading space
+[instructions/whitespace] trailing spaces after operands
 ==========
-  jr $t0
+foo $t0  
 ---
 (program
   (instruction
@@ -132,122 +106,20 @@ nop
       (register))))
 
 ==========
-[instructions/whitespace] instruction with operands with leading tab
+[instructions/whitespace] trailing tab after operands
 ==========
-	jr $t0
+foo $t0	
 ---
 (program
   (instruction
     (opcode)
     (operands
       (register))))
-
-==========
-[instructions/whitespace] instruction with operands with trailing space
-==========
-jr $t0  
----
-(program
-  (instruction
-    (opcode)
-    (operands
-      (register))))
-
-==========
-[instructions/whitespace] instruction with operands with trailing tab
-==========
-jr $t0	
----
-(program
-  (instruction
-    (opcode)
-    (operands
-      (register))))
-
-==========
-[instructions/whitespace] directive without attributes with leading space
-==========
-  .text
----
-(program
-  (directive
-    (control_mnemonic)))
-
-==========
-[instructions/whitespace] directive without attributes with leading tab
-==========
-	.text
----
-(program
-  (directive
-    (control_mnemonic)))
-
-==========
-[instructions/whitespace] directive without attributes with trailing space
-==========
-.text  
----
-(program
-  (directive
-    (control_mnemonic)))
-
-==========
-[instructions/whitespace] directive without attributes with trailing tab
-==========
-.text	
----
-(program
-  (directive
-    (control_mnemonic)))
-
-==========
-[instructions/whitespace] directive with attributes with leading space
-==========
-  .word 123
----
-(program
-  (directive
-    (integer_mnemonic)
-    (integer_operands
-      (decimal))))
-
-==========
-[instructions/whitespace] directive with attributes with leading tab
-==========
-	.word 123
----
-(program
-  (directive
-    (integer_mnemonic)
-    (integer_operands
-      (decimal))))
-
-==========
-[instructions/whitespace] directive with attributes with trailing space
-==========
-.word 123  
----
-(program
-  (directive
-    (integer_mnemonic)
-    (integer_operands
-      (decimal))))
-
-==========
-[instructions/whitespace] directive with attributes with trailing tab
-==========
-.word 123	
----
-(program
-  (directive
-    (integer_mnemonic)
-    (integer_operands
-      (decimal))))
 
 ==========
 [instructions/whitespace] instruction without operands with semicolon
 ==========
-nop;
+foo;
 ---
 (program
   (instruction
@@ -256,7 +128,7 @@ nop;
 ==========
 [instructions/whitespace] instruction without operands with space before semicolon
 ==========
-nop ;
+foo ;
 ---
 (program
   (instruction
@@ -265,7 +137,7 @@ nop ;
 ==========
 [instructions/whitespace] instruction with operands with semicolon
 ==========
-jr $t0;
+foo $t0;
 ---
 (program
   (instruction
@@ -276,10 +148,34 @@ jr $t0;
 ==========
 [instructions/whitespace] instruction with operands with space before semicolon
 ==========
-jr $t0 ;
+foo $t0 ;
 ---
 (program
   (instruction
     (opcode)
     (operands
       (register))))
+
+==========
+[instructions/whitespace] call expression with space before
+==========
+foo (bar, baz)
+---
+(program
+  (instruction
+    opcode: (opcode)
+    operands: (operands
+      (symbol)
+      (symbol))))
+
+==========
+[instructions/whitespace] call expression with spaces around operands
+==========
+foo ( bar, baz )
+---
+(program
+  (instruction
+    opcode: (opcode)
+    operands: (operands
+      (symbol)
+      (symbol))))

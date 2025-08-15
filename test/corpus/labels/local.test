@@ -7,6 +7,15 @@
   (local_label))
 
 ==========
+[labels/local] chained local labels
+==========
+.L0:.L1:
+---
+(program
+  (local_label)
+  (local_label))
+
+==========
 [labels/local] local label reference
 ==========
 foo .L123

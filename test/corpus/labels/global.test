@@ -1,5 +1,5 @@
 ==========
-[labels/whitespace] basic label
+[labels/global] basic label
 ==========
 test:
 ---
@@ -7,7 +7,7 @@ test:
   (global_label))
 
 ==========
-[labels/whitespace] chained label without space
+[labels/global] chained labels without space
 ==========
 test:test:
 ---
@@ -16,7 +16,7 @@ test:test:
   (global_label))
 
 ==========
-[labels/whitespace] chained label with space
+[labels/global] chained labels with space
 ==========
 test: test:
 ---
@@ -25,7 +25,7 @@ test: test:
   (global_label))
 
 ==========
-[labels/whitespace] chained label with tab
+[labels/global] chained labels with tab
 ==========
 test:	test:
 ---
@@ -34,7 +34,7 @@ test:	test:
   (global_label))
 
 ==========
-[labels/whitespace] label with leading space
+[labels/global] leading space
 ==========
   test:
 ---
@@ -42,7 +42,7 @@ test:	test:
   (global_label))
 
 ==========
-[labels/whitespace] label with leading tab
+[labels/global] leading tab
 ==========
 	test:
 ---
@@ -50,7 +50,7 @@ test:	test:
   (global_label))
 
 ==========
-[labels/whitespace] label with trailing space
+[labels/global] trailing space
 ==========
 test:  
 ---
@@ -58,7 +58,7 @@ test:
   (global_label))
 
 ==========
-[labels/whitespace] label with trailing tab
+[labels/global] trailing tab
 ==========
 test:	
 ---
@@ -66,7 +66,7 @@ test:
   (global_label))
 
 ==========
-[instructions/whitespace] label with semicolon
+[labels/global] label with semicolon
 ==========
 test:;
 ---
@@ -74,7 +74,7 @@ test:;
   (global_label))
 
 ==========
-[instructions/whitespace] label with space before semicolon
+[labels/global] space before semicolon
 ==========
 test: ;
 ---

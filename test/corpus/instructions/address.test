@@ -1,54 +1,50 @@
 ==========
-[instructions/address] instruction with register address without offset
+[instructions/address] address without offset
 ==========
-la $t0, ($s0)
+foo ($s0)
 ---
 (program
   (instruction
     (opcode)
     (operands
-      (register)
       (address
         (register)))))
 
 ==========
-[instructions/address] instruction with decimal offset address
+[instructions/address] address with decimal offset
 ==========
-la $t0, -100($s0)
+foo -100($s0)
 ---
 (program
   (instruction
     (opcode)
     (operands
-      (register)
       (address
         (decimal)
         (register)))))
 
 ==========
-[instructions/address] instruction with label offset address
+[instructions/address] address with label
 ==========
-la $t0, test($s0)
+foo bar($s0)
 ---
 (program
   (instruction
     (opcode)
     (operands
-      (register)
       (address
         (symbol)
         (register)))))
 
 ==========
-[instructions/address] instruction with address using simple expression offset
+[instructions/address] address with simple expression offset
 ==========
-la $t0, test+100($s0)
+foo bar+100($s0)
 ---
 (program
   (instruction
     (opcode)
     (operands
-      (register)
       (address
         (binary_expression
           (symbol)
@@ -56,32 +52,17 @@ la $t0, test+100($s0)
         (register)))))
 
 ==========
-[instructions/address] instruction with address using parenthesized expression offset
+[instructions/address] address with parenthesized expression offset
 ==========
-la $t0, (test+0x123)($s0)
+foo (bar+0x123)($s0)
 ---
 (program
   (instruction
     (opcode)
     (operands
-      (register)
       (address
         (parenthesized_expression
           (binary_expression
             (symbol)
             (hexadecimal)))
-        (register)))))
-
-==========
-[instructions/address] instruction with address using label offset
-==========
-la $t0, test($s0)
----
-(program
-  (instruction
-    (opcode)
-    (operands
-      (register)
-      (address
-        (symbol)
         (register)))))
