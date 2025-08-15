@@ -254,6 +254,7 @@ module.exports = grammar({
       $.macro_variable,
       $.register,
       $.symbol,
+      $.local_label_reference,
       $.char,
       $.octal,
       $.decimal,
@@ -301,10 +302,11 @@ module.exports = grammar({
 
     float: $ => token(choice(
       seq(
-        choice(/-?\d+\.?\d*/, /-?\d*\.\d+/),
+        choice(/-?\d+\.\d*/, /-?\d*\.\d+/),
         optional(/[eE][+-]?\d+/),
+        optional('f'),
       ),
-      /-?\d+[eE][+-]?\d+/,
+      /-?\d+[eE][+-]?\d+f?/,
     )),
 
     register: $ => token(seq('$', choice(
@@ -317,12 +319,14 @@ module.exports = grammar({
     // Lower precedence than registers, because they overlap.
     macro_variable: $ => /[%$\\][0-9a-zA-Z_:$%\\]+/,
 
-    // Bare identifier without colon.
+    // Symbol includes label references
     symbol: $ => /[a-zA-Z_][a-zA-Z0-9_]*/,
 
-    // identifier with colon.
-    _label: $ => seq($.label, /[ \t]*/),
-    label: $ => token(prec(2, /[a-zA-Z_][a-zA-Z0-9_]*:/)),
+    local_label_reference: $ => /[0-9][fb]/,
+
+    _label: $ => seq(choice($.global_label, $.local_label), /[ \t]*/),
+    global_label: $ => token(prec(2, /([1-9][0-9]+|[a-zA-Z_][a-zA-Z0-9_]*):/)),
+    local_label: $ => token(prec(3, /[0-9]:/)),
 
     // Examples: `main($s4)`, `value+4($s1)`, `($v1)`, `-0x10($a0)`
     // Cannot match expression-like addresses: main, main+2

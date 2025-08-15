@@ -38,6 +38,10 @@
             "named": true
           },
           {
+            "type": "local_label_reference",
+            "named": true
+          },
+          {
             "type": "macro_variable",
             "named": true
           },
@@ -90,6 +94,10 @@
             "named": true
           },
           {
+            "type": "local_label_reference",
+            "named": true
+          },
+          {
             "type": "macro_variable",
             "named": true
           },
@@ -133,6 +141,10 @@
           },
           {
             "type": "hexadecimal",
+            "named": true
+          },
+          {
+            "type": "local_label_reference",
             "named": true
           },
           {
@@ -194,6 +206,10 @@
         },
         {
           "type": "hexadecimal",
+          "named": true
+        },
+        {
+          "type": "local_label_reference",
           "named": true
         },
         {
@@ -445,6 +461,10 @@
           "named": true
         },
         {
+          "type": "local_label_reference",
+          "named": true
+        },
+        {
           "type": "macro_variable",
           "named": true
         },
@@ -535,6 +555,10 @@
           "named": true
         },
         {
+          "type": "local_label_reference",
+          "named": true
+        },
+        {
           "type": "macro_variable",
           "named": true
         },
@@ -594,6 +618,10 @@
             "named": true
           },
           {
+            "type": "local_label_reference",
+            "named": true
+          },
+          {
             "type": "macro_variable",
             "named": true
           },
@@ -639,15 +667,19 @@
           "named": true
         },
         {
+          "type": "global_label",
+          "named": true
+        },
+        {
           "type": "instruction",
           "named": true
         },
         {
-          "type": "label",
+          "type": "line_comment",
           "named": true
         },
         {
-          "type": "line_comment",
+          "type": "local_label",
           "named": true
         },
         {
@@ -684,6 +716,10 @@
           },
           {
             "type": "hexadecimal",
+            "named": true
+          },
+          {
+            "type": "local_label_reference",
             "named": true
           },
           {
@@ -871,15 +907,23 @@
     "named": true
   },
   {
+    "type": "global_label",
+    "named": true
+  },
+  {
     "type": "hexadecimal",
     "named": true
   },
   {
-    "type": "label",
+    "type": "line_comment",
     "named": true
   },
   {
-    "type": "line_comment",
+    "type": "local_label",
+    "named": true
+  },
+  {
+    "type": "local_label_reference",
     "named": true
   },
   {

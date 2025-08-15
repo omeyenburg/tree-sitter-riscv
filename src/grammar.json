@@ -1387,6 +1387,10 @@
         },
         {
           "type": "SYMBOL",
+          "name": "local_label_reference"
+        },
+        {
+          "type": "SYMBOL",
           "name": "char"
         },
         {
@@ -1958,7 +1962,7 @@
                 "members": [
                   {
                     "type": "PATTERN",
-                    "value": "-?\\d+\\.?\\d*"
+                    "value": "-?\\d+\\.\\d*"
                   },
                   {
                     "type": "PATTERN",
@@ -1977,12 +1981,24 @@
                     "type": "BLANK"
                   }
                 ]
+              },
+              {
+                "type": "CHOICE",
+                "members": [
+                  {
+                    "type": "STRING",
+                    "value": "f"
+                  },
+                  {
+                    "type": "BLANK"
+                  }
+                ]
               }
             ]
           },
           {
             "type": "PATTERN",
-            "value": "-?\\d+[eE][+-]?\\d+"
+            "value": "-?\\d+[eE][+-]?\\d+f?"
           }
         ]
       }
@@ -2056,12 +2072,25 @@
       "type": "PATTERN",
       "value": "[a-zA-Z_][a-zA-Z0-9_]*"
     },
+    "local_label_reference": {
+      "type": "PATTERN",
+      "value": "[0-9][fb]"
+    },
     "_label": {
       "type": "SEQ",
       "members": [
         {
-          "type": "SYMBOL",
-          "name": "label"
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "global_label"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "local_label"
+            }
+          ]
         },
         {
           "type": "PATTERN",
@@ -2069,14 +2098,25 @@
         }
       ]
     },
-    "label": {
+    "global_label": {
       "type": "TOKEN",
       "content": {
         "type": "PREC",
         "value": 2,
         "content": {
           "type": "PATTERN",
-          "value": "[a-zA-Z_][a-zA-Z0-9_]*:"
+          "value": "([1-9][0-9]+|[a-zA-Z_][a-zA-Z0-9_]*):"
+        }
+      }
+    },
+    "local_label": {
+      "type": "TOKEN",
+      "content": {
+        "type": "PREC",
+        "value": 3,
+        "content": {
+          "type": "PATTERN",
+          "value": "[0-9]:"
         }
       }
     },
