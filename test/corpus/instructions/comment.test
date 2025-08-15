@@ -1,43 +1,167 @@
 ==========
-[instructions/comment] inline comment following instruction without operands, no space
+[instructions/comment] inline comment after opcode without space
 ==========
-nop# This is an in-line comment
+foo# bar
 ---
 (program
   (instruction
     (opcode))
-  (comment))
+  (line_comment))
 
 ==========
-[instructions/comment] inline comment following instruction without operands, space
+[instructions/comment] inline C style comment after opcode without space
 ==========
-nop # This is an in-line comment
+foo// bar
 ---
 (program
   (instruction
     (opcode))
-  (comment))
+  (line_comment))
 
 ==========
-[instructions/comment] inline comment following instruction with operands, no space
+[instructions/comment] inline C style block comment after opcode without space
 ==========
-jr $t0# This is an in-line comment
+foo/* bar */
+---
+(program
+  (instruction
+    (opcode))
+  (block_comment))
+
+==========
+[instructions/comment] inline comment after opcode with space
+==========
+foo # bar
+---
+(program
+  (instruction
+    (opcode))
+  (line_comment))
+
+==========
+[instructions/comment] inline C style comment after opcode with space
+==========
+foo // bar
+---
+(program
+  (instruction
+    (opcode))
+  (line_comment))
+
+==========
+[instructions/comment] inline C style block comment after opcode with space
+==========
+foo /* bar */
+---
+(program
+  (instruction
+    (opcode))
+  (block_comment))
+
+==========
+[instructions/comment] inline comment after operands without space
+==========
+foo $t0# bar
 ---
 (program
   (instruction
     (opcode)
     (operands
       (register)))
-  (comment))
+  (line_comment))
 
 ==========
-[instructions/comment] inline comment following instruction with operands, space
+[instructions/comment] inline C style comment after operands without space
 ==========
-jr $t0 # This is an in-line comment
+foo $t0// bar
 ---
 (program
   (instruction
     (opcode)
     (operands
       (register)))
-  (comment))
+  (line_comment))
+
+==========
+[instructions/comment] inline C style block comment after operands without space
+==========
+foo $t0/* bar */
+---
+(program
+  (instruction
+    (opcode)
+    (operands
+      (register)))
+  (block_comment))
+
+==========
+[instructions/comment] inline comment after operands with space
+==========
+foo $t0 # bar
+---
+(program
+  (instruction
+    (opcode)
+    (operands
+      (register)))
+  (line_comment))
+
+==========
+[instructions/comment] inline C style comment after operands with space
+==========
+foo $t0 // bar
+---
+(program
+  (instruction
+    (opcode)
+    (operands
+      (register)))
+  (line_comment))
+
+==========
+[instructions/comment] inline C style block comment after operands with space
+==========
+foo $t0 /* bar */
+---
+(program
+  (instruction
+    (opcode)
+    (operands
+      (register)))
+  (block_comment))
+
+==========
+[instructions/comment] C style block comment between opcode and operands without space
+==========
+foo/* bar */$t0
+---
+(program
+  (instruction
+    (opcode)
+    (block_comment)
+    (operands
+      (register))))
+
+==========
+[instructions/comment] C style block comment between opcode and operands with space before
+==========
+foo /* bar */$t0
+---
+(program
+  (instruction
+    (opcode)
+    (block_comment)
+    (operands
+      (register))))
+
+==========
+[instructions/comment] C style block comment between opcode and operands with space after
+==========
+foo/* bar */ $t0
+---
+(program
+  (instruction
+    (opcode)
+    (block_comment)
+    (operands
+      (register))))

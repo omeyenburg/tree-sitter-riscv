@@ -1,0 +1,127 @@
+==========
+[program/preprocessor] include statement
+==========
+#include
+---
+(program
+  (preprocessor))
+
+==========
+[program/preprocessor] define statement
+==========
+#define
+---
+(program
+  (preprocessor))
+
+==========
+[program/preprocessor] undef statement
+==========
+#undef
+---
+(program
+  (preprocessor))
+
+==========
+[program/preprocessor] if statement
+==========
+#if
+---
+(program
+  (preprocessor))
+
+==========
+[program/preprocessor] ifdef statement
+==========
+#ifdef
+---
+(program
+  (preprocessor))
+
+==========
+[program/preprocessor] ifndef statement
+==========
+#ifndef
+---
+(program
+  (preprocessor))
+
+==========
+[program/preprocessor] elif statement
+==========
+#elif
+---
+(program
+  (preprocessor))
+
+==========
+[program/preprocessor] else statement
+==========
+#else
+---
+(program
+  (preprocessor))
+
+==========
+[program/preprocessor] endif statement
+==========
+#endif
+---
+(program
+  (preprocessor))
+
+==========
+[program/preprocessor] error statement
+==========
+#error
+---
+(program
+  (preprocessor))
+
+==========
+[program/preprocessor] warning statement
+==========
+#warning
+---
+(program
+  (preprocessor))
+
+==========
+[program/preprocessor] pragma statement
+==========
+#pragma
+---
+(program
+  (preprocessor))
+
+==========
+[program/preprocessor] line statement
+==========
+#line
+---
+(program
+  (preprocessor))
+
+==========
+[program/preprocessor] preprocessor statement with arguments
+==========
+#include <foo>
+---
+(program
+  (preprocessor))
+
+==========
+[program/preprocessor] incomplete preprocessor statement
+==========
+#includ
+---
+(program
+  (line_comment))
+
+==========
+[program/preprocessor] preprocessor statement without space
+==========
+#included
+---
+(program
+  (line_comment))
