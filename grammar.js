@@ -151,7 +151,7 @@ module.exports = grammar({
     ),
     float_mnemonic: $ => choice('.float', '.double'),
     float_operands: $ => seq(
-      $.float,
+      $._float_operand,
       repeat(seq(
         choice(
           ' ',
@@ -159,7 +159,7 @@ module.exports = grammar({
           /[ \t]*,[ \t]*/,
           seq(optional(choice(' ', '\t')), optional($._comment), $._data_separator),
         ),
-        $.float,
+        $._float_operand,
       )),
       optional(repeat($._data_separator)),
     ),

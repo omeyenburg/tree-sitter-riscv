@@ -401,6 +401,10 @@
           "named": true
         },
         {
+          "type": "macro_variable",
+          "named": true
+        },
+        {
           "type": "preprocessor",
           "named": true
         }
