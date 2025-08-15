@@ -1423,6 +1423,10 @@
         },
         {
           "type": "SYMBOL",
+          "name": "local_numeric_label_reference"
+        },
+        {
+          "type": "SYMBOL",
           "name": "char"
         },
         {
@@ -2120,10 +2124,6 @@
         "value": "@[a-z]+"
       }
     },
-    "local_label_reference": {
-      "type": "PATTERN",
-      "value": "[0-9][fb]"
-    },
     "_label": {
       "type": "SEQ",
       "members": [
@@ -2137,6 +2137,14 @@
             {
               "type": "SYMBOL",
               "name": "local_label"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "global_numeric_label"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "local_numeric_label"
             }
           ]
         },
@@ -2153,11 +2161,33 @@
         "value": 2,
         "content": {
           "type": "PATTERN",
-          "value": "([1-9][0-9]+|[a-zA-Z_][a-zA-Z0-9_]*):"
+          "value": "[a-zA-Z_][a-zA-Z0-9_]*:"
         }
       }
     },
     "local_label": {
+      "type": "TOKEN",
+      "content": {
+        "type": "PATTERN",
+        "value": "\\.L[0-9]+:"
+      }
+    },
+    "local_label_reference": {
+      "type": "PATTERN",
+      "value": "\\.L[0-9]+"
+    },
+    "global_numeric_label": {
+      "type": "TOKEN",
+      "content": {
+        "type": "PREC",
+        "value": 2,
+        "content": {
+          "type": "PATTERN",
+          "value": "[1-9][0-9]+:"
+        }
+      }
+    },
+    "local_numeric_label": {
       "type": "TOKEN",
       "content": {
         "type": "PREC",
@@ -2167,6 +2197,10 @@
           "value": "[0-9]:"
         }
       }
+    },
+    "local_numeric_label_reference": {
+      "type": "PATTERN",
+      "value": "[0-9][fb]"
     },
     "address": {
       "type": "PREC",

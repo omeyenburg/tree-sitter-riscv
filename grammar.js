@@ -257,6 +257,7 @@ module.exports = grammar({
       $.register,
       $.symbol,
       $.local_label_reference,
+      $.local_numeric_label_reference,
       $.char,
       $.octal,
       $.decimal,
@@ -328,11 +329,21 @@ module.exports = grammar({
     section_symbol: $ => prec(-5, /\.[a-z]+/),
     section_type: $ => prec(-5, /@[a-z]+/),
 
-    local_label_reference: $ => /[0-9][fb]/,
+    _label: $ => seq(choice($.global_label, $.local_label, $.global_numeric_label, $.local_numeric_label), /[ \t]*/),
 
-    _label: $ => seq(choice($.global_label, $.local_label), /[ \t]*/),
-    global_label: $ => token(prec(2, /([1-9][0-9]+|[a-zA-Z_][a-zA-Z0-9_]*):/)),
-    local_label: $ => token(prec(3, /[0-9]:/)),
+    // Example: `main:`
+    global_label: $ => token(prec(2, /[a-zA-Z_][a-zA-Z0-9_]*:/)),
+
+    // Example: `.L123:`
+    local_label: $ => token(/\.L[0-9]+:/),
+    local_label_reference: $ => /\.L[0-9]+/,
+
+    // Example: `123:`
+    global_numeric_label: $ => token(prec(2, /[1-9][0-9]+:/)),
+
+    // Example: `1:`
+    local_numeric_label: $ => token(prec(3, /[0-9]:/)),
+    local_numeric_label_reference: $ => /[0-9][fb]/,
 
     // Examples: `main($s4)`, `value+4($s1)`, `($v1)`, `-0x10($a0)`
     // Cannot match expression-like addresses: main, main+2
