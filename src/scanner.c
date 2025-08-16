@@ -191,6 +191,13 @@ bool tree_sitter_mips_external_scanner_scan(void* _payload,
             }
         } else if (lexer->lookahead == '#' &&
                    (valid_symbols[LINE_COMMENT] || valid_symbols[PREPROCESSOR])) {
+
+            // Consume whitespace to allow `# define ...`
+            do {
+                lexer->advance(lexer, false);
+            } while (!lexer->eof(lexer) &&
+                     (lexer->lookahead == ' ' || lexer->lookahead == '\t'));
+
             TokenChecker tokens[] = {
                 createTokenChecker("include"),
                 createTokenChecker("define"),
@@ -207,11 +214,10 @@ bool tree_sitter_mips_external_scanner_scan(void* _payload,
                 createTokenChecker("line"),
             };
 
-            lexer->advance(lexer, false);
-
             int i;
-            for (i = 0; !(lexer->eof(lexer) || lexer->lookahead == ' ' || lexer->lookahead == '\t' ||
-                          lexer->lookahead == '\r' || lexer->lookahead == '\n');
+            for (i = 0; !(lexer->eof(lexer) || lexer->lookahead == ' ' ||
+                          lexer->lookahead == '\t' || lexer->lookahead == '\r' ||
+                          lexer->lookahead == '\n');
                  i++) {
                 for (int j = 0; j < sizeof(tokens) / sizeof(TokenChecker); j++) {
                     TokenChecker* token = tokens + j;

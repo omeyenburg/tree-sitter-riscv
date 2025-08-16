@@ -202,7 +202,7 @@ module.exports = grammar({
       $.string,
       $.section_symbol,
       $.section_type,
-      $.option_flag
+      $.option_flag,
     ),
 
     // Specific symbols for .section directive
