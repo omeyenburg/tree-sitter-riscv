@@ -5,7 +5,7 @@
     "fields": {
       "base": {
         "multiple": false,
-        "required": true,
+        "required": false,
         "types": [
           {
             "type": "macro_variable",
@@ -25,6 +25,10 @@
         "multiple": false,
         "required": false,
         "types": [
+          {
+            "type": "address",
+            "named": true
+          },
           {
             "type": "binary_expression",
             "named": true
@@ -78,6 +82,16 @@
             "named": true
           }
         ]
+      },
+      "operands": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "operands",
+            "named": true
+          }
+        ]
       }
     }
   },
@@ -89,6 +103,10 @@
         "multiple": false,
         "required": true,
         "types": [
+          {
+            "type": "address",
+            "named": true
+          },
           {
             "type": "binary_expression",
             "named": true
@@ -147,6 +165,10 @@
         "multiple": false,
         "required": true,
         "types": [
+          {
+            "type": "address",
+            "named": true
+          },
           {
             "type": "binary_expression",
             "named": true
@@ -226,6 +248,10 @@
       "multiple": true,
       "required": true,
       "types": [
+        {
+          "type": "address",
+          "named": true
+        },
         {
           "type": "binary_expression",
           "named": true
@@ -374,6 +400,10 @@
         "required": false,
         "types": [
           {
+            "type": "address",
+            "named": true
+          },
+          {
             "type": "macro_variable",
             "named": true
           },
@@ -408,6 +438,10 @@
       "multiple": true,
       "required": true,
       "types": [
+        {
+          "type": "address",
+          "named": true
+        },
         {
           "type": "block_comment",
           "named": true
@@ -480,6 +514,10 @@
       "multiple": true,
       "required": true,
       "types": [
+        {
+          "type": "address",
+          "named": true
+        },
         {
           "type": "binary_expression",
           "named": true
@@ -664,8 +702,12 @@
     "fields": {
       "argument": {
         "multiple": false,
-        "required": true,
+        "required": false,
         "types": [
+          {
+            "type": "address",
+            "named": true
+          },
           {
             "type": "binary_expression",
             "named": true
@@ -716,6 +758,16 @@
           },
           {
             "type": "unary_expression",
+            "named": true
+          }
+        ]
+      },
+      "operands": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "operands",
             "named": true
           }
         ]
@@ -778,6 +830,10 @@
         "multiple": false,
         "required": true,
         "types": [
+          {
+            "type": "address",
+            "named": true
+          },
           {
             "type": "binary_expression",
             "named": true
@@ -857,6 +913,10 @@
         "multiple": false,
         "required": true,
         "types": [
+          {
+            "type": "address",
+            "named": true
+          },
           {
             "type": "binary_expression",
             "named": true

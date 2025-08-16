@@ -28,18 +28,18 @@ module.exports = grammar({
 
   inline: $ => [
     $._whitespace,
+    $._expression_argument,
   ],
 
   conflicts: $ => [
-    [$.macro_parameters],
-    [$.control_operands],
-    [$.integer_operands],
-    [$.operands],
-    [$.instruction],
-    [$._statement],
     [$._control_directive],
+    [$._statement],
+    [$.control_operands],
     [$.float_operands],
-    [$._operand, $._expression_argument],
+    [$.instruction],
+    [$.integer_operands],
+    [$.macro_parameters],
+    [$.operands],
   ],
 
   rules: {
@@ -163,7 +163,7 @@ module.exports = grammar({
       )),
       optional(repeat($._data_separator)),
     ),
-    _float_operand: $ => choice($.float, $.macro_variable),
+    _float_operand: $ => choice($.float, $.macro_variable, $.address),
 
     _string_directive: $ => seq(
       field('mnemonic', $.string_mnemonic),
@@ -177,7 +177,7 @@ module.exports = grammar({
       '.string',
       '.byte_string',
     ),
-    _string_operand: $ => choice($.string, $.macro_variable),
+    _string_operand: $ => choice($.string, $.macro_variable, $.address),
 
     // Catch-all directive
     _control_directive: $ => seq(
@@ -212,7 +212,6 @@ module.exports = grammar({
     // Specific symbol for .option directive
     option_flag: $ => prec(-5, /\+[a-z]/),
 
-    // NOTE: Mars also allow this: %macro()
     instruction: $ => seq(
       field('opcode', $.opcode),
       optional(choice(
@@ -227,7 +226,7 @@ module.exports = grammar({
         ),
       )),
     ),
-    opcode: $ => token(prec(1, /[a-zA-Z_][a-zA-Z0-9_.]*/)),
+    opcode: $ => token(prec(1, /%?[a-zA-Z_][a-zA-Z0-9_.]*/)),
     operands: $ => seq(
       $._operand,
       repeat(seq(
@@ -237,7 +236,6 @@ module.exports = grammar({
       optional($._operand_separator),
     ),
     _operand: $ => choice(
-      $.address,
       $._expression,
       $.float,
       $.string,
@@ -246,7 +244,7 @@ module.exports = grammar({
 
     // Support macro-style calling.
     // Examples: `exit(0)`, `for($t0, 0, 3)`
-    _call_expression: $ => seq('(', optional($.block_comment), optional(field('operands', $.operands)), optional($.block_comment), ')'),
+    _call_expression: $ => prec(20, seq('(', optional($.block_comment), optional(field('operands', $.operands)), optional($.block_comment), ')')),
 
     // Standalone fallback, because it gets in trouble with macro_variable.
     // Used as operand in instruction.
@@ -258,9 +256,10 @@ module.exports = grammar({
     // as standalone operands or in directives.
     // Examples: `1`, `%var + 3`, `(label + 7)`
     _expression: $ => choice(
+      prec(1, $.relocation_expression),
+      $.address,
       $.binary_expression,
       $.unary_expression,
-      prec(1, $.relocation_expression),
       $.parenthesized_expression,
       $.macro_variable,
       $.register,
@@ -297,7 +296,15 @@ module.exports = grammar({
     _left_expression: $ => prec(1, seq(field('left', $._expression), optional($._operator_separator))),
     _right_expression: $ => field('right', $._expression),
 
-    parenthesized_expression: $ => seq('(', $._expression_argument, ')'),
+    parenthesized_expression: $ => prec(19, seq(
+      '(',
+      choice(
+        $._expression_argument,
+        field('operands', $.operands),
+      ),
+      ')',
+    )),
+
     unary_expression: $ => choice(
       prec.right(11, seq('-', $._expression_argument)),
       prec.right(11, seq('~', $._expression_argument)),
@@ -363,7 +370,14 @@ module.exports = grammar({
     // Cannot match expression-like addresses: main, main+2
     address: $ => prec(1, seq(
       optional(field('offset', $._expression)),
-      '(', field('base', choice($.register, $.macro_variable, $.symbol)), ')',
+      '(',
+      choice(
+        field('base', $.register),
+        field('base', $.macro_variable),
+        field('base', $.symbol),
+        field('operands', $.operands),
+      ),
+      ')',
     )),
   },
 });

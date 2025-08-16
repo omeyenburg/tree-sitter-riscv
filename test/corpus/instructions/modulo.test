@@ -69,7 +69,7 @@ foo $t0 4%%2
         (macro_variable)))))
 
 ==========
-[instructions/modulo] instruction without parenthesized modulo expression
+[instructions/modulo] instruction with parenthesized modulo expression
 ==========
 foo $t0 (4 % 2)
 ---
@@ -79,8 +79,9 @@ foo $t0 (4 % 2)
     (operands
       (register)
       (parenthesized_expression
-        (binary_expression
+        (operands
           (decimal)
+          (modulo_operator)
           (decimal))))))
 
 ==========

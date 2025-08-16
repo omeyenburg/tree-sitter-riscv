@@ -45,11 +45,11 @@ foo bar+100($s0)
   (instruction
     (opcode)
     (operands
-      (address
-        (binary_expression
-          (symbol)
-          (decimal))
-        (register)))))
+      (binary_expression
+        (symbol)
+        (address
+          (decimal)
+          (register))))))
 
 ==========
 [instructions/address] address with parenthesized expression offset

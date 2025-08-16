@@ -41,11 +41,11 @@ foo bar-10($s0)
   (instruction
     opcode: (opcode)
     operands: (operands
-      (address
-        offset: (binary_expression
-          left: (symbol)
-          right: (decimal))
-        base: (register)))))
+      (binary_expression
+        left: (symbol)
+        right: (address
+          offset: (decimal)
+          base: (register))))))
 
 ==========
 [instructions/fields] simple expression
