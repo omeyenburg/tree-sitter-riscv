@@ -311,17 +311,39 @@ module.exports = grammar({
 
     // Examples: `%hi(foo)`, `%lo(123)`
     relocation_expression: $ => seq(
-      field('operator', /%hi|%lo|%hig|%glo|%pcrel_hi|%pcrel_lo/),
+      field('type', $.relocation_type),
       '(',
       $._expression_argument,
       ')',
     ),
 
+    relocation_type: $ => token(choice(
+      '%abs64',
+      '%call16',
+      '%dtprel',
+      '%got',
+      '%got_hi',
+      '%got_lo',
+      '%gprel',
+      '%hi',
+      '%lo',
+      '%pc16',
+      '%pc32',
+      '%pcrel_hi',
+      '%pcrel_lo',
+      '%tls_got_hi',
+      '%tls_got_lo',
+      '%tlsgd_hi',
+      '%tlsgd_lo',
+      '%tprel',
+      '%tprel_add',
+      '%tprel_hi',
+      '%tprel_lo',
+    )),
+
     _expression_argument: $ => field('argument', $._expression),
 
-    // Primitive data types.
-    char: $ => /'(?:\\.|[^'\\])'/,
-    string: $ => /"(?:\\.|[^"\\])*"/,
+    // Primitive data types
     octal: $ => /-?0[0-7]*/,
     decimal: $ => /-?\d+/,
     hexadecimal: $ => /-?0[xX][0-9a-fA-F]+/,
@@ -335,26 +357,47 @@ module.exports = grammar({
       /-?\d+[eE][+-]?\d+f?/,
     )),
 
+    _escape_sequence: $ => token(
+      seq(
+        '\\',
+        choice(
+          /[abfnrtv\\'"?]/, // standard single-char escapes
+          /[0-7]{1,3}/, // octal
+          /x[0-9a-fA-F]{2}/, // hex
+          /u[0-9a-fA-F]{4}/, // Unicode 16-bit
+          /U[0-9a-fA-F]{8}/, // Unicode 32-bit
+        ),
+      ),
+    ),
+
+    char: $ => seq('\'', choice($._escape_sequence, /[^'\\]/), '\''),
+
+    string: $ => seq(
+      '"',
+      repeat(choice($._escape_sequence, /[^"\\]/)),
+      '"',
+    ),
+
     register: $ => token(seq(
       optional('$'),
       choice(
         // MIPS
         'zero', 'at', 'gp', 'sp', 'fp', 'ra',
-        /[vV][0-1]/,            // v0–v1
-        /[kK][0-1]/,            // k0–k1
-        /[cC][0-3]/,            // c0–c3
+        /[vV][0-1]/, // v0–v1
+        /[kK][0-1]/, // k0–k1
+        /[cC][0-3]/, // c0–c3
 
         // RISC-V
         'tp',
         /f[ts](?:[0-9]|1[01])/, // ft0–ft11 and fs0–fs11
-        /fa[0-7]/,              // fa0–fa7
+        /fa[0-7]/, // fa0–fa7
 
         // Both
-        /[aA][0-7]/,            // a0–a7, MIPS32 only has ..a3
-        /[sS](?:[0-9]|1[01])/,  // s0–s11,  MIPS only has ..s8
-        /[tT][0-9]/,            // t0-t9, RISC-V only has ..t6
-        /[frxFRX]?(?:[0-9]|[12][0-9]|30|31)/
-      )
+        /[aA][0-7]/, // a0–a7, MIPS32 only has ..a3
+        /[sS](?:[0-9]|1[01])/, // s0–s11,  MIPS only has ..s8
+        /[tT][0-9]/, // t0-t9, RISC-V only has ..t6
+        /[frxFRX]?(?:[0-9]|[12][0-9]|30|31)/,
+      ),
     )),
 
     // Macro variables can start with percent, dollar and backslash.

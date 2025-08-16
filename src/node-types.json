@@ -236,6 +236,11 @@
     }
   },
   {
+    "type": "char",
+    "named": true,
+    "fields": {}
+  },
+  {
     "type": "control_mnemonic",
     "named": true,
     "fields": {}
@@ -876,11 +881,26 @@
             "named": true
           }
         ]
+      },
+      "type": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "relocation_type",
+            "named": true
+          }
+        ]
       }
     }
   },
   {
     "type": "section_type",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "string",
     "named": true,
     "fields": {}
   },
@@ -987,6 +1007,10 @@
     "named": false
   },
   {
+    "type": "\"",
+    "named": false
+  },
+  {
     "type": "%",
     "named": false
   },
@@ -996,6 +1020,10 @@
   },
   {
     "type": "&&",
+    "named": false
+  },
+  {
+    "type": "'",
     "named": false
   },
   {
@@ -1131,10 +1159,6 @@
     "named": true
   },
   {
-    "type": "char",
-    "named": true
-  },
-  {
     "type": "decimal",
     "named": true
   },
@@ -1211,12 +1235,12 @@
     "named": true
   },
   {
-    "type": "skip",
-    "named": false
+    "type": "relocation_type",
+    "named": true
   },
   {
-    "type": "string",
-    "named": true
+    "type": "skip",
+    "named": false
   },
   {
     "type": "|",

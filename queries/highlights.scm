@@ -30,7 +30,9 @@
 
 ;; Instructions
 (opcode) @function
+
 (register) @parameter
+(relocation_type) @type
 
 ;; Primitives
 [

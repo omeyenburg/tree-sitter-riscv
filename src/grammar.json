@@ -2071,10 +2071,10 @@
       "members": [
         {
           "type": "FIELD",
-          "name": "operator",
+          "name": "type",
           "content": {
-            "type": "PATTERN",
-            "value": "%hi|%lo|%hig|%glo|%pcrel_hi|%pcrel_lo"
+            "type": "SYMBOL",
+            "name": "relocation_type"
           }
         },
         {
@@ -2091,6 +2091,98 @@
         }
       ]
     },
+    "relocation_type": {
+      "type": "TOKEN",
+      "content": {
+        "type": "CHOICE",
+        "members": [
+          {
+            "type": "STRING",
+            "value": "%abs64"
+          },
+          {
+            "type": "STRING",
+            "value": "%call16"
+          },
+          {
+            "type": "STRING",
+            "value": "%dtprel"
+          },
+          {
+            "type": "STRING",
+            "value": "%got"
+          },
+          {
+            "type": "STRING",
+            "value": "%got_hi"
+          },
+          {
+            "type": "STRING",
+            "value": "%got_lo"
+          },
+          {
+            "type": "STRING",
+            "value": "%gprel"
+          },
+          {
+            "type": "STRING",
+            "value": "%hi"
+          },
+          {
+            "type": "STRING",
+            "value": "%lo"
+          },
+          {
+            "type": "STRING",
+            "value": "%pc16"
+          },
+          {
+            "type": "STRING",
+            "value": "%pc32"
+          },
+          {
+            "type": "STRING",
+            "value": "%pcrel_hi"
+          },
+          {
+            "type": "STRING",
+            "value": "%pcrel_lo"
+          },
+          {
+            "type": "STRING",
+            "value": "%tls_got_hi"
+          },
+          {
+            "type": "STRING",
+            "value": "%tls_got_lo"
+          },
+          {
+            "type": "STRING",
+            "value": "%tlsgd_hi"
+          },
+          {
+            "type": "STRING",
+            "value": "%tlsgd_lo"
+          },
+          {
+            "type": "STRING",
+            "value": "%tprel"
+          },
+          {
+            "type": "STRING",
+            "value": "%tprel_add"
+          },
+          {
+            "type": "STRING",
+            "value": "%tprel_hi"
+          },
+          {
+            "type": "STRING",
+            "value": "%tprel_lo"
+          }
+        ]
+      }
+    },
     "_expression_argument": {
       "type": "FIELD",
       "name": "argument",
@@ -2098,14 +2190,6 @@
         "type": "SYMBOL",
         "name": "_expression"
       }
-    },
-    "char": {
-      "type": "PATTERN",
-      "value": "'(?:\\\\.|[^'\\\\])'"
-    },
-    "string": {
-      "type": "PATTERN",
-      "value": "\"(?:\\\\.|[^\"\\\\])*\""
     },
     "octal": {
       "type": "PATTERN",
@@ -2172,6 +2256,98 @@
           }
         ]
       }
+    },
+    "_escape_sequence": {
+      "type": "TOKEN",
+      "content": {
+        "type": "SEQ",
+        "members": [
+          {
+            "type": "STRING",
+            "value": "\\"
+          },
+          {
+            "type": "CHOICE",
+            "members": [
+              {
+                "type": "PATTERN",
+                "value": "[abfnrtv\\\\'\"?]"
+              },
+              {
+                "type": "PATTERN",
+                "value": "[0-7]{1,3}"
+              },
+              {
+                "type": "PATTERN",
+                "value": "x[0-9a-fA-F]{2}"
+              },
+              {
+                "type": "PATTERN",
+                "value": "u[0-9a-fA-F]{4}"
+              },
+              {
+                "type": "PATTERN",
+                "value": "U[0-9a-fA-F]{8}"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "char": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "'"
+        },
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "_escape_sequence"
+            },
+            {
+              "type": "PATTERN",
+              "value": "[^'\\\\]"
+            }
+          ]
+        },
+        {
+          "type": "STRING",
+          "value": "'"
+        }
+      ]
+    },
+    "string": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "\""
+        },
+        {
+          "type": "REPEAT",
+          "content": {
+            "type": "CHOICE",
+            "members": [
+              {
+                "type": "SYMBOL",
+                "name": "_escape_sequence"
+              },
+              {
+                "type": "PATTERN",
+                "value": "[^\"\\\\]"
+              }
+            ]
+          }
+        },
+        {
+          "type": "STRING",
+          "value": "\""
+        }
+      ]
     },
     "register": {
       "type": "TOKEN",
