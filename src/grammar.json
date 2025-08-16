@@ -1170,7 +1170,7 @@
       "value": -1,
       "content": {
         "type": "PATTERN",
-        "value": "\\.[a-z_]+"
+        "value": "\\.[a-z0-9_]+"
       }
     },
     "control_operands": {
@@ -2219,23 +2219,43 @@
               },
               {
                 "type": "PATTERN",
-                "value": "[vk][01]"
+                "value": "[vV][0-1]"
               },
               {
                 "type": "PATTERN",
-                "value": "[ac][0-3]"
+                "value": "[kK][0-1]"
               },
               {
                 "type": "PATTERN",
-                "value": "t[0-9]"
+                "value": "[cC][0-3]"
+              },
+              {
+                "type": "STRING",
+                "value": "tp"
               },
               {
                 "type": "PATTERN",
-                "value": "s[0-8]"
+                "value": "f[ts](?:[0-9]|1[01])"
               },
               {
                 "type": "PATTERN",
-                "value": "[frx]?([12]?[0-9]|3[0-1])"
+                "value": "fa[0-7]"
+              },
+              {
+                "type": "PATTERN",
+                "value": "[aA][0-7]"
+              },
+              {
+                "type": "PATTERN",
+                "value": "[sS](?:[0-9]|1[01])"
+              },
+              {
+                "type": "PATTERN",
+                "value": "[tT][0-9]"
+              },
+              {
+                "type": "PATTERN",
+                "value": "[frxFRX]?(?:[0-9]|[12][0-9]|30|31)"
               }
             ]
           }

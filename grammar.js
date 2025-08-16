@@ -85,7 +85,7 @@ module.exports = grammar({
     _directive_operand_separator: $ => choice(
       repeat1(choice(' ', '\t')),
       seq(optional(repeat(choice(' ', '\t'))), ','),
-      $.block_comment
+      $.block_comment,
     ),
 
     directive: $ => seq(choice(
@@ -189,7 +189,7 @@ module.exports = grammar({
         optional($._directive_operand_separator),
       ), /[ \t]+/)),
     ),
-    control_mnemonic: $ => prec(-1, /\.[a-z_]+/),
+    control_mnemonic: $ => prec(-1, /\.[a-z0-9_]+/),
     control_operands: $ => seq(
       $._control_operand,
       repeat(seq(
@@ -335,11 +335,27 @@ module.exports = grammar({
       /-?\d+[eE][+-]?\d+f?/,
     )),
 
-    register: $ => token(seq(optional('$'), choice(
-      'zero', 'at', 'gp', 'sp', 'fp', 'ra',
-      /[vk][01]/, /[ac][0-3]/, /t[0-9]/, /s[0-8]/,
-      /[frx]?([12]?[0-9]|3[0-1])/,
-    ))),
+    register: $ => token(seq(
+      optional('$'),
+      choice(
+        // MIPS
+        'zero', 'at', 'gp', 'sp', 'fp', 'ra',
+        /[vV][0-1]/,            // v0–v1
+        /[kK][0-1]/,            // k0–k1
+        /[cC][0-3]/,            // c0–c3
+
+        // RISC-V
+        'tp',
+        /f[ts](?:[0-9]|1[01])/, // ft0–ft11 and fs0–fs11
+        /fa[0-7]/,              // fa0–fa7
+
+        // Both
+        /[aA][0-7]/,            // a0–a7, MIPS32 only has ..a3
+        /[sS](?:[0-9]|1[01])/,  // s0–s11,  MIPS only has ..s8
+        /[tT][0-9]/,            // t0-t9, RISC-V only has ..t6
+        /[frxFRX]?(?:[0-9]|[12][0-9]|30|31)/
+      )
+    )),
 
     // Macro variables can start with percent, dollar and backslash.
     macro_variable: $ => token(/[%$\\][0-9a-zA-Z_:$%\\]+/),
