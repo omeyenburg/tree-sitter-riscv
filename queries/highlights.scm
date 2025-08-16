@@ -7,19 +7,26 @@
   (control_mnemonic)
 ] @keyword
 
-(preprocessor) @keyword
+(section_type) @type
+(option_flag) @character.special
 
 ;; Labels & symbols
 [
-  (local_label)
   (global_label)
-  (local_numeric_label)
+  (local_label)
+  (local_label_reference)
   (global_numeric_label)
+  (local_numeric_label)
+  (local_numeric_label_reference)
   (symbol)
 ] @label
 
-;; Macro variables
-(macro_variable) @label
+;; Macros
+(macro_name) @label
+[
+  (macro_variable)
+  (macro_parameter)
+] @parameter
 
 ;; Instructions
 (opcode) @function
@@ -27,35 +34,36 @@
 
 ;; Primitives
 [
-  (char)
-  (float)
   (octal)
   (decimal)
   (hexadecimal)
 ] @number
 
-;; String
+(float) @number.float
+(char) @character
 (string) @string
 
-;; Errors
 (ERROR) @error
 (ERROR (_) @error)
 
-;; Comments
 [
   (line_comment)
   (block_comment)
+  (preprocessor)
 ] @comment
 
 ;; Punctuation
 [
   ","
   ";"
-  "("
-  ")"
 ] @punctuation.delimiter
 
-;; Operator
+[
+  "("
+  ")"
+] @punctuation.bracket
+
+;; Operators
 [
   "|"
   "||"

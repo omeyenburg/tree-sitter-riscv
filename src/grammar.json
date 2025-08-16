@@ -279,12 +279,53 @@
       "type": "CHOICE",
       "members": [
         {
-          "type": "PATTERN",
-          "value": "[ \\t]+"
+          "type": "REPEAT1",
+          "content": {
+            "type": "CHOICE",
+            "members": [
+              {
+                "type": "STRING",
+                "value": " "
+              },
+              {
+                "type": "STRING",
+                "value": "\t"
+              }
+            ]
+          }
         },
         {
-          "type": "PATTERN",
-          "value": "[ \\t]*,[ \\t]*"
+          "type": "SEQ",
+          "members": [
+            {
+              "type": "CHOICE",
+              "members": [
+                {
+                  "type": "REPEAT",
+                  "content": {
+                    "type": "CHOICE",
+                    "members": [
+                      {
+                        "type": "STRING",
+                        "value": " "
+                      },
+                      {
+                        "type": "STRING",
+                        "value": "\t"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "type": "BLANK"
+                }
+              ]
+            },
+            {
+              "type": "STRING",
+              "value": ","
+            }
+          ]
         },
         {
           "type": "SYMBOL",
@@ -1170,10 +1211,6 @@
         },
         {
           "type": "SYMBOL",
-          "name": "section_symbol"
-        },
-        {
-          "type": "SYMBOL",
           "name": "section_type"
         },
         {
@@ -1181,14 +1218,6 @@
           "name": "option_flag"
         }
       ]
-    },
-    "section_symbol": {
-      "type": "PREC",
-      "value": -5,
-      "content": {
-        "type": "PATTERN",
-        "value": "\\.[a-z]+"
-      }
     },
     "section_type": {
       "type": "PREC",

@@ -305,10 +305,6 @@
           "named": true
         },
         {
-          "type": "section_symbol",
-          "named": true
-        },
-        {
           "type": "section_type",
           "named": true
         },
@@ -877,11 +873,6 @@
         ]
       }
     }
-  },
-  {
-    "type": "section_symbol",
-    "named": true,
-    "fields": {}
   },
   {
     "type": "section_type",

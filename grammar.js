@@ -82,7 +82,11 @@ module.exports = grammar({
     _whitespace: $ => /[ \t]+/,
 
     // TODO: Why is this not just _operand_separator?
-    _directive_operand_separator: $ => choice(/[ \t]+/, /[ \t]*,[ \t]*/, $.block_comment),
+    _directive_operand_separator: $ => choice(
+      repeat1(choice(' ', '\t')),
+      seq(optional(repeat(choice(' ', '\t'))), ','),
+      $.block_comment
+    ),
 
     directive: $ => seq(choice(
       $._macro_directive,
@@ -196,13 +200,11 @@ module.exports = grammar({
     _control_operand: $ => choice(
       $._expression,
       $.string,
-      $.section_symbol,
       $.section_type,
       $.option_flag,
     ),
 
-    // Specific symbols for .section directive
-    section_symbol: $ => prec(-5, /\.[a-z]+/),
+    // Specific symbol for .section directive
     section_type: $ => prec(-5, /@[a-z]+/),
 
     // Specific symbol for .option directive
@@ -350,7 +352,7 @@ module.exports = grammar({
     global_label: $ => token(prec(2, /[a-zA-Z_.][a-zA-Z0-9_.$]*:/)),
     symbol: $ => token(prec(-1, /[a-zA-Z_.][a-zA-Z0-9_.$]*/)),
 
-    // Example: `.L123:`, `.Loop_1`
+    // Example: `.L122:`, `.Loop_1`
     local_label: $ => token(prec(3, /\.L[a-zA-Z0-9_$]+:/)),
     local_label_reference: $ => token(/\.L[a-zA-Z0-9_$]+/),
 
