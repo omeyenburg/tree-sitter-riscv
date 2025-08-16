@@ -6,10 +6,10 @@
 (program
   (directive
     (macro_mnemonic)
-    (symbol)
+    (macro_name)
     (macro_parameters
-      (macro_variable)
-      (macro_variable))))
+      (macro_parameter)
+      (macro_parameter))))
 
 ==========
 [directives/macro] macro definition with backslash (\) prefix
@@ -19,10 +19,10 @@
 (program
   (directive
     (macro_mnemonic)
-    (symbol)
+    (macro_name)
     (macro_parameters
-      (macro_variable)
-      (macro_variable))))
+      (macro_parameter)
+      (macro_parameter))))
 
 ==========
 [directives/macro] macro definition with dollar ($) prefix
@@ -32,10 +32,10 @@
 (program
   (directive
     (macro_mnemonic)
-    (symbol)
+    (macro_name)
     (macro_parameters
-      (macro_variable)
-      (macro_variable))))
+      (macro_parameter)
+      (macro_parameter))))
 
 ==========
 [directives/macro] macro definition with mixed prefixes
@@ -45,14 +45,14 @@
 (program
   (directive
     (macro_mnemonic)
-    (symbol)
+    (macro_name)
     (macro_parameters
-      (macro_variable)
-      (macro_variable)
-      (macro_variable)
-      (macro_variable)
-      (macro_variable)
-      (macro_variable))))
+      (macro_parameter)
+      (macro_parameter)
+      (macro_parameter)
+      (macro_parameter)
+      (macro_parameter)
+      (macro_parameter))))
 
 ==========
 [directives/macro] macro definition with parentheses without space before
@@ -62,10 +62,10 @@
 (program
   (directive
     (macro_mnemonic)
-    (symbol)
+    (macro_name)
     (macro_parameters
-      (macro_variable)
-      (macro_variable))))
+      (macro_parameter)
+      (macro_parameter))))
 
 ==========
 [directives/macro] macro definition with parentheses with space before
@@ -75,10 +75,10 @@
 (program
   (directive
     (macro_mnemonic)
-    (symbol)
+    (macro_name)
     (macro_parameters
-      (macro_variable)
-      (macro_variable))))
+      (macro_parameter)
+      (macro_parameter))))
 
 ==========
 [directives/macro] macro definition with parentheses and comma separation
@@ -88,10 +88,10 @@
 (program
   (directive
     (macro_mnemonic)
-    (symbol)
+    (macro_name)
     (macro_parameters
-      (macro_variable)
-      (macro_variable))))
+      (macro_parameter)
+      (macro_parameter))))
 
 ==========
 [directives/macro] integer directive with macro variable

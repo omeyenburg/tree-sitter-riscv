@@ -96,7 +96,7 @@ module.exports = grammar({
       field('mnemonic', $.macro_mnemonic),
       optional($._whitespace),
       choice($.block_comment, $._whitespace),
-      field('name', $.symbol),
+      field('name', $.macro_name),
       optional(choice(
         seq(optional($._whitespace), '(', optional($.block_comment), optional(field('parameters', $.macro_parameters)), optional(choice(' ', '\t', $.block_comment)), ')'),
         seq($._whitespace, field('parameters', $.macro_parameters)),
@@ -104,7 +104,7 @@ module.exports = grammar({
     ),
     macro_mnemonic: $ => '.macro',
     macro_parameters: $ => seq(
-      $._macro_parameter,
+      $.macro_parameter,
       repeat(seq(
         choice(
           ' ',
@@ -112,12 +112,8 @@ module.exports = grammar({
           $.block_comment,
           seq(optional(choice(' ', '\t', $.block_comment)), ',', optional($.block_comment)),
         ),
-        $._macro_parameter,
-      ),
+        $.macro_parameter,
       )),
-    _macro_parameter: $ => choice(
-      $.macro_variable,
-      $.symbol,
     ),
 
     // Operands can be on multiple lines
@@ -344,30 +340,32 @@ module.exports = grammar({
     ))),
 
     // Macro variables can start with percent, dollar and backslash.
-    // Lower precedence than registers, because they overlap.
-    macro_variable: $ => /[%$\\][0-9a-zA-Z_:$%\\]+/,
-
-    // Symbol includes label references
-    symbol: $ => /[a-zA-Z_][a-zA-Z0-9_]*/,
+    macro_variable: $ => token(/[%$\\][0-9a-zA-Z_:$%\\]+/),
+    macro_parameter: $ => token(/[%$\\]?[0-9a-zA-Z_:$%\\]+/),
+    macro_name: $ => token(/[a-zA-Z_][a-zA-Z0-9_$]*/),
 
     _label: $ => seq(choice($.global_label, $.local_label, $.global_numeric_label, $.local_numeric_label), /[ \t]*/),
 
     // Example: `main:`
-    global_label: $ => token(prec(2, /[a-zA-Z_][a-zA-Z0-9_]*:/)),
+    global_label: $ => token(prec(2, /[a-zA-Z_.][a-zA-Z0-9_.$]*:/)),
+    symbol: $ => token(prec(-1, /[a-zA-Z_.][a-zA-Z0-9_.$]*/)),
 
-    // Example: `.L123:`
-    local_label: $ => token(/\.L[0-9]+:/),
-    local_label_reference: $ => /\.L[0-9]+/,
+    // Example: `.L123:`, `.Loop_1`
+    local_label: $ => token(prec(3, /\.L[a-zA-Z0-9_$]+:/)),
+    local_label_reference: $ => token(/\.L[a-zA-Z0-9_$]+/),
 
     // Example: `123:`
+    // Referenced by number literal
     global_numeric_label: $ => token(prec(2, /[1-9][0-9]+:/)),
 
     // Example: `1:`
     local_numeric_label: $ => token(prec(3, /[0-9]:/)),
-    local_numeric_label_reference: $ => /[0-9][fb]/,
+    local_numeric_label_reference: $ => token(/[0-9][fb]/),
 
     // Examples: `main($s4)`, `value+4($s1)`, `($v1)`, `-0x10($a0)`
     // Cannot match expression-like addresses: main, main+2
+    //  NOTE: This also matches macro calls in instructions.
+    //        Example: `for($t0, 1, 5)`
     address: $ => prec(1, seq(
       optional(field('offset', $._expression)),
       '(',

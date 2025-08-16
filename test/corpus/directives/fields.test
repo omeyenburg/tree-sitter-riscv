@@ -6,10 +6,10 @@
 (program
   (directive
     mnemonic: (macro_mnemonic)
-    name: (symbol)
+    name: (macro_name)
     parameters: (macro_parameters
-      (macro_variable)
-      (macro_variable))))
+      (macro_parameter)
+      (macro_parameter))))
 
 ==========
 [directives/fields] integer directive

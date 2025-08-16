@@ -6,13 +6,6 @@ foo 1e
 ---
 
 ==========
-[instructions/error] instruction with invalid float literal (malformed mantissa)
-:error
-==========
-foo .e+1
----
-
-==========
 [instructions/error] instruction with invalid float literal (malformed exponent)
 :error
 ==========

@@ -362,7 +362,7 @@
         "required": false,
         "types": [
           {
-            "type": "symbol",
+            "type": "macro_name",
             "named": true
           }
         ]
@@ -590,11 +590,7 @@
           "named": true
         },
         {
-          "type": "macro_variable",
-          "named": true
-        },
-        {
-          "type": "symbol",
+          "type": "macro_parameter",
           "named": true
         }
       ]
@@ -1183,6 +1179,14 @@
   },
   {
     "type": "macro_mnemonic",
+    "named": true
+  },
+  {
+    "type": "macro_name",
+    "named": true
+  },
+  {
+    "type": "macro_parameter",
     "named": true
   },
   {
