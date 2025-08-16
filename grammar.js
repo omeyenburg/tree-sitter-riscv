@@ -261,8 +261,8 @@ module.exports = grammar({
       $.parenthesized_expression,
       $.macro_variable,
       $.register,
-      $.symbol,
       $.local_label_reference,
+      $.symbol,
       $.local_numeric_label_reference,
       $.char,
       $.octal,
@@ -348,13 +348,13 @@ module.exports = grammar({
 
     _label: $ => seq(choice($.global_label, $.local_label, $.global_numeric_label, $.local_numeric_label), /[ \t]*/),
 
+    // Example: `.L122:`, `.Loop_1`
+    local_label: $ => token(prec(3, /\.L[a-zA-Z0-9_$]*:/)),
+    local_label_reference: $ => prec(1, /\.L[a-zA-Z0-9_$]*/),
+
     // Example: `main:`
     global_label: $ => token(prec(2, /[a-zA-Z_.][a-zA-Z0-9_.$]*:/)),
-    symbol: $ => token(prec(-1, /[a-zA-Z_.][a-zA-Z0-9_.$]*/)),
-
-    // Example: `.L122:`, `.Loop_1`
-    local_label: $ => token(prec(3, /\.L[a-zA-Z0-9_$]+:/)),
-    local_label_reference: $ => token(/\.L[a-zA-Z0-9_$]+/),
+    symbol: $ => prec(-1, /[a-zA-Z_.][a-zA-Z0-9_.$]*/),
 
     // Example: `123:`
     // Referenced by number literal

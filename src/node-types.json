@@ -574,6 +574,11 @@
     }
   },
   {
+    "type": "local_label_reference",
+    "named": true,
+    "fields": {}
+  },
+  {
     "type": "macro_parameters",
     "named": true,
     "fields": {},
@@ -885,6 +890,11 @@
     "fields": {}
   },
   {
+    "type": "symbol",
+    "named": true,
+    "fields": {}
+  },
+  {
     "type": "unary_expression",
     "named": true,
     "fields": {
@@ -1157,10 +1167,6 @@
     "named": true
   },
   {
-    "type": "local_label_reference",
-    "named": true
-  },
-  {
     "type": "local_numeric_label",
     "named": true
   },
@@ -1210,10 +1216,6 @@
   },
   {
     "type": "string",
-    "named": true
-  },
-  {
-    "type": "symbol",
     "named": true
   },
   {

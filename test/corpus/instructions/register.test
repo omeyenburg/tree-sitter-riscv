@@ -74,3 +74,36 @@ foo $f31
     (opcode)
     (operands
       (register))))
+
+==========
+[instructions/register] register without prefix
+==========
+foo sp
+---
+(program
+(instruction
+(opcode)
+(operands
+  (register))))
+
+==========
+[instructions/register] symbol starting as register without prefix
+==========
+foo space
+---
+(program
+  (instruction
+    (opcode)
+    (operands
+      (symbol))))
+
+==========
+[instructions/register] RISC-V prefix
+==========
+foo x1
+---
+(program
+(instruction
+(opcode)
+(operands
+  (register))))
