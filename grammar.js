@@ -260,6 +260,7 @@ module.exports = grammar({
     _expression: $ => choice(
       $.binary_expression,
       $.unary_expression,
+      prec(1, $.relocation_expression),
       $.parenthesized_expression,
       $.macro_variable,
       $.register,
@@ -302,6 +303,15 @@ module.exports = grammar({
       prec.right(11, seq('~', $._expression_argument)),
       prec.right(11, seq('!', $._expression_argument)),
     ),
+
+    // Examples: `%hi(foo)`, `%lo(123)`
+    relocation_expression: $ => seq(
+      field('operator', /%hi|%lo|%pcrel_hi|%pcrel_lo/),
+      '(',
+      $._expression_argument,
+      ')',
+    ),
+
     _expression_argument: $ => field('argument', $._expression),
 
     // Primitive data types.
