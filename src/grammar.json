@@ -1527,6 +1527,10 @@
         },
         {
           "type": "SYMBOL",
+          "name": "binary"
+        },
+        {
+          "type": "SYMBOL",
           "name": "decimal"
         },
         {
@@ -2195,9 +2199,17 @@
       "type": "PATTERN",
       "value": "-?0[0-7]*"
     },
-    "decimal": {
+    "binary": {
       "type": "PATTERN",
-      "value": "-?\\d+"
+      "value": "-?0b[01]+"
+    },
+    "decimal": {
+      "type": "PREC",
+      "value": -1,
+      "content": {
+        "type": "PATTERN",
+        "value": "-?\\d+"
+      }
     },
     "hexadecimal": {
       "type": "PATTERN",

@@ -37,6 +37,7 @@
 ;; Primitives
 [
   (octal)
+  (binary)
   (decimal)
   (hexadecimal)
 ] @number

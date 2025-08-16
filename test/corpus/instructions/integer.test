@@ -54,6 +54,17 @@ foo 0x0314
       (hexadecimal))))
 
 ==========
+[instructions/integer] instruction with binary value
+==========
+foo 0b11
+---
+(program
+  (instruction
+    (opcode)
+    (operands
+      (binary))))
+
+==========
 [instructions/integer] instruction with signed hexadecimal value
 ==========
 foo -0x0123456789ABCDEFabcdef

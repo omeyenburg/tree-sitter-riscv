@@ -266,6 +266,7 @@ module.exports = grammar({
       $.local_numeric_label_reference,
       $.char,
       $.octal,
+      $.binary,
       $.decimal,
       $.hexadecimal,
     ),
@@ -345,7 +346,8 @@ module.exports = grammar({
 
     // Primitive data types
     octal: $ => /-?0[0-7]*/,
-    decimal: $ => /-?\d+/,
+    binary: $ => /-?0b[01]+/,
+    decimal: $ => prec(-1, /-?\d+/),
     hexadecimal: $ => /-?0[xX][0-9a-fA-F]+/,
 
     float: $ => token(choice(
