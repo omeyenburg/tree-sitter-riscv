@@ -457,10 +457,6 @@
         {
           "type": "macro_variable",
           "named": true
-        },
-        {
-          "type": "preprocessor",
-          "named": true
         }
       ]
     }
@@ -560,10 +556,6 @@
         },
         {
           "type": "parenthesized_expression",
-          "named": true
-        },
-        {
-          "type": "preprocessor",
           "named": true
         },
         {

@@ -71,6 +71,10 @@
           },
           {
             "type": "SYMBOL",
+            "name": "preprocessor"
+          },
+          {
+            "type": "SYMBOL",
             "name": "block_comment"
           },
           {
@@ -264,10 +268,6 @@
         {
           "type": "SYMBOL",
           "name": "block_comment"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "preprocessor"
         }
       ]
     },

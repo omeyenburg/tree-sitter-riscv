@@ -57,6 +57,7 @@ module.exports = grammar({
       ';',
       '\r',
       '\n',
+      $.preprocessor,
       $.block_comment,
       choice(
         seq($.directive, choice(
@@ -77,7 +78,6 @@ module.exports = grammar({
     _comment: $ => choice(
       $.line_comment,
       $.block_comment,
-      $.preprocessor,
     ),
     _whitespace: $ => /[ \t]+/,
 

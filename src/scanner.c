@@ -191,71 +191,72 @@ bool tree_sitter_mips_external_scanner_scan(void* _payload,
             }
         } else if (lexer->lookahead == '#' &&
                    (valid_symbols[LINE_COMMENT] || valid_symbols[PREPROCESSOR])) {
+            if (valid_symbols[PREPROCESSOR]) {
+                // Consume whitespace to allow `# define ...`
+                do {
+                    lexer->advance(lexer, false);
+                } while (!lexer->eof(lexer) &&
+                         (lexer->lookahead == ' ' || lexer->lookahead == '\t'));
 
-            // Consume whitespace to allow `# define ...`
-            do {
-                lexer->advance(lexer, false);
-            } while (!lexer->eof(lexer) &&
-                     (lexer->lookahead == ' ' || lexer->lookahead == '\t'));
+                TokenChecker tokens[] = {
+                    createTokenChecker("include"),
+                    createTokenChecker("define"),
+                    createTokenChecker("undef"),
+                    createTokenChecker("if"),
+                    createTokenChecker("ifdef"),
+                    createTokenChecker("ifndef"),
+                    createTokenChecker("else"),
+                    createTokenChecker("elif"),
+                    createTokenChecker("endif"),
+                    createTokenChecker("error"),
+                    createTokenChecker("warning"),
+                    createTokenChecker("pragma"),
+                    createTokenChecker("line"),
+                };
 
-            TokenChecker tokens[] = {
-                createTokenChecker("include"),
-                createTokenChecker("define"),
-                createTokenChecker("undef"),
-                createTokenChecker("if"),
-                createTokenChecker("ifdef"),
-                createTokenChecker("ifndef"),
-                createTokenChecker("else"),
-                createTokenChecker("elif"),
-                createTokenChecker("endif"),
-                createTokenChecker("error"),
-                createTokenChecker("warning"),
-                createTokenChecker("pragma"),
-                createTokenChecker("line"),
-            };
-
-            int i;
-            for (i = 0; !(lexer->eof(lexer) || lexer->lookahead == ' ' ||
-                          lexer->lookahead == '\t' || lexer->lookahead == '\r' ||
-                          lexer->lookahead == '\n');
-                 i++) {
-                for (int j = 0; j < sizeof(tokens) / sizeof(TokenChecker); j++) {
-                    TokenChecker* token = tokens + j;
-                    if (token->valid) {
-                        if (i < token->len && lexer->lookahead != token->str[i]) {
-                            token->valid = false;
-                        } else if (i == token->len) {
-                            token->valid = false;
-                        }
-                    }
-                }
-
-                lexer->advance(lexer, false);
-            }
-
-            for (int j = 0; j < sizeof(tokens) / sizeof(TokenChecker); j++) {
-                TokenChecker token = tokens[j];
-                if (token.valid && i == token.len) {
-                    bool backslash = false;
-                    while (!lexer->eof(lexer)) {
-                        if (lexer->lookahead == '\\') {
-                            backslash = true;
-                        } else if (lexer->lookahead == '\r' && !backslash) {
-                            break;
-                        } else if (lexer->lookahead == '\n') {
-                            if (backslash) {
-                                backslash = false;
-                            } else {
-                                break;
+                int i;
+                for (i = 0; !(lexer->eof(lexer) || lexer->lookahead == ' ' ||
+                              lexer->lookahead == '\t' || lexer->lookahead == '\r' ||
+                              lexer->lookahead == '\n');
+                     i++) {
+                    for (int j = 0; j < sizeof(tokens) / sizeof(TokenChecker); j++) {
+                        TokenChecker* token = tokens + j;
+                        if (token->valid) {
+                            if (i < token->len && lexer->lookahead != token->str[i]) {
+                                token->valid = false;
+                            } else if (i == token->len) {
+                                token->valid = false;
                             }
                         }
-
-                        lexer->advance(lexer, false);
                     }
 
-                    lexer->result_symbol = PREPROCESSOR;
-                    lexer->mark_end(lexer);
-                    return valid_symbols[PREPROCESSOR];
+                    lexer->advance(lexer, false);
+                }
+
+                for (int j = 0; j < sizeof(tokens) / sizeof(TokenChecker); j++) {
+                    TokenChecker token = tokens[j];
+                    if (token.valid && i == token.len) {
+                        bool backslash = false;
+                        while (!lexer->eof(lexer)) {
+                            if (lexer->lookahead == '\\') {
+                                backslash = true;
+                            } else if (lexer->lookahead == '\r' && !backslash) {
+                                break;
+                            } else if (lexer->lookahead == '\n') {
+                                if (backslash) {
+                                    backslash = false;
+                                } else {
+                                    break;
+                                }
+                            }
+
+                            lexer->advance(lexer, false);
+                        }
+
+                        lexer->result_symbol = PREPROCESSOR;
+                        lexer->mark_end(lexer);
+                        return true;
+                    }
                 }
             }
 
