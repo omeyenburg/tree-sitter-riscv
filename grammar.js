@@ -306,7 +306,7 @@ module.exports = grammar({
 
     // Examples: `%hi(foo)`, `%lo(123)`
     relocation_expression: $ => seq(
-      field('operator', /%hi|%lo|%pcrel_hi|%pcrel_lo/),
+      field('operator', /%hi|%lo|%hig|%glo|%pcrel_hi|%pcrel_lo/),
       '(',
       $._expression_argument,
       ')',
@@ -330,10 +330,10 @@ module.exports = grammar({
       /-?\d+[eE][+-]?\d+f?/,
     )),
 
-    register: $ => token(seq('$', choice(
+    register: $ => token(seq(optional('$'), choice(
       'zero', 'at', 'gp', 'sp', 'fp', 'ra',
       /[vk][01]/, /[ac][0-3]/, /t[0-9]/, /s[0-8]/,
-      /f?([12]?[0-9]|3[0-1])/,
+      /[frx]?([12]?[0-9]|3[0-1])/,
     ))),
 
     // Macro variables can start with percent, dollar and backslash.
