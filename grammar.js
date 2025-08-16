@@ -128,7 +128,7 @@ module.exports = grammar({
       field('operands', $.integer_operands),
       optional(repeat(choice('\r', '\n', ' ', '\t'))),
     ),
-    integer_mnemonic: $ => choice('.word', '.half', '.hword', '.byte', '.dword'),
+    integer_mnemonic: $ => choice('.word', '.half', '.hword', '.byte', '.dword', '.2byte', '.4byte', '.8byte', '.align', 'skip'),
     integer_operands: $ => seq(
       $._expression,
       repeat(seq(
@@ -149,7 +149,7 @@ module.exports = grammar({
       field('operands', $.float_operands),
       optional(repeat(choice('\r', '\n', ' ', '\t'))),
     ),
-    float_mnemonic: $ => choice('.float', '.double'),
+    float_mnemonic: $ => choice('.float', '.double', '.single'),
     float_operands: $ => seq(
       $._float_operand,
       repeat(seq(
@@ -175,6 +175,7 @@ module.exports = grammar({
       '.ascii',
       '.asciiz',
       '.string',
+      '.byte_string',
     ),
     _string_operand: $ => choice($.string, $.macro_variable),
 
@@ -201,7 +202,15 @@ module.exports = grammar({
       $.string,
       $.section_symbol,
       $.section_type,
+      $.option_flag
     ),
+
+    // Specific symbols for .section directive
+    section_symbol: $ => prec(-5, /\.[a-z]+/),
+    section_type: $ => prec(-5, /@[a-z]+/),
+
+    // Specific symbol for .option directive
+    option_flag: $ => prec(-5, /\+[a-z]/),
 
     // NOTE: Mars also allow this: %macro()
     instruction: $ => seq(
@@ -248,7 +257,6 @@ module.exports = grammar({
     // Does not match floats, floats are not accepted in expressions, but only
     // as standalone operands or in directives.
     // Examples: `1`, `%var + 3`, `(label + 7)`
-    // TODO: Why does this match registers?
     _expression: $ => choice(
       $.binary_expression,
       $.unary_expression,
@@ -324,10 +332,6 @@ module.exports = grammar({
 
     // Symbol includes label references
     symbol: $ => /[a-zA-Z_][a-zA-Z0-9_]*/,
-
-    // Specific symbols for .section directive
-    section_symbol: $ => prec(-5, /\.[a-z]+/),
-    section_type: $ => prec(-5, /@[a-z]+/),
 
     _label: $ => seq(choice($.global_label, $.local_label, $.global_numeric_label, $.local_numeric_label), /[ \t]*/),
 

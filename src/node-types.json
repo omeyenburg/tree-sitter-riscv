@@ -251,6 +251,10 @@
           "named": true
         },
         {
+          "type": "option_flag",
+          "named": true
+        },
+        {
           "type": "parenthesized_expression",
           "named": true
         },
@@ -626,6 +630,11 @@
     }
   },
   {
+    "type": "option_flag",
+    "named": true,
+    "fields": {}
+  },
+  {
     "type": "parenthesized_expression",
     "named": true,
     "fields": {
@@ -869,6 +878,22 @@
     "named": false
   },
   {
+    "type": ".2byte",
+    "named": false
+  },
+  {
+    "type": ".4byte",
+    "named": false
+  },
+  {
+    "type": ".8byte",
+    "named": false
+  },
+  {
+    "type": ".align",
+    "named": false
+  },
+  {
     "type": ".ascii",
     "named": false
   },
@@ -878,6 +903,10 @@
   },
   {
     "type": ".byte",
+    "named": false
+  },
+  {
+    "type": ".byte_string",
     "named": false
   },
   {
@@ -898,6 +927,10 @@
   },
   {
     "type": ".hword",
+    "named": false
+  },
+  {
+    "type": ".single",
     "named": false
   },
   {
@@ -1027,6 +1060,10 @@
   {
     "type": "register",
     "named": true
+  },
+  {
+    "type": "skip",
+    "named": false
   },
   {
     "type": "string",
