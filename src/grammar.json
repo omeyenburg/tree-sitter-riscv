@@ -688,7 +688,15 @@
       "members": [
         {
           "type": "STRING",
-          "value": ".word"
+          "value": ".byte"
+        },
+        {
+          "type": "STRING",
+          "value": ".2byte"
+        },
+        {
+          "type": "STRING",
+          "value": ".short"
         },
         {
           "type": "STRING",
@@ -700,19 +708,15 @@
         },
         {
           "type": "STRING",
-          "value": ".byte"
-        },
-        {
-          "type": "STRING",
-          "value": ".dword"
-        },
-        {
-          "type": "STRING",
-          "value": ".2byte"
-        },
-        {
-          "type": "STRING",
           "value": ".4byte"
+        },
+        {
+          "type": "STRING",
+          "value": ".word"
+        },
+        {
+          "type": "STRING",
+          "value": ".int"
         },
         {
           "type": "STRING",
@@ -720,11 +724,59 @@
         },
         {
           "type": "STRING",
+          "value": ".dword"
+        },
+        {
+          "type": "STRING",
+          "value": ".long"
+        },
+        {
+          "type": "STRING",
+          "value": ".quad"
+        },
+        {
+          "type": "STRING",
+          "value": ".comm"
+        },
+        {
+          "type": "STRING",
+          "value": ".lcomm"
+        },
+        {
+          "type": "STRING",
           "value": ".align"
         },
         {
           "type": "STRING",
-          "value": "skip"
+          "value": ".balign"
+        },
+        {
+          "type": "STRING",
+          "value": ".p2align"
+        },
+        {
+          "type": "STRING",
+          "value": ".sleb128"
+        },
+        {
+          "type": "STRING",
+          "value": ".uleb128"
+        },
+        {
+          "type": "STRING",
+          "value": ".dtprelword"
+        },
+        {
+          "type": "STRING",
+          "value": ".dtpreldword"
+        },
+        {
+          "type": "STRING",
+          "value": ".skip"
+        },
+        {
+          "type": "STRING",
+          "value": ".space"
         }
       ]
     },
@@ -1052,6 +1104,10 @@
       "members": [
         {
           "type": "STRING",
+          "value": ".asciz"
+        },
+        {
+          "type": "STRING",
           "value": ".ascii"
         },
         {
@@ -1064,7 +1120,7 @@
         },
         {
           "type": "STRING",
-          "value": ".byte_string"
+          "value": ".stringz"
         }
       ]
     },
@@ -2252,8 +2308,17 @@
                 "type": "CHOICE",
                 "members": [
                   {
-                    "type": "STRING",
-                    "value": "f"
+                    "type": "CHOICE",
+                    "members": [
+                      {
+                        "type": "STRING",
+                        "value": "f"
+                      },
+                      {
+                        "type": "STRING",
+                        "value": "d"
+                      }
+                    ]
                   },
                   {
                     "type": "BLANK"

@@ -1116,15 +1116,31 @@
     "named": false
   },
   {
+    "type": ".asciz",
+    "named": false
+  },
+  {
+    "type": ".balign",
+    "named": false
+  },
+  {
     "type": ".byte",
     "named": false
   },
   {
-    "type": ".byte_string",
+    "type": ".comm",
     "named": false
   },
   {
     "type": ".double",
+    "named": false
+  },
+  {
+    "type": ".dtpreldword",
+    "named": false
+  },
+  {
+    "type": ".dtprelword",
     "named": false
   },
   {
@@ -1144,11 +1160,55 @@
     "named": false
   },
   {
+    "type": ".int",
+    "named": false
+  },
+  {
+    "type": ".lcomm",
+    "named": false
+  },
+  {
+    "type": ".long",
+    "named": false
+  },
+  {
+    "type": ".p2align",
+    "named": false
+  },
+  {
+    "type": ".quad",
+    "named": false
+  },
+  {
+    "type": ".short",
+    "named": false
+  },
+  {
     "type": ".single",
     "named": false
   },
   {
+    "type": ".skip",
+    "named": false
+  },
+  {
+    "type": ".sleb128",
+    "named": false
+  },
+  {
+    "type": ".space",
+    "named": false
+  },
+  {
     "type": ".string",
+    "named": false
+  },
+  {
+    "type": ".stringz",
+    "named": false
+  },
+  {
+    "type": ".uleb128",
     "named": false
   },
   {
@@ -1278,10 +1338,6 @@
   {
     "type": "relocation_type",
     "named": true
-  },
-  {
-    "type": "skip",
-    "named": false
   },
   {
     "type": "|",

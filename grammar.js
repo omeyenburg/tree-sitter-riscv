@@ -128,7 +128,17 @@ module.exports = grammar({
       field('operands', $.integer_operands),
       optional(repeat(choice('\r', '\n', ' ', '\t'))),
     ),
-    integer_mnemonic: $ => choice('.word', '.half', '.hword', '.byte', '.dword', '.2byte', '.4byte', '.8byte', '.align', 'skip'),
+    integer_mnemonic: $ => choice(
+      '.byte',
+      '.2byte', '.short', '.half', '.hword',
+      '.4byte', '.word', '.int',
+      '.8byte', '.dword', '.long', '.quad',
+      '.comm', '.lcomm',
+      '.align', '.balign', '.p2align',
+      '.sleb128', '.uleb128',
+      '.dtprelword', '.dtpreldword',
+      '.skip', '.space',
+    ),
     integer_operands: $ => seq(
       $._expression,
       repeat(seq(
@@ -172,10 +182,11 @@ module.exports = grammar({
       /[ \t]*/,
     ),
     string_mnemonic: $ => choice(
+      '.asciz',
       '.ascii',
       '.asciiz',
       '.string',
-      '.byte_string',
+      '.stringz',
     ),
     _string_operand: $ => choice($.string, $.macro_variable, $.address),
 
@@ -354,7 +365,7 @@ module.exports = grammar({
       seq(
         choice(/-?\d+\.\d*/, /-?\d*\.\d+/),
         optional(/[eE][+-]?\d+/),
-        optional('f'),
+        optional(choice('f', 'd')),
       ),
       /-?\d+[eE][+-]?\d+f?/,
     )),
