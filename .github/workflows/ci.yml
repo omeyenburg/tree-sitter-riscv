@@ -69,3 +69,4 @@ jobs:
             MIPS-Assembly-Projects/GuessingGame.asm
             MIPS-Assembly-Projects/RoboQueSegueLinha.asm
             mips-asm-examples/macros.asm
+            riscv/x86_64/*
