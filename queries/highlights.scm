@@ -1,4 +1,4 @@
-;; Mnemonics for directives
+;; Directives
 [
   (macro_mnemonic)
   (integer_mnemonic)
@@ -21,18 +21,17 @@
   (symbol)
 ] @label
 
+;; Instructions
+(opcode) @function
+(register) @parameter
+(relocation_type) @type
+
 ;; Macros
 (macro_name) @label
 [
   (macro_variable)
   (macro_parameter)
 ] @parameter
-
-;; Instructions
-(opcode) @function
-
-(register) @parameter
-(relocation_type) @type
 
 ;; Primitives
 [
@@ -55,7 +54,6 @@
   (preprocessor)
 ] @comment
 
-;; Punctuation
 [
   ","
   ";"
@@ -66,7 +64,6 @@
   ")"
 ] @punctuation.bracket
 
-;; Operators
 [
   "|"
   "||"
