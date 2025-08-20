@@ -275,64 +275,6 @@
       "type": "PATTERN",
       "value": "[ \\t]+"
     },
-    "_directive_operand_separator": {
-      "type": "CHOICE",
-      "members": [
-        {
-          "type": "REPEAT1",
-          "content": {
-            "type": "CHOICE",
-            "members": [
-              {
-                "type": "STRING",
-                "value": " "
-              },
-              {
-                "type": "STRING",
-                "value": "\t"
-              }
-            ]
-          }
-        },
-        {
-          "type": "SEQ",
-          "members": [
-            {
-              "type": "CHOICE",
-              "members": [
-                {
-                  "type": "REPEAT",
-                  "content": {
-                    "type": "CHOICE",
-                    "members": [
-                      {
-                        "type": "STRING",
-                        "value": " "
-                      },
-                      {
-                        "type": "STRING",
-                        "value": "\t"
-                      }
-                    ]
-                  }
-                },
-                {
-                  "type": "BLANK"
-                }
-              ]
-            },
-            {
-              "type": "STRING",
-              "value": ","
-            }
-          ]
-        },
-        {
-          "type": "SYMBOL",
-          "name": "block_comment"
-        }
-      ]
-    },
     "directive": {
       "type": "SEQ",
       "members": [
@@ -1199,7 +1141,7 @@
                       "members": [
                         {
                           "type": "SYMBOL",
-                          "name": "_directive_operand_separator"
+                          "name": "_operand_separator"
                         },
                         {
                           "type": "BLANK"
@@ -1243,7 +1185,7 @@
             "members": [
               {
                 "type": "SYMBOL",
-                "name": "_directive_operand_separator"
+                "name": "_operand_separator"
               },
               {
                 "type": "SYMBOL",

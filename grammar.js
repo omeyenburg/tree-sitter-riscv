@@ -81,13 +81,6 @@ module.exports = grammar({
     ),
     _whitespace: $ => /[ \t]+/,
 
-    // TODO: Why is this not just _operand_separator?
-    _directive_operand_separator: $ => choice(
-      repeat1(choice(' ', '\t')),
-      seq(optional(repeat(choice(' ', '\t'))), ','),
-      $.block_comment,
-    ),
-
     directive: $ => seq(choice(
       $._macro_directive,
       $._integer_directive,
@@ -197,14 +190,14 @@ module.exports = grammar({
         optional($._whitespace),
         choice($.block_comment, $._whitespace),
         field('operands', $.control_operands),
-        optional($._directive_operand_separator),
+        optional($._operand_separator),
       ), /[ \t]+/)),
     ),
     control_mnemonic: $ => prec(-1, /\.[a-z0-9_]+/),
     control_operands: $ => seq(
       $._control_operand,
       repeat(seq(
-        $._directive_operand_separator,
+        $._operand_separator,
         $._control_operand,
       )),
     ),

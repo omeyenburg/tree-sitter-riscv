@@ -278,10 +278,6 @@
           "named": true
         },
         {
-          "type": "block_comment",
-          "named": true
-        },
-        {
           "type": "char",
           "named": true
         },
