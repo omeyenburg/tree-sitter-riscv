@@ -1,13 +1,13 @@
 # tree-sitter-mips
 
-A [tree-sitter](https://github.com/tree-sitter/tree-sitter) parser for the MIPS assembly language.
+A [tree-sitter](https://github.com/tree-sitter/tree-sitter) parser for the MIPS and RISC-V assembly languages.
 
 [![CI](https://img.shields.io/github/actions/workflow/status/omeyenburg/tree-sitter-mips/ci.yml?logo=github&label=CI)](https://github.com/omeyenburg/tree-sitter-mips/actions/workflows/ci.yml)
 [![crates](https://img.shields.io/crates/v/tree-sitter-mips?logo=rust)](https://crates.io/crates/tree-sitter-mips)
 [![npm](https://img.shields.io/npm/v/tree-sitter-mips?logo=npm)](https://www.npmjs.com/package/tree-sitter-mips)
 [![pypi](https://img.shields.io/pypi/v/tree-sitter-mips?logo=pypi&logoColor=ffd242)](https://pypi.org/project/tree-sitter-mips)
 
-![Syntax highlighting in NeoVim](assets/preview.png)
+![Preview: syntax highlighting in NeoVim](assets/preview.png)
 
 ## Integration in NeoVim
 
@@ -30,7 +30,7 @@ To use `tree-sitter-mips` in NeoVim, the plugin [nvim-treesitter](https://github
         filetype = { 'asm', 'vmasm' },
     }
   ```
-2. Run `:TSInstall mips` to install the parser.
+2. Run `:TSInstall mips` to install or update the parser.
 3. Copy the queries to enable highlighting. See [Adding queries](https://github.com/nvim-treesitter/nvim-treesitter?tab=readme-ov-file#adding-queries) for more information.
     <details>
     <summary>Unix</summary>
@@ -62,10 +62,11 @@ Install `tree-sitter` and `tree-sitter-mips`:
 ```sh
 npm install tree-sitter@^0.25.0 tree-sitter-mips
 ```
-Or using `bun` (or `yarn` or `pnpm`):
+Or using `yarn` or `pnpm`:
 ```sh
-bun add tree-sitter@^0.25.0 tree-sitter-mips
+yarn add tree-sitter@^0.25.0 tree-sitter-mips
 ```
+`bun` can also be used to install `tree-sitter-mips` but cannot install `tree-sitter`.
 
 <details>
 <summary>Example code</summary>
@@ -96,7 +97,7 @@ pip install tree-sitter tree-sitter-mips
 <details>
 <summary>Example code</summary>
 
-```python
+```py
 import tree_sitter
 from tree_sitter_mips import language
 
@@ -216,6 +217,7 @@ npx tree-sitter parse file.asm
 
 ## Further reading
 
-- https://www.cs.cornell.edu/courses/cs3410/2008fa/MIPS_Vol2.pdf
-- http://www.cs.unibo.it/~solmi/teaching/arch_2002-2003/AssemblyLanguageProgDoc.pdf
-- https://en.wikibooks.org/wiki/MIPS_Assembly/Instruction_Formats
+- [MIPS Assembly Programmming](https://www.robertwinkler.com/projects/mips_book/mips_book.html)
+- [The MIPS32 Instruction Set](https://www.cs.cornell.edu/courses/cs3410/2008fa/MIPS_Vol2.pdf)
+- [MIPS Assembly Language Programmer's Guide](http://www.cs.unibo.it/~solmi/teaching/arch_2002-2003/AssemblyLanguageProgDoc.pdf)
+- [MIPS Assembly/Instruction Formats](https://en.wikibooks.org/wiki/MIPS_Assembly/Instruction_Formats)
