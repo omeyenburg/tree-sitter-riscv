@@ -139,3 +139,15 @@
 (program
   (directive
     (control_mnemonic)))
+
+==========
+[directives/whitespace] comma separated arguments
+==========
+.foo bar, baz
+---
+(program
+  (directive
+    (control_mnemonic)
+    (control_operands
+      (symbol)
+      (symbol))))

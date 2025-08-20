@@ -190,14 +190,14 @@ module.exports = grammar({
         optional($._whitespace),
         choice($.block_comment, $._whitespace),
         field('operands', $.control_operands),
-        optional($._operand_separator),
+        optional($._control_operand_separator),
       ), /[ \t]+/)),
     ),
     control_mnemonic: $ => prec(-1, /\.[a-z0-9_]+/),
     control_operands: $ => seq(
       $._control_operand,
       repeat(seq(
-        $._operand_separator,
+        $._control_operand_separator,
         $._control_operand,
       )),
     ),
@@ -206,6 +206,11 @@ module.exports = grammar({
       $.string,
       $.section_type,
       $.option_flag,
+    ),
+    _control_operand_separator: $ => choice(
+      repeat1(choice(' ', '\t')),
+      seq(optional(repeat(choice(' ', '\t'))), ','),
+      $.block_comment,
     ),
 
     // Specific symbol for .section directive
