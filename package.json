@@ -59,7 +59,8 @@
     "g": "tree-sitter generate",
     "t": "tree-sitter test",
     "p": "parse() { tree-sitter parse <(printf \"$1\"); }; parse",
-    "gp": "parse() { tree-sitter parse <(printf \"$1\"); }; tree-sitter generate; parse"
+    "gp": "parse() { tree-sitter parse <(printf \"$1\"); }; tree-sitter generate && parse",
+    "gt": "tree-sitter generate && tree-sitter test"
   },
   "tree-sitter": [
     {
