@@ -29,15 +29,23 @@ void* tree_sitter_mips_external_scanner_create() {
     return NULL;
 }
 
-void tree_sitter_mips_external_scanner_destroy(void* _payload) {}
+void tree_sitter_mips_external_scanner_destroy(void* payload) {
+    (void) payload;
+}
 
-unsigned tree_sitter_mips_external_scanner_serialize(void* _payload, char* _buffer) {
+unsigned tree_sitter_mips_external_scanner_serialize(void* payload, char* buffer) {
+    (void) payload;
+    (void) buffer;
     return 0;
 }
 
-void tree_sitter_mips_external_scanner_deserialize(void* _payload,
-                                                   const char* _buffer,
-                                                   unsigned _length) {}
+void tree_sitter_mips_external_scanner_deserialize(void* payload,
+                                                   const char* buffer,
+                                                   unsigned length) {
+    (void) payload;
+    (void) buffer;
+    (void) length;
+}
 
 static bool is_operator_start(int32_t c) {
     return c == '+' || c == '-' || c == '*' || c == '&' || c == '|' || // removed /
@@ -49,9 +57,11 @@ static bool is_operand_start(int32_t c) {
            c == '\'' || c == '"' || c == '(' || c == ')' || c == '-';
 }
 
-bool tree_sitter_mips_external_scanner_scan(void* _payload,
+bool tree_sitter_mips_external_scanner_scan(void* payload,
                                             TSLexer* lexer,
                                             const bool* valid_symbols) {
+    (void) payload;
+
     if (lexer->eof(lexer))
         return false;
 
@@ -175,7 +185,7 @@ bool tree_sitter_mips_external_scanner_scan(void* _payload,
                     last = lexer->lookahead;
                     lexer->advance(lexer, false);
                 } while (
-                    !(lexer->eof(lexer) || last == '*' && lexer->lookahead == '/'));
+                    !(lexer->eof(lexer) || (last == '*' && lexer->lookahead == '/')));
 
                 if (lexer->lookahead == '/') {
                     lexer->advance(lexer, false);
@@ -219,7 +229,7 @@ bool tree_sitter_mips_external_scanner_scan(void* _payload,
                               lexer->lookahead == '\t' || lexer->lookahead == '\r' ||
                               lexer->lookahead == '\n');
                      i++) {
-                    for (int j = 0; j < sizeof(tokens) / sizeof(TokenChecker); j++) {
+                    for (unsigned int j = 0; j < sizeof(tokens) / sizeof(TokenChecker); j++) {
                         TokenChecker* token = tokens + j;
                         if (token->valid) {
                             if (i < token->len && lexer->lookahead != token->str[i]) {
@@ -233,7 +243,7 @@ bool tree_sitter_mips_external_scanner_scan(void* _payload,
                     lexer->advance(lexer, false);
                 }
 
-                for (int j = 0; j < sizeof(tokens) / sizeof(TokenChecker); j++) {
+                for (unsigned int j = 0; j < sizeof(tokens) / sizeof(TokenChecker); j++) {
                     TokenChecker token = tokens[j];
                     if (token.valid && i == token.len) {
                         bool backslash = false;
