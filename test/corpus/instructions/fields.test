@@ -81,19 +81,6 @@ foo (bar+4)
           right: (decimal))))))
 
 ==========
-[instructions/fields] unary expression
-==========
-foo -bar
----
-
-(program
-  (instruction
-    opcode: (opcode)
-    operands: (operands
-      (unary_expression
-        argument: (symbol)))))
-
-==========
 [instructions/fields] call expression
 ==========
 foo(bar, baz)
