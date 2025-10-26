@@ -5,8 +5,8 @@ foo
 ---
 
 (program
-    (instruction
-        (opcode)))
+  (instruction
+    opcode: (opcode)))
 
 ==========
 [instructions/opcode] uppercase opcode
@@ -15,8 +15,8 @@ FOO
 ---
 
 (program
-    (instruction
-        (opcode)))
+  (instruction
+    opcode: (opcode)))
 
 ==========
 [instructions/opcode] opcode starting with underscore
@@ -25,8 +25,8 @@ _foo
 ---
 
 (program
-    (instruction
-        (opcode)))
+  (instruction
+    opcode: (opcode)))
 
 ==========
 [instructions/opcode] opcode containing underscore
@@ -35,8 +35,8 @@ foo_bar
 ---
 
 (program
-    (instruction
-        (opcode)))
+  (instruction
+    opcode: (opcode)))
 
 ==========
 [instructions/opcode] opcode containing dot
@@ -45,5 +45,5 @@ foo.bar
 ---
 
 (program
-    (instruction
-        (opcode)))
+  (instruction
+    opcode: (opcode)))

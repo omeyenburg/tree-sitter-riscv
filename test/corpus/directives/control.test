@@ -6,4 +6,4 @@
 
 (program
   (directive
-    (control_mnemonic)))
+    mnemonic: (control_mnemonic)))

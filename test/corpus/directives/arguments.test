@@ -6,8 +6,8 @@
 
 (program
   (directive
-    (control_mnemonic)
-    (control_operands
+    mnemonic: (control_mnemonic)
+    operands: (control_operands
       (symbol)
       (symbol))))
 
@@ -19,7 +19,7 @@
 
 (program
   (directive
-    (control_mnemonic)
-    (control_operands
+    mnemonic: (control_mnemonic)
+    operands: (control_operands
       (symbol)
       (symbol))))

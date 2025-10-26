@@ -6,8 +6,8 @@
 
 (program
   (directive
-    (string_mnemonic)
-    (string)))
+    mnemonic: (string_mnemonic)
+    string: (string)))
 
 ==========
 [directives/string] string directive using asciiz mnemonic
@@ -17,8 +17,8 @@
 
 (program
   (directive
-    (string_mnemonic)
-    (string)))
+    mnemonic: (string_mnemonic)
+    string: (string)))
 
 ==========
 [directives/string] string directive using string mnemonic
@@ -28,8 +28,8 @@
 
 (program
   (directive
-    (string_mnemonic)
-    (string)))
+    mnemonic: (string_mnemonic)
+    string: (string)))
 
 ==========
 [directives/string] string containing escaped character
@@ -39,8 +39,8 @@
 
 (program
   (directive
-    (string_mnemonic)
-    (string)))
+    mnemonic: (string_mnemonic)
+    string: (string)))
 
 ==========
 [directives/string] string containing escaped quote
@@ -50,5 +50,5 @@
 
 (program
   (directive
-    (string_mnemonic)
-    (string)))
+    mnemonic: (string_mnemonic)
+    string: (string)))

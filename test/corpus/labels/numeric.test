@@ -24,8 +24,8 @@ foo 1f
 
 (program
   (instruction
-    (opcode)
-    (operands
+    opcode: (opcode)
+    operands: (operands
       (local_numeric_label_reference))))
 
 ==========
@@ -36,6 +36,6 @@ foo 1b
 
 (program
   (instruction
-    (opcode)
-    (operands
+    opcode: (opcode)
+    operands: (operands
       (local_numeric_label_reference))))

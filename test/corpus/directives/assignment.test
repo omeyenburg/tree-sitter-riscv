@@ -6,11 +6,11 @@
 
 (program
   (directive
-    (control_mnemonic)
-    (control_operands
+    mnemonic: (control_mnemonic)
+    operands: (control_operands
       (binary_expression
-        (symbol)
-        (decimal)))))
+        left: (symbol)
+        right: (decimal)))))
 
 ==========
 [directives/assignment] assignment with char
@@ -20,11 +20,11 @@
 
 (program
   (directive
-    (control_mnemonic)
-    (control_operands
+    mnemonic: (control_mnemonic)
+    operands: (control_operands
       (binary_expression
-        (symbol)
-        (char)))))
+        left: (symbol)
+        right: (char)))))
 
 ==========
 [directives/assignment] multiple assignments
@@ -34,14 +34,14 @@
 
 (program
   (directive
-    (control_mnemonic)
-    (control_operands
+    mnemonic: (control_mnemonic)
+    operands: (control_operands
       (binary_expression
-        (symbol)
-        (decimal))
+        left: (symbol)
+        right: (decimal))
       (binary_expression
-        (symbol)
-        (decimal)))))
+        left: (symbol)
+        right: (decimal)))))
 
 ==========
 [directives/assignment] assignment with spaces around equals
@@ -51,11 +51,11 @@
 
 (program
   (directive
-    (control_mnemonic)
-    (control_operands
+    mnemonic: (control_mnemonic)
+    operands: (control_operands
       (binary_expression
-        (symbol)
-        (decimal)))))
+        left: (symbol)
+        right: (decimal)))))
 
 ==========
 [directives/assignment] assignment with tabs around equals
@@ -65,8 +65,8 @@
 
 (program
   (directive
-    (control_mnemonic)
-    (control_operands
+    mnemonic: (control_mnemonic)
+    operands: (control_operands
       (binary_expression
-        (symbol)
-        (decimal)))))
+        left: (symbol)
+        right: (decimal)))))

@@ -6,8 +6,8 @@
 
 (program
   (directive
-    (float_mnemonic)
-    (float_operands
+    mnemonic: (float_mnemonic)
+    operands: (float_operands
       (float))))
 
 ==========
@@ -18,8 +18,8 @@
 
 (program
   (directive
-    (float_mnemonic)
-    (float_operands
+    mnemonic: (float_mnemonic)
+    operands: (float_operands
       (float)
       (float))))
 
@@ -32,8 +32,8 @@
 
 (program
   (directive
-    (float_mnemonic)
-    (float_operands
+    mnemonic: (float_mnemonic)
+    operands: (float_operands
       (float)
       (float))))
 
@@ -46,8 +46,8 @@
 
 (program
   (directive
-    (float_mnemonic)
-    (float_operands
+    mnemonic: (float_mnemonic)
+    operands: (float_operands
       (float)
       (float))))
 
@@ -60,7 +60,7 @@
 
 (program
   (directive
-    (float_mnemonic)
-    (float_operands
+    mnemonic: (float_mnemonic)
+    operands: (float_operands
       (float)
       (float))))

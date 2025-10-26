@@ -6,10 +6,10 @@ foo ($s0)
 
 (program
   (instruction
-    (opcode)
-    (operands
+    opcode: (opcode)
+    operands: (operands
       (address
-        (register)))))
+        base: (register)))))
 
 ==========
 [instructions/address] address with decimal offset
@@ -19,11 +19,11 @@ foo -100($s0)
 
 (program
   (instruction
-    (opcode)
-    (operands
+    opcode: (opcode)
+    operands: (operands
       (address
-        (decimal)
-        (register)))))
+        offset: (decimal)
+        base: (register)))))
 
 ==========
 [instructions/address] address with label
@@ -33,11 +33,11 @@ foo bar($s0)
 
 (program
   (instruction
-    (opcode)
-    (operands
+    opcode: (opcode)
+    operands: (operands
       (address
-        (symbol)
-        (register)))))
+        offset: (symbol)
+        base: (register)))))
 
 ==========
 [instructions/address] address with simple expression offset
@@ -47,13 +47,13 @@ foo bar+100($s0)
 
 (program
   (instruction
-    (opcode)
-    (operands
+    opcode: (opcode)
+    operands: (operands
       (binary_expression
-        (symbol)
-        (address
-          (decimal)
-          (register))))))
+        left: (symbol)
+        right: (address
+          offset: (decimal)
+          base: (register))))))
 
 ==========
 [instructions/address] address with parenthesized expression offset
@@ -63,11 +63,11 @@ foo (bar+0x123)($s0)
 
 (program
   (instruction
-    (opcode)
-    (operands
+    opcode: (opcode)
+    operands: (operands
       (address
-        (parenthesized_expression
-          (binary_expression
-            (symbol)
-            (hexadecimal)))
-        (register)))))
+        offset: (parenthesized_expression
+          argument: (binary_expression
+            left: (symbol)
+            right: (hexadecimal)))
+        base: (register)))))

@@ -6,8 +6,8 @@ foo -10
 
 (program
   (instruction
-    (opcode)
-    (operands
+    opcode: (opcode)
+    operands: (operands
       (decimal))))
 
 ==========
@@ -31,8 +31,8 @@ foo 1 -1
 
 (program
   (instruction
-    (opcode)
-    (operands
+    opcode: (opcode)
+    operands: (operands
       (decimal)
       (decimal))))
 

@@ -6,8 +6,8 @@ foo $t0 $t1 $t2
 
 (program
   (instruction
-    (opcode)
-    (operands
+    opcode: (opcode)
+    operands: (operands
       (register)
       (register)
       (register))))
@@ -20,8 +20,8 @@ foo $t0,$t1,$t2
 
 (program
   (instruction
-    (opcode)
-    (operands
+    opcode: (opcode)
+    operands: (operands
       (register)
       (register)
       (register))))
@@ -34,6 +34,48 @@ foo bar
 
 (program
   (instruction
-    (opcode)
-    (operands
+    opcode: (opcode)
+    operands: (operands
+      (symbol))))
+
+==========
+[instructions/operands] simple binary expression
+==========
+foo bar+4
+---
+
+(program
+  (instruction
+    opcode: (opcode)
+    operands: (operands
+      (binary_expression
+        left: (symbol)
+        right: (decimal)))))
+
+==========
+[instructions/operands] parenthesized expression
+==========
+foo (bar+4)
+---
+
+(program
+  (instruction
+    opcode: (opcode)
+    operands: (operands
+      (parenthesized_expression
+        argument: (binary_expression
+          left: (symbol)
+          right: (decimal))))))
+
+==========
+[instructions/operands] call expression
+==========
+foo(bar, baz)
+---
+
+(program
+  (instruction
+    opcode: (opcode)
+    operands: (operands
+      (symbol)
       (symbol))))

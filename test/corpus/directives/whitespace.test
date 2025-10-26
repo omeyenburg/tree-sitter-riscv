@@ -7,11 +7,11 @@
 
 (program
   (directive
-    (integer_mnemonic)
-    (integer_operands
+    mnemonic: (integer_mnemonic)
+    operands: (integer_operands
       (decimal)))
   (directive
-    (control_mnemonic)))
+    mnemonic: (control_mnemonic)))
 
 ==========
 [directives/whitespace] CRLF after directive with indented directive in next line
@@ -22,11 +22,11 @@
 
 (program
   (directive
-    (integer_mnemonic)
-    (integer_operands
+    mnemonic: (integer_mnemonic)
+    operands: (integer_operands
       (decimal)))
   (directive
-    (control_mnemonic)))
+    mnemonic: (control_mnemonic)))
 
 ==========
 [directives/whitespace] CRLF after multiline directive
@@ -37,8 +37,8 @@
 
 (program
   (directive
-    (integer_mnemonic)
-    (integer_operands
+    mnemonic: (integer_mnemonic)
+    operands: (integer_operands
       (decimal)
       (decimal)
       (decimal)
@@ -76,7 +76,7 @@
 
 (program
   (directive
-    (control_mnemonic)))
+    mnemonic: (control_mnemonic)))
 
 ==========
 [directives/whitespace] space after mnemonic before semicolon
@@ -86,7 +86,7 @@
 
 (program
   (directive
-    (control_mnemonic)))
+    mnemonic: (control_mnemonic)))
 
 ==========
 [directives/whitespace] semicolon after operands
@@ -96,8 +96,8 @@
 
 (program
   (directive
-    (integer_mnemonic)
-    (integer_operands
+    mnemonic: (integer_mnemonic)
+    operands: (integer_operands
       (decimal))))
 
 ==========
@@ -108,10 +108,9 @@
 
 (program
   (directive
-    (integer_mnemonic)
-    (integer_operands
+    mnemonic: (integer_mnemonic)
+    operands: (integer_operands
       (decimal))))
-
 
 ==========
 [directives/whitespace] space before mnemonic
@@ -121,7 +120,7 @@
 
 (program
   (directive
-    (control_mnemonic)))
+    mnemonic: (control_mnemonic)))
 
 ==========
 [directives/whitespace] tab before mnemonic
@@ -131,7 +130,7 @@
 
 (program
   (directive
-    (control_mnemonic)))
+    mnemonic: (control_mnemonic)))
 
 ==========
 [directives/whitespace] trailing spaces after mnemonic
@@ -141,7 +140,7 @@
 
 (program
   (directive
-    (control_mnemonic)))
+    mnemonic: (control_mnemonic)))
 
 ==========
 [directives/whitespace] trailing tab after mnemonic
@@ -151,7 +150,7 @@
 
 (program
   (directive
-    (control_mnemonic)))
+    mnemonic: (control_mnemonic)))
 
 ==========
 [directives/whitespace] comma separated arguments
@@ -161,7 +160,7 @@
 
 (program
   (directive
-    (control_mnemonic)
-    (control_operands
+    mnemonic: (control_mnemonic)
+    operands: (control_operands
       (symbol)
       (symbol))))

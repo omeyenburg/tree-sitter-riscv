@@ -6,8 +6,8 @@
 
 (program
   (directive
-    (integer_mnemonic)
-    (integer_operands
+    mnemonic: (integer_mnemonic)
+    operands: (integer_operands
       (decimal))))
 
 ==========
@@ -18,8 +18,8 @@
 
 (program
   (directive
-    (integer_mnemonic)
-    (integer_operands
+    mnemonic: (integer_mnemonic)
+    operands: (integer_operands
       (octal))))
 
 ==========
@@ -30,8 +30,8 @@
 
 (program
   (directive
-    (integer_mnemonic)
-    (integer_operands
+    mnemonic: (integer_mnemonic)
+    operands: (integer_operands
       (hexadecimal))))
 
 ==========
@@ -42,8 +42,8 @@
 
 (program
   (directive
-    (integer_mnemonic)
-    (integer_operands
+    mnemonic: (integer_mnemonic)
+    operands: (integer_operands
       (char))))
 
 ==========
@@ -54,8 +54,8 @@
 
 (program
   (directive
-    (integer_mnemonic)
-    (integer_operands
+    mnemonic: (integer_mnemonic)
+    operands: (integer_operands
       (decimal)
       (decimal)
       (decimal))))
@@ -68,8 +68,8 @@
 
 (program
   (directive
-    (integer_mnemonic)
-    (integer_operands
+    mnemonic: (integer_mnemonic)
+    operands: (integer_operands
       (decimal)
       (decimal)
       (decimal))))
@@ -82,8 +82,8 @@
 
 (program
   (directive
-    (integer_mnemonic)
-    (integer_operands
+    mnemonic: (integer_mnemonic)
+    operands: (integer_operands
       (decimal)
       (decimal)
       (decimal))))
@@ -96,8 +96,8 @@
 
 (program
   (directive
-    (integer_mnemonic)
-    (integer_operands
+    mnemonic: (integer_mnemonic)
+    operands: (integer_operands
       (decimal)
       (decimal)
       (decimal))))
@@ -111,8 +111,8 @@
 
 (program
   (directive
-    (integer_mnemonic)
-    (integer_operands
+    mnemonic: (integer_mnemonic)
+    operands: (integer_operands
       (decimal)
       (decimal)
       (decimal)
@@ -127,8 +127,8 @@
 
 (program
   (directive
-    (integer_mnemonic)
-    (integer_operands
+    mnemonic: (integer_mnemonic)
+    operands: (integer_operands
       (decimal)
       (decimal)
       (decimal)
@@ -143,8 +143,8 @@
 
 (program
   (directive
-    (integer_mnemonic)
-    (integer_operands
+    mnemonic: (integer_mnemonic)
+    operands: (integer_operands
       (decimal)
       (decimal)
       (decimal)

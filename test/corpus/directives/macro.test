@@ -6,9 +6,9 @@
 
 (program
   (directive
-    (macro_mnemonic)
-    (macro_name)
-    (macro_parameters
+    mnemonic: (macro_mnemonic)
+    name: (macro_name)
+    parameters: (macro_parameters
       (macro_parameter)
       (macro_parameter))))
 
@@ -20,9 +20,9 @@
 
 (program
   (directive
-    (macro_mnemonic)
-    (macro_name)
-    (macro_parameters
+    mnemonic: (macro_mnemonic)
+    name: (macro_name)
+    parameters: (macro_parameters
       (macro_parameter)
       (macro_parameter))))
 
@@ -34,9 +34,9 @@
 
 (program
   (directive
-    (macro_mnemonic)
-    (macro_name)
-    (macro_parameters
+    mnemonic: (macro_mnemonic)
+    name: (macro_name)
+    parameters: (macro_parameters
       (macro_parameter)
       (macro_parameter))))
 
@@ -66,9 +66,9 @@
 
 (program
   (directive
-    (macro_mnemonic)
-    (macro_name)
-    (macro_parameters
+    mnemonic: (macro_mnemonic)
+    name: (macro_name)
+    parameters: (macro_parameters
       (macro_parameter)
       (macro_parameter))))
 
@@ -80,9 +80,9 @@
 
 (program
   (directive
-    (macro_mnemonic)
-    (macro_name)
-    (macro_parameters
+    mnemonic: (macro_mnemonic)
+    name: (macro_name)
+    parameters: (macro_parameters
       (macro_parameter)
       (macro_parameter))))
 
@@ -94,9 +94,9 @@
 
 (program
   (directive
-    (macro_mnemonic)
-    (macro_name)
-    (macro_parameters
+    mnemonic: (macro_mnemonic)
+    name: (macro_name)
+    parameters: (macro_parameters
       (macro_parameter)
       (macro_parameter))))
 
@@ -108,8 +108,8 @@
 
 (program
   (directive
-    (integer_mnemonic)
-    (integer_operands
+    mnemonic: (integer_mnemonic)
+    operands: (integer_operands
       (macro_variable))))
 
 ==========
@@ -120,8 +120,8 @@
 
 (program
   (directive
-    (float_mnemonic)
-    (float_operands
+    mnemonic: (float_mnemonic)
+    operands: (float_operands
       (macro_variable))))
 
 ==========
@@ -132,5 +132,5 @@
 
 (program
   (directive
-    (string_mnemonic)
-    (macro_variable)))
+    mnemonic: (string_mnemonic)
+    string: (macro_variable)))

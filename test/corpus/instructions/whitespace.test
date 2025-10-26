@@ -6,8 +6,8 @@ foo 1,2
 
 (program
   (instruction
-    (opcode)
-    (operands
+    opcode: (opcode)
+    operands: (operands
       (decimal)
       (decimal))))
 
@@ -19,8 +19,8 @@ foo 1 2
 
 (program
   (instruction
-    (opcode)
-    (operands
+    opcode: (opcode)
+    operands: (operands
       (decimal)
       (decimal))))
 
@@ -32,8 +32,8 @@ foo	1	2
 
 (program
   (instruction
-    (opcode)
-    (operands
+    opcode: (opcode)
+    operands: (operands
       (decimal)
       (decimal))))
 
@@ -45,8 +45,8 @@ foo 1 , 2
 
 (program
   (instruction
-    (opcode)
-    (operands
+    opcode: (opcode)
+    operands: (operands
       (decimal)
       (decimal))))
 
@@ -58,8 +58,8 @@ foo	1	,	2
 
 (program
   (instruction
-    (opcode)
-    (operands
+    opcode: (opcode)
+    operands: (operands
       (decimal)
       (decimal))))
 
@@ -71,7 +71,7 @@ foo	1	,	2
 
 (program
   (instruction
-    (opcode)))
+    opcode: (opcode)))
 
 ==========
 [instructions/whitespace] tab before opcode
@@ -81,17 +81,17 @@ foo	1	,	2
 
 (program
   (instruction
-    (opcode)))
+    opcode: (opcode)))
 
 =========
 [instructions/whitespace] trailing spaces after opcode
-==========
+=========
 foo  
 ---
 
 (program
   (instruction
-    (opcode)))
+    opcode: (opcode)))
 
 ==========
 [instructions/whitespace] trailing tab after opcode
@@ -101,7 +101,7 @@ foo
 
 (program
   (instruction
-    (opcode)))
+    opcode: (opcode)))
 
 ==========
 [instructions/whitespace] trailing spaces after operands
@@ -111,8 +111,8 @@ foo $t0
 
 (program
   (instruction
-    (opcode)
-    (operands
+    opcode: (opcode)
+    operands: (operands
       (register))))
 
 ==========
@@ -123,8 +123,8 @@ foo $t0
 
 (program
   (instruction
-    (opcode)
-    (operands
+    opcode: (opcode)
+    operands: (operands
       (register))))
 
 ==========
@@ -135,7 +135,7 @@ foo;
 
 (program
   (instruction
-    (opcode)))
+    opcode: (opcode)))
 
 ==========
 [instructions/whitespace] instruction without operands with space before semicolon
@@ -145,7 +145,7 @@ foo ;
 
 (program
   (instruction
-    (opcode)))
+    opcode: (opcode)))
 
 ==========
 [instructions/whitespace] instruction with operands with semicolon
@@ -155,8 +155,8 @@ foo $t0;
 
 (program
   (instruction
-    (opcode)
-    (operands
+    opcode: (opcode)
+    operands: (operands
       (register))))
 
 ==========
@@ -167,8 +167,8 @@ foo $t0 ;
 
 (program
   (instruction
-    (opcode)
-    (operands
+    opcode: (opcode)
+    operands: (operands
       (register))))
 
 ==========

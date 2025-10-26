@@ -6,8 +6,8 @@ foo %bar %baz
 
 (program
   (instruction
-    (opcode)
-    (operands
+    opcode: (opcode)
+    operands: (operands
       (macro_variable)
       (macro_variable))))
 
@@ -19,8 +19,8 @@ foo %bar	%baz
 
 (program
   (instruction
-    (opcode)
-    (operands
+    opcode: (opcode)
+    operands: (operands
       (macro_variable)
       (macro_variable))))
 
@@ -32,8 +32,8 @@ foo %bar,%baz
 
 (program
   (instruction
-    (opcode)
-    (operands
+    opcode: (opcode)
+    operands: (operands
       (macro_variable)
       (macro_variable))))
 
@@ -45,8 +45,8 @@ foo \bar \baz
 
 (program
   (instruction
-    (opcode)
-    (operands
+    opcode: (opcode)
+    operands: (operands
       (macro_variable)
       (macro_variable))))
 
@@ -58,8 +58,8 @@ foo \bar	\baz
 
 (program
   (instruction
-    (opcode)
-    (operands
+    opcode: (opcode)
+    operands: (operands
       (macro_variable)
       (macro_variable))))
 
@@ -71,8 +71,8 @@ foo \bar,\baz
 
 (program
   (instruction
-    (opcode)
-    (operands
+    opcode: (opcode)
+    operands: (operands
       (macro_variable)
       (macro_variable))))
 
@@ -84,8 +84,8 @@ foo $bar $baz
 
 (program
   (instruction
-    (opcode)
-    (operands
+    opcode: (opcode)
+    operands: (operands
       (macro_variable)
       (macro_variable))))
 
@@ -97,8 +97,8 @@ foo $bar	$baz
 
 (program
   (instruction
-    (opcode)
-    (operands
+    opcode: (opcode)
+    operands: (operands
       (macro_variable)
       (macro_variable))))
 
@@ -110,8 +110,8 @@ foo $bar,$baz
 
 (program
   (instruction
-    (opcode)
-    (operands
+    opcode: (opcode)
+    operands: (operands
       (macro_variable)
       (macro_variable))))
 
@@ -123,8 +123,8 @@ foo $\ $% \$ \% %$ $\
 
 (program
   (instruction
-    (opcode)
-    (operands
+    opcode: (opcode)
+    operands: (operands
       (macro_variable)
       (macro_variable)
       (macro_variable)
@@ -140,11 +140,11 @@ foo 4(%x)
 
 (program
   (instruction
-    (opcode)
-    (operands
+    opcode: (opcode)
+    operands: (operands
       (address
-        (decimal)
-        (macro_variable)))))
+        offset: (decimal)
+        base: (macro_variable)))))
 
 ==========
 [instructions/macro] address with macro_variable as register with backslash (\) prefix
@@ -154,11 +154,11 @@ foo 4(\x)
 
 (program
   (instruction
-    (opcode)
-    (operands
+    opcode: (opcode)
+    operands: (operands
       (address
-        (decimal)
-        (macro_variable)))))
+        offset: (decimal)
+        base: (macro_variable)))))
 
 ==========
 [instructions/macro] address with macro_variable as register with dollar ($) prefix
@@ -168,11 +168,11 @@ foo 4($x)
 
 (program
   (instruction
-    (opcode)
-    (operands
+    opcode: (opcode)
+    operands: (operands
       (address
-        (decimal)
-        (macro_variable)))))
+        offset: (decimal)
+        base: (macro_variable)))))
 
 ==========
 [instructions/macro] macro call with string
@@ -182,6 +182,6 @@ foo("bar")
 
 (program
   (instruction
-    (opcode)
-    (operands
+    opcode: (opcode)
+    operands: (operands
       (string))))

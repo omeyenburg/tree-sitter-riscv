@@ -6,7 +6,7 @@ foo# bar
 
 (program
   (instruction
-    (opcode))
+    opcode: (opcode))
   (line_comment))
 
 ==========
@@ -17,7 +17,7 @@ foo// bar
 
 (program
   (instruction
-    (opcode))
+    opcode: (opcode))
   (line_comment))
 
 ==========
@@ -28,7 +28,7 @@ foo/* bar */
 
 (program
   (instruction
-    (opcode))
+    opcode: (opcode))
   (block_comment))
 
 ==========
@@ -39,7 +39,7 @@ foo # bar
 
 (program
   (instruction
-    (opcode))
+    opcode: (opcode))
   (line_comment))
 
 ==========
@@ -50,7 +50,7 @@ foo // bar
 
 (program
   (instruction
-    (opcode))
+    opcode: (opcode))
   (line_comment))
 
 ==========
@@ -61,7 +61,7 @@ foo /* bar */
 
 (program
   (instruction
-    (opcode))
+    opcode: (opcode))
   (block_comment))
 
 ==========
@@ -72,8 +72,8 @@ foo $t0# bar
 
 (program
   (instruction
-    (opcode)
-    (operands
+    opcode: (opcode)
+    operands: (operands
       (register)))
   (line_comment))
 
@@ -85,8 +85,8 @@ foo $t0// bar
 
 (program
   (instruction
-    (opcode)
-    (operands
+    opcode: (opcode)
+    operands: (operands
       (register)))
   (line_comment))
 
@@ -98,8 +98,8 @@ foo $t0/* bar */
 
 (program
   (instruction
-    (opcode)
-    (operands
+    opcode: (opcode)
+    operands: (operands
       (register)))
   (block_comment))
 
@@ -111,8 +111,8 @@ foo $t0 # bar
 
 (program
   (instruction
-    (opcode)
-    (operands
+    opcode: (opcode)
+    operands: (operands
       (register)))
   (line_comment))
 
@@ -124,8 +124,8 @@ foo $t0 // bar
 
 (program
   (instruction
-    (opcode)
-    (operands
+    opcode: (opcode)
+    operands: (operands
       (register)))
   (line_comment))
 
@@ -137,8 +137,8 @@ foo $t0 /* bar */
 
 (program
   (instruction
-    (opcode)
-    (operands
+    opcode: (opcode)
+    operands: (operands
       (register)))
   (block_comment))
 
@@ -150,9 +150,9 @@ foo/* bar */$t0
 
 (program
   (instruction
-    (opcode)
+    opcode: (opcode)
     (block_comment)
-    (operands
+    operands: (operands
       (register))))
 
 ==========
@@ -163,9 +163,9 @@ foo /* bar */$t0
 
 (program
   (instruction
-    (opcode)
+    opcode: (opcode)
     (block_comment)
-    (operands
+    operands: (operands
       (register))))
 
 ==========
@@ -176,9 +176,9 @@ foo/* bar */ $t0
 
 (program
   (instruction
-    (opcode)
+    opcode: (opcode)
     (block_comment)
-    (operands
+    operands: (operands
       (register))))
 
 ==========
