@@ -680,10 +680,6 @@
           "named": true
         },
         {
-          "type": "modulo_operator",
-          "named": true
-        },
-        {
           "type": "octal",
           "named": true
         },
@@ -1261,7 +1257,8 @@
   },
   {
     "type": "block_comment",
-    "named": true
+    "named": true,
+    "extra": true
   },
   {
     "type": "division_operator",
@@ -1313,10 +1310,6 @@
   },
   {
     "type": "macro_variable",
-    "named": true
-  },
-  {
-    "type": "modulo_operator",
     "named": true
   },
   {

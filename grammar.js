@@ -40,6 +40,7 @@ module.exports = grammar({
     [$.integer_operands],
     [$.macro_parameters],
     [$.operands],
+    [$._left_expression, $._right_expression_no_expand],
   ],
 
   rules: {
@@ -246,7 +247,6 @@ module.exports = grammar({
       $._expression,
       $.float,
       $.string,
-      $.modulo_operator,
     ),
 
     // Support macro-style calling.
@@ -256,6 +256,7 @@ module.exports = grammar({
     // Standalone fallback, because it gets in trouble with macro_variable.
     // Used as operand in instruction.
     // Example: `2 % 5` but not `2%5` or `2% 5`
+    // Note: This is only used internally, not in operand list
     modulo_operator: $ => token(prec(-1, '%')),
 
     // Matches primitives, registers, macro variables and compound expressions.
@@ -298,11 +299,12 @@ module.exports = grammar({
       prec.left(9, seq($._left_expression, '-', $._right_expression)),
       prec.left(10, seq($._left_expression, '*', $._right_expression)),
       prec.left(10, seq($._left_expression, $.division_operator, $._right_expression)),
-      prec.left(10, seq($._left_expression, '%', $._right_expression)),
+      prec.left(10, seq($._left_expression, '%', field('right', choice($.macro_variable, $.register, $.local_label_reference, $.symbol, $.local_numeric_label_reference, $.char, $.octal, $.binary, $.decimal, $.hexadecimal, $.parenthesized_expression)))),
       prec.left(20, seq($._left_expression, '=', $._right_expression)),
     ),
     _left_expression: $ => prec(1, seq(field('left', $._expression), optional($._operator_separator))),
     _right_expression: $ => field('right', $._expression),
+    _right_expression_no_expand: $ => prec.right(0, field('right', $._expression)),
 
     parenthesized_expression: $ => prec(19, seq(
       '(',
@@ -412,7 +414,13 @@ module.exports = grammar({
     )),
 
     // Macro variables can start with percent, dollar and backslash.
-    macro_variable: $ => token(/[%$\\][0-9a-zA-Z_:$%\\]+/),
+    // Macros starting with % cannot contain % inside (breaks on second %)
+    // Macros starting with $ or \ can contain % inside
+    macro_variable: $ => token(choice(
+      seq('%', /[0-9a-zA-Z_:$\\]+/),      // % prefix: no % allowed inside
+      seq('\\', /[0-9a-zA-Z_:%$\\]+/),    // \ prefix: can have % inside
+      seq('$', /[0-9a-zA-Z_:%$\\]+/),     // $ prefix: can have % inside
+    )),
     macro_parameter: $ => token(/[%$\\]?[0-9a-zA-Z_:$%\\]+/),
     macro_name: $ => token(/[a-zA-Z_][a-zA-Z0-9_$]*/),
 
