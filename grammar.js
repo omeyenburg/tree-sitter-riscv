@@ -281,27 +281,58 @@ module.exports = grammar({
       $.hexadecimal,
     ),
 
+    // Binary expression with visible operator nodes, grouped by C precedence
     binary_expression: $ => choice(
-      prec.left(1, seq($._left_expression, '||', $._right_expression)),
-      prec.left(2, seq($._left_expression, '&&', $._right_expression)),
-      prec.left(3, seq($._left_expression, '|', $._right_expression)),
-      prec.left(4, seq($._left_expression, '^', $._right_expression)),
-      prec.left(5, seq($._left_expression, '&', $._right_expression)),
-      prec.left(6, seq($._left_expression, '==', $._right_expression)),
-      prec.left(6, seq($._left_expression, '!=', $._right_expression)),
-      prec.left(7, seq($._left_expression, '<', $._right_expression)),
-      prec.left(7, seq($._left_expression, '>', $._right_expression)),
-      prec.left(7, seq($._left_expression, '<=', $._right_expression)),
-      prec.left(7, seq($._left_expression, '>=', $._right_expression)),
-      prec.left(8, seq($._left_expression, '<<', $._right_expression)),
-      prec.left(8, seq($._left_expression, '>>', $._right_expression)),
-      prec.left(9, seq($._left_expression, '+', $._right_expression)),
-      prec.left(9, seq($._left_expression, '-', $._right_expression)),
-      prec.left(10, seq($._left_expression, '*', $._right_expression)),
-      prec.left(10, seq($._left_expression, $.division_operator, $._right_expression)),
-      prec.left(10, seq($._left_expression, '%', field('right', choice($.macro_variable, $.register, $.local_label_reference, $.symbol, $.local_numeric_label_reference, $.char, $.octal, $.binary, $.decimal, $.hexadecimal, $.parenthesized_expression)))),
-      prec.left(20, seq($._left_expression, '=', $._right_expression)),
+      // Precedence 1: Logical OR
+      prec.left(1, seq($._left_expression, field('operator', $.logical_or_operator), $._right_expression)),
+      
+      // Precedence 2: Logical AND
+      prec.left(2, seq($._left_expression, field('operator', $.logical_and_operator), $._right_expression)),
+      
+      // Precedence 3: Bitwise OR
+      prec.left(3, seq($._left_expression, field('operator', $.bitwise_or_operator), $._right_expression)),
+      
+      // Precedence 4: Bitwise XOR
+      prec.left(4, seq($._left_expression, field('operator', $.bitwise_xor_operator), $._right_expression)),
+      
+      // Precedence 5: Bitwise AND
+      prec.left(5, seq($._left_expression, field('operator', $.bitwise_and_operator), $._right_expression)),
+      
+      // Precedence 6: Equality
+      prec.left(6, seq($._left_expression, field('operator', $.equality_operator), $._right_expression)),
+      
+      // Precedence 7: Relational
+      prec.left(7, seq($._left_expression, field('operator', $.relational_operator), $._right_expression)),
+      
+      // Precedence 8: Shift
+      prec.left(8, seq($._left_expression, field('operator', $.shift_operator), $._right_expression)),
+      
+      // Precedence 9: Additive
+      prec.left(9, seq($._left_expression, field('operator', $.additive_operator), $._right_expression)),
+      
+      // Precedence 10: Multiplicative
+      prec.left(10, seq($._left_expression, field('operator', $.multiplicative_operator), $._right_expression)),
+      // Special case for modulo: right side cannot be another binary expression to enforce left-associativity
+      prec.left(10, seq($._left_expression, field('operator', $.modulo_operator), field('right', choice($.macro_variable, $.register, $.local_label_reference, $.symbol, $.local_numeric_label_reference, $.char, $.octal, $.binary, $.decimal, $.hexadecimal, $.parenthesized_expression)))),
+      
+      // Precedence 20: Assignment
+      prec.left(20, seq($._left_expression, field('operator', $.assignment_operator), $._right_expression)),
     ),
+    
+    // Individual operator nodes
+    logical_or_operator: $ => token('||'),
+    logical_and_operator: $ => token('&&'),
+    bitwise_or_operator: $ => token('|'),
+    bitwise_xor_operator: $ => token('^'),
+    bitwise_and_operator: $ => token('&'),
+    
+    equality_operator: $ => token(choice('==', '!=')),
+    relational_operator: $ => token(choice('<', '>', '<=', '>=')),
+    shift_operator: $ => token(choice('<<', '>>')),
+    additive_operator: $ => token(choice('+', '-')),
+    multiplicative_operator: $ => choice(token('*'), $.division_operator),
+    modulo_operator: $ => token('%'),
+    assignment_operator: $ => token('='),
     _left_expression: $ => prec(1, seq(field('left', $._expression), optional($._operator_separator))),
     _right_expression: $ => field('right', $._expression),
     _right_expression_no_expand: $ => prec.right(0, field('right', $._expression)),

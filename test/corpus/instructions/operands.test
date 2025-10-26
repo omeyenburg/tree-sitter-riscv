@@ -50,6 +50,7 @@ foo bar+4
     operands: (operands
       (binary_expression
         left: (symbol)
+        operator: (additive_operator)
         right: (decimal)))))
 
 ==========
@@ -65,6 +66,7 @@ foo (bar+4)
       (parenthesized_expression
         argument: (binary_expression
           left: (symbol)
+          operator: (additive_operator)
           right: (decimal))))))
 
 ==========

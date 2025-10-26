@@ -10,6 +10,7 @@
     operands: (control_operands
       (binary_expression
         left: (symbol)
+        operator: (assignment_operator)
         right: (decimal)))))
 
 ==========
@@ -24,6 +25,7 @@
     operands: (control_operands
       (binary_expression
         left: (symbol)
+        operator: (assignment_operator)
         right: (char)))))
 
 ==========
@@ -38,9 +40,11 @@
     operands: (control_operands
       (binary_expression
         left: (symbol)
+        operator: (assignment_operator)
         right: (decimal))
       (binary_expression
         left: (symbol)
+        operator: (assignment_operator)
         right: (decimal)))))
 
 ==========
@@ -55,6 +59,7 @@
     operands: (control_operands
       (binary_expression
         left: (symbol)
+        operator: (assignment_operator)
         right: (decimal)))))
 
 ==========
@@ -69,4 +74,5 @@
     operands: (control_operands
       (binary_expression
         left: (symbol)
+        operator: (assignment_operator)
         right: (decimal)))))

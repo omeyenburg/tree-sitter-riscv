@@ -51,6 +51,7 @@ foo bar+100($s0)
     operands: (operands
       (binary_expression
         left: (symbol)
+        operator: (additive_operator)
         right: (address
           offset: (decimal)
           base: (register))))))
@@ -69,5 +70,6 @@ foo (bar+0x123)($s0)
         offset: (parenthesized_expression
           argument: (binary_expression
             left: (symbol)
+            operator: (additive_operator)
             right: (hexadecimal)))
         base: (register)))))

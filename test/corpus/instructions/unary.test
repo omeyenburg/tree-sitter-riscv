@@ -63,6 +63,7 @@ foo 1 -- 1
     operands: (operands
       (binary_expression
         left: (decimal)
+        operator: (additive_operator)
         right: (unary_expression
           argument: (decimal))))))
 
