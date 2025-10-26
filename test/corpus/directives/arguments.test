@@ -3,6 +3,7 @@
 ==========
 .foo bar baz
 ---
+
 (program
   (directive
     (control_mnemonic)
@@ -15,6 +16,7 @@
 ==========
 .foo bar baz
 ---
+
 (program
   (directive
     (control_mnemonic)

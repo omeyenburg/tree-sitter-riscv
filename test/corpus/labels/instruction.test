@@ -3,6 +3,7 @@
 ==========
 foo:bar
 ---
+
 (program
   (global_label)
   (instruction
@@ -13,6 +14,7 @@ foo:bar
 ==========
 foo: bar
 ---
+
 (program
   (global_label)
   (instruction
@@ -23,6 +25,7 @@ foo: bar
 ==========
 foo:	bar
 ---
+
 (program
   (global_label)
   (instruction

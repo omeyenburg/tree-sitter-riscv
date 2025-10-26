@@ -4,6 +4,7 @@
 .word 1
 .foo
 ---
+
 (program
   (directive
     (integer_mnemonic)
@@ -18,6 +19,7 @@
 	.word 1
 	.foo
 ---
+
 (program
   (directive
     (integer_mnemonic)
@@ -32,6 +34,7 @@
 .word 1 2
       3 4
 ---
+
 (program
   (directive
     (integer_mnemonic)
@@ -47,6 +50,7 @@
 .asciiz "foo" 
 
 ---
+
 (program
   (directive
     (string_mnemonic)
@@ -58,6 +62,7 @@
 .asciiz "foo"	
 
 ---
+
 (program
   (directive
     (string_mnemonic)
@@ -68,6 +73,7 @@
 ==========
 .foo;
 ---
+
 (program
   (directive
     (control_mnemonic)))
@@ -77,6 +83,7 @@
 ==========
 .foo ;
 ---
+
 (program
   (directive
     (control_mnemonic)))
@@ -86,6 +93,7 @@
 ==========
 .word 123;
 ---
+
 (program
   (directive
     (integer_mnemonic)
@@ -97,6 +105,7 @@
 ==========
 .word 123 ;
 ---
+
 (program
   (directive
     (integer_mnemonic)
@@ -109,6 +118,7 @@
 ==========
   .foo
 ---
+
 (program
   (directive
     (control_mnemonic)))
@@ -118,6 +128,7 @@
 ==========
 	.foo
 ---
+
 (program
   (directive
     (control_mnemonic)))
@@ -127,6 +138,7 @@
 ==========
 .foo  
 ---
+
 (program
   (directive
     (control_mnemonic)))
@@ -136,6 +148,7 @@
 ==========
 .foo	
 ---
+
 (program
   (directive
     (control_mnemonic)))
@@ -145,6 +158,7 @@
 ==========
 .foo bar, baz
 ---
+
 (program
   (directive
     (control_mnemonic)

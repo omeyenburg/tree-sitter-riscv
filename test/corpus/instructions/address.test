@@ -3,6 +3,7 @@
 ==========
 foo ($s0)
 ---
+
 (program
   (instruction
     (opcode)
@@ -15,6 +16,7 @@ foo ($s0)
 ==========
 foo -100($s0)
 ---
+
 (program
   (instruction
     (opcode)
@@ -28,6 +30,7 @@ foo -100($s0)
 ==========
 foo bar($s0)
 ---
+
 (program
   (instruction
     (opcode)
@@ -41,6 +44,7 @@ foo bar($s0)
 ==========
 foo bar+100($s0)
 ---
+
 (program
   (instruction
     (opcode)
@@ -56,6 +60,7 @@ foo bar+100($s0)
 ==========
 foo (bar+0x123)($s0)
 ---
+
 (program
   (instruction
     (opcode)

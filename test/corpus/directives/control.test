@@ -3,6 +3,7 @@
 ==========
 .text
 ---
+
 (program
   (directive
     (control_mnemonic)))

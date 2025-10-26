@@ -3,6 +3,7 @@
 ==========
 foo 1,2
 ---
+
 (program
   (instruction
     (opcode)
@@ -15,6 +16,7 @@ foo 1,2
 ==========
 foo 1 2
 ---
+
 (program
   (instruction
     (opcode)
@@ -27,6 +29,7 @@ foo 1 2
 ==========
 foo	1	2
 ---
+
 (program
   (instruction
     (opcode)
@@ -39,6 +42,7 @@ foo	1	2
 ==========
 foo 1 , 2
 ---
+
 (program
   (instruction
     (opcode)
@@ -51,6 +55,7 @@ foo 1 , 2
 ==========
 foo	1	,	2
 ---
+
 (program
   (instruction
     (opcode)
@@ -63,6 +68,7 @@ foo	1	,	2
 ==========
   foo
 ---
+
 (program
   (instruction
     (opcode)))
@@ -72,6 +78,7 @@ foo	1	,	2
 ==========
 	foo
 ---
+
 (program
   (instruction
     (opcode)))
@@ -81,6 +88,7 @@ foo	1	,	2
 ==========
 foo  
 ---
+
 (program
   (instruction
     (opcode)))
@@ -90,6 +98,7 @@ foo
 ==========
 foo	
 ---
+
 (program
   (instruction
     (opcode)))
@@ -99,6 +108,7 @@ foo
 ==========
 foo $t0  
 ---
+
 (program
   (instruction
     (opcode)
@@ -110,6 +120,7 @@ foo $t0
 ==========
 foo $t0	
 ---
+
 (program
   (instruction
     (opcode)
@@ -121,6 +132,7 @@ foo $t0
 ==========
 foo;
 ---
+
 (program
   (instruction
     (opcode)))
@@ -130,6 +142,7 @@ foo;
 ==========
 foo ;
 ---
+
 (program
   (instruction
     (opcode)))
@@ -139,6 +152,7 @@ foo ;
 ==========
 foo $t0;
 ---
+
 (program
   (instruction
     (opcode)
@@ -150,6 +164,7 @@ foo $t0;
 ==========
 foo $t0 ;
 ---
+
 (program
   (instruction
     (opcode)
@@ -161,6 +176,7 @@ foo $t0 ;
 ==========
 foo (bar, baz)
 ---
+
 (program
   (instruction
     opcode: (opcode)
@@ -173,6 +189,7 @@ foo (bar, baz)
 ==========
 foo ( bar, baz )
 ---
+
 (program
   (instruction
     opcode: (opcode)

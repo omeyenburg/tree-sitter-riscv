@@ -3,6 +3,7 @@
 ==========
 test:
 ---
+
 (program
   (global_label))
 
@@ -11,6 +12,7 @@ test:
 ==========
 test:test:
 ---
+
 (program
   (global_label)
   (global_label))
@@ -20,6 +22,7 @@ test:test:
 ==========
 test: test:
 ---
+
 (program
   (global_label)
   (global_label))
@@ -29,6 +32,7 @@ test: test:
 ==========
 test:	test:
 ---
+
 (program
   (global_label)
   (global_label))
@@ -38,6 +42,7 @@ test:	test:
 ==========
   test:
 ---
+
 (program
   (global_label))
 
@@ -46,6 +51,7 @@ test:	test:
 ==========
 	test:
 ---
+
 (program
   (global_label))
 
@@ -54,6 +60,7 @@ test:	test:
 ==========
 test:  
 ---
+
 (program
   (global_label))
 
@@ -62,6 +69,7 @@ test:
 ==========
 test:	
 ---
+
 (program
   (global_label))
 
@@ -70,6 +78,7 @@ test:
 ==========
 test:;
 ---
+
 (program
   (global_label))
 
@@ -78,5 +87,6 @@ test:;
 ==========
 test: ;
 ---
+
 (program
   (global_label))

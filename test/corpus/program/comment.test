@@ -3,6 +3,7 @@
 ==========
 # foo
 ---
+
 (program
   (line_comment))
 
@@ -11,6 +12,7 @@
 ==========
 #foo
 ---
+
 (program
   (line_comment))
 
@@ -19,6 +21,7 @@
 ==========
 // foo
 ---
+
 (program
   (line_comment))
 
@@ -27,6 +30,7 @@
 ==========
 /* foo */
 ---
+
 (program
   (block_comment))
 
@@ -35,6 +39,7 @@
 ==========
  # foo
 ---
+
 (program
   (line_comment))
 
@@ -43,6 +48,7 @@
 ==========
 	# foo
 ---
+
 (program
   (line_comment))
 
@@ -52,6 +58,7 @@
 # foo
 
 ---
+
 (program
   (line_comment))
 
@@ -61,6 +68,7 @@
 // foo
 
 ---
+
 (program
   (line_comment))
 
@@ -70,6 +78,7 @@
 /* foo */
 
 ---
+
 (program
   (block_comment))
 
@@ -79,6 +88,7 @@
 # foo
 
 ---
+
 (program
   (line_comment))
 
@@ -88,6 +98,7 @@
 // foo
 
 ---
+
 (program
   (line_comment))
 
@@ -97,5 +108,6 @@
 /* foo */
 
 ---
+
 (program
   (block_comment))

@@ -3,6 +3,7 @@
 ==========
 .word 123
 ---
+
 (program
   (directive
     (integer_mnemonic)
@@ -14,6 +15,7 @@
 ==========
 .word 012
 ---
+
 (program
   (directive
     (integer_mnemonic)
@@ -25,6 +27,7 @@
 ==========
 .word 0x01abCD
 ---
+
 (program
   (directive
     (integer_mnemonic)
@@ -36,6 +39,7 @@
 ==========
 .word 'a'
 ---
+
 (program
   (directive
     (integer_mnemonic)
@@ -47,6 +51,7 @@
 ==========
 .word 1 2 3
 ---
+
 (program
   (directive
     (integer_mnemonic)
@@ -60,6 +65,7 @@
 ==========
 .word 1, 2, 3
 ---
+
 (program
   (directive
     (integer_mnemonic)
@@ -73,6 +79,7 @@
 ==========
 .word 1 2 3 
 ---
+
 (program
   (directive
     (integer_mnemonic)
@@ -86,6 +93,7 @@
 ==========
 .word 1 2 3	
 ---
+
 (program
   (directive
     (integer_mnemonic)
@@ -100,6 +108,7 @@
 .word 1 2
       3 4
 ---
+
 (program
   (directive
     (integer_mnemonic)
@@ -115,6 +124,7 @@
 .word 1 2 
       3 4 
 ---
+
 (program
   (directive
     (integer_mnemonic)
@@ -130,6 +140,7 @@
 .word 1 2	
       3 4	
 ---
+
 (program
   (directive
     (integer_mnemonic)

@@ -3,6 +3,7 @@
 ==========
 foo:.bar
 ---
+
 (program
   (global_label)
   (directive
@@ -13,6 +14,7 @@ foo:.bar
 ==========
 foo: .bar
 ---
+
 (program
   (global_label)
   (directive
@@ -23,6 +25,7 @@ foo: .bar
 ==========
 foo:	.bar
 ---
+
 (program
   (global_label)
   (directive

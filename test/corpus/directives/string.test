@@ -3,6 +3,7 @@
 ==========
 .ascii "foo"
 ---
+
 (program
   (directive
     (string_mnemonic)
@@ -13,6 +14,7 @@
 ==========
 .asciiz "foo"
 ---
+
 (program
   (directive
     (string_mnemonic)
@@ -23,6 +25,7 @@
 ==========
 .string "foo"
 ---
+
 (program
   (directive
     (string_mnemonic)
@@ -33,6 +36,7 @@
 ==========
 .asciiz "\n"
 ---
+
 (program
   (directive
     (string_mnemonic)
@@ -43,6 +47,7 @@
 ==========
 .asciiz "\""
 ---
+
 (program
   (directive
     (string_mnemonic)

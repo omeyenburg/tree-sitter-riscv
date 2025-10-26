@@ -3,6 +3,7 @@
 ==========
 foo# bar
 ---
+
 (program
   (instruction
     (opcode))
@@ -13,6 +14,7 @@ foo# bar
 ==========
 foo// bar
 ---
+
 (program
   (instruction
     (opcode))
@@ -23,6 +25,7 @@ foo// bar
 ==========
 foo/* bar */
 ---
+
 (program
   (instruction
     (opcode))
@@ -33,6 +36,7 @@ foo/* bar */
 ==========
 foo # bar
 ---
+
 (program
   (instruction
     (opcode))
@@ -43,6 +47,7 @@ foo # bar
 ==========
 foo // bar
 ---
+
 (program
   (instruction
     (opcode))
@@ -53,6 +58,7 @@ foo // bar
 ==========
 foo /* bar */
 ---
+
 (program
   (instruction
     (opcode))
@@ -63,6 +69,7 @@ foo /* bar */
 ==========
 foo $t0# bar
 ---
+
 (program
   (instruction
     (opcode)
@@ -75,6 +82,7 @@ foo $t0# bar
 ==========
 foo $t0// bar
 ---
+
 (program
   (instruction
     (opcode)
@@ -87,6 +95,7 @@ foo $t0// bar
 ==========
 foo $t0/* bar */
 ---
+
 (program
   (instruction
     (opcode)
@@ -99,6 +108,7 @@ foo $t0/* bar */
 ==========
 foo $t0 # bar
 ---
+
 (program
   (instruction
     (opcode)
@@ -111,6 +121,7 @@ foo $t0 # bar
 ==========
 foo $t0 // bar
 ---
+
 (program
   (instruction
     (opcode)
@@ -123,6 +134,7 @@ foo $t0 // bar
 ==========
 foo $t0 /* bar */
 ---
+
 (program
   (instruction
     (opcode)
@@ -135,6 +147,7 @@ foo $t0 /* bar */
 ==========
 foo/* bar */$t0
 ---
+
 (program
   (instruction
     (opcode)
@@ -147,6 +160,7 @@ foo/* bar */$t0
 ==========
 foo /* bar */$t0
 ---
+
 (program
   (instruction
     (opcode)
@@ -159,6 +173,7 @@ foo /* bar */$t0
 ==========
 foo/* bar */ $t0
 ---
+
 (program
   (instruction
     (opcode)
@@ -171,6 +186,7 @@ foo/* bar */ $t0
 ==========
 foo/* bar */(1, 2)
 ---
+
 (program
   (instruction
     opcode: (opcode)
@@ -184,6 +200,7 @@ foo/* bar */(1, 2)
 ==========
 foo(/* bar */1, 2)
 ---
+
 (program
   (instruction
     opcode: (opcode)
@@ -197,6 +214,7 @@ foo(/* bar */1, 2)
 ==========
 foo(1, 2/* baz */)
 ---
+
 (program
   (instruction
     opcode: (opcode)

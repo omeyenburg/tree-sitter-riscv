@@ -3,6 +3,7 @@
 ==========
 .macro foo(%bar, %baz)
 ---
+
 (program
   (directive
     mnemonic: (macro_mnemonic)
@@ -16,6 +17,7 @@
 ==========
 .word 123
 ---
+
 (program
   (directive
     mnemonic: (integer_mnemonic)
@@ -27,6 +29,7 @@
 ==========
 .double 1.2
 ---
+
 (program
   (directive
     mnemonic: (float_mnemonic)
@@ -38,6 +41,7 @@
 ==========
 .string "foo"
 ---
+
 (program
   (directive
     mnemonic: (string_mnemonic)
@@ -48,6 +52,7 @@
 ==========
 .foo bar
 ---
+
 (program
   (directive
     mnemonic: (control_mnemonic)

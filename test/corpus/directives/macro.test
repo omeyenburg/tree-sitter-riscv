@@ -3,6 +3,7 @@
 ==========
 .macro foo %bar %baz
 ---
+
 (program
   (directive
     (macro_mnemonic)
@@ -16,6 +17,7 @@
 ==========
 .macro foo \bar \baz
 ---
+
 (program
   (directive
     (macro_mnemonic)
@@ -29,6 +31,7 @@
 ==========
 .macro foo \bar \baz
 ---
+
 (program
   (directive
     (macro_mnemonic)
@@ -42,6 +45,7 @@
 ==========
 .macro foo $\ $% \$ \% %$ $\
 ---
+
 (program
   (directive
     (macro_mnemonic)
@@ -59,6 +63,7 @@
 ==========
 .macro foo(%bar %baz)
 ---
+
 (program
   (directive
     (macro_mnemonic)
@@ -72,6 +77,7 @@
 ==========
 .macro foo (%bar %baz)
 ---
+
 (program
   (directive
     (macro_mnemonic)
@@ -85,6 +91,7 @@
 ==========
 .macro foo(%bar, %baz)
 ---
+
 (program
   (directive
     (macro_mnemonic)
@@ -98,6 +105,7 @@
 ==========
 .word %foo
 ---
+
 (program
   (directive
     (integer_mnemonic)
@@ -109,6 +117,7 @@
 ==========
 .float %foo
 ---
+
 (program
   (directive
     (float_mnemonic)
@@ -120,6 +129,7 @@
 ==========
 .asciiz %foo
 ---
+
 (program
   (directive
     (string_mnemonic)

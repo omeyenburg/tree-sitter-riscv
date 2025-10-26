@@ -3,6 +3,7 @@
 ==========
 foo $t0 $t1 $t2
 ---
+
 (program
   (instruction
     (opcode)
@@ -16,6 +17,7 @@ foo $t0 $t1 $t2
 ==========
 foo $t0,$t1,$t2
 ---
+
 (program
   (instruction
     (opcode)
@@ -29,6 +31,7 @@ foo $t0,$t1,$t2
 ==========
 foo bar
 ---
+
 (program
   (instruction
     (opcode)

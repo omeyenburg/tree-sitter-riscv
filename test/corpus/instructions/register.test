@@ -3,6 +3,7 @@
 ==========
 foo $t0
 ---
+
 (program
   (instruction
     (opcode)
@@ -14,6 +15,7 @@ foo $t0
 ==========
 foo $0
 ---
+
 (program
   (instruction
     (opcode)
@@ -25,6 +27,7 @@ foo $0
 ==========
 foo $31
 ---
+
 (program
   (instruction
     (opcode)
@@ -36,6 +39,7 @@ foo $31
 ==========
 foo $gp
 ---
+
 (program
   (instruction
     (opcode)
@@ -47,6 +51,7 @@ foo $gp
 ==========
 foo $zero
 ---
+
 (program
   (instruction
     (opcode)
@@ -58,6 +63,7 @@ foo $zero
 ==========
 foo $f0
 ---
+
 (program
   (instruction
     (opcode)
@@ -69,6 +75,7 @@ foo $f0
 ==========
 foo $f31
 ---
+
 (program
   (instruction
     (opcode)
@@ -80,6 +87,7 @@ foo $f31
 ==========
 foo sp
 ---
+
 (program
 (instruction
 (opcode)
@@ -91,6 +99,7 @@ foo sp
 ==========
 foo space
 ---
+
 (program
   (instruction
     (opcode)
@@ -102,6 +111,7 @@ foo space
 ==========
 foo x1
 ---
+
 (program
 (instruction
 (opcode)

@@ -3,6 +3,7 @@
 ==========
 foo %bar %baz
 ---
+
 (program
   (instruction
     (opcode)
@@ -15,6 +16,7 @@ foo %bar %baz
 ==========
 foo %bar	%baz
 ---
+
 (program
   (instruction
     (opcode)
@@ -27,6 +29,7 @@ foo %bar	%baz
 ==========
 foo %bar,%baz
 ---
+
 (program
   (instruction
     (opcode)
@@ -39,6 +42,7 @@ foo %bar,%baz
 ==========
 foo \bar \baz
 ---
+
 (program
   (instruction
     (opcode)
@@ -51,6 +55,7 @@ foo \bar \baz
 ==========
 foo \bar	\baz
 ---
+
 (program
   (instruction
     (opcode)
@@ -63,6 +68,7 @@ foo \bar	\baz
 ==========
 foo \bar,\baz
 ---
+
 (program
   (instruction
     (opcode)
@@ -75,6 +81,7 @@ foo \bar,\baz
 ==========
 foo $bar $baz
 ---
+
 (program
   (instruction
     (opcode)
@@ -87,6 +94,7 @@ foo $bar $baz
 ==========
 foo $bar	$baz
 ---
+
 (program
   (instruction
     (opcode)
@@ -99,6 +107,7 @@ foo $bar	$baz
 ==========
 foo $bar,$baz
 ---
+
 (program
   (instruction
     (opcode)
@@ -111,6 +120,7 @@ foo $bar,$baz
 ==========
 foo $\ $% \$ \% %$ $\
 ---
+
 (program
   (instruction
     (opcode)
@@ -127,6 +137,7 @@ foo $\ $% \$ \% %$ $\
 ==========
 foo 4(%x)
 ---
+
 (program
   (instruction
     (opcode)
@@ -140,6 +151,7 @@ foo 4(%x)
 ==========
 foo 4(\x)
 ---
+
 (program
   (instruction
     (opcode)
@@ -153,6 +165,7 @@ foo 4(\x)
 ==========
 foo 4($x)
 ---
+
 (program
   (instruction
     (opcode)
@@ -166,6 +179,7 @@ foo 4($x)
 ==========
 foo("bar")
 ---
+
 (program
   (instruction
     (opcode)

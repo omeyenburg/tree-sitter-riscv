@@ -3,6 +3,7 @@
 ==========
 foo 100
 ---
+
 (program
   (instruction
     (opcode)
@@ -14,6 +15,7 @@ foo 100
 ==========
 foo -100
 ---
+
 (program
   (instruction
     (opcode)
@@ -25,6 +27,7 @@ foo -100
 ==========
 foo 012
 ---
+
 (program
   (instruction
     (opcode)
@@ -36,6 +39,7 @@ foo 012
 ==========
 foo 089
 ---
+
 (program
   (instruction
     (opcode)
@@ -47,6 +51,7 @@ foo 089
 ==========
 foo 0x0314
 ---
+
 (program
   (instruction
     (opcode)
@@ -58,6 +63,7 @@ foo 0x0314
 ==========
 foo 0b11
 ---
+
 (program
   (instruction
     (opcode)
@@ -69,6 +75,7 @@ foo 0b11
 ==========
 foo -0x0123456789ABCDEFabcdef
 ---
+
 (program
   (instruction
     (opcode)
@@ -80,6 +87,7 @@ foo -0x0123456789ABCDEFabcdef
 ==========
 foo 'A'
 ---
+
 (program
   (instruction
     (opcode)
@@ -91,6 +99,7 @@ foo 'A'
 ==========
 foo '\n'
 ---
+
 (program
   (instruction
     (opcode)
@@ -102,6 +111,7 @@ foo '\n'
 ==========
 foo '\''
 ---
+
 (program
   (instruction
     (opcode)

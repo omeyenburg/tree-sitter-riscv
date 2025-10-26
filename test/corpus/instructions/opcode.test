@@ -3,6 +3,7 @@
 ==========
 foo
 ---
+
 (program
     (instruction
         (opcode)))
@@ -12,6 +13,7 @@ foo
 ==========
 FOO
 ---
+
 (program
     (instruction
         (opcode)))
@@ -21,6 +23,7 @@ FOO
 ==========
 _foo
 ---
+
 (program
     (instruction
         (opcode)))
@@ -30,6 +33,7 @@ _foo
 ==========
 foo_bar
 ---
+
 (program
     (instruction
         (opcode)))
@@ -39,6 +43,7 @@ foo_bar
 ==========
 foo.bar
 ---
+
 (program
     (instruction
         (opcode)))
