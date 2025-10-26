@@ -117,3 +117,46 @@ foo '\''
     (opcode)
     (operands
       (char))))
+
+==========
+[instructions/integer] negative number as separate operand
+==========
+foo 1 -1
+---
+
+(program
+  (instruction
+    (opcode)
+    (operands
+      (decimal)
+      (decimal))))
+
+==========
+[instructions/integer] unary expression on parenthesized expression
+==========
+foo 1 -(-1)
+---
+
+(program
+  (instruction
+    opcode: (opcode)
+    operands: (operands
+      (decimal)
+      (unary_expression
+        argument: (parenthesized_expression
+          argument: (decimal))))))
+
+==========
+[instructions/integer] unary expression in binary expression
+==========
+foo 1 -- 1
+---
+
+(program
+  (instruction
+    opcode: (opcode)
+    operands: (operands
+      (binary_expression
+        left: (decimal)
+        right: (unary_expression
+          argument: (decimal))))))
