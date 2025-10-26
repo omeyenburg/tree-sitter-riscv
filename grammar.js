@@ -426,9 +426,9 @@ module.exports = grammar({
     // Macros starting with % cannot contain % inside (breaks on second %)
     // Macros starting with $ or \ can contain % inside
     macro_variable: $ => token(choice(
-      seq('%', /[0-9a-zA-Z_:$\\]+/),      // % prefix: no % allowed inside
-      seq('\\', /[0-9a-zA-Z_:%$\\]+/),    // \ prefix: can have % inside
-      seq('$', /[0-9a-zA-Z_:%$\\]+/),     // $ prefix: can have % inside
+      seq('%', /[0-9a-zA-Z_:$\\]+/), // % prefix: no % allowed inside
+      seq('\\', /[0-9a-zA-Z_:%$\\]+/), // \ prefix: can have % inside
+      seq('$', /[0-9a-zA-Z_:%$\\]+/), // $ prefix: can have % inside
     )),
     macro_parameter: $ => token(/[%$\\]?[0-9a-zA-Z_:$%\\]+/),
     macro_name: $ => token(/[a-zA-Z_][a-zA-Z0-9_$]*/),
