@@ -40,7 +40,6 @@ module.exports = grammar({
     [$.integer_operands],
     [$.macro_parameters],
     [$.operands],
-    [$._left_expression, $._right_expression_no_expand],
   ],
 
   rules: {
@@ -307,7 +306,6 @@ module.exports = grammar({
     assignment_operator: $ => token('='),
     _left_expression: $ => prec(1, seq(field('left', $._expression), optional($._operator_separator))),
     _right_expression: $ => field('right', $._expression),
-    _right_expression_no_expand: $ => prec.right(0, field('right', $._expression)),
 
     parenthesized_expression: $ => prec(19, seq(
       '(',

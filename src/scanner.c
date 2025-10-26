@@ -10,10 +10,6 @@ typedef struct {
     bool valid;
 } TokenChecker;
 
-static TokenChecker createTokenChecker(const char* str) {
-    return (TokenChecker) {str, strlen(str), true};
-}
-
 enum TokenType {
     _OPERAND_SEPARATOR,
     _OPERATOR_SEPARATOR,
@@ -85,9 +81,6 @@ bool tree_sitter_mips_external_scanner_scan(void* payload,
                 // The grammar will handle deciding if it's an operator or macro-variable
                 // We peek ahead to determine separator type, but must mark end at the space position
                 if (lexer->lookahead == '%') {
-                    if (!valid_symbols[_OPERATOR_SEPARATOR] && !valid_symbols[_OPERAND_SEPARATOR])
-                        return false;
-
                     // Mark end now, at the space position (before %)
                     lexer->mark_end(lexer);
 
@@ -179,7 +172,8 @@ bool tree_sitter_mips_external_scanner_scan(void* payload,
         }
     }
 
-    if (valid_symbols[_LINE_SEPARATOR] && valid_symbols[_DATA_SEPARATOR]) {
+    if (valid_symbols[_LINE_SEPARATOR] || valid_symbols[_DATA_SEPARATOR]) {
+        // Handle CRLF
         if (lexer->lookahead == '\r') {
             lexer->advance(lexer, false);
             if (lexer->eof(lexer))
@@ -189,47 +183,35 @@ bool tree_sitter_mips_external_scanner_scan(void* payload,
         if (lexer->lookahead == '\n') {
             lexer->advance(lexer, false);
 
-            while (!lexer->eof(lexer) &&
-                   (lexer->lookahead == ' ' || lexer->lookahead == '\t')) {
-                lexer->advance(lexer, false);
-            }
-            if (lexer->eof(lexer))
-                return false;
+            // If both symbols are valid, need to determine which one
+            if (valid_symbols[_LINE_SEPARATOR] && valid_symbols[_DATA_SEPARATOR]) {
+                // Skip whitespace after newline
+                while (!lexer->eof(lexer) &&
+                       (lexer->lookahead == ' ' || lexer->lookahead == '\t')) {
+                    lexer->advance(lexer, false);
+                }
+                if (lexer->eof(lexer))
+                    return false;
 
-            if (lexer->lookahead == '\n' || lexer->lookahead == '.' ||
-                isalpha(lexer->lookahead)) {
-                lexer->result_symbol = _LINE_SEPARATOR;
+                // Check if it's a line separator (starts new line/directive) or data separator
+                if (lexer->lookahead == '\n' || lexer->lookahead == '.' ||
+                    isalpha(lexer->lookahead)) {
+                    lexer->result_symbol = _LINE_SEPARATOR;
+                    lexer->mark_end(lexer);
+                    return true;
+                }
+
+                lexer->result_symbol = _DATA_SEPARATOR;
                 lexer->mark_end(lexer);
                 return true;
             }
 
-            lexer->result_symbol = _DATA_SEPARATOR;
-            lexer->mark_end(lexer);
-            return true;
-        }
-    } else if (valid_symbols[_LINE_SEPARATOR]) {
-        if (lexer->lookahead == '\r') {
-            lexer->advance(lexer, false);
-            if (lexer->eof(lexer))
-                return false;
-        }
-
-        if (lexer->lookahead == '\n') {
-            lexer->advance(lexer, false);
-            lexer->result_symbol = _LINE_SEPARATOR;
-            lexer->mark_end(lexer);
-            return true;
-        }
-    } else if (valid_symbols[_DATA_SEPARATOR]) {
-        if (lexer->lookahead == '\r') {
-            lexer->advance(lexer, false);
-            if (lexer->eof(lexer))
-                return false;
-        }
-
-        if (lexer->lookahead == '\n') {
-            lexer->advance(lexer, false);
-            lexer->result_symbol = _DATA_SEPARATOR;
+            // Only one symbol is valid
+            if (valid_symbols[_LINE_SEPARATOR]) {
+                lexer->result_symbol = _LINE_SEPARATOR;
+            } else {
+                lexer->result_symbol = _DATA_SEPARATOR;
+            }
             lexer->mark_end(lexer);
             return true;
         }
@@ -282,19 +264,19 @@ bool tree_sitter_mips_external_scanner_scan(void* payload,
                          (lexer->lookahead == ' ' || lexer->lookahead == '\t'));
 
                 TokenChecker tokens[] = {
-                    createTokenChecker("include"),
-                    createTokenChecker("define"),
-                    createTokenChecker("undef"),
-                    createTokenChecker("if"),
-                    createTokenChecker("ifdef"),
-                    createTokenChecker("ifndef"),
-                    createTokenChecker("else"),
-                    createTokenChecker("elif"),
-                    createTokenChecker("endif"),
-                    createTokenChecker("error"),
-                    createTokenChecker("warning"),
-                    createTokenChecker("pragma"),
-                    createTokenChecker("line"),
+                    {"include", 7, true},
+                    {"define", 6, true},
+                    {"undef", 5, true},
+                    {"if", 2, true},
+                    {"ifdef", 5, true},
+                    {"ifndef", 6, true},
+                    {"else", 4, true},
+                    {"elif", 4, true},
+                    {"endif", 5, true},
+                    {"error", 5, true},
+                    {"warning", 7, true},
+                    {"pragma", 6, true},
+                    {"line", 4, true},
                 };
 
                 int i;

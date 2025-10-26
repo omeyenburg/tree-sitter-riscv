@@ -2108,18 +2108,6 @@
         "name": "_expression"
       }
     },
-    "_right_expression_no_expand": {
-      "type": "PREC_RIGHT",
-      "value": 0,
-      "content": {
-        "type": "FIELD",
-        "name": "right",
-        "content": {
-          "type": "SYMBOL",
-          "name": "_expression"
-        }
-      }
-    },
     "parenthesized_expression": {
       "type": "PREC",
       "value": 19,
@@ -2895,10 +2883,6 @@
     ],
     [
       "operands"
-    ],
-    [
-      "_left_expression",
-      "_right_expression_no_expand"
     ]
   ],
   "precedences": [],
