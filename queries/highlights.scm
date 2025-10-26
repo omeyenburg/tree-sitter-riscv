@@ -65,26 +65,20 @@
 ] @punctuation.bracket
 
 [
-  "|"
-  "||"
-  "&"
-  "&&"
-  "^"
-  "<"
-  "<<"
-  ">"
-  ">>"
-  "+"
-  "-"
-  "*"
-  "~"
-  "!"
-  "=="
-  "!="
-  "<="
-  ">="
-  "%"
-  "="
+  (bitwise_or_operator)
+  (logical_or_operator)
+  (bitwise_and_operator)
+  (logical_and_operator)
+  (bitwise_xor_operator)
+  (relational_operator)
+  (shift_operator)
+  (additive_operator)
+  (multiplicative_operator)
+  (equality_operator)
   (modulo_operator)
+  (assignment_operator)
   (division_operator)
+  (unary_minus_operator)
+  (bitwise_not_operator)
+  (logical_not_operator)
 ] @operator
