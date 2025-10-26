@@ -1,109 +1,240 @@
 ==========
-[instructions/modulo] instruction with modulo expression without spaces
+[instructions/modulo] basic modulo operations
 ==========
-foo $t0 4%2
----
-(program
-  (instruction
-    (opcode)
-    (operands
-      (register)
-      (binary_expression
-        (decimal)
-        (decimal)))))
-
-==========
-[instructions/modulo] instruction with modulo expression with space after operator
-==========
-foo $t0 4%2
----
-(program
-  (instruction
-    (opcode)
-    (operands
-      (register)
-      (binary_expression
-        (decimal)
-        (decimal)))))
-
-==========
-[instructions/modulo] instruction with modulo expression with space after operator
-==========
-foo $t0 4% 2
----
-(program
-  (instruction
-    (opcode)
-    (operands
-      (register)
-      (binary_expression
-        (decimal)
-        (decimal)))))
-
-==========
-[instructions/modulo] instruction with modulo expression with spaces around operator (edge case with special treatment using extra node)
-==========
-foo $t0 4 % 2
----
-(program
-  (instruction
-    (opcode)
-    (operands
-      (register)
-      (decimal)
-      (modulo_operator)
-      (decimal))))
-
-==========
-[instructions/modulo] instruction with modulo expression without spaces between decimal and macro variable
-==========
-foo $t0 4%%2
----
-(program
-  (instruction
-    (opcode)
-    (operands
-      (register)
-      (binary_expression
-        (decimal)
-        (macro_variable)))))
-
-==========
-[instructions/modulo] instruction with parenthesized modulo expression
-==========
-foo $t0 (4 % 2)
----
-(program
-  (instruction
-    (opcode)
-    (operands
-      (register)
-      (parenthesized_expression
-        (operands
-          (decimal)
-          (modulo_operator)
-          (decimal))))))
-
-==========
-[instructions/modulo] instruction without modulo expression and macro variable instead
-==========
+foo 4%2
+foo 4 % 2
+foo 4% 2
 foo 4 %2
 ---
+
 (program
   (instruction
-    (opcode)
-    (operands
+    opcode: (opcode)
+    operands: (operands
+      (binary_expression
+        left: (decimal)
+        right: (decimal))))
+  (instruction
+    opcode: (opcode)
+    operands: (operands
+      (binary_expression
+        left: (decimal)
+        right: (decimal))))
+  (instruction
+    opcode: (opcode)
+    operands: (operands
+      (binary_expression
+        left: (decimal)
+        right: (decimal))))
+  (instruction
+    opcode: (opcode)
+    operands: (operands
       (decimal)
       (macro_variable))))
 
 ==========
-[instructions/modulo] instruction without modulo expression and two macro variables instead
+[instructions/modulo] left-associative chaining
 ==========
-foo %4 %2
+foo 1 % 2 % 3
+foo 10 % 3 % 2
+foo %1 % %2 % %3
 ---
+
 (program
   (instruction
-    (opcode)
-    (operands
+    opcode: (opcode)
+    operands: (operands
+      (binary_expression
+        left: (binary_expression
+          left: (decimal)
+          right: (decimal))
+        right: (decimal))))
+  (instruction
+    opcode: (opcode)
+    operands: (operands
+      (binary_expression
+        left: (binary_expression
+          left: (decimal)
+          right: (decimal))
+        right: (decimal))))
+  (instruction
+    opcode: (opcode)
+    operands: (operands
+      (binary_expression
+        left: (binary_expression
+          left: (macro_variable)
+          right: (macro_variable))
+        right: (macro_variable)))))
+
+==========
+[instructions/modulo] complex chaining
+==========
+foo 100 % 20 % 5 % 2
+---
+
+(program
+  (instruction
+    opcode: (opcode)
+    operands: (operands
+      (binary_expression
+        left: (binary_expression
+          left: (binary_expression
+            left: (decimal)
+            right: (decimal))
+          right: (decimal))
+        right: (decimal)))))
+
+==========
+[instructions/modulo] parentheses for grouping
+==========
+foo 10 % (5 % 2)
+foo (10 % 5) % 2
+---
+
+(program
+  (instruction
+    opcode: (opcode)
+    operands: (operands
+      (binary_expression
+        left: (decimal)
+        right: (parenthesized_expression
+          argument: (binary_expression
+            left: (decimal)
+            right: (decimal))))))
+  (instruction
+    opcode: (opcode)
+    operands: (operands
+      (binary_expression
+        left: (parenthesized_expression
+          argument: (binary_expression
+            left: (decimal)
+            right: (decimal)))
+        right: (decimal)))))
+
+==========
+[instructions/modulo] precedence with other operators
+==========
+foo 10 % 3 + 2 % 1
+foo 10 * 3 % 2
+foo 10 % 3 / 2
+---
+
+(program
+  (instruction
+    opcode: (opcode)
+    operands: (operands
+      (binary_expression
+        left: (binary_expression
+          left: (decimal)
+          right: (decimal))
+        right: (binary_expression
+          left: (decimal)
+          right: (decimal)))))
+  (instruction
+    opcode: (opcode)
+    operands: (operands
+      (binary_expression
+        left: (decimal)
+        right: (binary_expression
+          left: (decimal)
+          right: (decimal)))))
+  (instruction
+    opcode: (opcode)
+    operands: (operands
+      (binary_expression
+        left: (binary_expression
+          left: (decimal)
+          right: (decimal))
+        (division_operator)
+        right: (decimal)))))
+
+==========
+[instructions/modulo] parenthesized modulo as operand
+==========
+foo (4 % 2)
+---
+
+(program
+  (instruction
+    opcode: (opcode)
+    operands: (operands
+      (parenthesized_expression
+        argument: (binary_expression
+          left: (decimal)
+          right: (decimal))))))
+
+==========
+[instructions/modulo] modulo with macro variables
+==========
+foo 4%%2
+foo 1 %%2
+foo %2%4
+foo %bar%4
+foo %1 % 2
+foo 1 % %2
+---
+
+(program
+  (instruction
+    opcode: (opcode)
+    operands: (operands
+      (binary_expression
+        left: (decimal)
+        right: (macro_variable))))
+  (instruction
+    opcode: (opcode)
+    operands: (operands
+      (binary_expression
+        left: (decimal)
+        right: (macro_variable))))
+  (instruction
+    opcode: (opcode)
+    operands: (operands
+      (binary_expression
+        left: (macro_variable)
+        right: (decimal))))
+  (instruction
+    opcode: (opcode)
+    operands: (operands
+      (binary_expression
+        left: (macro_variable)
+        right: (decimal))))
+  (instruction
+    opcode: (opcode)
+    operands: (operands
+      (binary_expression
+        left: (macro_variable)
+        right: (decimal))))
+  (instruction
+    opcode: (opcode)
+    operands: (operands
+      (binary_expression
+        left: (decimal)
+        right: (macro_variable)))))
+
+==========
+[instructions/modulo] separate operands (NOT modulo chaining)
+==========
+foo %bar %baz
+foo %123 %456
+foo %1 %2%3
+---
+
+(program
+  (instruction
+    opcode: (opcode)
+    operands: (operands
       (macro_variable)
-      (macro_variable))))
+      (macro_variable)))
+  (instruction
+    opcode: (opcode)
+    operands: (operands
+      (macro_variable)
+      (macro_variable)))
+  (instruction
+    opcode: (opcode)
+    operands: (operands
+      (macro_variable)
+      (binary_expression
+        left: (macro_variable)
+        right: (decimal)))))
