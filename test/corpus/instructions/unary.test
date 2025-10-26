@@ -21,6 +21,7 @@ foo -bar
     opcode: (opcode)
     operands: (operands
       (unary_expression
+        operator: (unary_minus_operator)
         argument: (symbol)))))
 
 ==========
@@ -48,6 +49,7 @@ foo 1 -(-1)
     operands: (operands
       (decimal)
       (unary_expression
+        operator: (unary_minus_operator)
         argument: (parenthesized_expression
           argument: (decimal))))))
 
@@ -65,6 +67,7 @@ foo 1 -- 1
         left: (decimal)
         operator: (additive_operator)
         right: (unary_expression
+          operator: (unary_minus_operator)
           argument: (decimal))))))
 
 ==========
@@ -80,16 +83,19 @@ foo ~bar
     opcode: (opcode)
     operands: (operands
       (unary_expression
+        operator: (bitwise_not_operator)
         argument: (decimal))))
   (instruction
     opcode: (opcode)
     operands: (operands
       (unary_expression
+        operator: (bitwise_not_operator)
         argument: (decimal))))
   (instruction
     opcode: (opcode)
     operands: (operands
       (unary_expression
+        operator: (bitwise_not_operator)
         argument: (symbol)))))
 
 ==========
@@ -105,16 +111,19 @@ foo !bar
     opcode: (opcode)
     operands: (operands
       (unary_expression
+        operator: (logical_not_operator)
         argument: (decimal))))
   (instruction
     opcode: (opcode)
     operands: (operands
       (unary_expression
+        operator: (logical_not_operator)
         argument: (decimal))))
   (instruction
     opcode: (opcode)
     operands: (operands
       (unary_expression
+        operator: (logical_not_operator)
         argument: (symbol)))))
 
 ==========
@@ -131,20 +140,25 @@ foo 1 !!1
     operands: (operands
       (decimal)
       (unary_expression
+        operator: (unary_minus_operator)
         argument: (decimal))))
   (instruction
     opcode: (opcode)
     operands: (operands
       (decimal)
       (unary_expression
+        operator: (bitwise_not_operator)
         argument: (unary_expression
+          operator: (bitwise_not_operator)
           argument: (decimal)))))
   (instruction
     opcode: (opcode)
     operands: (operands
       (decimal)
       (unary_expression
+        operator: (logical_not_operator)
         argument: (unary_expression
+          operator: (logical_not_operator)
           argument: (decimal))))))
 
 ==========
@@ -161,6 +175,7 @@ foo 1 !(!1)
     operands: (operands
       (decimal)
       (unary_expression
+        operator: (unary_minus_operator)
         argument: (parenthesized_expression
           argument: (decimal)))))
   (instruction
@@ -168,16 +183,20 @@ foo 1 !(!1)
     operands: (operands
       (decimal)
       (unary_expression
+        operator: (bitwise_not_operator)
         argument: (parenthesized_expression
           argument: (unary_expression
+            operator: (bitwise_not_operator)
             argument: (decimal))))))
   (instruction
     opcode: (opcode)
     operands: (operands
       (decimal)
       (unary_expression
+        operator: (logical_not_operator)
         argument: (parenthesized_expression
           argument: (unary_expression
+            operator: (logical_not_operator)
             argument: (decimal)))))))
 
 ==========
@@ -192,11 +211,13 @@ foo ~$s0
     opcode: (opcode)
     operands: (operands
       (unary_expression
+        operator: (unary_minus_operator)
         argument: (register))))
   (instruction
     opcode: (opcode)
     operands: (operands
       (unary_expression
+        operator: (bitwise_not_operator)
         argument: (register)))))
 
 ==========
@@ -212,16 +233,19 @@ foo !%flag
     opcode: (opcode)
     operands: (operands
       (unary_expression
+        operator: (unary_minus_operator)
         argument: (macro_variable))))
   (instruction
     opcode: (opcode)
     operands: (operands
       (unary_expression
+        operator: (bitwise_not_operator)
         argument: (macro_variable))))
   (instruction
     opcode: (opcode)
     operands: (operands
       (unary_expression
+        operator: (logical_not_operator)
         argument: (macro_variable)))))
 
 ==========
@@ -236,6 +260,7 @@ foo ~%lo(symbol)
     opcode: (opcode)
     operands: (operands
       (unary_expression
+        operator: (unary_minus_operator)
         argument: (relocation_expression
           type: (relocation_type)
           argument: (symbol)))))
@@ -243,6 +268,7 @@ foo ~%lo(symbol)
     opcode: (opcode)
     operands: (operands
       (unary_expression
+        operator: (bitwise_not_operator)
         argument: (relocation_expression
           type: (relocation_type)
           argument: (symbol))))))
@@ -266,10 +292,12 @@ foo 1 !1
     operands: (operands
       (decimal)
       (unary_expression
+        operator: (bitwise_not_operator)
         argument: (decimal))))
   (instruction
     opcode: (opcode)
     operands: (operands
       (decimal)
       (unary_expression
+        operator: (logical_not_operator)
         argument: (decimal)))))

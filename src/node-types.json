@@ -1075,6 +1075,24 @@
             "named": true
           }
         ]
+      },
+      "operator": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "bitwise_not_operator",
+            "named": true
+          },
+          {
+            "type": "logical_not_operator",
+            "named": true
+          },
+          {
+            "type": "unary_minus_operator",
+            "named": true
+          }
+        ]
       }
     }
   },
@@ -1092,10 +1110,6 @@
   },
   {
     "type": " ",
-    "named": false
-  },
-  {
-    "type": "!",
     "named": false
   },
   {
@@ -1120,10 +1134,6 @@
   },
   {
     "type": ",",
-    "named": false
-  },
-  {
-    "type": "-",
     "named": false
   },
   {
@@ -1271,6 +1281,10 @@
     "named": true
   },
   {
+    "type": "bitwise_not_operator",
+    "named": true
+  },
+  {
     "type": "bitwise_or_operator",
     "named": true
   },
@@ -1328,6 +1342,10 @@
     "named": true
   },
   {
+    "type": "logical_not_operator",
+    "named": true
+  },
+  {
     "type": "logical_or_operator",
     "named": true
   },
@@ -1380,7 +1398,7 @@
     "named": true
   },
   {
-    "type": "~",
-    "named": false
+    "type": "unary_minus_operator",
+    "named": true
   }
 ]
