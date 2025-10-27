@@ -11,16 +11,16 @@ A [tree-sitter](https://github.com/tree-sitter/tree-sitter) parser for the MIPS 
 
 ## Quick Start
 
-This parser is available for JavaScript, Python, Rust, and Go, and integrates with NeoVim.
+This parser is available for JavaScript, Python, Rust, Go, and C, and integrates with NeoVim.
 
 See [Editor Integration](docs/EDITOR_INTEGRATION.md) and [Language Integration](docs/LANGUAGE_INTEGRATION.md) for installation and integration instructions.
 
 ## Documentation
 
-- **[Editor Integration](docs/EDITOR_INTEGRATION.md)** - Installation for NeoVim
-- **[Language Integration](docs/LANGUAGE_INTEGRATION.md)** - Installation and integration for all supported languages
-- **[AST Reference](docs/AST.md)** - Complete node type reference with examples
-- **[Development](docs/DEVELOPMENT.md)** - Building and testing the grammar
+- [Editor Integration](docs/EDITOR_INTEGRATION.md) - NeoVim installation
+- [Language Integration](docs/LANGUAGE_INTEGRATION.md) - JavaScript, Python, Rust, Go, C
+- [AST Reference](docs/AST.md) - Complete node type reference
+- [Development](docs/DEVELOPMENT.md) - Building and testing the grammar
 
 ## Further reading
 

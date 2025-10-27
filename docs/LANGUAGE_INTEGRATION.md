@@ -114,3 +114,33 @@ func main() {
     // Output: (program (instruction opcode: (opcode) operands: (operands (register) (decimal))))
 }
 ```
+
+## C
+
+You can find a template repository to use this grammar in C [here](https://github.com/omeyenburg/tree-sitter-mips-c-template)
+
+**Example:**
+```c
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include "tree-sitter-mips.h"
+#include "tree_sitter/api.h"
+
+int main(void) {
+    TSParser* parser = ts_parser_new();
+    ts_parser_set_language(parser, tree_sitter_mips());
+
+    const char* code = "li $t0, 2";
+    TSTree* tree = ts_parser_parse_string(parser, NULL, code, strlen(code));
+
+    char* result = ts_node_string(ts_tree_root_node(tree));
+    printf("%s\n", result);
+    // Output: (program (instruction opcode: (opcode) operands: (operands (register) (decimal))))
+
+    free(result);
+    ts_tree_delete(tree);
+    ts_parser_delete(parser);
+    return 0;
+}
+```
