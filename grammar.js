@@ -40,6 +40,67 @@ module.exports = grammar({
     [$.integer_operands],
     [$.macro_parameters],
     [$.operands],
+    [$._expression, $._primary_expression],
+    [$._operand, $.parenthesized_expression],
+
+    [$._logical_or_expression],
+    [$._logical_and_expression],
+    [$._bitwise_or_expression],
+    [$._bitwise_xor_expression],
+    [$._bitwise_and_expression],
+    [$._equality_expression],
+    [$._relational_expression],
+    [$._shift_expression],
+    [$._additive_expression],
+    [$._multiplicative_expression],
+    [$._assignment_expression],
+
+    [$._logical_or_expression, $._logical_and_expression],
+    [$._logical_and_expression, $._bitwise_or_expression],
+    [$._bitwise_or_expression, $._bitwise_xor_expression],
+    [$._bitwise_xor_expression, $._bitwise_and_expression],
+    [$._bitwise_and_expression, $._equality_expression],
+    [$._equality_expression, $._relational_expression],
+    [$._relational_expression, $._shift_expression],
+    [$._shift_expression, $._additive_expression],
+    [$._additive_expression, $._multiplicative_expression],
+    [$._multiplicative_expression, $._assignment_expression],
+
+    [$._expression, $._logical_or_expression],
+    [$._expression, $._logical_and_expression],
+    [$._expression, $._bitwise_or_expression],
+    [$._expression, $._bitwise_xor_expression],
+    [$._expression, $._bitwise_and_expression],
+    [$._expression, $._equality_expression],
+    [$._expression, $._relational_expression],
+    [$._expression, $._shift_expression],
+    [$._expression, $._additive_expression],
+    [$._expression, $._multiplicative_expression],
+    [$._expression, $._assignment_expression],
+
+    [$._expression, $._wrapped_logical_or_expression],
+    [$._expression, $._wrapped_logical_and_expression],
+    [$._expression, $._wrapped_bitwise_or_expression],
+    [$._expression, $._wrapped_bitwise_xor_expression],
+    [$._expression, $._wrapped_bitwise_and_expression],
+    [$._expression, $._wrapped_equality_expression],
+    [$._expression, $._wrapped_relational_expression],
+    [$._expression, $._wrapped_shift_expression],
+    [$._expression, $._wrapped_additive_expression],
+    [$._expression, $._wrapped_multiplicative_expression],
+    [$._expression, $._wrapped_assignment_expression],
+
+    [$._logical_or_expression, $._wrapped_logical_or_expression],
+    [$._logical_and_expression, $._wrapped_logical_and_expression],
+    [$._bitwise_or_expression, $._wrapped_bitwise_or_expression],
+    [$._bitwise_xor_expression, $._wrapped_bitwise_xor_expression],
+    [$._bitwise_and_expression, $._wrapped_bitwise_and_expression],
+    [$._equality_expression, $._wrapped_equality_expression],
+    [$._relational_expression, $._wrapped_relational_expression],
+    [$._shift_expression, $._wrapped_shift_expression],
+    [$._additive_expression, $._wrapped_additive_expression],
+    [$._multiplicative_expression, $._wrapped_multiplicative_expression],
+    [$._assignment_expression, $._wrapped_assignment_expression],
   ],
 
   rules: {
@@ -113,7 +174,6 @@ module.exports = grammar({
       )),
     ),
 
-    // Operands can be on multiple lines
     _integer_directive: $ => seq(
       field('mnemonic', $.integer_mnemonic),
       optional($._whitespace),
@@ -183,7 +243,6 @@ module.exports = grammar({
     ),
     _string_operand: $ => choice($.string, $.macro_variable, $.address),
 
-    // Catch-all directive
     _control_directive: $ => seq(
       field('mnemonic', $.control_mnemonic),
       optional(choice(seq(
@@ -213,10 +272,7 @@ module.exports = grammar({
       $.block_comment,
     ),
 
-    // Specific symbol for .section directive
     section_type: $ => prec(-5, /@[a-z]+/),
-
-    // Specific symbol for .option directive
     option_flag: $ => prec(-5, /\+[a-z]/),
 
     instruction: $ => seq(
@@ -235,33 +291,26 @@ module.exports = grammar({
     ),
     opcode: $ => token(prec(1, /%?[a-zA-Z_][a-zA-Z0-9_.]*/)),
     operands: $ => seq(
-      $._operand,
+      field('operand', $._operand),
       repeat(seq(
         choice(',', $._operand_separator, $.block_comment),
-        $._operand,
+        field('operand', $._operand),
       )),
       optional($._operand_separator),
     ),
     _operand: $ => choice(
       $._expression,
+      // $.binary_expression,
       $.float,
       $.string,
     ),
 
-    // Support macro-style calling.
-    // Examples: `exit(0)`, `for($t0, 0, 3)`
     _call_expression: $ => prec(20, seq('(', optional($.block_comment), optional(field('operands', $.operands)), optional($.block_comment), ')')),
 
-    // Matches primitives, registers, macro variables and compound expressions.
-    // Does not match floats, floats are not accepted in expressions, but only
-    // as standalone operands or in directives.
-    // Examples: `1`, `%var + 3`, `(label + 7)`
     _expression: $ => choice(
-      prec(1, $.relocation_expression),
+      $._wrapped_logical_or_expression,
+      $.relocation_expression,
       $.address,
-      $.binary_expression,
-      $.unary_expression,
-      $.parenthesized_expression,
       $.macro_variable,
       $.register,
       $.local_label_reference,
@@ -272,22 +321,154 @@ module.exports = grammar({
       $.binary,
       $.decimal,
       $.hexadecimal,
+      $.parenthesized_expression,
+      $.unary_expression,
     ),
 
-    // Binary expression with visible operator nodes
-    binary_expression: $ => choice(
-      prec.left(1, seq($._left_expression, field('operator', $.logical_or_operator), $._right_expression)),
-      prec.left(2, seq($._left_expression, field('operator', $.logical_and_operator), $._right_expression)),
-      prec.left(3, seq($._left_expression, field('operator', $.bitwise_or_operator), $._right_expression)),
-      prec.left(4, seq($._left_expression, field('operator', $.bitwise_xor_operator), $._right_expression)),
-      prec.left(5, seq($._left_expression, field('operator', $.bitwise_and_operator), $._right_expression)),
-      prec.left(6, seq($._left_expression, field('operator', $.equality_operator), $._right_expression)),
-      prec.left(7, seq($._left_expression, field('operator', $.relational_operator), $._right_expression)),
-      prec.left(8, seq($._left_expression, field('operator', $.shift_operator), $._right_expression)),
-      prec.left(9, seq($._left_expression, field('operator', $.additive_operator), $._right_expression)),
-      prec.left(10, seq($._left_expression, field('operator', $.multiplicative_operator), $._right_expression)),
-      prec.left(10, seq($._left_expression, field('operator', $.modulo_operator), field('right', choice($.macro_variable, $.register, $.local_label_reference, $.symbol, $.local_numeric_label_reference, $.char, $.octal, $.binary, $.decimal, $.hexadecimal, $.parenthesized_expression)))),
-      prec.left(20, seq($._left_expression, field('operator', $.assignment_operator), $._right_expression)),
+    // Precedence ladder.
+    _logical_or_expression: $ => prec(1, seq(
+      field('left', $._wrapped_logical_or_expression),
+      // optional($._whitespace),
+      field('operator', $.logical_or_operator),
+      field('right', $._wrapped_logical_and_expression),
+    )),
+    _wrapped_logical_or_expression: $ => choice(
+      alias($._logical_or_expression, $.binary_expression),
+      $._wrapped_logical_and_expression,
+    ),
+
+    _logical_and_expression: $ => prec(2, seq(
+      field('left', $._wrapped_logical_and_expression),
+      // optional($._whitespace),
+      field('operator', $.logical_and_operator),
+      field('right', $._wrapped_bitwise_or_expression),
+    )),
+    _wrapped_logical_and_expression: $ => choice(
+      alias($._logical_and_expression, $.binary_expression),
+      $._wrapped_bitwise_or_expression,
+    ),
+
+    _bitwise_or_expression: $ => prec(3, seq(
+      field('left', $._wrapped_bitwise_or_expression),
+      // optional($._whitespace),
+      field('operator', $.bitwise_or_operator),
+      field('right', $._wrapped_bitwise_xor_expression),
+    )),
+    _wrapped_bitwise_or_expression: $ => choice(
+      alias($._bitwise_or_expression, $.binary_expression),
+      $._wrapped_bitwise_xor_expression,
+    ),
+
+    _bitwise_xor_expression: $ => prec(4, seq(
+      field('left', $._wrapped_bitwise_xor_expression),
+      // optional($._whitespace),
+      field('operator', $.bitwise_xor_operator),
+      field('right', $._wrapped_bitwise_and_expression),
+    )),
+    _wrapped_bitwise_xor_expression: $ => choice(
+      alias($._bitwise_xor_expression, $.binary_expression),
+      $._wrapped_bitwise_and_expression,
+    ),
+
+    _bitwise_and_expression: $ => prec(5, seq(
+      field('left', $._wrapped_bitwise_and_expression),
+      // optional($._whitespace),
+      field('operator', $.bitwise_and_operator),
+      field('right', $._wrapped_equality_expression),
+    )),
+    _wrapped_bitwise_and_expression: $ => choice(
+      alias($._bitwise_and_expression, $.binary_expression),
+      $._wrapped_equality_expression,
+    ),
+
+    _equality_expression: $ => prec(6, seq(
+      field('left', $._wrapped_equality_expression),
+      // optional($._whitespace),
+      field('operator', $.equality_operator),
+      field('right', $._wrapped_relational_expression),
+    )),
+    _wrapped_equality_expression: $ => choice(
+      alias($._equality_expression, $.binary_expression),
+      $._wrapped_relational_expression,
+    ),
+
+    _relational_expression: $ => prec(7, seq(
+      field('left', $._wrapped_relational_expression),
+      // optional($._whitespace),
+      field('operator', $.relational_operator),
+      field('right', $._wrapped_shift_expression),
+    )),
+    _wrapped_relational_expression: $ => choice(
+      alias($._relational_expression, $.binary_expression),
+      $._wrapped_shift_expression,
+    ),
+
+    _shift_expression: $ => prec(8, seq(
+      field('left', $._wrapped_shift_expression),
+      // optional($._whitespace),
+      field('operator', $.shift_operator),
+      field('right', $._wrapped_additive_expression),
+    )),
+    _wrapped_shift_expression: $ => choice(
+      alias($._shift_expression, $.binary_expression),
+      $._wrapped_additive_expression,
+    ),
+
+    _additive_expression: $ => prec(9, seq(
+      field('left', $._wrapped_additive_expression),
+      // optional($._whitespace),
+      field('operator', $.additive_operator),
+      field('right', $._wrapped_multiplicative_expression),
+    )),
+    _wrapped_additive_expression: $ => choice(
+      alias($._additive_expression, $.binary_expression),
+      $._wrapped_multiplicative_expression,
+    ),
+
+    _multiplicative_expression: $ => prec(11, seq(
+      field('left', $._wrapped_multiplicative_expression),
+      // optional($._whitespace),
+      field('operator', $.multiplicative_operator),
+      field('right', $._wrapped_assignment_expression),
+    )),
+    _wrapped_multiplicative_expression: $ => choice(
+      alias($._multiplicative_expression, $.binary_expression),
+      $._wrapped_assignment_expression,
+    ),
+
+    _assignment_expression: $ => prec(13, seq(
+      field('left', $._wrapped_assignment_expression),
+      // optional($._whitespace),
+      field('operator', $.assignment_operator),
+      field('right', $._primary_expression),
+    )),
+    _wrapped_assignment_expression: $ => choice(
+      alias($._assignment_expression, $.binary_expression),
+      $._primary_expression,
+    ),
+
+    // The bottom layer: primitives and parens
+    _primary_expression: $ => choice(
+      $.relocation_expression,
+      $.address,
+      $.macro_variable,
+      $.register,
+      $.local_label_reference,
+      $.symbol,
+      $.local_numeric_label_reference,
+      $.char,
+      $.octal,
+      $.binary,
+      $.decimal,
+      $.hexadecimal,
+      $.parenthesized_expression,
+      $.unary_expression,
+    ),
+
+    parenthesized_expression: $ => seq(
+      '(',
+      $._expression,
+      ')',
     ),
 
     // Individual operator nodes
@@ -296,39 +477,22 @@ module.exports = grammar({
     bitwise_or_operator: $ => token('|'),
     bitwise_xor_operator: $ => token('^'),
     bitwise_and_operator: $ => token('&'),
-
     equality_operator: $ => token(choice('==', '!=')),
     relational_operator: $ => token(choice('<', '>', '<=', '>=')),
     shift_operator: $ => token(choice('<<', '>>')),
-    additive_operator: $ => token(choice('+', '-')),
-    multiplicative_operator: $ => choice(token('*'), $.division_operator),
-    modulo_operator: $ => token('%'),
+    additive_operator: $ => choice(seq(optional($._operator_separator), token('+')), '-'),
+    multiplicative_operator: $ => choice(seq(optional($._operator_separator), token('*')), seq(optional($._operator_separator), token('%')), $.division_operator),
     assignment_operator: $ => token('='),
-    _left_expression: $ => prec(1, seq(field('left', $._expression), optional($._operator_separator))),
-    _right_expression: $ => field('right', $._expression),
 
-    parenthesized_expression: $ => prec(19, seq(
-      '(',
-      choice(
-        $._expression_argument,
-        field('operands', $.operands),
-      ),
-      ')',
-    )),
-
-    // Binary expression with visible operator nodes
     unary_expression: $ => choice(
-      prec.right(11, seq(field('operator', $.unary_minus_operator), $._expression_argument)),
-      prec.right(11, seq(field('operator', $.bitwise_not_operator), $._expression_argument)),
-      prec.right(11, seq(field('operator', $.logical_not_operator), $._expression_argument)),
+      seq(field('operator', $.unary_minus_operator), $._expression_argument),
+      seq(field('operator', $.bitwise_not_operator), $._expression_argument),
+      seq(field('operator', $.logical_not_operator), $._expression_argument),
     ),
-
-    // Individual unary operator nodes
     unary_minus_operator: $ => token('-'),
     bitwise_not_operator: $ => token('~'),
     logical_not_operator: $ => token('!'),
 
-    // Examples: `%hi(foo)`, `%lo(123)`
     relocation_expression: $ => seq(
       field('type', $.relocation_type),
       '(',
@@ -381,11 +545,11 @@ module.exports = grammar({
       seq(
         '\\',
         choice(
-          /[abfnrtv\\'"?]/, // standard single-char escapes
-          /[0-7]{1,3}/, // octal
-          /x[0-9a-fA-F]{2}/, // hex
-          /u[0-9a-fA-F]{4}/, // Unicode 16-bit
-          /U[0-9a-fA-F]{8}/, // Unicode 32-bit
+          /[abfnrtv\\'"?]/,
+          /[0-7]{1,3}/,
+          /x[0-9a-fA-F]{2}/,
+          /u[0-9a-fA-F]{4}/,
+          /U[0-9a-fA-F]{8}/,
         ),
       ),
     ),
@@ -401,58 +565,41 @@ module.exports = grammar({
     register: $ => token(seq(
       optional('$'),
       choice(
-        // MIPS
         'zero', 'at', 'gp', 'sp', 'fp', 'ra',
-        /[vV][0-1]/, // v0–v1
-        /[kK][0-1]/, // k0–k1
-        /[cC][0-3]/, // c0–c3
-
-        // RISC-V
+        /[vV][0-1]/,
+        /[kK][0-1]/,
+        /[cC][0-3]/,
         'tp',
-        /f[ts](?:[0-9]|1[01])/, // ft0–ft11 and fs0–fs11
-        /fa[0-7]/, // fa0–fa7
-
-        // Both
-        /[aA][0-7]/, // a0–a7, MIPS32 only has ..a3
-        /[sS](?:[0-9]|1[01])/, // s0–s11,  MIPS only has ..s8
-        /[tT][0-9]/, // t0-t9, RISC-V only has ..t6
+        /f[ts](?:[0-9]|1[01])/,
+        /fa[0-7]/,
+        /[aA][0-7]/,
+        /[sS](?:[0-9]|1[01])/,
+        /[tT][0-9]/,
         /[frxFRX]?(?:[0-9]|[12][0-9]|30|31)/,
       ),
     )),
 
-    // Macro variables can start with percent, dollar and backslash.
-    // Macros starting with % cannot contain % inside (breaks on second %)
-    // Macros starting with $ or \ can contain % inside
     macro_variable: $ => token(choice(
-      seq('%', /[0-9a-zA-Z_:$\\]+/), // % prefix: no % allowed inside
-      seq('\\', /[0-9a-zA-Z_:%$\\]+/), // \ prefix: can have % inside
-      seq('$', /[0-9a-zA-Z_:%$\\]+/), // $ prefix: can have % inside
+      seq('%', /[0-9a-zA-Z_:$\\]+/),
+      seq('\\', /[0-9a-zA-Z_:%$\\]+/),
+      seq('$', /[0-9a-zA-Z_:%$\\]+/),
     )),
     macro_parameter: $ => token(/[%$\\]?[0-9a-zA-Z_:$%\\]+/),
     macro_name: $ => token(/[a-zA-Z_][a-zA-Z0-9_$]*/),
 
     _label: $ => seq(choice($.global_label, $.local_label, $.global_numeric_label, $.local_numeric_label), /[ \t]*/),
 
-    // Example: `.L122:`, `.Loop_1`
     local_label: $ => token(prec(3, /\.L[a-zA-Z0-9_$]*:/)),
     local_label_reference: $ => prec(1, /\.L[a-zA-Z0-9_$]*/),
 
-    // Example: `main:`
     global_label: $ => token(prec(2, /[a-zA-Z_.][a-zA-Z0-9_.$]*:/)),
     symbol: $ => prec(-1, /[a-zA-Z_.][a-zA-Z0-9_.$]*/),
 
-    // Example: `123:`
-    // Referenced by number literal
     global_numeric_label: $ => token(prec(2, /[1-9][0-9]+:/)),
 
-    // Example: `1:`
     local_numeric_label: $ => token(prec(3, /[0-9]:/)),
     local_numeric_label_reference: $ => token(/[0-9][fb]/),
 
-    // Examples: `main($s4)`, `value+4($s1)`, `($v1)`, `-0x10($a0)`
-    // Cannot match expression-like addresses: main, main+2
-    //  NOTE: This also matches macro calls in instructions.
-    //        Example: `for($t0, 1, 5)`
     address: $ => prec(1, seq(
       optional(field('offset', $._expression)),
       '(',
