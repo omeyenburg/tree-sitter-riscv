@@ -28,6 +28,7 @@ module.exports = grammar({
 
   inline: $ => [
     $._whitespace,
+    $._expression,
     $._expression_argument,
   ],
 
@@ -39,19 +40,25 @@ module.exports = grammar({
     [$.integer_operands],
     [$.macro_parameters],
     [$.operands],
-    [$._expression, $._simple_expression],
+    // [$._expression, $._simple_expression],
     [$._operand, $.parenthesized_expression],
+    [$.program, $._statement],
   ],
 
   rules: {
     program: $ => seq(
+      optional(choice($.preprocessor, alias($._wrong_preprocessor, $.line_comment))),
       repeat($._statement),
-      optional(choice(
-        $.directive,
-        $.instruction,
-        $._label,
+      optional(seq(
+        choice(
+          $.directive,
+          $.instruction,
+          $._label,
+        ),
+        // Preprocessor after last statement should be parsed as line comment
+        optional(alias(choice($.preprocessor, $._wrong_preprocessor), $.line_comment)),
       )),
-      optional(choice($._comment, $.preprocessor, alias($._wrong_preprocessor, $.line_comment))),
+      optional($._comment),
     ),
 
     _statement: $ => prec(1, choice(
@@ -75,9 +82,14 @@ module.exports = grammar({
         )),
       ),
       seq($.preprocessor, /\r?\n/),
+      // seq($.preprocessor2, /\r?\n/),
       seq(alias($._wrong_preprocessor, $.line_comment), /\r?\n/),
       seq($.line_comment, /\r?\n/),
       $.block_comment,
+      prec(100, seq(
+        $._label,
+        alias(choice($.preprocessor, $._wrong_preprocessor), $.line_comment),
+      )),
       $._label,
     )),
 
@@ -121,9 +133,15 @@ module.exports = grammar({
             seq('\\', /\r?\n/),
           )),
         ),
-        /[\r\n]/, // Or just newline (directive alone on line)
         seq('\\', /\r?\n/), // Or line continuation immediately
       )),
+    ))),
+
+    preprocessor2: $ => token(prec(1, seq(
+      '#',
+      optional(/[ \t]+/), // Optional whitespace after #
+      get_preprocessor_directives(),
+      // /[\r\n]/,
     ))),
 
     // Wrong preprocessor: directive followed by non-whitespace symbol.
@@ -140,7 +158,6 @@ module.exports = grammar({
             seq('\\', /\r?\n/),
           )),
         ),
-        /[\r\n]/,
         seq('\\', /\r?\n/),
       ),
     ))),
@@ -314,30 +331,16 @@ module.exports = grammar({
     // Matches primitives, registers, macro variables and compound expressions.
     // Does not match floats, floats are not accepted in expressions, but only
     // as standalone operands or in directives.
-    // Examples: `1`, `%var + 3`, `(label + 7)`
-    _expression: $ => choice(
-      $._wrapped_assignment_expression,
-      $.relocation_expression,
-      $.address,
-      $.macro_variable,
-      $.register,
-      $.local_label_reference,
-      $.symbol,
-      $.local_numeric_label_reference,
-      $.char,
-      $.octal,
-      $.binary,
-      $.decimal,
-      $.hexadecimal,
-      $.parenthesized_expression,
-      $.unary_expression,
-    ),
-
+    //
     // Nested expression evaluation order.
     // Operands of higher precedence binary expressions cannot be
     // expressions of lower precedence.
     // Primitives, addresses and single argument expression types
     // are at the bottom of the chain.
+    //
+    // Examples: `1`, `%var + 3`, `(label + 7)`
+    _expression: $ => $._wrapped_assignment_expression,
+
     _assignment_expression: $ => prec(13, seq(
       field('left', $._wrapped_assignment_expression),
       field('operator', $.assignment_operator),
