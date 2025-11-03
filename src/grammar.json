@@ -1893,7 +1893,7 @@
       "members": [
         {
           "type": "SYMBOL",
-          "name": "_wrapped_logical_or_expression"
+          "name": "_wrapped_assignment_expression"
         },
         {
           "type": "SYMBOL",
@@ -1950,6 +1950,64 @@
         {
           "type": "SYMBOL",
           "name": "unary_expression"
+        }
+      ]
+    },
+    "_assignment_expression": {
+      "type": "PREC",
+      "value": 13,
+      "content": {
+        "type": "SEQ",
+        "members": [
+          {
+            "type": "FIELD",
+            "name": "left",
+            "content": {
+              "type": "SYMBOL",
+              "name": "_wrapped_assignment_expression"
+            }
+          },
+          {
+            "type": "FIELD",
+            "name": "operator",
+            "content": {
+              "type": "SYMBOL",
+              "name": "assignment_operator"
+            }
+          },
+          {
+            "type": "FIELD",
+            "name": "right",
+            "content": {
+              "type": "SYMBOL",
+              "name": "_wrapped_logical_or_expression"
+            }
+          }
+        ]
+      }
+    },
+    "assignment_operator": {
+      "type": "TOKEN",
+      "content": {
+        "type": "STRING",
+        "value": "="
+      }
+    },
+    "_wrapped_assignment_expression": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "ALIAS",
+          "content": {
+            "type": "SYMBOL",
+            "name": "_assignment_expression"
+          },
+          "named": true,
+          "value": "binary_expression"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "_wrapped_logical_or_expression"
         }
       ]
     },
@@ -2546,7 +2604,7 @@
             "name": "right",
             "content": {
               "type": "SYMBOL",
-              "name": "_wrapped_assignment_expression"
+              "name": "_simple_expression"
             }
           }
         ]
@@ -2580,64 +2638,6 @@
           "content": {
             "type": "SYMBOL",
             "name": "_multiplicative_expression"
-          },
-          "named": true,
-          "value": "binary_expression"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "_wrapped_assignment_expression"
-        }
-      ]
-    },
-    "_assignment_expression": {
-      "type": "PREC",
-      "value": 13,
-      "content": {
-        "type": "SEQ",
-        "members": [
-          {
-            "type": "FIELD",
-            "name": "left",
-            "content": {
-              "type": "SYMBOL",
-              "name": "_wrapped_assignment_expression"
-            }
-          },
-          {
-            "type": "FIELD",
-            "name": "operator",
-            "content": {
-              "type": "SYMBOL",
-              "name": "assignment_operator"
-            }
-          },
-          {
-            "type": "FIELD",
-            "name": "right",
-            "content": {
-              "type": "SYMBOL",
-              "name": "_simple_expression"
-            }
-          }
-        ]
-      }
-    },
-    "assignment_operator": {
-      "type": "TOKEN",
-      "content": {
-        "type": "STRING",
-        "value": "="
-      }
-    },
-    "_wrapped_assignment_expression": {
-      "type": "CHOICE",
-      "members": [
-        {
-          "type": "ALIAS",
-          "content": {
-            "type": "SYMBOL",
-            "name": "_assignment_expression"
           },
           "named": true,
           "value": "binary_expression"

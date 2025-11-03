@@ -312,7 +312,7 @@ module.exports = grammar({
     // as standalone operands or in directives.
     // Examples: `1`, `%var + 3`, `(label + 7)`
     _expression: $ => choice(
-      $._wrapped_logical_or_expression,
+      $._wrapped_assignment_expression,
       $.relocation_expression,
       $.address,
       $.macro_variable,
@@ -334,6 +334,17 @@ module.exports = grammar({
     // expressions of lower precedence.
     // Primitives, addresses and single argument expression types
     // are at the bottom of the chain.
+    _assignment_expression: $ => prec(13, seq(
+      field('left', $._wrapped_assignment_expression),
+      field('operator', $.assignment_operator),
+      field('right', $._wrapped_logical_or_expression),
+    )),
+    assignment_operator: $ => token('='),
+    _wrapped_assignment_expression: $ => choice(
+      alias($._assignment_expression, $.binary_expression),
+      $._wrapped_logical_or_expression,
+    ),
+
     _logical_or_expression: $ => prec(1, seq(
       field('left', $._wrapped_logical_or_expression),
       field('operator', $.logical_or_operator),
@@ -436,22 +447,11 @@ module.exports = grammar({
     _multiplicative_expression: $ => prec(11, seq(
       field('left', $._wrapped_multiplicative_expression),
       field('operator', $.multiplicative_operator),
-      field('right', $._wrapped_assignment_expression),
+      field('right', $._simple_expression),
     )),
     multiplicative_operator: $ => token(choice('*', '%', '/')),
     _wrapped_multiplicative_expression: $ => choice(
       alias($._multiplicative_expression, $.binary_expression),
-      $._wrapped_assignment_expression,
-    ),
-
-    _assignment_expression: $ => prec(13, seq(
-      field('left', $._wrapped_assignment_expression),
-      field('operator', $.assignment_operator),
-      field('right', $._simple_expression),
-    )),
-    assignment_operator: $ => token('='),
-    _wrapped_assignment_expression: $ => choice(
-      alias($._assignment_expression, $.binary_expression),
       $._simple_expression,
     ),
 
