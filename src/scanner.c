@@ -70,7 +70,8 @@ bool tree_sitter_mips_external_scanner_scan(void* payload,
             // If we hit end of line, semicolon, or comment - not an operand separator
             if (!(lexer->lookahead == '\r' || lexer->lookahead == '\n' ||
                   lexer->lookahead == ';' || lexer->lookahead == '#')) {
-                // Special handling for %: distinguish between modulo operator and macro variable
+                // Special handling for %: distinguish between modulo operator and macro
+                // variable
                 if (lexer->lookahead == '%') {
                     // Mark end at space position BEFORE peeking ahead
                     lexer->mark_end(lexer);
@@ -78,9 +79,11 @@ bool tree_sitter_mips_external_scanner_scan(void* payload,
                     // Peek ahead to see what follows %
                     lexer->advance(lexer, false);
                     if (!lexer->eof(lexer)) {
-                        if (lexer->lookahead == ' ' || lexer->lookahead == '\t' || lexer->lookahead == '%') {
-                            // Space or another % after % means it's the modulo operator (like "1 % 2" or "1 %% 2")
-                            // Don't produce separator, let whitespace be handled naturally
+                        if (lexer->lookahead == ' ' || lexer->lookahead == '\t' ||
+                            lexer->lookahead == '%') {
+                            // Space or another % after % means it's the modulo operator
+                            // (like "1 % 2" or "1 %% 2") Don't produce separator, let
+                            // whitespace be handled naturally
                             return false;
                         }
                         // No space after % means it's a macro variable (like "1 %2")
@@ -92,43 +95,59 @@ bool tree_sitter_mips_external_scanner_scan(void* payload,
                     return true;
                 }
 
-                // Don't produce separators for operators - let whitespace be handled naturally
+                // Don't produce separators for operators, handle whitespace naturally
                 if (is_operator_start(lexer->lookahead)) {
                     // Special case: handle unary operators ('-', '~', '!') specially
-                    if (lexer->lookahead == '-' || lexer->lookahead == '~' || lexer->lookahead == '!') {
+                    if (lexer->lookahead == '-' || lexer->lookahead == '~' ||
+                        lexer->lookahead == '!') {
                         // Mark end at the space position first
                         lexer->mark_end(lexer);
 
                         // Peek ahead to check what follows the operator
                         lexer->advance(lexer, false);
                         bool is_digit = !lexer->eof(lexer) && isdigit(lexer->lookahead);
-                        bool is_unary_expression = !lexer->eof(lexer) && (lexer->lookahead == '-' || lexer->lookahead == '~' || lexer->lookahead == '!');
-                        bool is_unary_on_paren = !lexer->eof(lexer) && lexer->lookahead == '(';
+                        bool is_unary_expression =
+                            !lexer->eof(lexer) &&
+                            (lexer->lookahead == '-' || lexer->lookahead == '~' ||
+                             lexer->lookahead == '!');
+                        bool is_unary_on_paren =
+                            !lexer->eof(lexer) && lexer->lookahead == '(';
 
-                        // Check if there's a space after the operator, which would make it a binary operator
-                        bool has_space_after = !lexer->eof(lexer) && (lexer->lookahead == ' ' || lexer->lookahead == '\t');
+                        // Check if there's a space after the operator, which would make
+                        // it a binary operator
+                        bool has_space_after =
+                            !lexer->eof(lexer) &&
+                            (lexer->lookahead == ' ' || lexer->lookahead == '\t');
 
-                        // Special case for '-': if we have '-- ' (double minus followed by space), treat as subtraction
-                        // (i.e., "1 -- 1" should parse as "1 - (-1)" not as nested unary)
+                        // Special case for '-': if we have '-- ' (double minus followed
+                        // by space), treat as subtraction (i.e., "1 -- 1" should parse
+                        // as "1 - (-1)" not as nested unary)
                         if (is_unary_expression && lexer->lookahead == '-') {
-                            // We saw '- -', now check if there's a space after the second '-'
+                            // We saw '- -', now check if there's a space after the
+                            // second '-'
                             if (!lexer->eof(lexer)) {
                                 lexer->advance(lexer, false);
-                                has_space_after = !lexer->eof(lexer) && (lexer->lookahead == ' ' || lexer->lookahead == '\t');
+                                has_space_after =
+                                    !lexer->eof(lexer) && (lexer->lookahead == ' ' ||
+                                                           lexer->lookahead == '\t');
                             }
                         }
 
-                        // If the unary operator is immediately followed by a digit, another unary, or paren without space,
-                        // treat the previous space as operand separator (it's part of the expression)
-                        if ((is_digit || is_unary_expression || is_unary_on_paren) && !has_space_after && is_valid_operand_separator) {
+                        // If the unary operator is immediately followed by a digit,
+                        // another unary, or paren without space, treat the previous
+                        // space as operand separator (it's part of the expression)
+                        if ((is_digit || is_unary_expression || is_unary_on_paren) &&
+                            !has_space_after && is_valid_operand_separator) {
                             lexer->result_symbol = _OPERAND_SEPARATOR;
                             return true;
                         }
-                        // Otherwise, it's a binary operator - don't produce separator, let whitespace be skipped
+                        // Otherwise, it's a binary operator - don't produce separator,
+                        // let whitespace be skipped
                         return false;
                     } else {
-                        // For non-unary binary operators (+, *, %, &, |, etc.), don't produce separator
-                        // Let whitespace be handled naturally by the parser
+                        // For non-unary binary operators (+, *, %, &, |, etc.), don't
+                        // produce separator Let whitespace be handled naturally by the
+                        // parser
                         return false;
                     }
                 }
@@ -162,7 +181,8 @@ bool tree_sitter_mips_external_scanner_scan(void* payload,
             if (is_valid_line_separator && is_valid_data_separator) {
                 // Skip whitespace after newline
                 while (!lexer->eof(lexer) &&
-                       (lexer->lookahead == ' ' || lexer->lookahead == '\t' || lexer->lookahead == '\r')) {
+                       (lexer->lookahead == ' ' || lexer->lookahead == '\t' ||
+                        lexer->lookahead == '\r')) {
                     lexer->advance(lexer, false);
                 }
                 if (lexer->eof(lexer)) {
@@ -172,9 +192,41 @@ bool tree_sitter_mips_external_scanner_scan(void* payload,
                     return true;
                 }
 
-                // Check if it's a line separator (starts new line/directive) or data separator
+                // Check for comments, semicolon - these always start new statements
+                if (lexer->lookahead == '#' || lexer->lookahead == '/' ||
+                    lexer->lookahead == ';') {
+                    lexer->result_symbol = _LINE_SEPARATOR;
+                    lexer->mark_end(lexer);
+                    return true;
+                }
+
+                // Check for numeric label: digits followed by ':'
+                if (iswdigit(lexer->lookahead)) {
+                    // Peek ahead to see if this is a numeric label (e.g., "1:")
+                    lexer->mark_end(lexer); // Mark current position
+
+                    // Skip digits
+                    while (!lexer->eof(lexer) && iswdigit(lexer->lookahead)) {
+                        lexer->advance(lexer, false);
+                    }
+
+                    // Check if followed by ':'
+                    if (!lexer->eof(lexer) && lexer->lookahead == ':') {
+                        // It's a numeric label - return LINE_SEPARATOR
+                        lexer->result_symbol = _LINE_SEPARATOR;
+                        return true;
+                    }
+
+                    // Not a numeric label - it's numeric data continuation
+                    // Return DATA_SEPARATOR
+                    lexer->result_symbol = _DATA_SEPARATOR;
+                    return true;
+                }
+
+                // Check if it's a line separator (starts new line/directive) or data
+                // separator
                 if (lexer->lookahead == '\n' || lexer->lookahead == '.' ||
-                    isalpha(lexer->lookahead)) {
+                    lexer->lookahead == '_' || isalpha(lexer->lookahead)) {
                     lexer->result_symbol = _LINE_SEPARATOR;
                     lexer->mark_end(lexer);
                     return true;
