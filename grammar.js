@@ -18,7 +18,7 @@ module.exports = grammar({
     $.line_comment,
     $.block_comment,
     $.preprocessor,
-    $.division_operator,
+    $._division_operator,
   ],
 
   extras: $ => [
@@ -419,7 +419,7 @@ module.exports = grammar({
     relational_operator: $ => token(choice('<', '>', '<=', '>=')),
     shift_operator: $ => token(choice('<<', '>>')),
     additive_operator: $ => choice('+', '-'),
-    multiplicative_operator: $ => choice(token('*'), token('%'), $.division_operator),
+    multiplicative_operator: $ => choice(token('*'), token('%'), $._division_operator),
     assignment_operator: $ => token('='),
 
     unary_expression: $ => choice(

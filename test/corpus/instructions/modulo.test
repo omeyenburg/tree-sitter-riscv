@@ -167,8 +167,7 @@ foo 10 % 3 / 2
           left: (decimal)
           operator: (multiplicative_operator)
           right: (decimal))
-        operator: (multiplicative_operator
-          (division_operator))
+        operator: (multiplicative_operator)
         right: (decimal)))))
 
 ==========

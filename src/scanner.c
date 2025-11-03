@@ -18,7 +18,7 @@ enum TokenType {
     LINE_COMMENT,
     BLOCK_COMMENT,
     PREPROCESSOR,
-    DIVISION_OPERATOR,
+    _DIVISION_OPERATOR,
 };
 
 void* tree_sitter_mips_external_scanner_create() {
@@ -81,7 +81,7 @@ bool tree_sitter_mips_external_scanner_scan(void* payload,
                 if (lexer->lookahead == '%') {
                     // Mark end at space position BEFORE peeking ahead
                     lexer->mark_end(lexer);
-                    
+
                     // Peek ahead to see what follows %
                     lexer->advance(lexer, false);
                     if (!lexer->eof(lexer)) {
@@ -204,7 +204,7 @@ bool tree_sitter_mips_external_scanner_scan(void* payload,
     }
 
     if (valid_symbols[BLOCK_COMMENT] || valid_symbols[LINE_COMMENT] ||
-        valid_symbols[DIVISION_OPERATOR]) {
+        valid_symbols[_DIVISION_OPERATOR]) {
 
         if (lexer->lookahead == '/') {
             lexer->advance(lexer, false);
@@ -236,9 +236,9 @@ bool tree_sitter_mips_external_scanner_scan(void* payload,
                 lexer->mark_end(lexer);
                 return valid_symbols[BLOCK_COMMENT];
             } else {
-                lexer->result_symbol = DIVISION_OPERATOR;
+                lexer->result_symbol = _DIVISION_OPERATOR;
                 lexer->mark_end(lexer);
-                return valid_symbols[DIVISION_OPERATOR];
+                return valid_symbols[_DIVISION_OPERATOR];
             }
         } else if (lexer->lookahead == '#' &&
                    (valid_symbols[LINE_COMMENT] || valid_symbols[PREPROCESSOR])) {

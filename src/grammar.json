@@ -2297,7 +2297,7 @@
         },
         {
           "type": "SYMBOL",
-          "name": "division_operator"
+          "name": "_division_operator"
         }
       ]
     },
@@ -3088,7 +3088,7 @@
     },
     {
       "type": "SYMBOL",
-      "name": "division_operator"
+      "name": "_division_operator"
     }
   ],
   "inline": [

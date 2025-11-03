@@ -671,17 +671,7 @@
   {
     "type": "multiplicative_operator",
     "named": true,
-    "fields": {},
-    "children": {
-      "multiple": false,
-      "required": false,
-      "types": [
-        {
-          "type": "division_operator",
-          "named": true
-        }
-      ]
-    }
+    "fields": {}
   },
   {
     "type": "operands",
@@ -1301,10 +1291,6 @@
   },
   {
     "type": "block_comment",
-    "named": true
-  },
-  {
-    "type": "division_operator",
     "named": true
   },
   {
