@@ -162,7 +162,7 @@ bool tree_sitter_mips_external_scanner_scan(void* payload,
             if (is_valid_line_separator && is_valid_data_separator) {
                 // Skip whitespace after newline
                 while (!lexer->eof(lexer) &&
-                       (lexer->lookahead == ' ' || lexer->lookahead == '\t')) {
+                       (lexer->lookahead == ' ' || lexer->lookahead == '\t' || lexer->lookahead == '\r')) {
                     lexer->advance(lexer, false);
                 }
                 if (lexer->eof(lexer)) {

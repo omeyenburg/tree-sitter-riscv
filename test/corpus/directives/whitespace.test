@@ -164,3 +164,16 @@
     operands: (control_operands
       (symbol)
       (symbol))))
+
+==========
+[directives/whitespace] control directive with argument followed by line with CRLF
+==========
+.foo bar
+
+---
+
+(program
+  (directive
+    mnemonic: (control_mnemonic)
+    operands: (control_operands
+      (symbol))))

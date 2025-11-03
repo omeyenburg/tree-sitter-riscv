@@ -106,6 +106,7 @@ module.exports = grammar({
       repeat(choice(
         /[^\\\n]/,
         seq('\\', /\r?\n/),
+        seq('\\', /./),
       )),
     )),
 
