@@ -111,3 +111,23 @@
 
 (program
   (block_comment))
+
+==========
+[program/comment] literal escape sequence in comment
+==========
+# \n
+
+---
+
+(program
+  (line_comment))
+
+==========
+[program/comment] literal escape sequence in C style line comment
+==========
+// \n
+
+---
+
+(program
+  (line_comment))

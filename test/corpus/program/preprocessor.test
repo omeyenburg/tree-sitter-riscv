@@ -151,3 +151,61 @@
 
 (program
   (preprocessor))
+
+==========
+[program/preprocessor] preprocessor-like comment after instruction
+==========
+foo #define bar
+---
+
+(program
+  (instruction
+    opcode: (opcode))
+  (line_comment))
+
+==========
+[program/preprocessor] wrong-preprocessor-like comment after instruction
+==========
+foo #defined bar
+---
+
+(program
+  (instruction
+    opcode: (opcode))
+  (line_comment))
+
+==========
+[program/preprocessor] preprocessor-like comment after directive
+==========
+.foo #define bar
+---
+
+(program
+  (directive
+    mnemonic: (control_mnemonic))
+  (line_comment))
+
+==========
+[program/preprocessor] preprocessor-like comment after label
+==========
+foo: #define bar
+---
+
+(program
+  (global_label)
+  (line_comment))
+
+==========
+[program/preprocessor] preprocessor surrounded by instructions
+==========
+foo
+#define
+bar
+---
+
+(program
+  (instruction
+    opcode: (opcode))
+  (preprocessor)
+  (instruction
+    opcode: (opcode)))
