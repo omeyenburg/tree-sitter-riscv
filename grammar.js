@@ -62,11 +62,15 @@ module.exports = grammar({
         seq($.directive, choice(
           ';',
           seq(optional($.line_comment), $._line_separator),
+          seq(optional(alias($.preprocessor, $.line_comment)), $._line_separator), // Parse preprocessor at line end as comment
+          seq(optional(alias($._wrong_preprocessor, $.line_comment)), $._line_separator),
           seq($.block_comment, optional($._line_separator)),
         )),
         seq($.instruction, choice(
           ';',
           seq(optional($.line_comment), optional('\r'), '\n'),
+          seq(optional(alias($.preprocessor, $.line_comment)), optional('\r'), '\n'),
+          seq(optional(alias($._wrong_preprocessor, $.line_comment)), optional('\r'), '\n'),
           seq($.block_comment, optional('\r'), optional('\n')),
         )),
       ),
