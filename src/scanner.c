@@ -47,12 +47,12 @@ bool tree_sitter_mips_external_scanner_scan(void* payload,
                                             const bool* valid_symbols) {
     (void) payload;
 
+    if (lexer->eof(lexer))
+        return false;
+
     bool is_valid_operand_separator = valid_symbols[_OPERAND_SEPARATOR];
     bool is_valid_line_separator = valid_symbols[_LINE_SEPARATOR];
     bool is_valid_data_separator = valid_symbols[_DATA_SEPARATOR];
-
-    if (lexer->eof(lexer))
-        return false;
 
     if (is_valid_operand_separator) {
         // Skip whitespace but track that we found some
