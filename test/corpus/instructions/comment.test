@@ -74,7 +74,7 @@ foo $t0# bar
   (instruction
     opcode: (opcode)
     operands: (operands
-      (register)))
+      operand: (register)))
   (line_comment))
 
 ==========
@@ -87,7 +87,7 @@ foo $t0// bar
   (instruction
     opcode: (opcode)
     operands: (operands
-      (register)))
+      operand: (register)))
   (line_comment))
 
 ==========
@@ -100,7 +100,7 @@ foo $t0/* bar */
   (instruction
     opcode: (opcode)
     operands: (operands
-      (register)))
+      operand: (register)))
   (block_comment))
 
 ==========
@@ -113,7 +113,7 @@ foo $t0 # bar
   (instruction
     opcode: (opcode)
     operands: (operands
-      (register)))
+      operand: (register)))
   (line_comment))
 
 ==========
@@ -126,7 +126,7 @@ foo $t0 // bar
   (instruction
     opcode: (opcode)
     operands: (operands
-      (register)))
+      operand: (register)))
   (line_comment))
 
 ==========
@@ -139,7 +139,7 @@ foo $t0 /* bar */
   (instruction
     opcode: (opcode)
     operands: (operands
-      (register)))
+      operand: (register)))
   (block_comment))
 
 ==========
@@ -153,7 +153,7 @@ foo/* bar */$t0
     opcode: (opcode)
     (block_comment)
     operands: (operands
-      (register))))
+      operand: (register))))
 
 ==========
 [instructions/comment] C style block comment between opcode and operands with space before
@@ -166,7 +166,7 @@ foo /* bar */$t0
     opcode: (opcode)
     (block_comment)
     operands: (operands
-      (register))))
+      operand: (register))))
 
 ==========
 [instructions/comment] C style block comment between opcode and operands with space after
@@ -179,7 +179,7 @@ foo/* bar */ $t0
     opcode: (opcode)
     (block_comment)
     operands: (operands
-      (register))))
+      operand: (register))))
 
 ==========
 [instructions/comment] call expression with C style block comment after opcode
@@ -192,8 +192,8 @@ foo/* bar */(1, 2)
     opcode: (opcode)
     (block_comment)
     operands: (operands
-      (decimal)
-      (decimal))))
+      operand: (decimal)
+      operand: (decimal))))
 
 ==========
 [instructions/comment] call expression with C style block comment before operands
@@ -206,8 +206,8 @@ foo(/* bar */1, 2)
     opcode: (opcode)
     (block_comment)
     operands: (operands
-      (decimal)
-      (decimal))))
+      operand: (decimal)
+      operand: (decimal))))
 
 ==========
 [instructions/comment] call expression with C style block comment after operands
@@ -219,6 +219,6 @@ foo(1, 2/* baz */)
   (instruction
     opcode: (opcode)
     operands: (operands
-      (decimal)
-      (decimal))
+      operand: (decimal)
+      operand: (decimal))
     (block_comment)))

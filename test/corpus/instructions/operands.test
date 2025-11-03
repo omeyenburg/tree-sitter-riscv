@@ -8,9 +8,9 @@ foo $t0 $t1 $t2
   (instruction
     opcode: (opcode)
     operands: (operands
-      (register)
-      (register)
-      (register))))
+      operand: (register)
+      operand: (register)
+      operand: (register))))
 
 ==========
 [instructions/operands] instruction with multiple comma-separated arguments
@@ -22,9 +22,9 @@ foo $t0,$t1,$t2
   (instruction
     opcode: (opcode)
     operands: (operands
-      (register)
-      (register)
-      (register))))
+      operand: (register)
+      operand: (register)
+      operand: (register))))
 
 ==========
 [instructions/operands] instruction with symbol
@@ -36,7 +36,7 @@ foo bar
   (instruction
     opcode: (opcode)
     operands: (operands
-      (symbol))))
+      operand: (symbol))))
 
 ==========
 [instructions/operands] simple binary expression
@@ -48,7 +48,7 @@ foo bar+4
   (instruction
     opcode: (opcode)
     operands: (operands
-      (binary_expression
+      operand: (binary_expression
         left: (symbol)
         operator: (additive_operator)
         right: (decimal)))))
@@ -63,7 +63,7 @@ foo (bar+4)
   (instruction
     opcode: (opcode)
     operands: (operands
-      (parenthesized_expression
+      operand: (parenthesized_expression
         argument: (binary_expression
           left: (symbol)
           operator: (additive_operator)
@@ -79,5 +79,5 @@ foo(bar, baz)
   (instruction
     opcode: (opcode)
     operands: (operands
-      (symbol)
-      (symbol))))
+      operand: (symbol)
+      operand: (symbol))))

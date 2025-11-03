@@ -1,5 +1,5 @@
 ==========
-[labels/local] global numeric label
+[labels/numeric] global numeric label
 ==========
 100:
 ---
@@ -8,7 +8,7 @@
   (global_numeric_label))
 
 ==========
-[labels/local] local numeric label
+[labels/numeric] local numeric label
 ==========
 0:
 ---
@@ -17,7 +17,7 @@
   (local_numeric_label))
 
 ==========
-[labels/local] local numeric label forward reference
+[labels/numeric] local numeric label forward reference
 ==========
 foo 1f
 ---
@@ -26,10 +26,10 @@ foo 1f
   (instruction
     opcode: (opcode)
     operands: (operands
-      (local_numeric_label_reference))))
+      operand: (local_numeric_label_reference))))
 
 ==========
-[labels/local] local numeric label backward reference
+[labels/numeric] local numeric label backward reference
 ==========
 foo 1b
 ---
@@ -38,4 +38,4 @@ foo 1b
   (instruction
     opcode: (opcode)
     operands: (operands
-      (local_numeric_label_reference))))
+      operand: (local_numeric_label_reference))))

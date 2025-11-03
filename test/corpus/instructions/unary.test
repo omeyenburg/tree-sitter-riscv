@@ -8,7 +8,7 @@ foo -10
   (instruction
     opcode: (opcode)
     operands: (operands
-      (decimal))))
+      operand: (decimal))))
 
 ==========
 [instructions/unary] unary expression with symbol
@@ -20,7 +20,7 @@ foo -bar
   (instruction
     opcode: (opcode)
     operands: (operands
-      (unary_expression
+      operand: (unary_expression
         operator: (unary_minus_operator)
         argument: (symbol)))))
 
@@ -34,8 +34,8 @@ foo 1 -1
   (instruction
     opcode: (opcode)
     operands: (operands
-      (decimal)
-      (decimal))))
+      operand: (decimal)
+      operand: (decimal))))
 
 ==========
 [instructions/unary] unary expression on parenthesized expression
@@ -47,8 +47,8 @@ foo 1 -(-1)
   (instruction
     opcode: (opcode)
     operands: (operands
-      (decimal)
-      (unary_expression
+      operand: (decimal)
+      operand: (unary_expression
         operator: (unary_minus_operator)
         argument: (parenthesized_expression
           argument: (decimal))))))
@@ -63,7 +63,7 @@ foo 1 -- 1
   (instruction
     opcode: (opcode)
     operands: (operands
-      (binary_expression
+      operand: (binary_expression
         left: (decimal)
         operator: (additive_operator)
         right: (unary_expression
@@ -82,19 +82,19 @@ foo ~bar
   (instruction
     opcode: (opcode)
     operands: (operands
-      (unary_expression
+      operand: (unary_expression
         operator: (bitwise_not_operator)
         argument: (decimal))))
   (instruction
     opcode: (opcode)
     operands: (operands
-      (unary_expression
+      operand: (unary_expression
         operator: (bitwise_not_operator)
         argument: (decimal))))
   (instruction
     opcode: (opcode)
     operands: (operands
-      (unary_expression
+      operand: (unary_expression
         operator: (bitwise_not_operator)
         argument: (symbol)))))
 
@@ -110,19 +110,19 @@ foo !bar
   (instruction
     opcode: (opcode)
     operands: (operands
-      (unary_expression
+      operand: (unary_expression
         operator: (logical_not_operator)
         argument: (decimal))))
   (instruction
     opcode: (opcode)
     operands: (operands
-      (unary_expression
+      operand: (unary_expression
         operator: (logical_not_operator)
         argument: (decimal))))
   (instruction
     opcode: (opcode)
     operands: (operands
-      (unary_expression
+      operand: (unary_expression
         operator: (logical_not_operator)
         argument: (symbol)))))
 
@@ -138,15 +138,15 @@ foo 1 !!1
   (instruction
     opcode: (opcode)
     operands: (operands
-      (decimal)
-      (unary_expression
+      operand: (decimal)
+      operand: (unary_expression
         operator: (unary_minus_operator)
         argument: (decimal))))
   (instruction
     opcode: (opcode)
     operands: (operands
-      (decimal)
-      (unary_expression
+      operand: (decimal)
+      operand: (unary_expression
         operator: (bitwise_not_operator)
         argument: (unary_expression
           operator: (bitwise_not_operator)
@@ -154,8 +154,8 @@ foo 1 !!1
   (instruction
     opcode: (opcode)
     operands: (operands
-      (decimal)
-      (unary_expression
+      operand: (decimal)
+      operand: (unary_expression
         operator: (logical_not_operator)
         argument: (unary_expression
           operator: (logical_not_operator)
@@ -173,16 +173,16 @@ foo 1 !(!1)
   (instruction
     opcode: (opcode)
     operands: (operands
-      (decimal)
-      (unary_expression
+      operand: (decimal)
+      operand: (unary_expression
         operator: (unary_minus_operator)
         argument: (parenthesized_expression
           argument: (decimal)))))
   (instruction
     opcode: (opcode)
     operands: (operands
-      (decimal)
-      (unary_expression
+      operand: (decimal)
+      operand: (unary_expression
         operator: (bitwise_not_operator)
         argument: (parenthesized_expression
           argument: (unary_expression
@@ -191,8 +191,8 @@ foo 1 !(!1)
   (instruction
     opcode: (opcode)
     operands: (operands
-      (decimal)
-      (unary_expression
+      operand: (decimal)
+      operand: (unary_expression
         operator: (logical_not_operator)
         argument: (parenthesized_expression
           argument: (unary_expression
@@ -210,13 +210,13 @@ foo ~$s0
   (instruction
     opcode: (opcode)
     operands: (operands
-      (unary_expression
+      operand: (unary_expression
         operator: (unary_minus_operator)
         argument: (register))))
   (instruction
     opcode: (opcode)
     operands: (operands
-      (unary_expression
+      operand: (unary_expression
         operator: (bitwise_not_operator)
         argument: (register)))))
 
@@ -232,19 +232,19 @@ foo !%flag
   (instruction
     opcode: (opcode)
     operands: (operands
-      (unary_expression
+      operand: (unary_expression
         operator: (unary_minus_operator)
         argument: (macro_variable))))
   (instruction
     opcode: (opcode)
     operands: (operands
-      (unary_expression
+      operand: (unary_expression
         operator: (bitwise_not_operator)
         argument: (macro_variable))))
   (instruction
     opcode: (opcode)
     operands: (operands
-      (unary_expression
+      operand: (unary_expression
         operator: (logical_not_operator)
         argument: (macro_variable)))))
 
@@ -259,7 +259,7 @@ foo ~%lo(symbol)
   (instruction
     opcode: (opcode)
     operands: (operands
-      (unary_expression
+      operand: (unary_expression
         operator: (unary_minus_operator)
         argument: (relocation_expression
           type: (relocation_type)
@@ -267,7 +267,7 @@ foo ~%lo(symbol)
   (instruction
     opcode: (opcode)
     operands: (operands
-      (unary_expression
+      operand: (unary_expression
         operator: (bitwise_not_operator)
         argument: (relocation_expression
           type: (relocation_type)
@@ -285,19 +285,19 @@ foo 1 !1
   (instruction
     opcode: (opcode)
     operands: (operands
-      (decimal)
-      (decimal)))
+      operand: (decimal)
+      operand: (decimal)))
   (instruction
     opcode: (opcode)
     operands: (operands
-      (decimal)
-      (unary_expression
+      operand: (decimal)
+      operand: (unary_expression
         operator: (bitwise_not_operator)
         argument: (decimal))))
   (instruction
     opcode: (opcode)
     operands: (operands
-      (decimal)
-      (unary_expression
+      operand: (decimal)
+      operand: (unary_expression
         operator: (logical_not_operator)
         argument: (decimal)))))

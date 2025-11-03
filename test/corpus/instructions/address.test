@@ -8,7 +8,7 @@ foo ($s0)
   (instruction
     opcode: (opcode)
     operands: (operands
-      (address
+      operand: (address
         base: (register)))))
 
 ==========
@@ -21,7 +21,7 @@ foo -100($s0)
   (instruction
     opcode: (opcode)
     operands: (operands
-      (address
+      operand: (address
         offset: (decimal)
         base: (register)))))
 
@@ -35,7 +35,7 @@ foo bar($s0)
   (instruction
     opcode: (opcode)
     operands: (operands
-      (address
+      operand: (address
         offset: (symbol)
         base: (register)))))
 
@@ -49,12 +49,12 @@ foo bar+100($s0)
   (instruction
     opcode: (opcode)
     operands: (operands
-      (binary_expression
-        left: (symbol)
-        operator: (additive_operator)
-        right: (address
-          offset: (decimal)
-          base: (register))))))
+      operand: (address
+        offset: (binary_expression
+          left: (symbol)
+          operator: (additive_operator)
+          right: (decimal))
+        base: (register)))))
 
 ==========
 [instructions/address] address with parenthesized expression offset
@@ -66,7 +66,7 @@ foo (bar+0x123)($s0)
   (instruction
     opcode: (opcode)
     operands: (operands
-      (address
+      operand: (address
         offset: (parenthesized_expression
           argument: (binary_expression
             left: (symbol)

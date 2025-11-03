@@ -11,29 +11,29 @@ foo 4 %2
   (instruction
     opcode: (opcode)
     operands: (operands
-      (binary_expression
+      operand: (binary_expression
         left: (decimal)
-        operator: (modulo_operator)
+        operator: (multiplicative_operator)
         right: (decimal))))
   (instruction
     opcode: (opcode)
     operands: (operands
-      (binary_expression
+      operand: (binary_expression
         left: (decimal)
-        operator: (modulo_operator)
+        operator: (multiplicative_operator)
         right: (decimal))))
   (instruction
     opcode: (opcode)
     operands: (operands
-      (binary_expression
+      operand: (binary_expression
         left: (decimal)
-        operator: (modulo_operator)
+        operator: (multiplicative_operator)
         right: (decimal))))
   (instruction
     opcode: (opcode)
     operands: (operands
-      (decimal)
-      (macro_variable))))
+      operand: (decimal)
+      operand: (macro_variable))))
 
 ==========
 [instructions/modulo] left-associative chaining
@@ -47,32 +47,32 @@ foo %1 % %2 % %3
   (instruction
     opcode: (opcode)
     operands: (operands
-      (binary_expression
+      operand: (binary_expression
         left: (binary_expression
           left: (decimal)
-          operator: (modulo_operator)
+          operator: (multiplicative_operator)
           right: (decimal))
-        operator: (modulo_operator)
+        operator: (multiplicative_operator)
         right: (decimal))))
   (instruction
     opcode: (opcode)
     operands: (operands
-      (binary_expression
+      operand: (binary_expression
         left: (binary_expression
           left: (decimal)
-          operator: (modulo_operator)
+          operator: (multiplicative_operator)
           right: (decimal))
-        operator: (modulo_operator)
+        operator: (multiplicative_operator)
         right: (decimal))))
   (instruction
     opcode: (opcode)
     operands: (operands
-      (binary_expression
+      operand: (binary_expression
         left: (binary_expression
           left: (macro_variable)
-          operator: (modulo_operator)
+          operator: (multiplicative_operator)
           right: (macro_variable))
-        operator: (modulo_operator)
+        operator: (multiplicative_operator)
         right: (macro_variable)))))
 
 ==========
@@ -85,15 +85,15 @@ foo 100 % 20 % 5 % 2
   (instruction
     opcode: (opcode)
     operands: (operands
-      (binary_expression
+      operand: (binary_expression
         left: (binary_expression
           left: (binary_expression
             left: (decimal)
-            operator: (modulo_operator)
+            operator: (multiplicative_operator)
             right: (decimal))
-          operator: (modulo_operator)
+          operator: (multiplicative_operator)
           right: (decimal))
-        operator: (modulo_operator)
+        operator: (multiplicative_operator)
         right: (decimal)))))
 
 ==========
@@ -107,24 +107,24 @@ foo (10 % 5) % 2
   (instruction
     opcode: (opcode)
     operands: (operands
-      (binary_expression
+      operand: (binary_expression
         left: (decimal)
-        operator: (modulo_operator)
+        operator: (multiplicative_operator)
         right: (parenthesized_expression
           argument: (binary_expression
             left: (decimal)
-            operator: (modulo_operator)
+            operator: (multiplicative_operator)
             right: (decimal))))))
   (instruction
     opcode: (opcode)
     operands: (operands
-      (binary_expression
+      operand: (binary_expression
         left: (parenthesized_expression
           argument: (binary_expression
             left: (decimal)
-            operator: (modulo_operator)
+            operator: (multiplicative_operator)
             right: (decimal)))
-        operator: (modulo_operator)
+        operator: (multiplicative_operator)
         right: (decimal)))))
 
 ==========
@@ -139,33 +139,33 @@ foo 10 % 3 / 2
   (instruction
     opcode: (opcode)
     operands: (operands
-      (binary_expression
+      operand: (binary_expression
         left: (binary_expression
           left: (decimal)
-          operator: (modulo_operator)
+          operator: (multiplicative_operator)
           right: (decimal))
         operator: (additive_operator)
         right: (binary_expression
           left: (decimal)
-          operator: (modulo_operator)
+          operator: (multiplicative_operator)
           right: (decimal)))))
   (instruction
     opcode: (opcode)
     operands: (operands
-      (binary_expression
-        left: (decimal)
-        operator: (multiplicative_operator)
-        right: (binary_expression
-          left: (decimal)
-          operator: (modulo_operator)
-          right: (decimal)))))
-  (instruction
-    opcode: (opcode)
-    operands: (operands
-      (binary_expression
+      operand: (binary_expression
         left: (binary_expression
           left: (decimal)
-          operator: (modulo_operator)
+          operator: (multiplicative_operator)
+          right: (decimal))
+        operator: (multiplicative_operator)
+        right: (decimal))))
+  (instruction
+    opcode: (opcode)
+    operands: (operands
+      operand: (binary_expression
+        left: (binary_expression
+          left: (decimal)
+          operator: (multiplicative_operator)
           right: (decimal))
         operator: (multiplicative_operator
           (division_operator))
@@ -181,10 +181,10 @@ foo (4 % 2)
   (instruction
     opcode: (opcode)
     operands: (operands
-      (parenthesized_expression
+      operand: (parenthesized_expression
         argument: (binary_expression
           left: (decimal)
-          operator: (modulo_operator)
+          operator: (multiplicative_operator)
           right: (decimal))))))
 
 ==========
@@ -202,44 +202,44 @@ foo 1 % %2
   (instruction
     opcode: (opcode)
     operands: (operands
-      (binary_expression
+      operand: (binary_expression
         left: (decimal)
-        operator: (modulo_operator)
+        operator: (multiplicative_operator)
         right: (macro_variable))))
   (instruction
     opcode: (opcode)
     operands: (operands
-      (binary_expression
+      operand: (binary_expression
         left: (decimal)
-        operator: (modulo_operator)
+        operator: (multiplicative_operator)
         right: (macro_variable))))
   (instruction
     opcode: (opcode)
     operands: (operands
-      (binary_expression
+      operand: (binary_expression
         left: (macro_variable)
-        operator: (modulo_operator)
+        operator: (multiplicative_operator)
         right: (decimal))))
   (instruction
     opcode: (opcode)
     operands: (operands
-      (binary_expression
+      operand: (binary_expression
         left: (macro_variable)
-        operator: (modulo_operator)
+        operator: (multiplicative_operator)
         right: (decimal))))
   (instruction
     opcode: (opcode)
     operands: (operands
-      (binary_expression
+      operand: (binary_expression
         left: (macro_variable)
-        operator: (modulo_operator)
+        operator: (multiplicative_operator)
         right: (decimal))))
   (instruction
     opcode: (opcode)
     operands: (operands
-      (binary_expression
+      operand: (binary_expression
         left: (decimal)
-        operator: (modulo_operator)
+        operator: (multiplicative_operator)
         right: (macro_variable)))))
 
 ==========
@@ -254,18 +254,18 @@ foo %1 %2%3
   (instruction
     opcode: (opcode)
     operands: (operands
-      (macro_variable)
-      (macro_variable)))
+      operand: (macro_variable)
+      operand: (macro_variable)))
   (instruction
     opcode: (opcode)
     operands: (operands
-      (macro_variable)
-      (macro_variable)))
+      operand: (macro_variable)
+      operand: (macro_variable)))
   (instruction
     opcode: (opcode)
     operands: (operands
-      (macro_variable)
-      (binary_expression
+      operand: (macro_variable)
+      operand: (binary_expression
         left: (macro_variable)
-        operator: (modulo_operator)
+        operator: (multiplicative_operator)
         right: (decimal)))))

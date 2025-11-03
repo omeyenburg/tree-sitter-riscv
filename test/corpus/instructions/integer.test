@@ -8,7 +8,7 @@ foo 100
   (instruction
     opcode: (opcode)
     operands: (operands
-      (decimal))))
+      operand: (decimal))))
 
 ==========
 [instructions/integer] instruction with signed integer value
@@ -20,7 +20,7 @@ foo -100
   (instruction
     opcode: (opcode)
     operands: (operands
-      (decimal))))
+      operand: (decimal))))
 
 ==========
 [instructions/integer] instruction with octal value
@@ -32,7 +32,7 @@ foo 012
   (instruction
     opcode: (opcode)
     operands: (operands
-      (octal))))
+      operand: (octal))))
 
 ==========
 [instructions/integer] instruction with decimal value with leading zero
@@ -44,7 +44,7 @@ foo 089
   (instruction
     opcode: (opcode)
     operands: (operands
-      (decimal))))
+      operand: (decimal))))
 
 ==========
 [instructions/integer] instruction with hexadecimal value
@@ -56,7 +56,7 @@ foo 0x0314
   (instruction
     opcode: (opcode)
     operands: (operands
-      (hexadecimal))))
+      operand: (hexadecimal))))
 
 ==========
 [instructions/integer] instruction with binary value
@@ -68,7 +68,7 @@ foo 0b11
   (instruction
     opcode: (opcode)
     operands: (operands
-      (binary))))
+      operand: (binary))))
 
 ==========
 [instructions/integer] instruction with signed hexadecimal value
@@ -80,7 +80,7 @@ foo -0x0123456789ABCDEFabcdef
   (instruction
     opcode: (opcode)
     operands: (operands
-      (hexadecimal))))
+      operand: (hexadecimal))))
 
 ==========
 [instructions/integer] instruction with char value
@@ -92,7 +92,7 @@ foo 'A'
   (instruction
     opcode: (opcode)
     operands: (operands
-      (char))))
+      operand: (char))))
 
 ==========
 [instructions/integer] instruction with escaped symbol
@@ -104,7 +104,7 @@ foo '\n'
   (instruction
     opcode: (opcode)
     operands: (operands
-      (char))))
+      operand: (char))))
 
 ==========
 [instructions/integer] instruction with escaped single quote
@@ -116,7 +116,7 @@ foo '\''
   (instruction
     opcode: (opcode)
     operands: (operands
-      (char))))
+      operand: (char))))
 
 ==========
 [instructions/integer] negative number as separate operand
@@ -128,5 +128,5 @@ foo 1 -1
   (instruction
     opcode: (opcode)
     operands: (operands
-      (decimal)
-      (decimal))))
+      operand: (decimal)
+      operand: (decimal))))
