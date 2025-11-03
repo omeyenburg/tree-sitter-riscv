@@ -4,21 +4,10 @@
 #include <string.h>
 #include <wctype.h>
 
-typedef struct {
-    const char* str;
-    const int len;
-    bool valid;
-} TokenChecker;
-
 enum TokenType {
     _OPERAND_SEPARATOR,
-    _OPERATOR_SEPARATOR,
     _LINE_SEPARATOR,
     _DATA_SEPARATOR,
-    LINE_COMMENT,
-    BLOCK_COMMENT,
-    PREPROCESSOR,
-    _DIVISION_OPERATOR,
 };
 
 void* tree_sitter_mips_external_scanner_create() {
@@ -58,10 +47,14 @@ bool tree_sitter_mips_external_scanner_scan(void* payload,
                                             const bool* valid_symbols) {
     (void) payload;
 
+    bool is_valid_operand_separator = valid_symbols[_OPERAND_SEPARATOR];
+    bool is_valid_line_separator = valid_symbols[_LINE_SEPARATOR];
+    bool is_valid_data_separator = valid_symbols[_DATA_SEPARATOR];
+
     if (lexer->eof(lexer))
         return false;
 
-    if (valid_symbols[_OPERAND_SEPARATOR] || valid_symbols[_OPERATOR_SEPARATOR]) {
+    if (is_valid_operand_separator) {
         // Skip whitespace but track that we found some
         bool found_space = false;
         while (!lexer->eof(lexer) &&
@@ -93,7 +86,7 @@ bool tree_sitter_mips_external_scanner_scan(void* payload,
                         // No space after % means it's a macro variable (like "1 %2")
                         // Return operand separator
                     }
-                    if (!valid_symbols[_OPERAND_SEPARATOR])
+                    if (!is_valid_operand_separator)
                         return false;
                     lexer->result_symbol = _OPERAND_SEPARATOR;
                     return true;
@@ -127,7 +120,7 @@ bool tree_sitter_mips_external_scanner_scan(void* payload,
 
                         // If the unary operator is immediately followed by a digit, another unary, or paren without space,
                         // treat the previous space as operand separator (it's part of the expression)
-                        if ((is_digit || is_unary_expression || is_unary_on_paren) && !has_space_after && valid_symbols[_OPERAND_SEPARATOR]) {
+                        if ((is_digit || is_unary_expression || is_unary_on_paren) && !has_space_after && is_valid_operand_separator) {
                             lexer->result_symbol = _OPERAND_SEPARATOR;
                             return true;
                         }
@@ -143,7 +136,7 @@ bool tree_sitter_mips_external_scanner_scan(void* payload,
                 // If we see something that looks like the start of an operand,
                 // then the space we found should separate operands
                 if (is_operand_start(lexer->lookahead)) {
-                    if (!valid_symbols[_OPERAND_SEPARATOR])
+                    if (!is_valid_operand_separator)
                         return false;
 
                     lexer->result_symbol = _OPERAND_SEPARATOR;
@@ -154,7 +147,7 @@ bool tree_sitter_mips_external_scanner_scan(void* payload,
         }
     }
 
-    if (valid_symbols[_LINE_SEPARATOR] || valid_symbols[_DATA_SEPARATOR]) {
+    if (is_valid_line_separator || is_valid_data_separator) {
         // Handle CRLF
         if (lexer->lookahead == '\r') {
             lexer->advance(lexer, false);
@@ -166,7 +159,7 @@ bool tree_sitter_mips_external_scanner_scan(void* payload,
             lexer->advance(lexer, false);
 
             // If both symbols are valid, need to determine which one
-            if (valid_symbols[_LINE_SEPARATOR] && valid_symbols[_DATA_SEPARATOR]) {
+            if (is_valid_line_separator && is_valid_data_separator) {
                 // Skip whitespace after newline
                 while (!lexer->eof(lexer) &&
                        (lexer->lookahead == ' ' || lexer->lookahead == '\t')) {
@@ -193,132 +186,13 @@ bool tree_sitter_mips_external_scanner_scan(void* payload,
             }
 
             // Only one symbol is valid
-            if (valid_symbols[_LINE_SEPARATOR]) {
+            if (is_valid_line_separator) {
                 lexer->result_symbol = _LINE_SEPARATOR;
             } else {
                 lexer->result_symbol = _DATA_SEPARATOR;
             }
             lexer->mark_end(lexer);
             return true;
-        }
-    }
-
-    if (valid_symbols[BLOCK_COMMENT] || valid_symbols[LINE_COMMENT] ||
-        valid_symbols[_DIVISION_OPERATOR]) {
-
-        if (lexer->lookahead == '/') {
-            lexer->advance(lexer, false);
-            if (lexer->eof(lexer))
-                return false;
-
-            if (lexer->lookahead == '/') {
-                do {
-                    lexer->advance(lexer, false);
-                } while (!(lexer->eof(lexer) || lexer->lookahead == '\r' ||
-                           lexer->lookahead == '\n'));
-
-                lexer->result_symbol = LINE_COMMENT;
-                lexer->mark_end(lexer);
-                return valid_symbols[LINE_COMMENT];
-            } else if (lexer->lookahead == '*') {
-                char last;
-                do {
-                    last = lexer->lookahead;
-                    lexer->advance(lexer, false);
-                } while (
-                    !(lexer->eof(lexer) || (last == '*' && lexer->lookahead == '/')));
-
-                if (lexer->lookahead == '/') {
-                    lexer->advance(lexer, false);
-                }
-
-                lexer->result_symbol = BLOCK_COMMENT;
-                lexer->mark_end(lexer);
-                return valid_symbols[BLOCK_COMMENT];
-            } else {
-                lexer->result_symbol = _DIVISION_OPERATOR;
-                lexer->mark_end(lexer);
-                return valid_symbols[_DIVISION_OPERATOR];
-            }
-        } else if (lexer->lookahead == '#' &&
-                   (valid_symbols[LINE_COMMENT] || valid_symbols[PREPROCESSOR])) {
-            if (valid_symbols[PREPROCESSOR]) {
-                // Consume whitespace to allow `# define ...`
-                do {
-                    lexer->advance(lexer, false);
-                } while (!lexer->eof(lexer) &&
-                         (lexer->lookahead == ' ' || lexer->lookahead == '\t'));
-
-                TokenChecker tokens[] = {
-                    {"include", 7, true},
-                    {"define", 6, true},
-                    {"undef", 5, true},
-                    {"if", 2, true},
-                    {"ifdef", 5, true},
-                    {"ifndef", 6, true},
-                    {"else", 4, true},
-                    {"elif", 4, true},
-                    {"endif", 5, true},
-                    {"error", 5, true},
-                    {"warning", 7, true},
-                    {"pragma", 6, true},
-                    {"line", 4, true},
-                };
-
-                int i;
-                for (i = 0; !(lexer->eof(lexer) || lexer->lookahead == ' ' ||
-                              lexer->lookahead == '\t' || lexer->lookahead == '\r' ||
-                              lexer->lookahead == '\n');
-                     i++) {
-                    for (unsigned int j = 0; j < sizeof(tokens) / sizeof(TokenChecker); j++) {
-                        TokenChecker* token = tokens + j;
-                        if (token->valid) {
-                            if (i < token->len && lexer->lookahead != token->str[i]) {
-                                token->valid = false;
-                            } else if (i == token->len) {
-                                token->valid = false;
-                            }
-                        }
-                    }
-
-                    lexer->advance(lexer, false);
-                }
-
-                for (unsigned int j = 0; j < sizeof(tokens) / sizeof(TokenChecker); j++) {
-                    TokenChecker token = tokens[j];
-                    if (token.valid && i == token.len) {
-                        bool backslash = false;
-                        while (!lexer->eof(lexer)) {
-                            if (lexer->lookahead == '\\') {
-                                backslash = true;
-                            } else if (lexer->lookahead == '\r' && !backslash) {
-                                break;
-                            } else if (lexer->lookahead == '\n') {
-                                if (backslash) {
-                                    backslash = false;
-                                } else {
-                                    break;
-                                }
-                            }
-
-                            lexer->advance(lexer, false);
-                        }
-
-                        lexer->result_symbol = PREPROCESSOR;
-                        lexer->mark_end(lexer);
-                        return true;
-                    }
-                }
-            }
-
-            while (!lexer->eof(lexer) && lexer->lookahead != '\r' &&
-                   lexer->lookahead != '\n') {
-                lexer->advance(lexer, false);
-            }
-
-            lexer->result_symbol = LINE_COMMENT;
-            lexer->mark_end(lexer);
-            return valid_symbols[LINE_COMMENT];
         }
     }
 

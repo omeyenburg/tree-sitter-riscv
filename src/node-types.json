@@ -1,10 +1,5 @@
 [
   {
-    "type": "additive_operator",
-    "named": true,
-    "fields": {}
-  },
-  {
     "type": "address",
     "named": true,
     "fields": {
@@ -669,11 +664,6 @@
     }
   },
   {
-    "type": "multiplicative_operator",
-    "named": true,
-    "fields": {}
-  },
-  {
     "type": "operands",
     "named": true,
     "fields": {
@@ -995,7 +985,7 @@
     "named": true,
     "fields": {
       "argument": {
-        "multiple": true,
+        "multiple": false,
         "required": true,
         "types": [
           {
@@ -1081,11 +1071,6 @@
     }
   },
   {
-    "type": "unary_minus_operator",
-    "named": true,
-    "fields": {}
-  },
-  {
     "type": "\t",
     "named": false
   },
@@ -1106,10 +1091,6 @@
     "named": false
   },
   {
-    "type": "%",
-    "named": false
-  },
-  {
     "type": "'",
     "named": false
   },
@@ -1122,19 +1103,7 @@
     "named": false
   },
   {
-    "type": "*",
-    "named": false
-  },
-  {
-    "type": "+",
-    "named": false
-  },
-  {
     "type": ",",
-    "named": false
-  },
-  {
-    "type": "-",
     "named": false
   },
   {
@@ -1266,6 +1235,10 @@
     "named": false
   },
   {
+    "type": "additive_operator",
+    "named": true
+  },
+  {
     "type": "assignment_operator",
     "named": true
   },
@@ -1358,6 +1331,10 @@
     "named": true
   },
   {
+    "type": "multiplicative_operator",
+    "named": true
+  },
+  {
     "type": "octal",
     "named": true
   },
@@ -1383,6 +1360,10 @@
   },
   {
     "type": "shift_operator",
+    "named": true
+  },
+  {
+    "type": "unary_minus_operator",
     "named": true
   }
 ]

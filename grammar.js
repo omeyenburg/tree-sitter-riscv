@@ -7,18 +7,18 @@
 /// <reference types="tree-sitter-cli/dsl" />
 // @ts-check
 
+/**
+ * Valid (C-like) preprocessor directives.
+ */
+const get_preprocessor_directives = () => choice('include', 'define', 'undef', 'if', 'ifdef', 'ifndef', 'else', 'elif', 'endif', 'error', 'warning', 'pragma', 'line');
+
 module.exports = grammar({
   name: 'mips',
 
   externals: $ => [
     $._operand_separator,
-    $._operator_separator,
     $._line_separator,
     $._data_separator,
-    $.line_comment,
-    $.block_comment,
-    $.preprocessor,
-    $._division_operator,
   ],
 
   extras: $ => [
@@ -51,15 +51,13 @@ module.exports = grammar({
         $.instruction,
         $._label,
       )),
-      optional($._comment),
+      optional(choice($._comment, $.preprocessor, alias($._wrong_preprocessor, $.line_comment))),
     ),
 
     _statement: $ => prec(1, choice(
       ';',
       '\r',
       '\n',
-      $.preprocessor,
-      $.block_comment,
       choice(
         seq($.directive, choice(
           ';',
@@ -72,8 +70,11 @@ module.exports = grammar({
           seq($.block_comment, optional('\r'), optional('\n')),
         )),
       ),
+      seq($.preprocessor, /\r?\n/),
+      seq(alias($._wrong_preprocessor, $.line_comment), /\r?\n/),
+      seq($.line_comment, /\r?\n/),
+      $.block_comment,
       $._label,
-      seq($._comment, optional('\r'), '\n'),
     )),
 
     _comment: $ => choice(
@@ -81,6 +82,63 @@ module.exports = grammar({
       $.block_comment,
     ),
     _whitespace: $ => /[ \t]+/,
+
+    // Comments
+    line_comment: $ => token(seq(
+      choice('#', '//'),
+      repeat(choice(
+        /[^\\\n]/,
+        seq('\\', /\r?\n/),
+      )),
+    )),
+
+    block_comment: $ => token(seq(
+      '/*',
+      repeat(choice(
+        /[^*]/, // Any character except *
+        seq('*', /[^/]/), // * followed by anything except /
+      )),
+      optional('*'),
+      '*/',
+    )),
+
+    // Preprocessor with backslash continuation (matches C preprocessor directives).
+    // Must be followed by whitespace, newline, or backslash.
+    preprocessor: $ => token(prec(1, seq(
+      '#',
+      optional(/[ \t]+/), // Optional whitespace after #
+      get_preprocessor_directives(),
+      optional(choice(
+        seq(
+          /[ \t]+/, // Whitespace after directive name
+          repeat(choice(
+            /[^\\\n]/,
+            seq('\\', /\r?\n/),
+          )),
+        ),
+        /[\r\n]/, // Or just newline (directive alone on line)
+        seq('\\', /\r?\n/), // Or line continuation immediately
+      )),
+    ))),
+
+    // Wrong preprocessor: directive followed by non-whitespace symbol.
+    // This should be aliased as line_comment.
+    _wrong_preprocessor: $ => token(prec(1, seq(
+      '#',
+      optional(/[ \t]+/), // Optional whitespace after #
+      get_preprocessor_directives(),
+      choice(
+        seq(
+          /[^ \\\t\n]/, // Missing whitespace after directive name
+          repeat(choice(
+            /[^\\\n]/,
+            seq('\\', /\r?\n/),
+          )),
+        ),
+        /[\r\n]/,
+        seq('\\', /\r?\n/),
+      ),
+    ))),
 
     directive: $ => seq(choice(
       $._macro_directive,
@@ -266,7 +324,6 @@ module.exports = grammar({
     // Precedence ladder.
     _logical_or_expression: $ => prec(1, seq(
       field('left', $._wrapped_logical_or_expression),
-      // optional($._whitespace),
       field('operator', $.logical_or_operator),
       field('right', $._wrapped_logical_and_expression),
     )),
@@ -277,7 +334,6 @@ module.exports = grammar({
 
     _logical_and_expression: $ => prec(2, seq(
       field('left', $._wrapped_logical_and_expression),
-      // optional($._whitespace),
       field('operator', $.logical_and_operator),
       field('right', $._wrapped_bitwise_or_expression),
     )),
@@ -288,7 +344,6 @@ module.exports = grammar({
 
     _bitwise_or_expression: $ => prec(3, seq(
       field('left', $._wrapped_bitwise_or_expression),
-      // optional($._whitespace),
       field('operator', $.bitwise_or_operator),
       field('right', $._wrapped_bitwise_xor_expression),
     )),
@@ -299,7 +354,6 @@ module.exports = grammar({
 
     _bitwise_xor_expression: $ => prec(4, seq(
       field('left', $._wrapped_bitwise_xor_expression),
-      // optional($._whitespace),
       field('operator', $.bitwise_xor_operator),
       field('right', $._wrapped_bitwise_and_expression),
     )),
@@ -310,7 +364,6 @@ module.exports = grammar({
 
     _bitwise_and_expression: $ => prec(5, seq(
       field('left', $._wrapped_bitwise_and_expression),
-      // optional($._whitespace),
       field('operator', $.bitwise_and_operator),
       field('right', $._wrapped_equality_expression),
     )),
@@ -321,7 +374,6 @@ module.exports = grammar({
 
     _equality_expression: $ => prec(6, seq(
       field('left', $._wrapped_equality_expression),
-      // optional($._whitespace),
       field('operator', $.equality_operator),
       field('right', $._wrapped_relational_expression),
     )),
@@ -332,7 +384,6 @@ module.exports = grammar({
 
     _relational_expression: $ => prec(7, seq(
       field('left', $._wrapped_relational_expression),
-      // optional($._whitespace),
       field('operator', $.relational_operator),
       field('right', $._wrapped_shift_expression),
     )),
@@ -343,7 +394,6 @@ module.exports = grammar({
 
     _shift_expression: $ => prec(8, seq(
       field('left', $._wrapped_shift_expression),
-      // optional($._whitespace),
       field('operator', $.shift_operator),
       field('right', $._wrapped_additive_expression),
     )),
@@ -354,7 +404,6 @@ module.exports = grammar({
 
     _additive_expression: $ => prec(9, seq(
       field('left', $._wrapped_additive_expression),
-      // optional($._whitespace),
       field('operator', $.additive_operator),
       field('right', $._wrapped_multiplicative_expression),
     )),
@@ -365,7 +414,6 @@ module.exports = grammar({
 
     _multiplicative_expression: $ => prec(11, seq(
       field('left', $._wrapped_multiplicative_expression),
-      // optional($._whitespace),
       field('operator', $.multiplicative_operator),
       field('right', $._wrapped_assignment_expression),
     )),
@@ -376,7 +424,6 @@ module.exports = grammar({
 
     _assignment_expression: $ => prec(13, seq(
       field('left', $._wrapped_assignment_expression),
-      // optional($._whitespace),
       field('operator', $.assignment_operator),
       field('right', $._primary_expression),
     )),
@@ -384,6 +431,19 @@ module.exports = grammar({
       alias($._assignment_expression, $.binary_expression),
       $._primary_expression,
     ),
+
+    // Individual operator nodes
+    logical_or_operator: $ => token('||'),
+    logical_and_operator: $ => token('&&'),
+    bitwise_or_operator: $ => token('|'),
+    bitwise_xor_operator: $ => token('^'),
+    bitwise_and_operator: $ => token('&'),
+    equality_operator: $ => token(choice('==', '!=')),
+    relational_operator: $ => token(choice('<', '>', '<=', '>=')),
+    shift_operator: $ => token(choice('<<', '>>')),
+    additive_operator: $ => token(choice('+', '-')),
+    multiplicative_operator: $ => token(choice('*', '%', '/')),
+    assignment_operator: $ => token('='),
 
     // The bottom layer: primitives and parens
     _primary_expression: $ => choice(
@@ -403,29 +463,15 @@ module.exports = grammar({
       $.unary_expression,
     ),
 
-    parenthesized_expression: $ => seq(
-      '(',
-      field('argument', $._expression),
-      ')',
-    ),
+    parenthesized_expression: $ => seq('(', $._expression_argument, ')'),
 
-    // Individual operator nodes
-    logical_or_operator: $ => token('||'),
-    logical_and_operator: $ => token('&&'),
-    bitwise_or_operator: $ => token('|'),
-    bitwise_xor_operator: $ => token('^'),
-    bitwise_and_operator: $ => token('&'),
-    equality_operator: $ => token(choice('==', '!=')),
-    relational_operator: $ => token(choice('<', '>', '<=', '>=')),
-    shift_operator: $ => token(choice('<<', '>>')),
-    additive_operator: $ => choice('+', '-'),
-    multiplicative_operator: $ => choice(token('*'), token('%'), $._division_operator),
-    assignment_operator: $ => token('='),
-
-    unary_expression: $ => choice(
-      seq(field('operator', $.unary_minus_operator), field('argument', $._expression_argument)),
-      seq(field('operator', $.bitwise_not_operator), field('argument', $._expression_argument)),
-      seq(field('operator', $.logical_not_operator), field('argument', $._expression_argument)),
+    unary_expression: $ => seq(
+      field('operator', choice(
+        $.unary_minus_operator,
+        $.bitwise_not_operator,
+        $.logical_not_operator,
+      )),
+      $._expression_argument,
     ),
     unary_minus_operator: $ => token('-'),
     bitwise_not_operator: $ => token('~'),
@@ -437,7 +483,6 @@ module.exports = grammar({
       $._expression_argument,
       ')',
     ),
-
     relocation_type: $ => token(choice(
       '%abs64',
       '%call16',
