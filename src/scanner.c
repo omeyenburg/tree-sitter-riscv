@@ -44,7 +44,7 @@ void tree_sitter_mips_external_scanner_deserialize(void* payload,
 }
 
 static bool is_operator_start(int32_t c) {
-    return c == '+' || c == '-' || c == '*' || c == '&' || c == '|' || // removed /
+    return c == '+' || c == '-' || c == '*' || c == '%' || c == '&' || c == '|' ||
            c == '^' || c == '~' || c == '!' || c == '<' || c == '>' || c == '=';
 }
 
@@ -77,43 +77,29 @@ bool tree_sitter_mips_external_scanner_scan(void* payload,
             // If we hit end of line, semicolon, or comment - not an operand separator
             if (!(lexer->lookahead == '\r' || lexer->lookahead == '\n' ||
                   lexer->lookahead == ';' || lexer->lookahead == '#')) {
-                // Special handling for %: always treat space-before-% as creating a separator
-                // The grammar will handle deciding if it's an operator or macro-variable
-                // We peek ahead to determine separator type, but must mark end at the space position
+                // Special handling for %: distinguish between modulo operator and macro variable
                 if (lexer->lookahead == '%') {
-                    // Mark end now, at the space position (before %)
+                    // Mark end at space position BEFORE peeking ahead
                     lexer->mark_end(lexer);
-
-                    // Now peek ahead to see if there's space after %, or another %
-                    lexer->advance(lexer, false);  // Move past %
-                    bool has_space_after = false;
-                    bool is_double_percent = false;
+                    
+                    // Peek ahead to see what follows %
+                    lexer->advance(lexer, false);
                     if (!lexer->eof(lexer)) {
-                        if (lexer->lookahead == ' ' || lexer->lookahead == '\t') {
-                            has_space_after = true;
-                        } else if (lexer->lookahead == '%') {
-                            // When we see %%, treat it as an operator
-                            is_double_percent = true;
+                        if (lexer->lookahead == ' ' || lexer->lookahead == '\t' || lexer->lookahead == '%') {
+                            // Space or another % after % means it's the modulo operator (like "1 % 2" or "1 %% 2")
+                            // Don't produce separator, let whitespace be handled naturally
+                            return false;
                         }
+                        // No space after % means it's a macro variable (like "1 %2")
+                        // Return operand separator
                     }
-
-                    if (has_space_after) {
-                        // Space before AND after, so it's an operator
-                        lexer->result_symbol = _OPERATOR_SEPARATOR;
-                        return true;
-                    } else if (is_double_percent) {
-                        // Space before and %% (no space after %), treat as operator
-                        lexer->result_symbol = _OPERATOR_SEPARATOR;
-                        return true;
-                    } else {
-                        // Space before but just a regular macro variable, treat as operand separator  
-                        lexer->result_symbol = _OPERAND_SEPARATOR;
-                        return true;
-                    }
+                    if (!valid_symbols[_OPERAND_SEPARATOR])
+                        return false;
+                    lexer->result_symbol = _OPERAND_SEPARATOR;
+                    return true;
                 }
 
-                // If we see an operator, this space is part of an expression, not a
-                // separator
+                // Don't produce separators for operators - let whitespace be handled naturally
                 if (is_operator_start(lexer->lookahead)) {
                     // Special case: handle unary operators ('-', '~', '!') specially
                     if (lexer->lookahead == '-' || lexer->lookahead == '~' || lexer->lookahead == '!') {
@@ -145,17 +131,13 @@ bool tree_sitter_mips_external_scanner_scan(void* payload,
                             lexer->result_symbol = _OPERAND_SEPARATOR;
                             return true;
                         }
-                        // Otherwise, treat as operator separator (subtraction or other binary operator)
-                    } else {
-                        // For non-unary operators, always treat as operator separator
-                        lexer->mark_end(lexer);
-                    }
-
-                    if (!valid_symbols[_OPERATOR_SEPARATOR])
+                        // Otherwise, it's a binary operator - don't produce separator, let whitespace be skipped
                         return false;
-
-                    lexer->result_symbol = _OPERATOR_SEPARATOR;
-                    return true;
+                    } else {
+                        // For non-unary binary operators (+, *, %, &, |, etc.), don't produce separator
+                        // Let whitespace be handled naturally by the parser
+                        return false;
+                    }
                 }
 
                 // If we see something that looks like the start of an operand,
@@ -190,8 +172,12 @@ bool tree_sitter_mips_external_scanner_scan(void* payload,
                        (lexer->lookahead == ' ' || lexer->lookahead == '\t')) {
                     lexer->advance(lexer, false);
                 }
-                if (lexer->eof(lexer))
-                    return false;
+                if (lexer->eof(lexer)) {
+                    // At EOF after newline, prefer LINE_SEPARATOR
+                    lexer->result_symbol = _LINE_SEPARATOR;
+                    lexer->mark_end(lexer);
+                    return true;
+                }
 
                 // Check if it's a line separator (starts new line/directive) or data separator
                 if (lexer->lookahead == '\n' || lexer->lookahead == '.' ||

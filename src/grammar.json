@@ -1135,18 +1135,6 @@
                         "type": "SYMBOL",
                         "name": "control_operands"
                       }
-                    },
-                    {
-                      "type": "CHOICE",
-                      "members": [
-                        {
-                          "type": "SYMBOL",
-                          "name": "_control_operand_separator"
-                        },
-                        {
-                          "type": "BLANK"
-                        }
-                      ]
                     }
                   ]
                 },
@@ -1221,57 +1209,16 @@
       "type": "CHOICE",
       "members": [
         {
-          "type": "REPEAT1",
-          "content": {
-            "type": "CHOICE",
-            "members": [
-              {
-                "type": "STRING",
-                "value": " "
-              },
-              {
-                "type": "STRING",
-                "value": "\t"
-              }
-            ]
-          }
+          "type": "SYMBOL",
+          "name": "_operand_separator"
         },
         {
-          "type": "SEQ",
-          "members": [
-            {
-              "type": "CHOICE",
-              "members": [
-                {
-                  "type": "REPEAT",
-                  "content": {
-                    "type": "CHOICE",
-                    "members": [
-                      {
-                        "type": "STRING",
-                        "value": " "
-                      },
-                      {
-                        "type": "STRING",
-                        "value": "\t"
-                      }
-                    ]
-                  }
-                },
-                {
-                  "type": "BLANK"
-                }
-              ]
-            },
-            {
-              "type": "STRING",
-              "value": ","
-            }
-          ]
+          "type": "PATTERN",
+          "value": "[ \\t]*,[ \\t]*"
         },
         {
           "type": "SYMBOL",
-          "name": "block_comment"
+          "name": "_data_separator"
         }
       ]
     },
@@ -2214,8 +2161,12 @@
           "value": "("
         },
         {
-          "type": "SYMBOL",
-          "name": "_expression"
+          "type": "FIELD",
+          "name": "argument",
+          "content": {
+            "type": "SYMBOL",
+            "name": "_expression"
+          }
         },
         {
           "type": "STRING",
@@ -2318,28 +2269,8 @@
       "type": "CHOICE",
       "members": [
         {
-          "type": "SEQ",
-          "members": [
-            {
-              "type": "CHOICE",
-              "members": [
-                {
-                  "type": "SYMBOL",
-                  "name": "_operator_separator"
-                },
-                {
-                  "type": "BLANK"
-                }
-              ]
-            },
-            {
-              "type": "TOKEN",
-              "content": {
-                "type": "STRING",
-                "value": "+"
-              }
-            }
-          ]
+          "type": "STRING",
+          "value": "+"
         },
         {
           "type": "STRING",
@@ -2351,52 +2282,18 @@
       "type": "CHOICE",
       "members": [
         {
-          "type": "SEQ",
-          "members": [
-            {
-              "type": "CHOICE",
-              "members": [
-                {
-                  "type": "SYMBOL",
-                  "name": "_operator_separator"
-                },
-                {
-                  "type": "BLANK"
-                }
-              ]
-            },
-            {
-              "type": "TOKEN",
-              "content": {
-                "type": "STRING",
-                "value": "*"
-              }
-            }
-          ]
+          "type": "TOKEN",
+          "content": {
+            "type": "STRING",
+            "value": "*"
+          }
         },
         {
-          "type": "SEQ",
-          "members": [
-            {
-              "type": "CHOICE",
-              "members": [
-                {
-                  "type": "SYMBOL",
-                  "name": "_operator_separator"
-                },
-                {
-                  "type": "BLANK"
-                }
-              ]
-            },
-            {
-              "type": "TOKEN",
-              "content": {
-                "type": "STRING",
-                "value": "%"
-              }
-            }
-          ]
+          "type": "TOKEN",
+          "content": {
+            "type": "STRING",
+            "value": "%"
+          }
         },
         {
           "type": "SYMBOL",
@@ -2426,8 +2323,12 @@
               }
             },
             {
-              "type": "SYMBOL",
-              "name": "_expression_argument"
+              "type": "FIELD",
+              "name": "argument",
+              "content": {
+                "type": "SYMBOL",
+                "name": "_expression_argument"
+              }
             }
           ]
         },
@@ -2443,8 +2344,12 @@
               }
             },
             {
-              "type": "SYMBOL",
-              "name": "_expression_argument"
+              "type": "FIELD",
+              "name": "argument",
+              "content": {
+                "type": "SYMBOL",
+                "name": "_expression_argument"
+              }
             }
           ]
         },
@@ -2460,8 +2365,12 @@
               }
             },
             {
-              "type": "SYMBOL",
-              "name": "_expression_argument"
+              "type": "FIELD",
+              "name": "argument",
+              "content": {
+                "type": "SYMBOL",
+                "name": "_expression_argument"
+              }
             }
           ]
         }
@@ -3124,9 +3033,6 @@
       "_statement"
     ],
     [
-      "control_operands"
-    ],
-    [
       "float_operands"
     ],
     [
@@ -3148,211 +3054,6 @@
     [
       "_operand",
       "parenthesized_expression"
-    ],
-    [
-      "_logical_or_expression"
-    ],
-    [
-      "_logical_and_expression"
-    ],
-    [
-      "_bitwise_or_expression"
-    ],
-    [
-      "_bitwise_xor_expression"
-    ],
-    [
-      "_bitwise_and_expression"
-    ],
-    [
-      "_equality_expression"
-    ],
-    [
-      "_relational_expression"
-    ],
-    [
-      "_shift_expression"
-    ],
-    [
-      "_additive_expression"
-    ],
-    [
-      "_multiplicative_expression"
-    ],
-    [
-      "_assignment_expression"
-    ],
-    [
-      "_logical_or_expression",
-      "_logical_and_expression"
-    ],
-    [
-      "_logical_and_expression",
-      "_bitwise_or_expression"
-    ],
-    [
-      "_bitwise_or_expression",
-      "_bitwise_xor_expression"
-    ],
-    [
-      "_bitwise_xor_expression",
-      "_bitwise_and_expression"
-    ],
-    [
-      "_bitwise_and_expression",
-      "_equality_expression"
-    ],
-    [
-      "_equality_expression",
-      "_relational_expression"
-    ],
-    [
-      "_relational_expression",
-      "_shift_expression"
-    ],
-    [
-      "_shift_expression",
-      "_additive_expression"
-    ],
-    [
-      "_additive_expression",
-      "_multiplicative_expression"
-    ],
-    [
-      "_multiplicative_expression",
-      "_assignment_expression"
-    ],
-    [
-      "_expression",
-      "_logical_or_expression"
-    ],
-    [
-      "_expression",
-      "_logical_and_expression"
-    ],
-    [
-      "_expression",
-      "_bitwise_or_expression"
-    ],
-    [
-      "_expression",
-      "_bitwise_xor_expression"
-    ],
-    [
-      "_expression",
-      "_bitwise_and_expression"
-    ],
-    [
-      "_expression",
-      "_equality_expression"
-    ],
-    [
-      "_expression",
-      "_relational_expression"
-    ],
-    [
-      "_expression",
-      "_shift_expression"
-    ],
-    [
-      "_expression",
-      "_additive_expression"
-    ],
-    [
-      "_expression",
-      "_multiplicative_expression"
-    ],
-    [
-      "_expression",
-      "_assignment_expression"
-    ],
-    [
-      "_expression",
-      "_wrapped_logical_or_expression"
-    ],
-    [
-      "_expression",
-      "_wrapped_logical_and_expression"
-    ],
-    [
-      "_expression",
-      "_wrapped_bitwise_or_expression"
-    ],
-    [
-      "_expression",
-      "_wrapped_bitwise_xor_expression"
-    ],
-    [
-      "_expression",
-      "_wrapped_bitwise_and_expression"
-    ],
-    [
-      "_expression",
-      "_wrapped_equality_expression"
-    ],
-    [
-      "_expression",
-      "_wrapped_relational_expression"
-    ],
-    [
-      "_expression",
-      "_wrapped_shift_expression"
-    ],
-    [
-      "_expression",
-      "_wrapped_additive_expression"
-    ],
-    [
-      "_expression",
-      "_wrapped_multiplicative_expression"
-    ],
-    [
-      "_expression",
-      "_wrapped_assignment_expression"
-    ],
-    [
-      "_logical_or_expression",
-      "_wrapped_logical_or_expression"
-    ],
-    [
-      "_logical_and_expression",
-      "_wrapped_logical_and_expression"
-    ],
-    [
-      "_bitwise_or_expression",
-      "_wrapped_bitwise_or_expression"
-    ],
-    [
-      "_bitwise_xor_expression",
-      "_wrapped_bitwise_xor_expression"
-    ],
-    [
-      "_bitwise_and_expression",
-      "_wrapped_bitwise_and_expression"
-    ],
-    [
-      "_equality_expression",
-      "_wrapped_equality_expression"
-    ],
-    [
-      "_relational_expression",
-      "_wrapped_relational_expression"
-    ],
-    [
-      "_shift_expression",
-      "_wrapped_shift_expression"
-    ],
-    [
-      "_additive_expression",
-      "_wrapped_additive_expression"
-    ],
-    [
-      "_multiplicative_expression",
-      "_wrapped_multiplicative_expression"
-    ],
-    [
-      "_assignment_expression",
-      "_wrapped_assignment_expression"
     ]
   ],
   "precedences": [],
@@ -3394,6 +3095,5 @@
     "_whitespace",
     "_expression_argument"
   ],
-  "supertypes": [],
-  "reserved": {}
+  "supertypes": []
 }
