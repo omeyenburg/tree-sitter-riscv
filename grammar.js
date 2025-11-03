@@ -455,7 +455,10 @@ module.exports = grammar({
       $._simple_expression,
     ),
 
+    // Any non-binary expression and primitive
     _simple_expression: $ => choice(
+      $.parenthesized_expression,
+      $.unary_expression,
       $.relocation_expression,
       $.address,
       $.macro_variable,
@@ -468,8 +471,6 @@ module.exports = grammar({
       $.binary,
       $.decimal,
       $.hexadecimal,
-      $.parenthesized_expression,
-      $.unary_expression,
     ),
 
     // Parenthesized expression:
@@ -540,6 +541,12 @@ module.exports = grammar({
       /-?\d+[eE][+-]?\d+f?/,
     )),
 
+    char: $ => seq('\'', choice($._escape_sequence, /[^'\\]/), '\''),
+    string: $ => seq(
+      '"',
+      repeat(choice($._escape_sequence, /[^"\\]/)),
+      '"',
+    ),
     _escape_sequence: $ => token(
       seq(
         '\\',
@@ -551,14 +558,6 @@ module.exports = grammar({
           /U[0-9a-fA-F]{8}/,
         ),
       ),
-    ),
-
-    char: $ => seq('\'', choice($._escape_sequence, /[^'\\]/), '\''),
-
-    string: $ => seq(
-      '"',
-      repeat(choice($._escape_sequence, /[^"\\]/)),
-      '"',
     ),
 
     register: $ => token(seq(

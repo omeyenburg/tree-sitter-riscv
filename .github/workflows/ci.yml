@@ -56,6 +56,7 @@ jobs:
           test-python: true
           test-go: true
           test-swift: ${{ matrix.os == 'macos-latest' }}
+          node-version: '22'
           # Swift disabled on Ubuntu due to setup-swift@v2 bug #694.
           # Swift is skipped on Windows.
       - name: Parse examples
