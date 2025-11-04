@@ -1,110 +1,389 @@
 # AST Reference
 
-Complete reference of all node types produced by tree-sitter-mips.
+Complete reference of node types produced by tree-sitter-mips.
 
-## Node Types
+## Table of Contents
 
-### Instructions
+- [Instructions](#instructions)
+- [Directives](#directives)
+- [Labels](#labels)
+- [Expressions](#expressions)
+- [Data Types](#data-types)
+- [Comments](#comments)
+- [Preprocessor](#preprocessor)
+- [Field Reference](#field-reference)
+- [Example](#example)
 
-#### `instruction`
+---
+
+## Instructions
+Represents a MIPS instruction with opcode and operands.
+
 ```scheme
 (instruction
   opcode: (opcode)
-  operands: (operands ...))
+  operands: (operands
+    operand: (register)
+    operand: (register)
+    operand: (decimal)))
 ```
-
-#### `operands`
-List of instruction operands.
 
 **Example:** `add $t0, $t1, $t2`
-```scheme
-(operands
-  (register "$t0")
-  (register "$t1")
-  (register "$t2"))
-```
 
-### Directives
+### Opcode
+Instruction mnemonic (e.g., `add`, `lw`, `beq`).
 
-#### `directive`
+### Operands
+List of operands separated by commas or whitespace.
+
+Operand types: `(register)`, `(decimal)`, `(hexadecimal)`, `(octal)`, `(float)`, `(symbol)`, `(address)`, `(macro_variable)`, `(string)`, `(binary_expression)`, `(unary_expression)`, `(parenthesized_expression)`, `(call_expression)`
+
+---
+
+## Directives
+Assembler directives that control assembly behavior.
+
+### Directive Types
+
+#### Macro directive
+Macro mnemonic: `.macro`
+
 ```scheme
 (directive
-  mnemonic: (macro_mnemonic | integer_mnemonic | ...)
-  operands: (operands ...))
+  mnemonic: (macro_mnemonic)
+  name: (macro_name)
+  parameters: (macro_parameters
+    (macro_parameter)
+    (macro_parameter)))
 ```
 
-### Expressions
+**Example:**
+```mips
+.macro loop(x, y, z)
+```
 
-#### `binary_expression`
+#### Integer directive
+Integer data directives: `.byte`, `.half`, `.word`, `.dword`, `.long`, `.quad`, `.2byte`, `.4byte`, `.8byte`, `.int`, `.short`, `.hword`, `.comm`, `.lcomm`, `.align`, `.balign`, `.p2align`, `.sleb128`, `.uleb128`, `.dtprelword`, `.dtpreldword`, `.skip`, `.space`
+
+```scheme
+(directive
+  mnemonic: (integer_mnemonic)
+  operands: (integer_operands
+    (decimal)
+    (decimal)))
+```
+
+**Example:**
+```mips
+.word 1, 2, 3
+```
+
+#### Float directive
+Floating-point data: `.float`, `.double`, `.single`
+
+```scheme
+(directive
+  mnemonic: (float_mnemonic)
+  operands: (float_operands
+    (float)
+    (float)))
+```
+
+#### String directive
+String data: `.ascii`, `.asciz`, `.asciiz`, `.string`, `.stringz`
+
+```scheme
+(directive
+  mnemonic: (string_mnemonic)
+  string: (string))
+```
+
+**Example:**
+```mips
+.asciiz "Hello, World!\n"
+```
+
+#### Control directive
+All other directives (e.g., `.text`, `.data`, `.globl`, `.section`)
+
+```scheme
+(directive
+  mnemonic: (control_mnemonic)
+  operands: (control_operands
+    (symbol)))
+```
+
+```mips
+.global _start
+```
+
+---
+
+## Labels
+
+### Global label
+Standard global labels.
+
+```scheme
+(global_label)
+```
+
+**Pattern:** `[a-zA-Z_.][a-zA-Z0-9_.$]*:`
+
+**Example:**
+```mips
+_start:
+```
+
+### Local label
+Local labels starting with dot.
+
+```scheme
+(local_label)
+```
+
+**Pattern:** `\.[A-Z][a-zA-Z0-9_]*:`
+
+**Example:**
+```mips
+.L1:
+```
+
+### Global numeric label
+Multi-digit numeric labels.
+
+```scheme
+(global_numeric_label)
+```
+
+**Example:**
+```mips
+10:
+```
+
+**Pattern:** `[1-9][0-9]+:`
+
+### Local numeric label
+Single-digit numeric labels.
+
+```scheme
+(local_numeric_label)
+```
+
+**Pattern:** `[0-9]:`
+
+**Example:**
+```mips
+1:
+```
+
+### Local numeric label reference
+Reference to numeric labels.
+
+```scheme
+(local_numeric_label_reference)
+```
+
+**Examples:**
+- `1b` - backward reference (previous label 1:)
+- `1f` - forward reference (next label 1:)
+
+---
+
+## Expressions
+
+### Binary expression
+Binary operations with full operator precedence and support for spaces.
+
 ```scheme
 (binary_expression
-  left: (...)
-  operator: (additive_operator | multiplicative_operator | ...)
-  right: (...))
+  left: (decimal)
+  operator: (additive_operator)
+  right: (decimal))
 ```
 
-**Operators:** `additive_operator`, `multiplicative_operator`, `equality_operator`, `relational_operator`, `shift_operator`, `logical_or_operator`, `logical_and_operator`, `bitwise_or_operator`, `bitwise_xor_operator`, `bitwise_and_operator`, `modulo_operator`, `assignment_operator`
+**Operators by precedence:**
 
-#### `unary_expression`
+| Operator             | Type                    |
+| -------------------- | ----------------------- |
+| `*`, `/`, `%`        | multiplicative_operator |
+| `+`, `-`             | additive_operator       |
+| `<<`, `>>`           | shift_operator          |
+| `<`, `>`, `<=`, `>=` | relational_operator     |
+| `==`, `!=`           | equality_operator       |
+| `&`                  | bitwise_and_operator    |
+| `^`                  | bitwise_xor_operator    |
+| `\|`                 | bitwise_or_operator     |
+| `&&`                 | logical_and_operator    |
+| `\|\|`               | logical_or_operator     |
+| `=`                  | assignment_operator     |
+
+**Left-associative:** `1 + 2 + 3` parses as `((1 + 2) + 3)`
+
+### Unary expression
+Unary operations.
+
 ```scheme
 (unary_expression
-  operator: (unary_minus_operator | bitwise_not_operator | logical_not_operator)
-  argument: (...))
+  operator: (unary_operator)
+  argument: (decimal))
 ```
 
-#### `parenthesized_expression`
+**Operators:** `-` (negation), `~` (bitwise NOT), `!` (logical NOT)
+
+**Example:** `-1`, `~0xFF`, `!flag`
+
+### Parenthesized expression
+Grouped expressions for precedence.
+
 ```scheme
 (parenthesized_expression
-  argument: (...))
+  argument: (binary_expression ...))
 ```
 
-#### `relocation_expression`
+**Example:** `(1 + 2) * 3`
+
+### Call expression
+Macro/function calls.
+
 ```scheme
-(relocation_expression
-  type: (relocation_type)
-  argument: (symbol))
+(call_expression
+  function: (symbol)
+  arguments: (call_arguments
+    (decimal)
+    (register)))
 ```
 
-### Addresses
+**Example:**
+```mips
+print_int($t0)
+```
 
-#### `address`
+---
+
+## Data Types
+
+### Numeric Literals
+
+#### Decimal
+
+```scheme
+(decimal)
+```
+
+#### Hexadecimal
+Hexadecimal with `0x` prefix.
+
+```scheme
+(hexadecimal)
+```
+
+#### Octal
+Octal with leading zero.
+
+```scheme
+(octal)
+```
+
+#### Float
+Floating-point literals: `1.2`, `1e2`
+
+```scheme
+(float)
+```
+
+### String
+
+```scheme
+(string)
+```
+
+### Character literal
+
+```scheme
+(char)
+```
+
+### Symbol
+Identifiers and label references.
+
+```scheme
+(symbol)
+```
+
+### Macro variable
+Macro parameters with prefix: `%var`, `\var`, `$var`
+
+```scheme
+(macro_variable)
+```
+
+### Address
+Memory address with optional offset expression and base register.
+
 ```scheme
 (address
-  offset: (...)
+  offset: (binary_expression ...)  ; Can be expression or literal
   base: (register))
 ```
 
-**Example:** `4($sp)`
+**Examples:**
+- `0($sp)` - Numeric offset
+- `label($gp)` - Symbol offset
+- `4 + 8($sp)` - Expression offset (e.g., `4 + 8`, `8 % 4 + 2`)
+- `%offset($s0)` - Macro offset
+
+### Register
+MIPS registers.
+
 ```scheme
-(address
-  offset: (decimal "4")
-  base: (register "$sp"))
+(register)
 ```
 
-### Data Types
+**Numeric:** `$0`-`$31`, `$f0`-`$f31`
+**Named:** `$zero`, `$at`, `$v0`-`$v1`, `$a0`-`$a3`, `$t0`-`$t9`, `$s0`-`$s7`, `$k0`-`$k1`, `$gp`, `$sp`, `$fp`, `$ra`
 
-- `decimal` - e.g., `42`
-- `hexadecimal` - e.g., `0x2a`
-- `octal` - e.g., `052`
-- `binary` - e.g., `0b101010`
-- `char` - e.g., `'a'`
-- `string` - e.g., `"hello"`
-- `float` - e.g., `3.14`
+---
 
-### Symbols & Registers
+## Comments
 
-- `register` - e.g., `$t0`, `$sp`
-- `symbol` - e.g., `main`, `my_function`
-- `macro_variable` - e.g., `%foo`, `$bar`, `\baz`
-- `global_label` - e.g., `main:`
-- `local_label` - e.g., `.L123:`
-- `local_label_reference` - e.g., `.L123`
+### Line comment
+Single-line comments.
 
-### Comments
+```scheme
+(line_comment)
+```
 
-- `line_comment` - `# comment` or `// comment`
-- `block_comment` - `/* comment */`
-- `preprocessor` - `.include`, `.define`, etc.
+**Examples:**
+```mips
+# hash comment
+// C-style line comment
+```
+
+### Block comment
+Multi-line C-style comments.
+
+```scheme
+(block_comment)
+```
+
+---
+
+## Preprocessor
+C preprocessor directives.
+
+```scheme
+(preprocessor)
+```
+
+**Directives:** `#include`, `#define`, `#undef`, `#if`, `#ifdef`, `#ifndef`, `#else`, `#elif`, `#endif`, `#error`, `#warning`, `#pragma`, `#line`
+
+**Example:**
+```mips
+#define MAX 100
+```
+
+---
 
 ## Field Reference
 
@@ -122,82 +401,25 @@ List of instruction operands.
 | `parameters`     | `directive`                                                             | Macro parameters     |
 | `string`         | `directive`                                                             | String value         |
 
-## Examples
+---
 
-### Simple Instruction
-```asm
-add $t0, $t1, $t2
-```
+## Example
 
-```scheme
-(program
-  (instruction
-    opcode: (opcode)
-    operands: (operands
-      (register) (register) (register))))
-```
+```mips
+.data
+    array: .word 1, 2, 3, 4, 5
 
-### Instruction with Expression
-```asm
-li $t0, 4 + 5 * 2
-```
+.text
+.globl main
 
-```scheme
-(program
-  (instruction
-    opcode: (opcode)
-    operands: (operands
-      (register)
-      (binary_expression
-        left: (decimal "4")
-        operator: (additive_operator "+")
-        right: (binary_expression
-          left: (decimal "5")
-          operator: (multiplicative_operator "*")
-          right: (decimal "2"))))))
-```
+main:
+    li $t0, 10              # Load immediate
+    add $t1, $t0, $t0       # Simple operation
+    addi $t2, $t1, 1 + 2    # Expression in operand
+    lw $t3, 4 + 8($sp)      # Expression in address
+    rem $t4, $t3, 100 % 7   # Modulo expression
 
-### Address Expression
-```asm
-lw $t0, 4($sp)
-```
-
-```scheme
-(program
-  (instruction
-    opcode: (opcode)
-    operands: (operands
-      (register)
-      (address
-        offset: (decimal "4")
-        base: (register "$sp")))))
-```
-
-### Unary Expression
-```asm
-addi $t0, $zero, -42
-```
-
-```scheme
-(program
-  (instruction
-    opcode: (opcode)
-    operands: (operands
-      (register)
-      (register)
-      (unary_expression
-        operator: (unary_minus_operator "-")
-        argument: (decimal "42")))))
-```
-
-### Directive
-```asm
-.word 42
-```
-
-```scheme
-(program
-  (directive
-    mnemonic: (integer_mnemonic ".word")
-    operands: (integer_operands (decimal "42"))))
+1:  bne $t0, $zero, 1b      # Branch loop
+    li $v0, 10
+    syscall
 ```

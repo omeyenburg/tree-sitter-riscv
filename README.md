@@ -19,8 +19,8 @@ See [Editor Integration](docs/EDITOR_INTEGRATION.md) and [Language Integration](
 
 - [Editor Integration](docs/EDITOR_INTEGRATION.md) - NeoVim installation
 - [Language Integration](docs/LANGUAGE_INTEGRATION.md) - JavaScript, Python, Rust, Go, C
-- [AST Reference](docs/AST.md) - Complete node type reference
-- [Development](docs/DEVELOPMENT.md) - Building and testing the grammar
+- [AST Reference](docs/AST.md) - Node type reference
+- [Development](docs/DEVELOPMENT.md) - Building and testing
 
 ## Further reading
 

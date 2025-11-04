@@ -117,7 +117,7 @@ func main() {
 
 ## C
 
-You can find a template repository to use this grammar in C [here](https://github.com/omeyenburg/tree-sitter-mips-c-template)
+You can find a template repository to use this grammar in C [here](https://github.com/omeyenburg/tree-sitter-mips-c-template).
 
 **Example:**
 ```c
