@@ -501,11 +501,27 @@
           "named": true
         },
         {
+          "type": "binary",
+          "named": true
+        },
+        {
           "type": "block_comment",
           "named": true
         },
         {
+          "type": "char",
+          "named": true
+        },
+        {
+          "type": "decimal",
+          "named": true
+        },
+        {
           "type": "float",
+          "named": true
+        },
+        {
+          "type": "hexadecimal",
           "named": true
         },
         {
@@ -514,6 +530,10 @@
         },
         {
           "type": "macro_variable",
+          "named": true
+        },
+        {
+          "type": "octal",
           "named": true
         }
       ]

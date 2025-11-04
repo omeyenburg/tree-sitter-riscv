@@ -11,6 +11,30 @@
       (float))))
 
 ==========
+[directives/float] float directive with decimal value
+==========
+.float 1
+---
+
+(program
+  (directive
+    mnemonic: (float_mnemonic)
+    operands: (float_operands
+      (decimal))))
+
+==========
+[directives/float] float directive with char value
+==========
+.float 'a'
+---
+
+(program
+  (directive
+    mnemonic: (float_mnemonic)
+    operands: (float_operands
+      (char))))
+
+==========
 [directives/float] float directive with multiple values
 ==========
 .float 3.14 2.71

@@ -250,7 +250,16 @@ module.exports = grammar({
       )),
       optional(repeat($._data_separator)),
     ),
-    _float_operand: $ => choice($.float, $.macro_variable, $.address),
+    _float_operand: $ => choice(
+      $.float,
+      $.macro_variable,
+      $.address,
+      $.char,
+      $.octal,
+      $.binary,
+      $.decimal,
+      $.hexadecimal,
+    ),
 
     _string_directive: $ => seq(
       field('mnemonic', $.string_mnemonic),
