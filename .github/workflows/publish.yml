@@ -28,7 +28,7 @@ jobs:
     with:
       abi-version: 14
   pypi:
-    uses: omeyenburg/tree-sitter-workflows/.github/workflows/package-pypi.yml@main
+    uses: omeyenburg/tree-sitter-workflows/.github/workflows/package-pypi.yml@9850ddde85c69c69b0fdf9880f45a5f162f04579
     secrets:
       PYPI_API_TOKEN: ${{secrets.PYPI_API_TOKEN}}
     with:
