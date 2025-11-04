@@ -6,6 +6,7 @@
 
 enum TokenType {
     _OPERAND_SEPARATOR,
+    _OPERATOR_SPACE,
     _LINE_SEPARATOR,
     _DATA_SEPARATOR,
 };
@@ -51,6 +52,7 @@ bool tree_sitter_mips_external_scanner_scan(void* payload,
         return false;
 
     bool is_valid_operand_separator = valid_symbols[_OPERAND_SEPARATOR];
+    bool is_valid_operator_space = valid_symbols[_OPERATOR_SPACE];
     bool is_valid_line_separator = valid_symbols[_LINE_SEPARATOR];
     bool is_valid_data_separator = valid_symbols[_DATA_SEPARATOR];
 
@@ -82,8 +84,11 @@ bool tree_sitter_mips_external_scanner_scan(void* payload,
                         if (lexer->lookahead == ' ' || lexer->lookahead == '\t' ||
                             lexer->lookahead == '%') {
                             // Space or another % after % means it's the modulo operator
-                            // (like "1 % 2" or "1 %% 2") Don't produce separator, let
-                            // whitespace be handled naturally
+                            // (like "1 % 2" or "1 %% 2")
+                            if (is_valid_operator_space) {
+                                lexer->result_symbol = _OPERATOR_SPACE;
+                                return true;
+                            }
                             return false;
                         }
                         // No space after % means it's a macro variable (like "1 %2")
@@ -97,57 +102,61 @@ bool tree_sitter_mips_external_scanner_scan(void* payload,
 
                 // Don't produce separators for operators, handle whitespace naturally
                 if (is_operator_start(lexer->lookahead)) {
-                    // Special case: handle unary operators ('-', '~', '!') specially
-                    if (lexer->lookahead == '-' || lexer->lookahead == '~' ||
-                        lexer->lookahead == '!') {
-                        // Mark end at the space position first
-                        lexer->mark_end(lexer);
-
-                        // Peek ahead to check what follows the operator
-                        lexer->advance(lexer, false);
-                        bool is_digit = !lexer->eof(lexer) && isdigit(lexer->lookahead);
-                        bool is_unary_expression =
-                            !lexer->eof(lexer) &&
-                            (lexer->lookahead == '-' || lexer->lookahead == '~' ||
-                             lexer->lookahead == '!');
-                        bool is_unary_on_paren =
-                            !lexer->eof(lexer) && lexer->lookahead == '(';
-
-                        // Check if there's a space after the operator, which would make
-                        // it a binary operator
-                        bool has_space_after =
-                            !lexer->eof(lexer) &&
-                            (lexer->lookahead == ' ' || lexer->lookahead == '\t');
-
-                        // Special case for '-': if we have '-- ' (double minus followed
-                        // by space), treat as subtraction (i.e., "1 -- 1" should parse
-                        // as "1 - (-1)" not as nested unary)
-                        if (is_unary_expression && lexer->lookahead == '-') {
-                            // We saw '- -', now check if there's a space after the
-                            // second '-'
-                            if (!lexer->eof(lexer)) {
-                                lexer->advance(lexer, false);
-                                has_space_after =
-                                    !lexer->eof(lexer) && (lexer->lookahead == ' ' ||
-                                                           lexer->lookahead == '\t');
+                    // Mark end at the space position first
+                    lexer->mark_end(lexer);
+                    
+                    // Since we're here, there WAS a space before this operator
+                    // Peek ahead to check what follows the operator
+                    int operator_char = lexer->lookahead;
+                    lexer->advance(lexer, false);
+                    
+                    // Check what follows the first operator
+                    bool next_is_space = !lexer->eof(lexer) &&
+                        (lexer->lookahead == ' ' || lexer->lookahead == '\t');
+                    bool next_is_operator = !lexer->eof(lexer) && is_operator_start(lexer->lookahead);
+                    
+                    // Special handling for unary-capable operators ('-', '~', '!')
+                    if (operator_char == '-' || operator_char == '~' || operator_char == '!') {
+                        // If there's space after the first operator, it's definitely binary
+                        if (next_is_space) {
+                            if (is_valid_operator_space) {
+                                lexer->result_symbol = _OPERATOR_SPACE;
+                                return true;
+                            }
+                        } else if (next_is_operator) {
+                            // Another operator directly follows (like --)
+                            // Need to peek further to see what comes after it
+                            lexer->advance(lexer, false);
+                            bool after_second_is_space = !lexer->eof(lexer) &&
+                                (lexer->lookahead == ' ' || lexer->lookahead == '\t');
+                            
+                            if (after_second_is_space) {
+                                // Pattern like "-- " suggests binary with unary: 1 -- 2 → 1 - (-2)
+                                if (is_valid_operator_space) {
+                                    lexer->result_symbol = _OPERATOR_SPACE;
+                                    return true;
+                                }
+                            } else {
+                                // Pattern like "--x" suggests unary operand: 1 --x → 1 and --x
+                                if (is_valid_operand_separator) {
+                                    lexer->result_symbol = _OPERAND_SEPARATOR;
+                                    return true;
+                                }
+                            }
+                        } else {
+                            // No space after operator, and no operator - unary operand
+                            if (is_valid_operand_separator) {
+                                lexer->result_symbol = _OPERAND_SEPARATOR;
+                                return true;
                             }
                         }
-
-                        // If the unary operator is immediately followed by a digit,
-                        // another unary, or paren without space, treat the previous
-                        // space as operand separator (it's part of the expression)
-                        if ((is_digit || is_unary_expression || is_unary_on_paren) &&
-                            !has_space_after && is_valid_operand_separator) {
-                            lexer->result_symbol = _OPERAND_SEPARATOR;
-                            return true;
-                        }
-                        // Otherwise, it's a binary operator - don't produce separator,
-                        // let whitespace be skipped
                         return false;
                     } else {
-                        // For non-unary binary operators (+, *, %, &, |, etc.), don't
-                        // produce separator Let whitespace be handled naturally by the
-                        // parser
+                        // For non-unary binary operators, always produce operator space
+                        if (is_valid_operator_space) {
+                            lexer->result_symbol = _OPERATOR_SPACE;
+                            return true;
+                        }
                         return false;
                     }
                 }

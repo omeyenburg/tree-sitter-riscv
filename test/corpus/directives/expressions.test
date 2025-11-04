@@ -126,6 +126,36 @@
         right: (decimal)))))
 
 ==========
+[directives/expressions] integer directive with spaces
+==========
+.word 1 + 2
+---
+
+(program
+  (directive
+    mnemonic: (integer_mnemonic)
+    operands: (integer_operands
+      (binary_expression
+        left: (decimal)
+        operator: (additive_operator)
+        right: (decimal)))))
+
+==========
+[directives/expressions] integer directive with modulo expression with spaces
+==========
+.word 1 % 2
+---
+
+(program
+  (directive
+    mnemonic: (integer_mnemonic)
+    operands: (integer_operands
+      (binary_expression
+        left: (decimal)
+        operator: (multiplicative_operator)
+        right: (decimal)))))
+
+==========
 [directives/expressions] integer directive with mixed precedence
 ==========
 .word 2+3*4

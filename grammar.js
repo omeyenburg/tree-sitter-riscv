@@ -17,6 +17,7 @@ module.exports = grammar({
 
   externals: $ => [
     $._operand_separator,
+    $._operator_space,
     $._line_separator,
     $._data_separator,
   ],
@@ -24,6 +25,7 @@ module.exports = grammar({
   extras: $ => [
     /[ \t\r]/,
     $.block_comment,
+    $._operator_space,
   ],
 
   inline: $ => [
@@ -40,7 +42,6 @@ module.exports = grammar({
     [$.integer_operands],
     [$.macro_parameters],
     [$.operands],
-    // [$._expression, $._simple_expression],
     [$._operand, $.parenthesized_expression],
     [$.program, $._statement],
   ],
@@ -213,18 +214,20 @@ module.exports = grammar({
       '.dtprelword', '.dtpreldword',
       '.skip', '.space',
     ),
-    integer_operands: $ => seq(
-      $._expression,
-      repeat(seq(
-        choice(
-          ' ',
-          '\t',
-          /[ \t]*,[ \t]*/,
-          seq(optional(choice(' ', '\t')), optional($._comment), choice($._data_separator, $.block_comment)),
-        ),
+    integer_operands: $ => choice(
+      seq(
         $._expression,
-      )),
-      optional(repeat($._data_separator)),
+        repeat(seq(
+          choice(
+            $._operand_separator,
+            /[ \t]*,[ \t]*/,
+            seq(optional(choice(' ', '\t')), optional($._comment), choice($._data_separator, $.block_comment)),
+          ),
+          $._expression,
+        )),
+        optional(repeat($._data_separator)),
+      ),
+      $._expression,
     ),
 
     _float_directive: $ => seq(
