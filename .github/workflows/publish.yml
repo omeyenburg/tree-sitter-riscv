@@ -3,6 +3,12 @@ name: Publish packages
 on:
   push:
     tags: ["*"]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Tag to publish (must exist in repo)'
+        required: true
+        default: ''
 
 permissions:
   contents: write
