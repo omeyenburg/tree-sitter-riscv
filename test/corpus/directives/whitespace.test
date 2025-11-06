@@ -177,3 +177,82 @@
     mnemonic: (control_mnemonic)
     operands: (control_operands
       (symbol))))
+
+
+==========
+[directives/whitespace] space before comma with decimals in control directive
+==========
+.foo 1 , 1
+---
+
+(program
+  (directive
+    mnemonic: (control_mnemonic)
+    operands: (control_operands
+      (decimal)
+      (decimal))))
+
+==========
+[directives/whitespace] space before comma with decimals
+==========
+.word 1 , 1
+---
+
+(program
+  (directive
+    mnemonic: (integer_mnemonic)
+    operands: (integer_operands
+      (decimal)
+      (decimal))))
+
+==========
+[directives/whitespace] tab before comma with floats
+==========
+.float 1.0 , 1.0
+---
+
+(program
+  (directive
+    mnemonic: (float_mnemonic)
+    operands: (float_operands
+      (float)
+      (float))))
+
+==========
+[directives/whitespace] tab before comma with symbols
+==========
+.foo bar	, baz
+---
+
+(program
+  (directive
+    mnemonic: (control_mnemonic)
+    operands: (control_operands
+      (symbol)
+      (symbol))))
+
+==========
+[directives/whitespace] tab before comma with decimals
+==========
+.word 1	, 1
+---
+
+(program
+  (directive
+    mnemonic: (integer_mnemonic)
+    operands: (integer_operands
+      (decimal)
+      (decimal))))
+
+==========
+[directives/whitespace] tab before comma with floats
+==========
+.float 1.0	, 1.0
+---
+
+(program
+  (directive
+    mnemonic: (float_mnemonic)
+    operands: (float_operands
+      (float)
+      (float))))

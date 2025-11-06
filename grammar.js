@@ -220,7 +220,7 @@ module.exports = grammar({
         repeat(seq(
           choice(
             $._operand_separator,
-            /[ \t]*,[ \t]*/,
+            seq(optional(choice(' ', '\t')), optional($._comment), ','),
             seq(optional(choice(' ', '\t')), optional($._comment), choice($._data_separator, $.block_comment)),
           ),
           $._expression,
@@ -243,7 +243,7 @@ module.exports = grammar({
         choice(
           ' ',
           '\t',
-          /[ \t]*,[ \t]*/,
+          seq(optional(choice(' ', '\t')), optional($._comment), ','),
           seq(optional(choice(' ', '\t')), optional($._comment), $._data_separator),
         ),
         $._float_operand,

@@ -1455,8 +1455,46 @@
                         "name": "_operand_separator"
                       },
                       {
-                        "type": "PATTERN",
-                        "value": "[ \\t]*,[ \\t]*"
+                        "type": "SEQ",
+                        "members": [
+                          {
+                            "type": "CHOICE",
+                            "members": [
+                              {
+                                "type": "CHOICE",
+                                "members": [
+                                  {
+                                    "type": "STRING",
+                                    "value": " "
+                                  },
+                                  {
+                                    "type": "STRING",
+                                    "value": "\t"
+                                  }
+                                ]
+                              },
+                              {
+                                "type": "BLANK"
+                              }
+                            ]
+                          },
+                          {
+                            "type": "CHOICE",
+                            "members": [
+                              {
+                                "type": "SYMBOL",
+                                "name": "_comment"
+                              },
+                              {
+                                "type": "BLANK"
+                              }
+                            ]
+                          },
+                          {
+                            "type": "STRING",
+                            "value": ","
+                          }
+                        ]
                       },
                       {
                         "type": "SEQ",
@@ -1639,8 +1677,46 @@
                     "value": "\t"
                   },
                   {
-                    "type": "PATTERN",
-                    "value": "[ \\t]*,[ \\t]*"
+                    "type": "SEQ",
+                    "members": [
+                      {
+                        "type": "CHOICE",
+                        "members": [
+                          {
+                            "type": "CHOICE",
+                            "members": [
+                              {
+                                "type": "STRING",
+                                "value": " "
+                              },
+                              {
+                                "type": "STRING",
+                                "value": "\t"
+                              }
+                            ]
+                          },
+                          {
+                            "type": "BLANK"
+                          }
+                        ]
+                      },
+                      {
+                        "type": "CHOICE",
+                        "members": [
+                          {
+                            "type": "SYMBOL",
+                            "name": "_comment"
+                          },
+                          {
+                            "type": "BLANK"
+                          }
+                        ]
+                      },
+                      {
+                        "type": "STRING",
+                        "value": ","
+                      }
+                    ]
                   },
                   {
                     "type": "SEQ",

@@ -503,3 +503,18 @@
       (decimal)
       (decimal)))
   (block_comment))
+
+
+==========
+[directives/comment] inline C style block comment before comma
+==========
+.word 1 /* bar */, 2
+---
+
+(program
+  (directive
+    mnemonic: (integer_mnemonic)
+    operands: (integer_operands
+      (decimal)
+      (block_comment)
+      (decimal))))
