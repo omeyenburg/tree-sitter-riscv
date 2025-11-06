@@ -143,6 +143,20 @@ foo $t0 /* bar */
   (block_comment))
 
 ==========
+[instructions/comment] inline C style block comment before comma
+==========
+foo $t0/* bar */,$t0
+---
+
+(program
+  (instruction
+    opcode: (opcode)
+    operands: (operands
+      operand: (register)
+      (block_comment)
+      operand: (register))))
+
+==========
 [instructions/comment] C style block comment between opcode and operands without space
 ==========
 foo/* bar */$t0

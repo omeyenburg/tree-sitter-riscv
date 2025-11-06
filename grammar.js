@@ -326,7 +326,7 @@ module.exports = grammar({
     operands: $ => seq(
       field('operand', $._operand),
       repeat(seq(
-        choice(',', $._operand_separator, $.block_comment),
+        choice(seq(optional($.block_comment), ','), $._operand_separator, $.block_comment),
         field('operand', $._operand),
       )),
       optional($._operand_separator),
