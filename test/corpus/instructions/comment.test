@@ -157,6 +157,22 @@ foo $t0/* bar */,$t0
       operand: (register))))
 
 ==========
+[instructions/comment] inline C style block comment before operator
+==========
+foo $t0/* bar */ + $t0
+---
+
+(program
+  (instruction
+    opcode: (opcode)
+    operands: (operands
+      operand: (binary_expression
+        left: (register)
+        (block_comment)
+        operator: (additive_operator)
+        right: (register)))))
+
+==========
 [instructions/comment] C style block comment between opcode and operands without space
 ==========
 foo/* bar */$t0
