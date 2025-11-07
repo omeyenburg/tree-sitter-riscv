@@ -471,16 +471,6 @@
           }
         ]
       }
-    },
-    "children": {
-      "multiple": true,
-      "required": false,
-      "types": [
-        {
-          "type": "block_comment",
-          "named": true
-        }
-      ]
     }
   },
   {
@@ -502,10 +492,6 @@
         },
         {
           "type": "binary",
-          "named": true
-        },
-        {
-          "type": "block_comment",
           "named": true
         },
         {
@@ -563,16 +549,6 @@
           }
         ]
       }
-    },
-    "children": {
-      "multiple": true,
-      "required": false,
-      "types": [
-        {
-          "type": "block_comment",
-          "named": true
-        }
-      ]
     }
   },
   {
@@ -598,10 +574,6 @@
         },
         {
           "type": "binary_expression",
-          "named": true
-        },
-        {
-          "type": "block_comment",
           "named": true
         },
         {
@@ -672,10 +644,6 @@
       "multiple": true,
       "required": true,
       "types": [
-        {
-          "type": "block_comment",
-          "named": true
-        },
         {
           "type": "macro_parameter",
           "named": true
@@ -761,16 +729,6 @@
           }
         ]
       }
-    },
-    "children": {
-      "multiple": true,
-      "required": false,
-      "types": [
-        {
-          "type": "block_comment",
-          "named": true
-        }
-      ]
     }
   },
   {
@@ -859,10 +817,6 @@
       "multiple": true,
       "required": false,
       "types": [
-        {
-          "type": "block_comment",
-          "named": true
-        },
         {
           "type": "directive",
           "named": true

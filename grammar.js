@@ -23,7 +23,8 @@ module.exports = grammar({
   ],
 
   extras: $ => [
-    /[ \t\r]/,
+    // /[ \t\r\n]/,
+    /\s|\\\r?\n/,
     $.block_comment,
     $._operator_space,
   ],
@@ -44,6 +45,7 @@ module.exports = grammar({
     [$.operands],
     [$._operand, $.parenthesized_expression],
     [$.program, $._statement],
+    [$._float_operand, $._simple_expression],
   ],
 
   rules: {
@@ -72,21 +74,21 @@ module.exports = grammar({
           seq(optional($.line_comment), $._line_separator),
           seq(optional(alias($.preprocessor, $.line_comment)), $._line_separator), // Parse preprocessor at line end as comment
           seq(optional(alias($._wrong_preprocessor, $.line_comment)), $._line_separator),
-          seq($.block_comment, optional($._line_separator)),
+          // seq($.block_comment, optional($._line_separator)),
         )),
         seq($.instruction, choice(
           ';',
           seq(optional($.line_comment), optional('\r'), '\n'),
           seq(optional(alias($.preprocessor, $.line_comment)), optional('\r'), '\n'),
           seq(optional(alias($._wrong_preprocessor, $.line_comment)), optional('\r'), '\n'),
-          seq($.block_comment, optional('\r'), optional('\n')),
+          // seq($.block_comment, optional('\r'), optional('\n')),
         )),
       ),
       seq($.preprocessor, /\r?\n/),
       // seq($.preprocessor2, /\r?\n/),
       seq(alias($._wrong_preprocessor, $.line_comment), /\r?\n/),
       seq($.line_comment, /\r?\n/),
-      $.block_comment,
+      // $.block_comment,
       prec(100, seq(
         $._label,
         alias(choice($.preprocessor, $._wrong_preprocessor), $.line_comment),
@@ -99,7 +101,7 @@ module.exports = grammar({
     // Comments
     _comment: $ => choice(
       $.line_comment,
-      $.block_comment,
+      // $.block_comment,
     ),
 
     line_comment: $ => token(seq(
@@ -174,11 +176,13 @@ module.exports = grammar({
 
     _macro_directive: $ => seq(
       field('mnemonic', $.macro_mnemonic),
-      optional($._whitespace),
-      choice($.block_comment, $._whitespace),
+      $._whitespace,
+      // optional($._whitespace),
+      // choice($.block_comment, $._whitespace),
       field('name', $.macro_name),
       optional(choice(
-        seq(optional($._whitespace), '(', optional($.block_comment), optional(field('parameters', $.macro_parameters)), optional(choice(' ', '\t', $.block_comment)), ')'),
+        seq(optional($._whitespace), '(', optional(field('parameters', $.macro_parameters)), optional(choice(' ', '\t')), ')'),
+        // seq(optional($._whitespace), '(', optional($.block_comment), optional(field('parameters', $.macro_parameters)), optional(choice(' ', '\t', $.block_comment)), ')'),
         seq($._whitespace, field('parameters', $.macro_parameters)),
       )),
     ),
@@ -189,8 +193,9 @@ module.exports = grammar({
         choice(
           ' ',
           '\t',
-          $.block_comment,
-          seq(optional(choice(' ', '\t', $.block_comment)), ',', optional($.block_comment)),
+          // $.block_comment,
+          // seq(optional(choice(' ', '\t', $.block_comment)), ',', optional($.block_comment)),
+          seq(optional(choice(' ', '\t')), ','),
         ),
         $.macro_parameter,
       )),
@@ -198,8 +203,9 @@ module.exports = grammar({
 
     _integer_directive: $ => seq(
       field('mnemonic', $.integer_mnemonic),
-      optional($._whitespace),
-      choice($.block_comment, $._whitespace),
+      $._whitespace,
+      // optional($._whitespace),
+      // choice($.block_comment, $._whitespace),
       field('operands', $.integer_operands),
       optional(repeat(choice('\r', '\n', ' ', '\t'))),
     ),
@@ -221,7 +227,8 @@ module.exports = grammar({
           choice(
             $._operand_separator,
             seq(optional(choice(' ', '\t')), optional($._comment), ','),
-            seq(optional(choice(' ', '\t')), optional($._comment), choice($._data_separator, $.block_comment)),
+            // seq(optional(choice(' ', '\t')), optional($._comment), choice($._data_separator, $.block_comment)),
+            seq(optional(choice(' ', '\t')), optional($._comment), $._data_separator),
           ),
           $._expression,
         )),
@@ -279,8 +286,9 @@ module.exports = grammar({
     _control_directive: $ => seq(
       field('mnemonic', $.control_mnemonic),
       optional(choice(seq(
-        optional($._whitespace),
-        choice($.block_comment, $._whitespace),
+        $._whitespace,
+        // optional($._whitespace),
+        // choice($.block_comment, $._whitespace),
         field('operands', $.control_operands),
       ), /[ \t]+/)),
     ),
@@ -313,8 +321,9 @@ module.exports = grammar({
       optional(choice(
         $._call_expression,
         seq(
-          optional($._whitespace),
-          choice($.block_comment, $._whitespace),
+          $._whitespace,
+          // optional($._whitespace),
+          // choice($.block_comment, $._whitespace),
           optional(choice(
             field('operands', $.operands),
             $._call_expression,
@@ -326,7 +335,8 @@ module.exports = grammar({
     operands: $ => seq(
       field('operand', $._operand),
       repeat(seq(
-        choice(seq(optional($.block_comment), ','), $._operand_separator, $.block_comment),
+        // choice(seq(optional($.block_comment), ','), $._operand_separator),
+        choice(',', $._operand_separator),
         field('operand', $._operand),
       )),
       optional($._operand_separator),
@@ -339,7 +349,8 @@ module.exports = grammar({
 
     // Support macro-style calling.
     // Examples: `exit(0)`, `for($t0, 0, 3)`
-    _call_expression: $ => prec(20, seq('(', optional($.block_comment), optional(field('operands', $.operands)), optional($.block_comment), ')')),
+    // _call_expression: $ => prec(20, seq('(', optional($.block_comment), optional(field('operands', $.operands)), optional($.block_comment), ')')),
+    _call_expression: $ => prec(20, seq('(', optional(field('operands', $.operands)), ')')),
 
     // Matches primitives, registers, macro variables and compound expressions.
     // Does not match floats, floats are not accepted in expressions, but only
