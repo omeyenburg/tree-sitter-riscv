@@ -7,8 +7,8 @@
 
 (program
   (directive
-    mnemonic: (integer_mnemonic)
-    operands: (integer_operands
+    mnemonic: (numeric_mnemonic)
+    operands: (numeric_operands
       (decimal)))
   (directive
     mnemonic: (control_mnemonic)))
@@ -22,8 +22,8 @@
 
 (program
   (directive
-    mnemonic: (integer_mnemonic)
-    operands: (integer_operands
+    mnemonic: (numeric_mnemonic)
+    operands: (numeric_operands
       (decimal)))
   (directive
     mnemonic: (control_mnemonic)))
@@ -37,8 +37,8 @@
 
 (program
   (directive
-    mnemonic: (integer_mnemonic)
-    operands: (integer_operands
+    mnemonic: (numeric_mnemonic)
+    operands: (numeric_operands
       (decimal)
       (decimal)
       (decimal)
@@ -96,8 +96,8 @@
 
 (program
   (directive
-    mnemonic: (integer_mnemonic)
-    operands: (integer_operands
+    mnemonic: (numeric_mnemonic)
+    operands: (numeric_operands
       (decimal))))
 
 ==========
@@ -108,8 +108,8 @@
 
 (program
   (directive
-    mnemonic: (integer_mnemonic)
-    operands: (integer_operands
+    mnemonic: (numeric_mnemonic)
+    operands: (numeric_operands
       (decimal))))
 
 ==========
@@ -200,8 +200,8 @@
 
 (program
   (directive
-    mnemonic: (integer_mnemonic)
-    operands: (integer_operands
+    mnemonic: (numeric_mnemonic)
+    operands: (numeric_operands
       (decimal)
       (decimal))))
 
@@ -213,8 +213,8 @@
 
 (program
   (directive
-    mnemonic: (float_mnemonic)
-    operands: (float_operands
+    mnemonic: (numeric_mnemonic)
+    operands: (numeric_operands
       (float)
       (float))))
 
@@ -239,8 +239,8 @@
 
 (program
   (directive
-    mnemonic: (integer_mnemonic)
-    operands: (integer_operands
+    mnemonic: (numeric_mnemonic)
+    operands: (numeric_operands
       (decimal)
       (decimal))))
 
@@ -252,7 +252,7 @@
 
 (program
   (directive
-    mnemonic: (float_mnemonic)
-    operands: (float_operands
+    mnemonic: (numeric_mnemonic)
+    operands: (numeric_operands
       (float)
       (float))))

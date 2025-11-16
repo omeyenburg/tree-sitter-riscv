@@ -38,14 +38,12 @@ module.exports = grammar({
   conflicts: $ => [
     [$._control_directive],
     [$._statement],
-    [$.float_operands],
     [$.instruction],
-    [$.integer_operands],
+    [$.numeric_operands],
     [$.macro_parameters],
     [$.operands],
     [$._operand, $.parenthesized_expression],
     [$.program, $._statement],
-    [$._float_operand, $._simple_expression],
   ],
 
   rules: {
@@ -171,8 +169,7 @@ module.exports = grammar({
 
     directive: $ => seq(choice(
       $._macro_directive,
-      $._integer_directive,
-      $._float_directive,
+      $._numeric_directive,
       $._string_directive,
       $._control_directive,
     )),
@@ -204,15 +201,15 @@ module.exports = grammar({
       )),
     ),
 
-    _integer_directive: $ => seq(
-      field('mnemonic', $.integer_mnemonic),
+    _numeric_directive: $ => seq(
+      field('mnemonic', $.numeric_mnemonic),
       $._whitespace,
       // optional($._whitespace),
       // choice($.block_comment, $._whitespace),
-      field('operands', $.integer_operands),
+      field('operands', $.numeric_operands),
       optional(repeat(choice('\r', '\n', ' ', '\t'))),
     ),
-    integer_mnemonic: $ => choice(
+    numeric_mnemonic: $ => choice(
       '.byte',
       '.2byte', '.short', '.half', '.hword',
       '.4byte', '.word', '.int',
@@ -222,8 +219,10 @@ module.exports = grammar({
       '.sleb128', '.uleb128',
       '.dtprelword', '.dtpreldword',
       '.skip', '.space',
+      // Floats
+      '.float', '.double', '.single',
     ),
-    integer_operands: $ => choice(
+    numeric_operands: $ => choice(
       seq(
         $._expression,
         repeat(seq(
@@ -238,37 +237,6 @@ module.exports = grammar({
         optional(repeat($._data_separator)),
       ),
       $._expression,
-    ),
-
-    _float_directive: $ => seq(
-      field('mnemonic', $.float_mnemonic),
-      $._whitespace,
-      field('operands', $.float_operands),
-      optional(repeat(choice('\r', '\n', ' ', '\t'))),
-    ),
-    float_mnemonic: $ => choice('.float', '.double', '.single'),
-    float_operands: $ => seq(
-      $._float_operand,
-      repeat(seq(
-        choice(
-          ' ',
-          '\t',
-          seq(optional(choice(' ', '\t')), optional($._comment), ','),
-          seq(optional(choice(' ', '\t')), optional($._comment), $._data_separator),
-        ),
-        $._float_operand,
-      )),
-      optional(repeat($._data_separator)),
-    ),
-    _float_operand: $ => choice(
-      $.float,
-      $.macro_variable,
-      $.address,
-      $.char,
-      $.octal,
-      $.binary,
-      $.decimal,
-      $.hexadecimal,
     ),
 
     _string_directive: $ => seq(
@@ -346,7 +314,6 @@ module.exports = grammar({
     ),
     _operand: $ => choice(
       $._expression,
-      $.float,
       $.string,
     ),
 
@@ -356,8 +323,6 @@ module.exports = grammar({
     _call_expression: $ => prec(20, seq('(', optional(field('operands', $.operands)), ')')),
 
     // Matches primitives, registers, macro variables and compound expressions.
-    // Does not match floats, floats are not accepted in expressions, but only
-    // as standalone operands or in directives.
     //
     // Nested expression evaluation order.
     // Operands of higher precedence binary expressions cannot be
@@ -505,6 +470,7 @@ module.exports = grammar({
       $.binary,
       $.decimal,
       $.hexadecimal,
+      $.float,
     ),
 
     // Parenthesized expression:

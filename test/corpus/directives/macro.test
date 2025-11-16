@@ -108,8 +108,8 @@
 
 (program
   (directive
-    mnemonic: (integer_mnemonic)
-    operands: (integer_operands
+    mnemonic: (numeric_mnemonic)
+    operands: (numeric_operands
       (macro_variable))))
 
 ==========
@@ -120,8 +120,8 @@
 
 (program
   (directive
-    mnemonic: (float_mnemonic)
-    operands: (float_operands
+    mnemonic: (numeric_mnemonic)
+    operands: (numeric_operands
       (macro_variable))))
 
 ==========

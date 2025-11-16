@@ -46,6 +46,10 @@
             "named": true
           },
           {
+            "type": "float",
+            "named": true
+          },
+          {
             "type": "hexadecimal",
             "named": true
           },
@@ -125,6 +129,10 @@
           },
           {
             "type": "decimal",
+            "named": true
+          },
+          {
+            "type": "float",
             "named": true
           },
           {
@@ -244,6 +252,10 @@
             "named": true
           },
           {
+            "type": "float",
+            "named": true
+          },
+          {
             "type": "hexadecimal",
             "named": true
           },
@@ -326,6 +338,10 @@
           "named": true
         },
         {
+          "type": "float",
+          "named": true
+        },
+        {
           "type": "hexadecimal",
           "named": true
         },
@@ -398,15 +414,11 @@
             "named": true
           },
           {
-            "type": "float_mnemonic",
-            "named": true
-          },
-          {
-            "type": "integer_mnemonic",
-            "named": true
-          },
-          {
             "type": "macro_mnemonic",
+            "named": true
+          },
+          {
+            "type": "numeric_mnemonic",
             "named": true
           },
           {
@@ -434,11 +446,7 @@
             "named": true
           },
           {
-            "type": "float_operands",
-            "named": true
-          },
-          {
-            "type": "integer_operands",
+            "type": "numeric_operands",
             "named": true
           }
         ]
@@ -474,58 +482,6 @@
     }
   },
   {
-    "type": "float_mnemonic",
-    "named": true,
-    "fields": {}
-  },
-  {
-    "type": "float_operands",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": true,
-      "types": [
-        {
-          "type": "address",
-          "named": true
-        },
-        {
-          "type": "binary",
-          "named": true
-        },
-        {
-          "type": "char",
-          "named": true
-        },
-        {
-          "type": "decimal",
-          "named": true
-        },
-        {
-          "type": "float",
-          "named": true
-        },
-        {
-          "type": "hexadecimal",
-          "named": true
-        },
-        {
-          "type": "line_comment",
-          "named": true
-        },
-        {
-          "type": "macro_variable",
-          "named": true
-        },
-        {
-          "type": "octal",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
     "type": "instruction",
     "named": true,
     "fields": {
@@ -552,12 +508,32 @@
     }
   },
   {
-    "type": "integer_mnemonic",
+    "type": "local_label_reference",
     "named": true,
     "fields": {}
   },
   {
-    "type": "integer_operands",
+    "type": "macro_parameters",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "macro_parameter",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "numeric_mnemonic",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "numeric_operands",
     "named": true,
     "fields": {},
     "children": {
@@ -582,6 +558,10 @@
         },
         {
           "type": "decimal",
+          "named": true
+        },
+        {
+          "type": "float",
           "named": true
         },
         {
@@ -626,26 +606,6 @@
         },
         {
           "type": "unary_expression",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "local_label_reference",
-    "named": true,
-    "fields": {}
-  },
-  {
-    "type": "macro_parameters",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": true,
-      "types": [
-        {
-          "type": "macro_parameter",
           "named": true
         }
       ]
@@ -765,6 +725,10 @@
             "named": true
           },
           {
+            "type": "float",
+            "named": true
+          },
+          {
             "type": "hexadecimal",
             "named": true
           },
@@ -881,6 +845,10 @@
             "named": true
           },
           {
+            "type": "float",
+            "named": true
+          },
+          {
             "type": "hexadecimal",
             "named": true
           },
@@ -980,6 +948,10 @@
           },
           {
             "type": "decimal",
+            "named": true
+          },
+          {
+            "type": "float",
             "named": true
           },
           {

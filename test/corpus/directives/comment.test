@@ -7,8 +7,8 @@
 
 (program
   (directive
-    mnemonic: (integer_mnemonic)
-    operands: (integer_operands
+    mnemonic: (numeric_mnemonic)
+    operands: (numeric_operands
       (decimal)
       (decimal)))
   (line_comment))
@@ -22,8 +22,8 @@
 
 (program
   (directive
-    mnemonic: (integer_mnemonic)
-    operands: (integer_operands
+    mnemonic: (numeric_mnemonic)
+    operands: (numeric_operands
       (decimal)
       (decimal)))
   (line_comment))
@@ -37,8 +37,8 @@
 
 (program
   (directive
-    (float_mnemonic)
-    (float_operands
+    (numeric_mnemonic)
+    (numeric_operands
       (float)
       (float)))
   (line_comment))
@@ -52,8 +52,8 @@
 
 (program
   (directive
-    (float_mnemonic)
-    (float_operands
+    (numeric_mnemonic)
+    (numeric_operands
       (float)
       (float)))
   (line_comment))
@@ -138,8 +138,8 @@
 
 (program
   (directive
-    mnemonic: (integer_mnemonic)
-    operands: (integer_operands
+    mnemonic: (numeric_mnemonic)
+    operands: (numeric_operands
       (decimal)
       (decimal)))
   (line_comment))
@@ -153,8 +153,8 @@
 
 (program
   (directive
-    mnemonic: (integer_mnemonic)
-    operands: (integer_operands
+    mnemonic: (numeric_mnemonic)
+    operands: (numeric_operands
       (decimal)
       (decimal)
       (line_comment)
@@ -170,8 +170,8 @@
 
 (program
   (directive
-    mnemonic: (integer_mnemonic)
-    operands: (integer_operands
+    mnemonic: (numeric_mnemonic)
+    operands: (numeric_operands
       (decimal)
       (decimal)
       (line_comment)
@@ -187,8 +187,8 @@
 
 (program
   (directive
-    mnemonic: (integer_mnemonic)
-    operands: (integer_operands
+    mnemonic: (numeric_mnemonic)
+    operands: (numeric_operands
       (decimal)
       (decimal)
       (line_comment)
@@ -204,8 +204,8 @@
 
 (program
   (directive
-    mnemonic: (integer_mnemonic)
-    operands: (integer_operands
+    mnemonic: (numeric_mnemonic)
+    operands: (numeric_operands
       (decimal)
       (decimal)
       (decimal)
@@ -221,8 +221,8 @@
 
 (program
   (directive
-    mnemonic: (integer_mnemonic)
-    operands: (integer_operands
+    mnemonic: (numeric_mnemonic)
+    operands: (numeric_operands
       (decimal)
       (decimal)
       (decimal)
@@ -238,8 +238,8 @@
 
 (program
   (directive
-    mnemonic: (integer_mnemonic)
-    operands: (integer_operands
+    mnemonic: (numeric_mnemonic)
+    operands: (numeric_operands
       (decimal)
       (decimal)
       (decimal)
@@ -256,8 +256,8 @@
 
 (program
   (directive
-    mnemonic: (integer_mnemonic)
-    operands: (integer_operands
+    mnemonic: (numeric_mnemonic)
+    operands: (numeric_operands
       (decimal)
       (decimal)
       (decimal)
@@ -273,8 +273,8 @@
 
 (program
   (directive
-    mnemonic: (integer_mnemonic)
-    operands: (integer_operands
+    mnemonic: (numeric_mnemonic)
+    operands: (numeric_operands
       (decimal)
       (decimal)
       (line_comment)
@@ -290,8 +290,8 @@
 
 (program
   (directive
-    mnemonic: (integer_mnemonic)
-    operands: (integer_operands
+    mnemonic: (numeric_mnemonic)
+    operands: (numeric_operands
       (decimal)
       (decimal)
       (line_comment)
@@ -307,8 +307,8 @@
 
 (program
   (directive
-    mnemonic: (integer_mnemonic)
-    operands: (integer_operands
+    mnemonic: (numeric_mnemonic)
+    operands: (numeric_operands
       (decimal)
       (decimal)
       (line_comment)
@@ -324,8 +324,8 @@
 
 (program
   (directive
-    mnemonic: (integer_mnemonic)
-    operands: (integer_operands
+    mnemonic: (numeric_mnemonic)
+    operands: (numeric_operands
       (decimal)
       (decimal)
       (decimal)
@@ -341,8 +341,8 @@
 
 (program
   (directive
-    mnemonic: (integer_mnemonic)
-    operands: (integer_operands
+    mnemonic: (numeric_mnemonic)
+    operands: (numeric_operands
       (decimal)
       (decimal)
       (decimal)
@@ -358,8 +358,8 @@
 
 (program
   (directive
-    mnemonic: (integer_mnemonic)
-    operands: (integer_operands
+    mnemonic: (numeric_mnemonic)
+    operands: (numeric_operands
       (decimal)
       (decimal)
       (decimal)
@@ -376,8 +376,8 @@
 
 (program
   (directive
-    mnemonic: (integer_mnemonic)
-    operands: (integer_operands
+    mnemonic: (numeric_mnemonic)
+    operands: (numeric_operands
       (decimal)
       (decimal)
       (decimal)
@@ -393,8 +393,8 @@
 
 (program
   (directive
-    mnemonic: (integer_mnemonic)
-    operands: (integer_operands
+    mnemonic: (numeric_mnemonic)
+    operands: (numeric_operands
       (decimal)
       (decimal)
       (block_comment)
@@ -410,8 +410,8 @@
 
 (program
   (directive
-    mnemonic: (integer_mnemonic)
-    operands: (integer_operands
+    mnemonic: (numeric_mnemonic)
+    operands: (numeric_operands
       (decimal)
       (decimal)
       (block_comment)
@@ -427,8 +427,8 @@
 
 (program
   (directive
-    mnemonic: (integer_mnemonic)
-    operands: (integer_operands
+    mnemonic: (numeric_mnemonic)
+    operands: (numeric_operands
       (decimal)
       (decimal)
       (block_comment)
@@ -444,8 +444,8 @@
 
 (program
   (directive
-    mnemonic: (integer_mnemonic)
-    operands: (integer_operands
+    mnemonic: (numeric_mnemonic)
+    operands: (numeric_operands
       (decimal)
       (decimal)
       (decimal)
@@ -461,8 +461,8 @@
 
 (program
   (directive
-    mnemonic: (integer_mnemonic)
-    operands: (integer_operands
+    mnemonic: (numeric_mnemonic)
+    operands: (numeric_operands
       (decimal)
       (decimal)
       (decimal)
@@ -478,8 +478,8 @@
 
 (program
   (directive
-    mnemonic: (integer_mnemonic)
-    operands: (integer_operands
+    mnemonic: (numeric_mnemonic)
+    operands: (numeric_operands
       (decimal)
       (decimal)
       (decimal)
@@ -496,8 +496,8 @@
 
 (program
   (directive
-    mnemonic: (integer_mnemonic)
-    operands: (integer_operands
+    mnemonic: (numeric_mnemonic)
+    operands: (numeric_operands
       (decimal)
       (decimal)
       (decimal)
@@ -513,8 +513,8 @@
 
 (program
   (directive
-    mnemonic: (integer_mnemonic)
-    operands: (integer_operands
+    mnemonic: (numeric_mnemonic)
+    operands: (numeric_operands
       (decimal)
       (block_comment)
       (decimal))))

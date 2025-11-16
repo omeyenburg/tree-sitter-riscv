@@ -118,8 +118,8 @@
 
 (program
   (directive
-    mnemonic: (integer_mnemonic)
-    operands: (integer_operands
+    mnemonic: (numeric_mnemonic)
+    operands: (numeric_operands
       (binary_expression
         left: (decimal)
         operator: (additive_operator)
@@ -133,8 +133,8 @@
 
 (program
   (directive
-    mnemonic: (integer_mnemonic)
-    operands: (integer_operands
+    mnemonic: (numeric_mnemonic)
+    operands: (numeric_operands
       (binary_expression
         left: (decimal)
         operator: (additive_operator)
@@ -148,8 +148,8 @@
 
 (program
   (directive
-    mnemonic: (integer_mnemonic)
-    operands: (integer_operands
+    mnemonic: (numeric_mnemonic)
+    operands: (numeric_operands
       (binary_expression
         left: (decimal)
         operator: (multiplicative_operator)
@@ -163,8 +163,8 @@
 
 (program
   (directive
-    mnemonic: (integer_mnemonic)
-    operands: (integer_operands
+    mnemonic: (numeric_mnemonic)
+    operands: (numeric_operands
       (binary_expression
         left: (decimal)
         operator: (additive_operator)
@@ -181,8 +181,8 @@
 
 (program
   (directive
-    mnemonic: (integer_mnemonic)
-    operands: (integer_operands
+    mnemonic: (numeric_mnemonic)
+    operands: (numeric_operands
       (binary_expression
         left: (binary_expression
           left: (decimal)
@@ -199,8 +199,8 @@
 
 (program
   (directive
-    mnemonic: (integer_mnemonic)
-    operands: (integer_operands
+    mnemonic: (numeric_mnemonic)
+    operands: (numeric_operands
       (binary_expression
         left: (decimal)
         operator: (additive_operator)
