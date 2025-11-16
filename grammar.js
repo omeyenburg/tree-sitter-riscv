@@ -89,10 +89,13 @@ module.exports = grammar({
       seq(alias($._wrong_preprocessor, $.line_comment), /\r?\n/),
       seq($.line_comment, /\r?\n/),
       // $.block_comment,
+
+      // TODO: might be problematic?
       prec(100, seq(
         $._label,
         alias(choice($.preprocessor, $._wrong_preprocessor), $.line_comment),
       )),
+
       $._label,
     )),
 
