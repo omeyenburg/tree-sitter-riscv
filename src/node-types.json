@@ -808,10 +808,6 @@
         {
           "type": "local_numeric_label",
           "named": true
-        },
-        {
-          "type": "preprocessor",
-          "named": true
         }
       ]
     }
@@ -1286,10 +1282,6 @@
   },
   {
     "type": "opcode",
-    "named": true
-  },
-  {
-    "type": "preprocessor",
     "named": true
   },
   {

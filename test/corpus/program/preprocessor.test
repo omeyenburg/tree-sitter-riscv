@@ -1,5 +1,6 @@
 ==========
 [program/preprocessor] include statement
+:skip
 ==========
 #include
 ---
@@ -9,6 +10,7 @@
 
 ==========
 [program/preprocessor] define statement
+:skip
 ==========
 #define
 ---
@@ -18,6 +20,7 @@
 
 ==========
 [program/preprocessor] undef statement
+:skip
 ==========
 #undef
 ---
@@ -27,6 +30,7 @@
 
 ==========
 [program/preprocessor] if statement
+:skip
 ==========
 #if
 ---
@@ -36,6 +40,7 @@
 
 ==========
 [program/preprocessor] ifdef statement
+:skip
 ==========
 #ifdef
 ---
@@ -45,6 +50,7 @@
 
 ==========
 [program/preprocessor] ifndef statement
+:skip
 ==========
 #ifndef
 ---
@@ -54,6 +60,7 @@
 
 ==========
 [program/preprocessor] elif statement
+:skip
 ==========
 #elif
 ---
@@ -63,6 +70,7 @@
 
 ==========
 [program/preprocessor] else statement
+:skip
 ==========
 #else
 ---
@@ -72,6 +80,7 @@
 
 ==========
 [program/preprocessor] endif statement
+:skip
 ==========
 #endif
 ---
@@ -81,6 +90,7 @@
 
 ==========
 [program/preprocessor] error statement
+:skip
 ==========
 #error
 ---
@@ -90,6 +100,7 @@
 
 ==========
 [program/preprocessor] warning statement
+:skip
 ==========
 #warning
 ---
@@ -99,6 +110,7 @@
 
 ==========
 [program/preprocessor] pragma statement
+:skip
 ==========
 #pragma
 ---
@@ -108,6 +120,7 @@
 
 ==========
 [program/preprocessor] line statement
+:skip
 ==========
 #line
 ---
@@ -117,6 +130,7 @@
 
 ==========
 [program/preprocessor] preprocessor statement with arguments
+:skip
 ==========
 #include <foo>
 ---
@@ -126,6 +140,7 @@
 
 ==========
 [program/preprocessor] incomplete preprocessor statement
+:skip
 ==========
 #includ
 ---
@@ -135,6 +150,7 @@
 
 ==========
 [program/preprocessor] preprocessor statement without space
+:skip
 ==========
 #included
 ---
@@ -144,6 +160,7 @@
 
 ==========
 [program/preprocessor] multiline preprocessor statement
+:skip
 ==========
 #define foo bar \
             baz
@@ -154,6 +171,7 @@
 
 ==========
 [program/preprocessor] preprocessor-like comment after instruction
+:skip
 ==========
 foo #define bar
 ---
@@ -165,6 +183,7 @@ foo #define bar
 
 ==========
 [program/preprocessor] wrong-preprocessor-like comment after instruction
+:skip
 ==========
 foo #defined bar
 ---
@@ -176,6 +195,7 @@ foo #defined bar
 
 ==========
 [program/preprocessor] preprocessor-like comment after directive
+:skip
 ==========
 .foo #define bar
 ---
@@ -187,6 +207,7 @@ foo #defined bar
 
 ==========
 [program/preprocessor] preprocessor-like comment after label
+:skip
 ==========
 foo: #define bar
 ---
@@ -197,6 +218,7 @@ foo: #define bar
 
 ==========
 [program/preprocessor] preprocessor surrounded by instructions
+:skip
 ==========
 foo
 #define

@@ -10,7 +10,7 @@
 /**
  * Valid (C-like) preprocessor directives.
  */
-const get_preprocessor_directives = () => choice('include', 'define', 'undef', 'if', 'ifdef', 'ifndef', 'else', 'elif', 'endif', 'error', 'warning', 'pragma', 'line');
+// const get_preprocessor_directives = () => choice('include', 'define', 'undef', 'if', 'ifdef', 'ifndef', 'else', 'elif', 'endif', 'error', 'warning', 'pragma', 'line');
 
 module.exports = grammar({
   name: 'mips',
@@ -48,7 +48,7 @@ module.exports = grammar({
 
   rules: {
     program: $ => seq(
-      optional(choice($.preprocessor, alias($._wrong_preprocessor, $.line_comment))),
+      // optional(choice($.preprocessor, alias($._wrong_preprocessor, $.line_comment))),
       repeat($._statement),
       optional(seq(
         choice(
@@ -57,7 +57,7 @@ module.exports = grammar({
           $._label,
         ),
         // Preprocessor after last statement should be parsed as line comment
-        optional(alias(choice($.preprocessor, $._wrong_preprocessor), $.line_comment)),
+        // optional(alias(choice($.preprocessor, $._wrong_preprocessor), $.line_comment)),
       )),
       optional($._comment),
     ),
@@ -70,29 +70,28 @@ module.exports = grammar({
         seq($.directive, choice(
           ';',
           seq(optional($.line_comment), $._line_separator),
-          seq(optional(alias($.preprocessor, $.line_comment)), $._line_separator), // Parse preprocessor at line end as comment
-          seq(optional(alias($._wrong_preprocessor, $.line_comment)), $._line_separator),
+          // seq(optional(alias($.preprocessor, $.line_comment)), $._line_separator), // Parse preprocessor at line end as comment
+          // seq(optional(alias($._wrong_preprocessor, $.line_comment)), $._line_separator),
           // seq($.block_comment, optional($._line_separator)),
         )),
         seq($.instruction, choice(
           ';',
           seq(optional($.line_comment), optional('\r'), '\n'),
-          seq(optional(alias($.preprocessor, $.line_comment)), optional('\r'), '\n'),
-          seq(optional(alias($._wrong_preprocessor, $.line_comment)), optional('\r'), '\n'),
+          // seq(optional(alias($.preprocessor, $.line_comment)), optional('\r'), '\n'),
+          // seq(optional(alias($._wrong_preprocessor, $.line_comment)), optional('\r'), '\n'),
           // seq($.block_comment, optional('\r'), optional('\n')),
         )),
       ),
-      seq($.preprocessor, /\r?\n/),
+      // seq($.preprocessor, /\r?\n/),
       // seq($.preprocessor2, /\r?\n/),
-      seq(alias($._wrong_preprocessor, $.line_comment), /\r?\n/),
+      // seq(alias($._wrong_preprocessor, $.line_comment), /\r?\n/),
       seq($.line_comment, /\r?\n/),
       // $.block_comment,
 
-      // TODO: might be problematic?
-      prec(100, seq(
-        $._label,
-        alias(choice($.preprocessor, $._wrong_preprocessor), $.line_comment),
-      )),
+      // prec(100, seq(
+      //   $._label,
+      //   alias(choice($.preprocessor, $._wrong_preprocessor), $.line_comment),
+      // )),
 
       $._label,
     )),
@@ -124,48 +123,48 @@ module.exports = grammar({
       '*/',
     )),
 
-    // Preprocessor with backslash continuation.
-    // Must be followed by whitespace, newline, or backslash.
-    preprocessor: $ => token(prec(1, seq(
-      '#',
-      optional(/[ \t]+/), // Optional whitespace after #
-      get_preprocessor_directives(),
-      optional(choice(
-        seq(
-          /[ \t]+/, // Whitespace after directive name
-          repeat(choice(
-            /[^\\\n]/,
-            seq('\\', /\r?\n/),
-          )),
-        ),
-        seq('\\', /\r?\n/), // Or line continuation immediately
-      )),
-    ))),
+    // // Preprocessor with backslash continuation.
+    // // Must be followed by whitespace, newline, or backslash.
+    // preprocessor: $ => token(prec(1, seq(
+    //   '#',
+    //   optional(/[ \t]+/), // Optional whitespace after #
+    //   get_preprocessor_directives(),
+    //   optional(choice(
+    //     seq(
+    //       /[ \t]+/, // Whitespace after directive name
+    //       repeat(choice(
+    //         /[^\\\n]/,
+    //         seq('\\', /\r?\n/),
+    //       )),
+    //     ),
+    //     seq('\\', /\r?\n/), // Or line continuation immediately
+    //   )),
+    // ))),
 
-    preprocessor2: $ => token(prec(1, seq(
-      '#',
-      optional(/[ \t]+/), // Optional whitespace after #
-      get_preprocessor_directives(),
-      // /[\r\n]/,
-    ))),
+    // preprocessor2: $ => token(prec(1, seq(
+    //   '#',
+    //   optional(/[ \t]+/), // Optional whitespace after #
+    //   get_preprocessor_directives(),
+    //   // /[\r\n]/,
+    // ))),
 
-    // Wrong preprocessor: directive followed by non-whitespace symbol.
-    // This should be aliased as line_comment.
-    _wrong_preprocessor: $ => token(prec(1, seq(
-      '#',
-      optional(/[ \t]+/), // Optional whitespace after #
-      get_preprocessor_directives(),
-      choice(
-        seq(
-          /[^ \\\t\n]/, // Missing whitespace after directive name
-          repeat(choice(
-            /[^\\\n]/,
-            seq('\\', /\r?\n/),
-          )),
-        ),
-        seq('\\', /\r?\n/),
-      ),
-    ))),
+    // // Wrong preprocessor: directive followed by non-whitespace symbol.
+    // // This should be aliased as line_comment.
+    // _wrong_preprocessor: $ => token(prec(1, seq(
+    //   '#',
+    //   optional(/[ \t]+/), // Optional whitespace after #
+    //   get_preprocessor_directives(),
+    //   choice(
+    //     seq(
+    //       /[^ \\\t\n]/, // Missing whitespace after directive name
+    //       repeat(choice(
+    //         /[^\\\n]/,
+    //         seq('\\', /\r?\n/),
+    //       )),
+    //     ),
+    //     seq('\\', /\r?\n/),
+    //   ),
+    // ))),
 
     directive: $ => seq(choice(
       $._macro_directive,
