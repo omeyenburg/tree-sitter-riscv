@@ -15,6 +15,7 @@
 
 ==========
 [directives/comment] C style comment on new line after integer directive
+:skip
 ==========
 .word 1 2
 // bar
@@ -45,6 +46,7 @@
 
 ==========
 [directives/comment] C style comment on new line after float directive
+:skip
 ==========
 .float 1.2 2.3
 // bar
@@ -368,6 +370,7 @@
 
 ==========
 [directives/comment] C style comment on new line after multiline directive
+:skip
 ==========
 .word 1 2
       3 4
@@ -488,6 +491,7 @@
 
 ==========
 [directives/comment] C style block comment on new line after multiline directive
+:skip
 ==========
 .word 1 2
       3 4

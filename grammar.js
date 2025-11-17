@@ -36,14 +36,9 @@ module.exports = grammar({
   ],
 
   conflicts: $ => [
-    [$._control_directive],
-    [$._statement],
-    [$.instruction],
     [$.numeric_operands],
     [$.macro_parameters],
-    [$.operands],
     [$._operand, $.parenthesized_expression],
-    [$.program, $._statement],
   ],
 
   rules: {

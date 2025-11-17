@@ -2675,12 +2675,6 @@
   ],
   "conflicts": [
     [
-      "_control_directive"
-    ],
-    [
-      "_statement"
-    ],
-    [
       "instruction"
     ],
     [
@@ -2690,15 +2684,8 @@
       "macro_parameters"
     ],
     [
-      "operands"
-    ],
-    [
       "_operand",
       "parenthesized_expression"
-    ],
-    [
-      "program",
-      "_statement"
     ]
   ],
   "precedences": [],

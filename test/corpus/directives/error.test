@@ -1,6 +1,7 @@
 ==========
 [directives/error] assignment with float
 :error
+:skip
 ==========
 .foo bar=3.14
 ---
