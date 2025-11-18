@@ -1,8 +1,7 @@
 ;; Directives
 [
   (macro_mnemonic)
-  (integer_mnemonic)
-  (float_mnemonic)
+  (numeric_mnemonic)
   (string_mnemonic)
   (control_mnemonic)
 ] @keyword
@@ -51,7 +50,6 @@
 [
   (line_comment)
   (block_comment)
-  (preprocessor)
 ] @comment
 
 [

@@ -259,10 +259,10 @@ bool tree_sitter_mips_external_scanner_scan(void* payload,
                 return true;
             }
 
-            // If we see a blank line, skip ONLY C-style comments, not #
+            // If we see a blank line, skip all comments (both # and C-style)
             if (lexer->lookahead == '\r' || lexer->lookahead == '\n' ||
-                lexer->lookahead == '/') {
-                // Look ahead past blank lines, C-style comments to see what's there
+                lexer->lookahead == '#' || lexer->lookahead == '/') {
+                // Look ahead past blank lines and all comments to see what's there
                 while (!lexer->eof(lexer)) {
                     // Skip blank lines
                     while (!lexer->eof(lexer) &&
@@ -283,7 +283,17 @@ bool tree_sitter_mips_external_scanner_scan(void* payload,
                         lexer->advance(lexer, false);
                     }
 
-                    // Skip ONLY C++ and C-style block comments (NOT # comments)
+                    // Skip # comments
+                    if (!lexer->eof(lexer) && lexer->lookahead == '#') {
+                        lexer->advance(lexer, false);
+                        while (!lexer->eof(lexer) && lexer->lookahead != '\n' &&
+                               lexer->lookahead != '\r') {
+                            lexer->advance(lexer, false);
+                        }
+                        continue;
+                    }
+
+                    // Skip C++ and C-style block comments
                     if (!lexer->eof(lexer) && lexer->lookahead == '/') {
                         lexer->advance(lexer, false);
                         if (!lexer->eof(lexer) && lexer->lookahead == '/') {
@@ -336,9 +346,8 @@ bool tree_sitter_mips_external_scanner_scan(void* payload,
                 }
             }
 
-            // Check for line-ending constructs
-            if (lexer->lookahead == '#' || lexer->lookahead == ';' ||
-                lexer->lookahead == '.') {
+            // Check for line-ending constructs (but NOT # which is a comment to skip)
+            if (lexer->lookahead == ';' || lexer->lookahead == '.') {
                 lexer->result_symbol = _LINE_SEPARATOR;
                 lexer->mark_end(lexer);
                 return true;
