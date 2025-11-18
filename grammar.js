@@ -1,6 +1,6 @@
 /**
  * @file A syntax parser for the MIPS Instruction Set Architecture.
- * @author Oskar Meyenburg <oskar.meyenburg@gmail.com>
+ * @author Oskar Meyenburg <omeyenburg@gmail.com>
  * @license MIT
  */
 

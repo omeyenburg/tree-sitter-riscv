@@ -2675,9 +2675,6 @@
   ],
   "conflicts": [
     [
-      "instruction"
-    ],
-    [
       "numeric_operands"
     ],
     [

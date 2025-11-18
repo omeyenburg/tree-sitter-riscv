@@ -33,32 +33,52 @@ void tree_sitter_mips_external_scanner_deserialize(void* payload,
     (void) length;
 }
 
-static bool is_operator_start(int32_t c) {
+static inline bool is_operator_start(int32_t c) {
     return c == '+' || c == '-' || c == '*' || c == '%' || c == '&' || c == '|' ||
            c == '^' || c == '~' || c == '!' || c == '<' || c == '>' || c == '=';
 }
 
-static bool is_operand_start(int32_t c) {
+// TODO: resolve ambiguity with % and -
+static inline bool is_operand_start(int32_t c) {
     return iswalnum(c) || c == '_' || c == '\\' || c == '%' || c == '$' || c == '.' ||
            c == '\'' || c == '"' || c == '(' || c == ')' || c == '-';
 }
 
-// Skip comments and whitespace within multiline directives
-static bool skip_comments_and_whitespace(TSLexer* lexer) {
-    bool found_any = false;
+static inline bool is_eol_or_eof(const TSLexer* lexer) {
+    return lexer->eof(lexer) || lexer->lookahead == '\n' || lexer->lookahead == '\r';
+}
+
+typedef enum {
+    SKIP_NONE,
+    SKIP_INLINE,
+    SKIP_MULTILINE,
+} SkippedType_t;
+
+// Skip whitespace and comments
+static SkippedType_t skip_whitespace_and_comments(TSLexer* lexer) {
+    SkippedType_t skipped = SKIP_NONE;
 
     while (!lexer->eof(lexer)) {
+        // Swallow any inline whitespace
         if (lexer->lookahead == ' ' || lexer->lookahead == '\t') {
-            found_any = true;
+            skipped |= SKIP_INLINE;
             lexer->advance(lexer, false);
             continue;
         }
 
-        if (lexer->lookahead == '#') {
-            found_any = true;
+        // Swallow new lines, and remember them. When skipping lines, no symbols or
+        // labels may be accepted as further operands, but numbers and strings are.
+        if (lexer->lookahead == '\r' || lexer->lookahead == '\n') {
+            skipped |= SKIP_MULTILINE;
             lexer->advance(lexer, false);
-            while (!lexer->eof(lexer) && lexer->lookahead != '\n' &&
-                   lexer->lookahead != '\r') {
+            continue;
+        }
+
+        // Swallow whole line comment.
+        if (lexer->lookahead == '#') {
+            skipped |= SKIP_INLINE;
+            lexer->advance(lexer, false);
+            while (!is_eol_or_eof(lexer)) {
                 lexer->advance(lexer, false);
             }
             continue;
@@ -66,16 +86,22 @@ static bool skip_comments_and_whitespace(TSLexer* lexer) {
 
         if (lexer->lookahead == '/') {
             lexer->advance(lexer, false);
-            if (!lexer->eof(lexer) && lexer->lookahead == '/') {
-                found_any = true;
+            if (lexer->eof(lexer))
+                break;
+
+            // Swallow whole C line comment.
+            if (lexer->lookahead == '/') {
+                skipped |= SKIP_INLINE;
                 lexer->advance(lexer, false);
-                while (!lexer->eof(lexer) && lexer->lookahead != '\n' &&
-                       lexer->lookahead != '\r') {
+                while (!is_eol_or_eof(lexer)) {
                     lexer->advance(lexer, false);
                 }
                 continue;
-            } else if (!lexer->eof(lexer) && lexer->lookahead == '*') {
-                found_any = true;
+            }
+
+            // Swallow whole C block comment.
+            if (lexer->lookahead == '*') {
+                skipped |= SKIP_INLINE;
                 lexer->advance(lexer, false);
                 while (!lexer->eof(lexer)) {
                     if (lexer->lookahead == '*') {
@@ -89,15 +115,15 @@ static bool skip_comments_and_whitespace(TSLexer* lexer) {
                     }
                 }
                 continue;
-            } else {
-                break;
             }
+
+            // Break; slash may also be an operator.
         }
 
         break;
     }
 
-    return found_any;
+    return skipped;
 }
 
 bool tree_sitter_mips_external_scanner_scan(void* payload,
@@ -328,7 +354,7 @@ bool tree_sitter_mips_external_scanner_scan(void* payload,
                     lexer->result_symbol = _LINE_SEPARATOR;
                     return true;
                 }
-                skip_comments_and_whitespace(lexer);
+                skip_whitespace_and_comments(lexer);
                 lexer->result_symbol = _DATA_SEPARATOR;
                 return true;
             }
@@ -341,7 +367,7 @@ bool tree_sitter_mips_external_scanner_scan(void* payload,
             }
 
             // Default: data separator with comment skipping
-            skip_comments_and_whitespace(lexer);
+            skip_whitespace_and_comments(lexer);
             lexer->result_symbol = _DATA_SEPARATOR;
             lexer->mark_end(lexer);
             return true;
