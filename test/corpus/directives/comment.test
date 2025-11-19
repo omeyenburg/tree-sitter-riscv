@@ -150,6 +150,7 @@
 
 ==========
 [directives/comment] comment in multiline directive
+:skip
 ==========
 .word 1 2# bar
       3 4
@@ -167,6 +168,7 @@
 
 ==========
 [directives/comment] comment in multiline directive with space before
+:skip
 ==========
 .word 1 2 # bar
       3 4
@@ -184,6 +186,7 @@
 
 ==========
 [directives/comment] comment in multiline directive with tab before
+:skip
 ==========
 .word 1 2	# bar
       3 4
@@ -271,6 +274,7 @@
 
 ==========
 [directives/comment] C style comment in multiline directive
+:skip
 ==========
 .word 1 2// bar
       3 4
@@ -288,6 +292,7 @@
 
 ==========
 [directives/comment] C style comment in multiline directive with space before
+:skip
 ==========
 .word 1 2 // bar
       3 4
@@ -305,6 +310,7 @@
 
 ==========
 [directives/comment] C style comment in multiline directive with tab before
+:skip
 ==========
 .word 1 2	// bar
       3 4
@@ -392,6 +398,7 @@
 
 ==========
 [directives/comment] C style block comment in multiline directive
+:skip
 ==========
 .word 1 2/* bar */
       3 4
@@ -409,6 +416,7 @@
 
 ==========
 [directives/comment] C style block comment in multiline directive with space before
+:skip
 ==========
 .word 1 2 /* bar */
       3 4
@@ -426,6 +434,7 @@
 
 ==========
 [directives/comment] C style block comment in multiline directive with tab before
+:skip
 ==========
 .word 1 2	/* bar */
       3 4

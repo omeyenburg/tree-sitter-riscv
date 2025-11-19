@@ -34,7 +34,7 @@ void tree_sitter_mips_external_scanner_deserialize(void* payload,
 }
 
 static inline bool is_operator_start(int32_t c) {
-    return c == '+' || c == '-' || c == '*' || c == '%' || c == '&' || c == '|' ||
+    return c == '+' || c == '-' || c == '*' || c == '%' || c == '/' || c == '&' || c == '|' ||
            c == '^' || c == '~' || c == '!' || c == '<' || c == '>' || c == '=';
 }
 
@@ -85,12 +85,12 @@ static SkippedType_t skip_whitespace_and_comments(TSLexer* lexer) {
         }
 
         if (lexer->lookahead == '/') {
+            // Check if it's a comment without permanently consuming it if it's not
+            // We need to peek ahead to check
             lexer->advance(lexer, false);
-            if (lexer->eof(lexer))
-                break;
-
-            // Swallow whole C line comment.
-            if (lexer->lookahead == '/') {
+            
+            if (!lexer->eof(lexer) && lexer->lookahead == '/') {
+                // It's a '//' comment
                 skipped |= SKIP_INLINE;
                 lexer->advance(lexer, false);
                 while (!is_eol_or_eof(lexer)) {
@@ -98,9 +98,9 @@ static SkippedType_t skip_whitespace_and_comments(TSLexer* lexer) {
                 }
                 continue;
             }
-
-            // Swallow whole C block comment.
-            if (lexer->lookahead == '*') {
+            
+            if (!lexer->eof(lexer) && lexer->lookahead == '*') {
+                // It's a '/*' comment
                 skipped |= SKIP_INLINE;
                 lexer->advance(lexer, false);
                 while (!lexer->eof(lexer)) {
@@ -117,7 +117,16 @@ static SkippedType_t skip_whitespace_and_comments(TSLexer* lexer) {
                 continue;
             }
 
-            // Break; slash may also be an operator.
+            // Not a comment - '/' is an operator. We've consumed it by advancing.
+            // The lookahead is now at the character after '/'.
+            // For the operator detection logic in my new code, we need a way to signal
+            // that '/' was found. Since we can't go back, we return a special value
+            // or handle this case specially. For now, we break and the lookahead
+            // will be checked in the calling code. But this is problematic.
+            // SOLUTION: Set a flag or check if the previous character was '/'
+            // Actually, let me just mark that we found division by checking the parent context.
+            // The real solution: don't break here, instead indicate somehow that we have '/'
+            break;
         }
 
         break;
@@ -231,10 +240,188 @@ bool tree_sitter_mips_external_scanner_scan(void* payload,
                     return true;
                 }
             }
+        } else if (is_valid_operator_space && 
+                   (!is_valid_line_separator || is_valid_data_separator) &&
+                   (lexer->lookahead == '\r' || lexer->lookahead == '\n')) {
+            // Support complex separators (newline + operator)
+            // Works in both instruction and directive contexts
+            // This handles: decimal\n+ decimal, decimal\n/ decimal, etc.
+            
+            lexer->advance(lexer, false); // Skip the newline
+            
+            // Skip whitespace and newlines only (not comments yet)
+            while (!lexer->eof(lexer) && (lexer->lookahead == ' ' || lexer->lookahead == '\t' || 
+                                          lexer->lookahead == '\r' || lexer->lookahead == '\n')) {
+                lexer->advance(lexer, false);
+            }
+            
+            // Now check for operators or comments
+            while (!lexer->eof(lexer)) {
+                // Check for '#' line comment
+                if (lexer->lookahead == '#') {
+                    lexer->advance(lexer, false);
+                    while (!lexer->eof(lexer) && lexer->lookahead != '\n' && lexer->lookahead != '\r') {
+                        lexer->advance(lexer, false);
+                    }
+                    // Skip the newline after comment and any whitespace
+                    while (!lexer->eof(lexer) && (lexer->lookahead == '\n' || lexer->lookahead == '\r' ||
+                                                  lexer->lookahead == ' ' || lexer->lookahead == '\t')) {
+                        lexer->advance(lexer, false);
+                    }
+                    continue;
+                }
+                
+                // Check for '/' - could be operator, //, or /*
+                if (lexer->lookahead == '/') {
+                    // Mark end RIGHT HERE, before peeking
+                    // This ensures the token includes the '/'
+                    lexer->mark_end(lexer);
+                    
+                    // Now peek ahead to see what follows
+                    lexer->advance(lexer, false);
+                    int32_t next_char = lexer->lookahead;
+                    
+                    if (next_char == '/') {
+                        // It's a '//' comment - skip until EOL
+                        lexer->advance(lexer, false);
+                        while (!lexer->eof(lexer) && lexer->lookahead != '\n' && lexer->lookahead != '\r') {
+                            lexer->advance(lexer, false);
+                        }
+                        // Skip the newline after comment and any whitespace
+                        while (!lexer->eof(lexer) && (lexer->lookahead == '\n' || lexer->lookahead == '\r' ||
+                                                      lexer->lookahead == ' ' || lexer->lookahead == '\t')) {
+                            lexer->advance(lexer, false);
+                        }
+                        continue;
+                    }
+                    
+                    if (next_char == '*') {
+                        // It's a '/*' comment - skip until */
+                        lexer->advance(lexer, false);
+                        while (!lexer->eof(lexer)) {
+                            if (lexer->lookahead == '*') {
+                                lexer->advance(lexer, false);
+                                if (!lexer->eof(lexer) && lexer->lookahead == '/') {
+                                    lexer->advance(lexer, false);
+                                    break;
+                                }
+                            } else {
+                                lexer->advance(lexer, false);
+                            }
+                        }
+                        // Skip any whitespace after the comment
+                        while (!lexer->eof(lexer) && (lexer->lookahead == ' ' || lexer->lookahead == '\t' ||
+                                                      lexer->lookahead == '\n' || lexer->lookahead == '\r')) {
+                            lexer->advance(lexer, false);
+                        }
+                        continue;
+                    }
+                    
+                    // It's a division operator
+                    // mark_end was already called above, so just emit
+                    lexer->result_symbol = _OPERATOR_SPACE;
+                    return true;
+                }
+                
+                // Check for other operators
+                if (is_operator_start(lexer->lookahead)) {
+                    lexer->mark_end(lexer);
+                    lexer->result_symbol = _OPERATOR_SPACE;
+                    return true;
+                }
+                
+                // No operator found
+                break;
+            }
+            
+            // Check if we should emit _DATA_SEPARATOR for multiline directives
+            if (is_valid_data_separator &&
+                (!lexer->eof(lexer)) &&
+                iswdigit(lexer->lookahead)) {
+                lexer->mark_end(lexer);
+                lexer->result_symbol = _DATA_SEPARATOR;
+                return true;
+            }
+            
+            return false;
         }
     }
 
     if (is_valid_line_separator || is_valid_data_separator) {
+        // Handle comment without preceding newline in directive context
+        // Peek ahead to see if comment+newline+data exists, and if so, emit _DATA_SEPARATOR
+        if ((lexer->lookahead == '#' || lexer->lookahead == '/') &&
+            is_valid_data_separator) {
+            // Only in pure directive context, not in instructions
+            // Look ahead without permanently advancing
+            
+            int saved_char = lexer->lookahead;
+            lexer->advance(lexer, false);
+            
+            // Skip to end of comment
+            if (saved_char == '#') {
+                while (!is_eol_or_eof(lexer)) {
+                    lexer->advance(lexer, false);
+                }
+            } else {
+                // saved_char == '/'
+                if (!lexer->eof(lexer)) {
+                    if (lexer->lookahead == '/') {
+                        lexer->advance(lexer, false);
+                        while (!is_eol_or_eof(lexer)) {
+                            lexer->advance(lexer, false);
+                        }
+                    } else if (lexer->lookahead == '*') {
+                        lexer->advance(lexer, false);
+                        while (!lexer->eof(lexer)) {
+                            if (lexer->lookahead == '*') {
+                                lexer->advance(lexer, false);
+                                if (!lexer->eof(lexer) && lexer->lookahead == '/') {
+                                    lexer->advance(lexer, false);
+                                    break;
+                                }
+                            } else {
+                                lexer->advance(lexer, false);
+                            }
+                        }
+                    } else {
+                        return false;
+                    }
+                } else {
+                    return false;
+                }
+            }
+            
+            // Must have newline
+            if (!is_eol_or_eof(lexer)) {
+                return false;
+            }
+            
+            // Skip newline
+            if (lexer->lookahead == '\r') {
+                lexer->advance(lexer, false);
+                if (!lexer->eof(lexer) && lexer->lookahead == '\n') {
+                    lexer->advance(lexer, false);
+                }
+            } else if (lexer->lookahead == '\n') {
+                lexer->advance(lexer, false);
+            }
+            
+            // Skip spaces
+            while (!lexer->eof(lexer) && (lexer->lookahead == ' ' || lexer->lookahead == '\t')) {
+                lexer->advance(lexer, false);
+            }
+            
+            // Check for data
+            if (!lexer->eof(lexer) && (iswdigit(lexer->lookahead) || is_operand_start(lexer->lookahead))) {
+                lexer->mark_end(lexer);
+                lexer->result_symbol = _DATA_SEPARATOR;
+                return true;
+            }
+            
+            return false;
+        }
+        
         if (lexer->lookahead == '\r') {
             lexer->advance(lexer, false);
             if (!lexer->eof(lexer) && lexer->lookahead == '\n') {

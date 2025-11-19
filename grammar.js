@@ -216,14 +216,13 @@ module.exports = grammar({
       // Floats
       '.float', '.double', '.single',
     ),
-    numeric_operands: $ => choice(
+    numeric_operands: $ => prec(10, choice(
       seq(
         $._expression,
         repeat(seq(
           choice(
             $._operand_separator,
             seq(optional(choice(' ', '\t')), optional($._comment), ','),
-            // seq(optional(choice(' ', '\t')), optional($._comment), choice($._data_separator, $.block_comment)),
             seq(optional(choice(' ', '\t')), optional($._comment), $._data_separator),
           ),
           $._expression,
@@ -231,7 +230,7 @@ module.exports = grammar({
         optional(repeat($._data_separator)),
       ),
       $._expression,
-    ),
+    )),
 
     _string_directive: $ => seq(
       field('mnemonic', $.string_mnemonic),
@@ -251,9 +250,8 @@ module.exports = grammar({
     _control_directive: $ => seq(
       field('mnemonic', $.control_mnemonic),
       optional(choice(seq(
-        $._whitespace,
-        // optional($._whitespace),
-        // choice($.block_comment, $._whitespace),
+        optional(/[ \t]/),
+        /[ \t]+/,
         field('operands', $.control_operands),
       ), /[ \t]+/)),
     ),
