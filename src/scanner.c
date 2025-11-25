@@ -1,8 +1,12 @@
 #include "tree_sitter/parser.h"
 
 #include <ctype.h>
+#include <stdio.h>
 #include <string.h>
 #include <wctype.h>
+
+// Debug flag - set to 1 to enable debug output
+#define DEBUG_SCANNER 0
 
 enum TokenType {
     _OPERAND_SEPARATOR,
@@ -84,6 +88,10 @@ static void skip_horizontal_space(TSLexer* lexer) {
  * Returns true if a newline was consumed.
  */
 static bool skip_newline(TSLexer* lexer) {
+#if DEBUG_SCANNER
+    fprintf(stderr, "[skip_newline] lookahead=%d (\\r=%d \\n=%d)\n", 
+            lexer->lookahead, '\r', '\n');
+#endif
     if (lexer->lookahead == '\r') {
         lexer->advance(lexer, false);
         if (!lexer->eof(lexer) && lexer->lookahead == '\n') {
@@ -335,12 +343,32 @@ static bool scan_operand_separator(TSLexer* lexer, const bool* valid_symbols) {
 static bool scan_newline_operator(TSLexer* lexer, const bool* valid_symbols) {
     const bool is_valid_operator_space = valid_symbols[_OPERATOR_SPACE];
     const bool is_valid_data_separator = valid_symbols[_DATA_SEPARATOR];
+    const bool is_valid_line_separator = valid_symbols[_LINE_SEPARATOR];
 
     if (!is_valid_operator_space || !is_newline(lexer->lookahead))
         return false;
 
+#if DEBUG_SCANNER
+    fprintf(stderr, "[scan_newline_operator] called\n");
+#endif
+
+    // IMPORTANT: Check if _LINE_SEPARATOR is also valid.
+    // If so, we should NOT consume the newline here - let scan_line_or_data_separator handle it
+    if (is_valid_line_separator || is_valid_data_separator) {
+#if DEBUG_SCANNER
+        fprintf(stderr, "[scan_newline_operator] -> FALSE (line/data sep also valid)\n");
+#endif
+        return false;
+    }
+
     skip_newline(lexer);
     skip_to_content(lexer);
+
+#if DEBUG_SCANNER
+    fprintf(stderr, "[scan_newline_operator] after skip, lookahead='%c'(%d)\n",
+            (lexer->lookahead >= 32 && lexer->lookahead < 127) ? lexer->lookahead : '?',
+            lexer->lookahead);
+#endif
 
     // Check for operators (including /)
     if (lexer->lookahead == '/') {
@@ -363,11 +391,17 @@ static bool scan_newline_operator(TSLexer* lexer, const bool* valid_symbols) {
 
     // Check for data continuation
     if (is_valid_data_separator && !lexer->eof(lexer) && iswdigit(lexer->lookahead)) {
+#if DEBUG_SCANNER
+        fprintf(stderr, "[scan_newline_operator] -> DATA_SEP (digit found)\n");
+#endif
         lexer->mark_end(lexer);
         lexer->result_symbol = _DATA_SEPARATOR;
         return true;
     }
 
+#if DEBUG_SCANNER
+    fprintf(stderr, "[scan_newline_operator] -> FALSE\n");
+#endif
     return false;
 }
 
@@ -420,6 +454,11 @@ static bool scan_line_or_data_separator(TSLexer* lexer, const bool* valid_symbol
     const bool is_valid_line_separator = valid_symbols[_LINE_SEPARATOR];
     const bool is_valid_data_separator = valid_symbols[_DATA_SEPARATOR];
 
+#if DEBUG_SCANNER
+    fprintf(stderr, "[scan_line_or_data] line_sep=%d data_sep=%d\n", 
+            is_valid_line_separator, is_valid_data_separator);
+#endif
+
     if (!is_valid_line_separator && !is_valid_data_separator)
         return false;
 
@@ -428,14 +467,30 @@ static bool scan_line_or_data_separator(TSLexer* lexer, const bool* valid_symbol
         return true;
 
     // Consume newline and whitespace
-    if (!skip_newline(lexer))
+    if (!skip_newline(lexer)) {
+#if DEBUG_SCANNER
+        fprintf(stderr, "[scan_line_or_data] no newline found\n");
+#endif
         return false;
+    }
 
     skip_horizontal_space(lexer);
 
+#if DEBUG_SCANNER
+    fprintf(stderr, "[scan_line_or_data] after skip, lookahead='%c'(%d)\n",
+            (lexer->lookahead >= 32 && lexer->lookahead < 127) ? lexer->lookahead : '?',
+            lexer->lookahead);
+#endif
+
     // Both separators valid - need to disambiguate
     if (is_valid_line_separator && is_valid_data_separator) {
+#if DEBUG_SCANNER
+        fprintf(stderr, "[scan_line_or_data] BOTH valid, disambiguating\n");
+#endif
         if (lexer->eof(lexer)) {
+#if DEBUG_SCANNER
+            fprintf(stderr, "[scan_line_or_data] -> LINE_SEP (EOF)\n");
+#endif
             lexer->result_symbol = _LINE_SEPARATOR;
             lexer->mark_end(lexer);
             return true;
@@ -456,9 +511,33 @@ static bool scan_line_or_data_separator(TSLexer* lexer, const bool* valid_symbol
         }
 
         // Check for line-ending constructs
-        if (lexer->lookahead == ';' || lexer->lookahead == '.') {
+        if (lexer->lookahead == ';') {
+#if DEBUG_SCANNER
+            fprintf(stderr, "[scan_line_or_data] -> LINE_SEP (found ';')\n");
+#endif
             lexer->result_symbol = _LINE_SEPARATOR;
             lexer->mark_end(lexer);
+            return true;
+        }
+        
+        // Check for directive (dot followed by letter)
+        if (lexer->lookahead == '.') {
+            // Peek ahead to see if it's followed by a letter (directive) or digit (float)
+            lexer->mark_end(lexer);
+            lexer->advance(lexer, false);
+            if (!lexer->eof(lexer) && isalpha(lexer->lookahead)) {
+                // It's a directive like .word, .section
+#if DEBUG_SCANNER
+                fprintf(stderr, "[scan_line_or_data] -> LINE_SEP (found directive)\n");
+#endif
+                lexer->result_symbol = _LINE_SEPARATOR;
+                return true;
+            }
+            // It's a float like .5, treat as data continuation
+#if DEBUG_SCANNER
+            fprintf(stderr, "[scan_line_or_data] -> DATA_SEP (float literal)\n");
+#endif
+            lexer->result_symbol = _DATA_SEPARATOR;
             return true;
         }
 
@@ -519,6 +598,17 @@ bool tree_sitter_mips_external_scanner_scan(void* payload,
 
     if (lexer->eof(lexer))
         return false;
+
+#if DEBUG_SCANNER
+    fprintf(stderr, "[SCAN] col=%d, lookahead='%c'(%d), valid: op_sep=%d op_space=%d line_sep=%d data_sep=%d\n",
+            lexer->get_column(lexer),
+            (lexer->lookahead >= 32 && lexer->lookahead < 127) ? lexer->lookahead : '?',
+            lexer->lookahead,
+            valid_symbols[_OPERAND_SEPARATOR],
+            valid_symbols[_OPERATOR_SPACE],
+            valid_symbols[_LINE_SEPARATOR],
+            valid_symbols[_DATA_SEPARATOR]);
+#endif
 
     // Try OPERAND_SEPARATOR first (space/tab between operands)
     if (valid_symbols[_OPERAND_SEPARATOR]) {

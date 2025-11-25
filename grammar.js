@@ -275,7 +275,7 @@ module.exports = grammar({
       $._data_separator,
     ),
 
-    section_type: $ => prec(-5, /@[a-z]+/),
+    section_type: $ => prec(-5, /[@.][a-z]+/),
     option_flag: $ => prec(-5, /\+[a-z]/),
 
     // Instruction consists of an opcode and optionally a list of operands.

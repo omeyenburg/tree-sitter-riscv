@@ -1039,7 +1039,7 @@
       "value": -5,
       "content": {
         "type": "PATTERN",
-        "value": "@[a-z]+"
+        "value": "[@.][a-z]+"
       }
     },
     "option_flag": {
