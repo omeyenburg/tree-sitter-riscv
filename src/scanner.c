@@ -435,7 +435,26 @@ static bool scan_comment_data_separator(TSLexer* lexer, const bool* valid_symbol
     skip_newline(lexer);
     skip_horizontal_space(lexer);
 
-    // Check for operand-like content
+    // Check for label (identifier followed by colon)
+    if (!lexer->eof(lexer) && (isalpha(lexer->lookahead) || lexer->lookahead == '_')) {
+        lexer->mark_end(lexer);
+        // Scan ahead to see if it's a label
+        while (!lexer->eof(lexer) && (isalnum(lexer->lookahead) || 
+                                       lexer->lookahead == '_' || 
+                                       lexer->lookahead == '.' ||
+                                       lexer->lookahead == '$')) {
+            lexer->advance(lexer, false);
+        }
+        if (!lexer->eof(lexer) && lexer->lookahead == ':') {
+            // It's a label, not an operand - don't return DATA_SEPARATOR
+            return false;
+        }
+        // It's a symbol operand, continue
+        lexer->result_symbol = _DATA_SEPARATOR;
+        return true;
+    }
+
+    // Check for other operand-like content
     if (!lexer->eof(lexer) &&
         (iswdigit(lexer->lookahead) || is_operand_start(lexer->lookahead))) {
         lexer->mark_end(lexer);
@@ -500,6 +519,36 @@ static bool scan_line_or_data_separator(TSLexer* lexer, const bool* valid_symbol
         if (is_newline(lexer->lookahead) || lexer->lookahead == '#' ||
             lexer->lookahead == '/') {
             skip_to_content(lexer);
+
+            // Check for directive (dot followed by letter)
+            if (lexer->lookahead == '.') {
+                lexer->mark_end(lexer);
+                lexer->advance(lexer, false);
+                if (!lexer->eof(lexer) && isalpha(lexer->lookahead)) {
+                    // It's a directive
+#if DEBUG_SCANNER
+                    fprintf(stderr, "[scan_line_or_data] -> LINE_SEP (directive after blank lines)\n");
+#endif
+                    lexer->result_symbol = _LINE_SEPARATOR;
+                    return true;
+                }
+                // It's a float like .5, treat as data
+#if DEBUG_SCANNER
+                fprintf(stderr, "[scan_line_or_data] -> DATA_SEP (float after blank lines)\n");
+#endif
+                lexer->result_symbol = _DATA_SEPARATOR;
+                return true;
+            }
+
+            // Check for other line-ending constructs
+            if (lexer->lookahead == '_' || isalpha(lexer->lookahead)) {
+#if DEBUG_SCANNER
+                fprintf(stderr, "[scan_line_or_data] -> LINE_SEP (label/instruction after blank lines)\n");
+#endif
+                lexer->mark_end(lexer);
+                lexer->result_symbol = _LINE_SEPARATOR;
+                return true;
+            }
 
             // Check for operand-like content
             bool found_operand =
