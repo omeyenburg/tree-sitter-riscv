@@ -352,11 +352,12 @@ static bool scan_newline_operator(TSLexer* lexer, const bool* valid_symbols) {
     fprintf(stderr, "[scan_newline_operator] called\n");
 #endif
 
-    // IMPORTANT: Check if _LINE_SEPARATOR is also valid.
+    // IMPORTANT: Check if _DATA_SEPARATOR is also valid.
     // If so, we should NOT consume the newline here - let scan_line_or_data_separator handle it
-    if (is_valid_line_separator || is_valid_data_separator) {
+    // (But _LINE_SEPARATOR being valid is OK - we can still check for operators)
+    if (is_valid_data_separator) {
 #if DEBUG_SCANNER
-        fprintf(stderr, "[scan_newline_operator] -> FALSE (line/data sep also valid)\n");
+        fprintf(stderr, "[scan_newline_operator] -> FALSE (data sep also valid)\n");
 #endif
         return false;
     }

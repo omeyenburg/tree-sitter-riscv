@@ -71,7 +71,7 @@ module.exports = grammar({
         )),
         seq($.instruction, choice(
           ';',
-          seq(optional($.line_comment), optional('\r'), '\n'),
+          seq(optional($.line_comment), $._line_separator),
           // seq(optional(alias($.preprocessor, $.line_comment)), optional('\r'), '\n'),
           // seq(optional(alias($._wrong_preprocessor, $.line_comment)), optional('\r'), '\n'),
           // seq($.block_comment, optional('\r'), optional('\n')),

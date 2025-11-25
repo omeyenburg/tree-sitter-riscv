@@ -146,20 +146,8 @@
                             ]
                           },
                           {
-                            "type": "CHOICE",
-                            "members": [
-                              {
-                                "type": "STRING",
-                                "value": "\r"
-                              },
-                              {
-                                "type": "BLANK"
-                              }
-                            ]
-                          },
-                          {
-                            "type": "STRING",
-                            "value": "\n"
+                            "type": "SYMBOL",
+                            "name": "_line_separator"
                           }
                         ]
                       }
