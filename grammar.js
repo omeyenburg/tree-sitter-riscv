@@ -434,7 +434,7 @@ module.exports = grammar({
     _expression_argument: $ => field('argument', $._expression),
 
     // Primitive data types
-    octal: $ => /-?0[0-7]*/,
+    octal: $ => /-?0o?[0-7]*/,
     binary: $ => /-?0[bB][01]+/,
     decimal: $ => prec(-1, /-?\d+/),
     hexadecimal: $ => /-?0[xX][0-9a-fA-F]+/,

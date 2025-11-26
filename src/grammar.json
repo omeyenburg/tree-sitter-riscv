@@ -2182,7 +2182,7 @@
     },
     "octal": {
       "type": "PATTERN",
-      "value": "-?0[0-7]*"
+      "value": "-?0o?[0-7]*"
     },
     "binary": {
       "type": "PATTERN",
