@@ -448,6 +448,10 @@
           {
             "type": "numeric_operands",
             "named": true
+          },
+          {
+            "type": "string_operands",
+            "named": true
           }
         ]
       },
@@ -457,24 +461,6 @@
         "types": [
           {
             "type": "macro_parameters",
-            "named": true
-          }
-        ]
-      },
-      "string": {
-        "multiple": false,
-        "required": false,
-        "types": [
-          {
-            "type": "address",
-            "named": true
-          },
-          {
-            "type": "macro_variable",
-            "named": true
-          },
-          {
-            "type": "string",
             "named": true
           }
         ]
@@ -928,6 +914,33 @@
     "type": "string_mnemonic",
     "named": true,
     "fields": {}
+  },
+  {
+    "type": "string_operands",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "address",
+          "named": true
+        },
+        {
+          "type": "block_comment",
+          "named": true
+        },
+        {
+          "type": "macro_variable",
+          "named": true
+        },
+        {
+          "type": "string",
+          "named": true
+        }
+      ]
+    }
   },
   {
     "type": "symbol",

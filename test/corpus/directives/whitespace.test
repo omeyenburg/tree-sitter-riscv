@@ -53,8 +53,9 @@
 
 (program
   (directive
-    (string_mnemonic)
-    (string)))
+    mnemonic: (string_mnemonic)
+    operands: (string_operands
+      (string))))
 
 ==========
 [directives/whitespace] trailing tab after string directive before new line
@@ -65,8 +66,9 @@
 
 (program
   (directive
-    (string_mnemonic)
-    (string)))
+    mnemonic: (string_mnemonic)
+    operands: (string_operands
+      (string))))
 
 ==========
 [directives/whitespace] directive without operands with semicolon

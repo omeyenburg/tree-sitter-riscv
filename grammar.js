@@ -32,6 +32,7 @@ module.exports = grammar({
   conflicts: $ => [
     [$.macro_parameters],
     [$._operand, $.parenthesized_expression],
+    [$.string_operands],
   ],
 
   rules: {
@@ -160,7 +161,7 @@ module.exports = grammar({
     _string_directive: $ => seq(
       field('mnemonic', $.string_mnemonic),
       choice($._whitespace, $.block_comment),
-      field('string', $._string_operand),
+      field('operands', $.string_operands),
       optional($._whitespace),
     ),
     string_mnemonic: $ => choice(
@@ -169,6 +170,22 @@ module.exports = grammar({
       '.asciiz',
       '.string',
       '.stringz',
+    ),
+    string_operands: $ => choice(
+      // Multiple strings with optional separators
+      seq(
+        $.string,
+        repeat(seq(
+          optional(choice(
+            ',',
+            $._whitespace,
+            $.block_comment,
+          )),
+          $.string,
+        )),
+      ),
+      // Single non-string operand
+      choice($.macro_variable, $.address),
     ),
     _string_operand: $ => choice($.string, $.macro_variable, $.address),
 

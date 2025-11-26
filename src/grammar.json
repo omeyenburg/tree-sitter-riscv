@@ -799,10 +799,10 @@
         },
         {
           "type": "FIELD",
-          "name": "string",
+          "name": "operands",
           "content": {
             "type": "SYMBOL",
-            "name": "_string_operand"
+            "name": "string_operands"
           }
         },
         {
@@ -841,6 +841,70 @@
         {
           "type": "STRING",
           "value": ".stringz"
+        }
+      ]
+    },
+    "string_operands": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "SEQ",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "string"
+            },
+            {
+              "type": "REPEAT",
+              "content": {
+                "type": "SEQ",
+                "members": [
+                  {
+                    "type": "CHOICE",
+                    "members": [
+                      {
+                        "type": "CHOICE",
+                        "members": [
+                          {
+                            "type": "STRING",
+                            "value": ","
+                          },
+                          {
+                            "type": "SYMBOL",
+                            "name": "_whitespace"
+                          },
+                          {
+                            "type": "SYMBOL",
+                            "name": "block_comment"
+                          }
+                        ]
+                      },
+                      {
+                        "type": "BLANK"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "SYMBOL",
+                    "name": "string"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "macro_variable"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "address"
+            }
+          ]
         }
       ]
     },
@@ -2671,6 +2735,9 @@
     [
       "_operand",
       "parenthesized_expression"
+    ],
+    [
+      "string_operands"
     ]
   ],
   "precedences": [],

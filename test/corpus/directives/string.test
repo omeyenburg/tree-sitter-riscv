@@ -7,7 +7,8 @@
 (program
   (directive
     mnemonic: (string_mnemonic)
-    string: (string)))
+    operands: (string_operands
+      (string))))
 
 ==========
 [directives/string] string directive using asciiz mnemonic
@@ -18,7 +19,8 @@
 (program
   (directive
     mnemonic: (string_mnemonic)
-    string: (string)))
+    operands: (string_operands
+      (string))))
 
 ==========
 [directives/string] string directive using string mnemonic
@@ -29,7 +31,8 @@
 (program
   (directive
     mnemonic: (string_mnemonic)
-    string: (string)))
+    operands: (string_operands
+      (string))))
 
 ==========
 [directives/string] string containing escaped character
@@ -40,7 +43,8 @@
 (program
   (directive
     mnemonic: (string_mnemonic)
-    string: (string)))
+    operands: (string_operands
+      (string))))
 
 ==========
 [directives/string] string containing escaped quote
@@ -51,4 +55,86 @@
 (program
   (directive
     mnemonic: (string_mnemonic)
-    string: (string)))
+    operands: (string_operands
+      (string))))
+
+==========
+[directives/string] multiple strings with space separator
+==========
+.string "a" "b"
+---
+
+(program
+  (directive
+    mnemonic: (string_mnemonic)
+    operands: (string_operands
+      (string)
+      (string))))
+
+==========
+[directives/string] multiple strings with comma separator
+==========
+.string "a", "b"
+---
+
+(program
+  (directive
+    mnemonic: (string_mnemonic)
+    operands: (string_operands
+      (string)
+      (string))))
+
+==========
+[directives/string] multiple strings without separator
+==========
+.string "a""b"
+---
+
+(program
+  (directive
+    mnemonic: (string_mnemonic)
+    operands: (string_operands
+      (string)
+      (string))))
+
+==========
+[directives/string] multiple strings with block comment separator
+==========
+.string "a" /* comment */ "b"
+---
+
+(program
+  (directive
+    mnemonic: (string_mnemonic)
+    operands: (string_operands
+      (string)
+      (block_comment)
+      (string))))
+
+==========
+[directives/string] multiple strings with block comment no space
+==========
+.string "a"/* comment */"b"
+---
+
+(program
+  (directive
+    mnemonic: (string_mnemonic)
+    operands: (string_operands
+      (string)
+      (block_comment)
+      (string))))
+
+==========
+[directives/string] three strings mixed separators
+==========
+.string "a" "b", "c"
+---
+
+(program
+  (directive
+    mnemonic: (string_mnemonic)
+    operands: (string_operands
+      (string)
+      (string)
+      (string))))

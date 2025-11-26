@@ -133,4 +133,5 @@
 (program
   (directive
     mnemonic: (string_mnemonic)
-    string: (macro_variable)))
+    operands: (string_operands
+      (macro_variable))))
