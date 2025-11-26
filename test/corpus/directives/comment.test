@@ -1,5 +1,5 @@
 ==========
-[directives/comment] comment on new line after integer directive
+[directives/comment] comment on new line after numeric directive
 ==========
 .word 1 2
 # bar
@@ -10,10 +10,58 @@
     mnemonic: (numeric_mnemonic)
     operands: (numeric_operands
       (decimal)
-      (decimal))))
+      (decimal)))
+  (line_comment))
 
 ==========
-[directives/comment] C style comment on new line after integer directive
+[directives/comment] comment on new line after control directive
+==========
+.foo 1 2
+# bar
+---
+
+(program
+  (directive
+    mnemonic: (control_mnemonic)
+    operands: (control_operands
+      (decimal)
+      (decimal)))
+  (line_comment))
+
+==========
+[directives/comment] comment on new line after empty line after numeric directive
+==========
+.word 1 2
+
+# bar
+---
+
+(program
+  (directive
+    mnemonic: (numeric_mnemonic)
+    operands: (numeric_operands
+      (decimal)
+      (decimal)))
+  (line_comment))
+
+==========
+[directives/comment] comment on new line after empty line after control directive
+==========
+.foo 1 2
+
+# bar
+---
+
+(program
+  (directive
+    mnemonic: (control_mnemonic)
+    operands: (control_operands
+      (decimal)
+      (decimal)))
+  (line_comment))
+
+==========
+[directives/comment] C style comment on new line after numeric directive
 ==========
 .word 1 2
 // bar
@@ -24,7 +72,24 @@
     mnemonic: (numeric_mnemonic)
     operands: (numeric_operands
       (decimal)
-      (decimal))))
+      (decimal)))
+  (line_comment))
+
+==========
+[directives/comment] C-style comment on new line after empty line after numeric directive
+==========
+.word 1 2
+
+// bar
+---
+
+(program
+  (directive
+    mnemonic: (numeric_mnemonic)
+    operands: (numeric_operands
+      (decimal)
+      (decimal)))
+  (line_comment))
 
 ==========
 [directives/comment] comment on new line after float directive
@@ -38,7 +103,8 @@
     (numeric_mnemonic)
     (numeric_operands
       (float)
-      (float))))
+      (float)))
+  (line_comment))
 
 ==========
 [directives/comment] C style comment on new line after float directive
@@ -52,7 +118,8 @@
     (numeric_mnemonic)
     (numeric_operands
       (float)
-      (float))))
+      (float)))
+  (line_comment))
 
 ==========
 [directives/comment] inline comment following directive without arguments
@@ -254,7 +321,8 @@
       (decimal)
       (decimal)
       (decimal)
-      (decimal))))
+      (decimal)))
+  (line_comment))
 
 ==========
 [directives/comment] C style comment in multiline directive
@@ -370,7 +438,8 @@
       (decimal)
       (decimal)
       (decimal)
-      (decimal))))
+      (decimal)))
+  (line_comment))
 
 ==========
 [directives/comment] C style block comment in multiline directive
@@ -486,7 +555,8 @@
       (decimal)
       (decimal)
       (decimal)
-      (decimal))))
+      (decimal)))
+  (block_comment))
 
 
 ==========

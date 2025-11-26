@@ -541,10 +541,133 @@ static bool scan_line_or_data_separator(TSLexer* lexer, const bool* valid_symbol
             return true;
         }
 
-        // Look ahead past blank lines and comments
-        if (is_newline(lexer->lookahead) || lexer->lookahead == '#' ||
-            lexer->lookahead == '/') {
-            skip_to_content(lexer);
+        // Check if we're at a comment
+        if (lexer->lookahead == '#' || lexer->lookahead == '/') {
+#if DEBUG_SCANNER
+            fprintf(stderr, "[scan_line_or_data] Found comment at start\n");
+#endif
+            // Mark end BEFORE the comment
+            lexer->mark_end(lexer);
+            
+            // Now skip the comment to see what comes after
+            if (lexer->lookahead == '#') {
+                consume_hash_comment(lexer);
+            } else {
+                if (!consume_slash_comment(lexer)) {
+                    // Not actually a comment, '/' is something else
+#if DEBUG_SCANNER
+                    fprintf(stderr, "[scan_line_or_data] Not a comment, returning LINE_SEP\n");
+#endif
+                    lexer->result_symbol = _LINE_SEPARATOR;
+                    return true;
+                }
+            }
+            
+            // Check what's after the comment
+            if (is_eol_or_eof(lexer)) {
+                // Comment ends the line - check if we need to look further for data
+                skip_newline(lexer);
+                skip_horizontal_space(lexer);
+                
+#if DEBUG_SCANNER
+                fprintf(stderr, "[scan_line_or_data] After comment+newline, lookahead='%c'(%d)\n",
+                        (lexer->lookahead >= 32 && lexer->lookahead < 127) ? lexer->lookahead : '?',
+                        lexer->lookahead);
+#endif
+                
+                // If we hit another newline or comment, just return LINE_SEP
+                // (don't look further - let the grammar handle the next line)
+                if (is_newline(lexer->lookahead) || lexer->lookahead == '#' || 
+                    (lexer->lookahead == '/' && !lexer->eof(lexer))) {
+#if DEBUG_SCANNER
+                    fprintf(stderr, "[scan_line_or_data] Found newline/comment after comment, LINE_SEP\n");
+#endif
+                    lexer->result_symbol = _LINE_SEPARATOR;
+                    return true;
+                }
+                
+                // Check if what follows is data continuation
+                if (!lexer->eof(lexer)) {
+                    // Check for directive (should be LINE_SEP)
+                    if (lexer->lookahead == '.') {
+                        lexer->advance(lexer, false);
+                        if (!lexer->eof(lexer) && isalpha(lexer->lookahead)) {
+                            // Directive - LINE_SEPARATOR
+#if DEBUG_SCANNER
+                            fprintf(stderr, "[scan_line_or_data] Directive after comment, LINE_SEP\n");
+#endif
+                            lexer->result_symbol = _LINE_SEPARATOR;
+                            return true;
+                        }
+                        // Fall through - could be float like .5
+                    }
+                    
+                    // Check for label
+                    if (lexer->lookahead == '_' || isalpha(lexer->lookahead)) {
+                        // Could be label or instruction - check for colon
+                        while (!lexer->eof(lexer) && (isalnum(lexer->lookahead) || 
+                                                       lexer->lookahead == '_' || 
+                                                       lexer->lookahead == '.' ||
+                                                       lexer->lookahead == '$')) {
+                            lexer->advance(lexer, false);
+                        }
+                        if (!lexer->eof(lexer) && lexer->lookahead == ':') {
+                            // Label - LINE_SEPARATOR
+#if DEBUG_SCANNER
+                            fprintf(stderr, "[scan_line_or_data] Label after comment, LINE_SEP\n");
+#endif
+                            lexer->result_symbol = _LINE_SEPARATOR;
+                            return true;
+                        }
+                        // Fall through - might be data
+                    }
+                    
+                    // Check if it's data-like (number, symbol, etc.)
+                    if (iswdigit(lexer->lookahead) || is_operand_start(lexer->lookahead)) {
+                        // Data continuation - call mark_end to swallow comment
+#if DEBUG_SCANNER
+                        fprintf(stderr, "[scan_line_or_data] Data after comment, DATA_SEP (swallowing comment)\n");
+#endif
+                        lexer->mark_end(lexer);
+                        lexer->result_symbol = _DATA_SEPARATOR;
+                        return true;
+                    }
+                }
+                
+                // Default to LINE_SEPARATOR (comment not swallowed)
+#if DEBUG_SCANNER
+                fprintf(stderr, "[scan_line_or_data] Default LINE_SEP after comment\n");
+#endif
+                lexer->result_symbol = _LINE_SEPARATOR;
+                return true;
+            }
+            
+            // Comment is inline (not followed by newline) - this shouldn't happen in this path
+#if DEBUG_SCANNER
+            fprintf(stderr, "[scan_line_or_data] Inline comment (unexpected), LINE_SEP\n");
+#endif
+            lexer->result_symbol = _LINE_SEPARATOR;
+            return true;
+        }
+
+        // Look ahead past blank lines and comments for DATA_SEP disambiguation
+        if (is_newline(lexer->lookahead)) {
+            // Skip blank lines but stop at comments
+            while (!lexer->eof(lexer) && is_newline(lexer->lookahead)) {
+                skip_newline(lexer);
+                skip_horizontal_space(lexer);
+            }
+            
+            // If we hit a comment, return LINE_SEP (let grammar handle the comment)
+            if (lexer->lookahead == '#' || 
+                (lexer->lookahead == '/' && !lexer->eof(lexer))) {
+#if DEBUG_SCANNER
+                fprintf(stderr, "[scan_line_or_data] -> LINE_SEP (comment after blank lines)\n");
+#endif
+                lexer->mark_end(lexer);
+                lexer->result_symbol = _LINE_SEPARATOR;
+                return true;
+            }
 
             // Check for directive (dot followed by letter)
             if (lexer->lookahead == '.') {
@@ -646,10 +769,11 @@ static bool scan_line_or_data_separator(TSLexer* lexer, const bool* valid_symbol
         return true;
     }
 
-    // Only one separator valid
-    if (is_valid_line_separator) {
-        lexer->result_symbol = _LINE_SEPARATOR;
+    // Only LINE_SEPARATOR valid
+    if (is_valid_line_separator && !is_valid_data_separator) {
+        // Mark end to not consume any comments/whitespace after newline
         lexer->mark_end(lexer);
+        lexer->result_symbol = _LINE_SEPARATOR;
         return true;
     }
 
