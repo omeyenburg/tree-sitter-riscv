@@ -50,3 +50,25 @@ _baz:
       (decimal)
       (block_comment)
       (decimal))))
+
+==========
+[directives/control] mnemonic directly followed by comment
+==========
+.foo# bar
+---
+
+(program
+  (directive
+    mnemonic: (control_mnemonic))
+  (line_comment))
+
+==========
+[directives/control] mnemonic directly followed by C-style block comment
+==========
+.foo/* bar */
+---
+
+(program
+  (directive
+    mnemonic: (control_mnemonic)
+    (block_comment)))

@@ -998,6 +998,10 @@
                 {
                   "type": "SYMBOL",
                   "name": "_whitespace"
+                },
+                {
+                  "type": "SYMBOL",
+                  "name": "block_comment"
                 }
               ]
             },

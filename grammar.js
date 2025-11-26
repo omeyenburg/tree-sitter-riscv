@@ -176,10 +176,14 @@ module.exports = grammar({
 
     _control_directive: $ => seq(
       field('mnemonic', $.control_mnemonic),
-      optional(choice(seq(
-        choice($._whitespace, $.block_comment),
-        field('operands', $.control_operands),
-      ), $._whitespace)),
+      optional(choice(
+        seq(
+          choice($._whitespace, $.block_comment),
+          field('operands', $.control_operands),
+        ),
+        $._whitespace,
+        $.block_comment,
+      )),
     ),
     control_mnemonic: $ => prec(-1, /\.[a-z0-9_]+/),
     control_operands: $ => seq(
