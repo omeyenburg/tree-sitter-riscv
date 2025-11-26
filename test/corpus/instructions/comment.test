@@ -28,8 +28,8 @@ foo/* bar */
 
 (program
   (instruction
-    opcode: (opcode))
-  (block_comment))
+    opcode: (opcode)
+    (block_comment)))
 
 ==========
 [instructions/comment] inline comment after opcode with space
@@ -174,7 +174,6 @@ foo $t0/* bar */ + $t0
 
 ==========
 [instructions/comment] C style block comment between opcode and operands without space
-:skip
 ==========
 foo/* bar */$t0
 ---

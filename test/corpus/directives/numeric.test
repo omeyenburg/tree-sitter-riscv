@@ -240,3 +240,29 @@
     operands: (numeric_operands
       (float)
       (float))))
+
+==========
+[directives/numeric] directive followed by float (continuation)
+==========
+.float 1.0
+.5
+---
+(program
+  (directive
+    (numeric_mnemonic)
+    (numeric_operands
+      (float)
+      (float))))
+
+==========
+[directives/numeric] directive followed by number (continuation)
+==========
+.byte 1
+2
+---
+(program
+  (directive
+    (numeric_mnemonic)
+    (numeric_operands
+      (decimal)
+      (decimal))))

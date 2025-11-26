@@ -196,3 +196,40 @@ foo ( bar, baz )
     operands: (operands
       operand: (symbol)
       operand: (symbol))))
+
+==========
+[instructions/whitespace] instruction followed by indented label
+==========
+foo
+ bar:
+---
+(program
+  (instruction
+    (opcode))
+  (global_label))
+
+==========
+[instructions/whitespace] instruction followed by indented instruction  
+==========
+foo
+ bar
+---
+(program
+  (instruction
+    (opcode))
+  (instruction
+    (opcode)))
+
+==========
+[instructions/whitespace] instruction followed by indented directive
+==========
+foo
+ .word 1
+---
+(program
+  (instruction
+    (opcode))
+  (directive
+    (numeric_mnemonic)
+    (numeric_operands
+      (decimal))))

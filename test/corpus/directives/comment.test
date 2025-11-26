@@ -1,6 +1,5 @@
 ==========
 [directives/comment] comment on new line after integer directive
-:skip
 ==========
 .word 1 2
 # bar
@@ -11,12 +10,10 @@
     mnemonic: (numeric_mnemonic)
     operands: (numeric_operands
       (decimal)
-      (decimal)))
-  (line_comment))
+      (decimal))))
 
 ==========
 [directives/comment] C style comment on new line after integer directive
-:skip
 ==========
 .word 1 2
 // bar
@@ -27,12 +24,10 @@
     mnemonic: (numeric_mnemonic)
     operands: (numeric_operands
       (decimal)
-      (decimal)))
-  (line_comment))
+      (decimal))))
 
 ==========
 [directives/comment] comment on new line after float directive
-:skip
 ==========
 .float 1.2 2.3
 # bar
@@ -43,12 +38,10 @@
     (numeric_mnemonic)
     (numeric_operands
       (float)
-      (float)))
-  (line_comment))
+      (float))))
 
 ==========
 [directives/comment] C style comment on new line after float directive
-:skip
 ==========
 .float 1.2 2.3
 // bar
@@ -59,8 +52,7 @@
     (numeric_mnemonic)
     (numeric_operands
       (float)
-      (float)))
-  (line_comment))
+      (float))))
 
 ==========
 [directives/comment] inline comment following directive without arguments
@@ -150,7 +142,6 @@
 
 ==========
 [directives/comment] comment in multiline directive
-:skip
 ==========
 .word 1 2# bar
       3 4
@@ -162,13 +153,11 @@
     operands: (numeric_operands
       (decimal)
       (decimal)
-      (line_comment)
       (decimal)
       (decimal))))
 
 ==========
 [directives/comment] comment in multiline directive with space before
-:skip
 ==========
 .word 1 2 # bar
       3 4
@@ -180,13 +169,11 @@
     operands: (numeric_operands
       (decimal)
       (decimal)
-      (line_comment)
       (decimal)
       (decimal))))
 
 ==========
 [directives/comment] comment in multiline directive with tab before
-:skip
 ==========
 .word 1 2	# bar
       3 4
@@ -198,7 +185,6 @@
     operands: (numeric_operands
       (decimal)
       (decimal)
-      (line_comment)
       (decimal)
       (decimal))))
 
@@ -255,7 +241,6 @@
 
 ==========
 [directives/comment] comment on new line after multiline directive
-:skip
 ==========
 .word 1 2
       3 4
@@ -269,12 +254,10 @@
       (decimal)
       (decimal)
       (decimal)
-      (decimal)))
-  (line_comment))
+      (decimal))))
 
 ==========
 [directives/comment] C style comment in multiline directive
-:skip
 ==========
 .word 1 2// bar
       3 4
@@ -286,13 +269,11 @@
     operands: (numeric_operands
       (decimal)
       (decimal)
-      (line_comment)
       (decimal)
       (decimal))))
 
 ==========
 [directives/comment] C style comment in multiline directive with space before
-:skip
 ==========
 .word 1 2 // bar
       3 4
@@ -304,13 +285,11 @@
     operands: (numeric_operands
       (decimal)
       (decimal)
-      (line_comment)
       (decimal)
       (decimal))))
 
 ==========
 [directives/comment] C style comment in multiline directive with tab before
-:skip
 ==========
 .word 1 2	// bar
       3 4
@@ -322,7 +301,6 @@
     operands: (numeric_operands
       (decimal)
       (decimal)
-      (line_comment)
       (decimal)
       (decimal))))
 
@@ -379,7 +357,6 @@
 
 ==========
 [directives/comment] C style comment on new line after multiline directive
-:skip
 ==========
 .word 1 2
       3 4
@@ -393,12 +370,10 @@
       (decimal)
       (decimal)
       (decimal)
-      (decimal)))
-  (line_comment))
+      (decimal))))
 
 ==========
 [directives/comment] C style block comment in multiline directive
-:skip
 ==========
 .word 1 2/* bar */
       3 4
@@ -410,13 +385,11 @@
     operands: (numeric_operands
       (decimal)
       (decimal)
-      (block_comment)
       (decimal)
       (decimal))))
 
 ==========
 [directives/comment] C style block comment in multiline directive with space before
-:skip
 ==========
 .word 1 2 /* bar */
       3 4
@@ -428,13 +401,11 @@
     operands: (numeric_operands
       (decimal)
       (decimal)
-      (block_comment)
       (decimal)
       (decimal))))
 
 ==========
 [directives/comment] C style block comment in multiline directive with tab before
-:skip
 ==========
 .word 1 2	/* bar */
       3 4
@@ -446,7 +417,6 @@
     operands: (numeric_operands
       (decimal)
       (decimal)
-      (block_comment)
       (decimal)
       (decimal))))
 
@@ -503,7 +473,6 @@
 
 ==========
 [directives/comment] C style block comment on new line after multiline directive
-:skip
 ==========
 .word 1 2
       3 4
@@ -517,8 +486,7 @@
       (decimal)
       (decimal)
       (decimal)
-      (decimal)))
-  (block_comment))
+      (decimal))))
 
 
 ==========
@@ -534,3 +502,17 @@
       (decimal)
       (block_comment)
       (decimal))))
+
+==========
+[directives/comment] directive with comment followed by label
+==========
+.foo bar # com
+baz:
+---
+(program
+  (directive
+    (control_mnemonic)
+    (control_operands
+      (symbol)))
+  (line_comment)
+  (global_label))
