@@ -1,6 +1,6 @@
 # tree-sitter-mips
 
-A [tree-sitter](https://github.com/tree-sitter/tree-sitter) parser for the MIPS and RISC-V assembly languages.
+A [tree-sitter](https://github.com/tree-sitter/tree-sitter) parser for the MIPS and RISC-V assembly languages, aiming for full compatibility with all major assemblers and simulators.
 
 [![CI](https://img.shields.io/github/actions/workflow/status/omeyenburg/tree-sitter-mips/ci.yml?logo=github&label=CI)](https://github.com/omeyenburg/tree-sitter-mips/actions/workflows/ci.yml)
 [![crates](https://img.shields.io/crates/v/tree-sitter-mips?logo=rust)](https://crates.io/crates/tree-sitter-mips)

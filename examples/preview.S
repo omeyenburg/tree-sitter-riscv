@@ -1,15 +1,9 @@
-#include <foo.s>
-
-/*
- * C style block comment
- */
-
-.text
+text
 .macro LOAD reg, val
     li \reg, \val
 .end_macro
 
-main: # comment
+main: # Comment
     LOAD $t0, 0x42
     la $a0, msg
     l.s $f0, pi
