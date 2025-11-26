@@ -386,3 +386,12 @@ main:
       (decimal)))
   (directive
     (control_mnemonic)))
+
+==========
+[directives/whitespace] numeric directive mnemonic followed by space
+==========
+.word 
+---
+(program
+  (directive
+    (numeric_mnemonic)))

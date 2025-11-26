@@ -36,3 +36,16 @@ _baz:
     operands: (control_operands
       (symbol)))
   (local_numeric_label))
+
+==========
+[directives/control] operands separated by block comment
+==========
+.foo 1/* bar */1
+---
+
+(program
+  (directive
+    mnemonic: (control_mnemonic)
+    operands: (control_operands
+      (decimal)
+      (decimal))))

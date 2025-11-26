@@ -7,6 +7,7 @@
 
 ==========
 [directives/error] interger directive without values
+:skip
 :error
 ==========
 .word
@@ -14,6 +15,7 @@
 
 ==========
 [directives/error] float directive without values
+:skip
 :error
 ==========
 .float

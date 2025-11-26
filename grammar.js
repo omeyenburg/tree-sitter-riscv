@@ -115,11 +115,14 @@ module.exports = grammar({
       )),
     ),
 
-    _numeric_directive: $ => seq(
+    _numeric_directive: $ => choice(
       field('mnemonic', $.numeric_mnemonic),
-      choice($._whitespace, $.block_comment),
-      field('operands', $.numeric_operands),
-      optional(repeat(choice('\r', '\n', ' ', '\t'))),
+      seq(
+        field('mnemonic', $.numeric_mnemonic),
+        choice($._whitespace, $.block_comment),
+        optional(field('operands', $.numeric_operands)),
+        optional(repeat(choice('\r', '\n', ' ', '\t'))),
+      ),
     ),
     numeric_mnemonic: $ => choice(
       '.byte',
