@@ -7,11 +7,6 @@
 /// <reference types="tree-sitter-cli/dsl" />
 // @ts-check
 
-/**
- * Valid (C-like) preprocessor directives.
- */
-// const get_preprocessor_directives = () => choice('include', 'define', 'undef', 'if', 'ifdef', 'ifndef', 'else', 'elif', 'endif', 'error', 'warning', 'pragma', 'line');
-
 module.exports = grammar({
   name: 'mips',
 
@@ -23,7 +18,6 @@ module.exports = grammar({
   ],
 
   extras: $ => [
-    // /[ \t\r\n]/,
     /\s|\\\r?\n/,
     $.block_comment,
     $._operator_space,
@@ -43,7 +37,6 @@ module.exports = grammar({
 
   rules: {
     program: $ => seq(
-      // optional(choice($.preprocessor, alias($._wrong_preprocessor, $.line_comment))),
       repeat($._statement),
       optional(seq(
         choice(
@@ -51,10 +44,8 @@ module.exports = grammar({
           $.instruction,
           $._label,
         ),
-        // Preprocessor after last statement should be parsed as line comment
-        // optional(alias(choice($.preprocessor, $._wrong_preprocessor), $.line_comment)),
       )),
-      optional($._comment),
+      optional($.line_comment),
     ),
 
     _statement: $ => prec(1, choice(
@@ -65,39 +56,17 @@ module.exports = grammar({
         seq($.directive, choice(
           ';',
           seq(optional($.line_comment), $._line_separator),
-          // seq(optional(alias($.preprocessor, $.line_comment)), $._line_separator), // Parse preprocessor at line end as comment
-          // seq(optional(alias($._wrong_preprocessor, $.line_comment)), $._line_separator),
-          // seq($.block_comment, optional($._line_separator)),
         )),
         seq($.instruction, choice(
           ';',
           seq(optional($.line_comment), $._line_separator),
-          // seq(optional(alias($.preprocessor, $.line_comment)), optional('\r'), '\n'),
-          // seq(optional(alias($._wrong_preprocessor, $.line_comment)), optional('\r'), '\n'),
-          // seq($.block_comment, optional('\r'), optional('\n')),
         )),
       ),
-      // seq($.preprocessor, /\r?\n/),
-      // seq($.preprocessor2, /\r?\n/),
-      // seq(alias($._wrong_preprocessor, $.line_comment), /\r?\n/),
       seq($.line_comment, /\r?\n/),
-      // $.block_comment,
-
-      // prec(100, seq(
-      //   $._label,
-      //   alias(choice($.preprocessor, $._wrong_preprocessor), $.line_comment),
-      // )),
-
       $._label,
     )),
 
     _whitespace: $ => /[ \t]+/,
-
-    // Comments
-    _comment: $ => choice(
-      $.line_comment,
-      // $.block_comment,
-    ),
 
     line_comment: $ => token(seq(
       choice('#', '//'),
@@ -111,55 +80,12 @@ module.exports = grammar({
     block_comment: $ => token(seq(
       '/*',
       repeat(choice(
-        /[^*]/, // Any character except *
-        seq('*', /[^/]/), // * followed by anything except /
+        /[^*]/,
+        seq('*', /[^/]/),
       )),
       optional('*'),
       '*/',
     )),
-
-    // // Preprocessor with backslash continuation.
-    // // Must be followed by whitespace, newline, or backslash.
-    // preprocessor: $ => token(prec(1, seq(
-    //   '#',
-    //   optional(/[ \t]+/), // Optional whitespace after #
-    //   get_preprocessor_directives(),
-    //   optional(choice(
-    //     seq(
-    //       /[ \t]+/, // Whitespace after directive name
-    //       repeat(choice(
-    //         /[^\\\n]/,
-    //         seq('\\', /\r?\n/),
-    //       )),
-    //     ),
-    //     seq('\\', /\r?\n/), // Or line continuation immediately
-    //   )),
-    // ))),
-
-    // preprocessor2: $ => token(prec(1, seq(
-    //   '#',
-    //   optional(/[ \t]+/), // Optional whitespace after #
-    //   get_preprocessor_directives(),
-    //   // /[\r\n]/,
-    // ))),
-
-    // // Wrong preprocessor: directive followed by non-whitespace symbol.
-    // // This should be aliased as line_comment.
-    // _wrong_preprocessor: $ => token(prec(1, seq(
-    //   '#',
-    //   optional(/[ \t]+/), // Optional whitespace after #
-    //   get_preprocessor_directives(),
-    //   choice(
-    //     seq(
-    //       /[^ \\\t\n]/, // Missing whitespace after directive name
-    //       repeat(choice(
-    //         /[^\\\n]/,
-    //         seq('\\', /\r?\n/),
-    //       )),
-    //     ),
-    //     seq('\\', /\r?\n/),
-    //   ),
-    // ))),
 
     directive: $ => seq(choice(
       $._macro_directive,
@@ -170,13 +96,10 @@ module.exports = grammar({
 
     _macro_directive: $ => seq(
       field('mnemonic', $.macro_mnemonic),
-      $._whitespace,
-      // optional($._whitespace),
-      // choice($.block_comment, $._whitespace),
+      choice(/[ \t]+/, $.block_comment),
       field('name', $.macro_name),
       optional(choice(
-        seq(optional($._whitespace), '(', optional(field('parameters', $.macro_parameters)), optional(choice(' ', '\t')), ')'),
-        // seq(optional($._whitespace), '(', optional($.block_comment), optional(field('parameters', $.macro_parameters)), optional(choice(' ', '\t', $.block_comment)), ')'),
+        seq(optional($._whitespace), '(', optional(field('parameters', $.macro_parameters)), optional($._whitespace), ')'),
         seq($._whitespace, field('parameters', $.macro_parameters)),
       )),
     ),
@@ -185,11 +108,8 @@ module.exports = grammar({
       $.macro_parameter,
       repeat(seq(
         choice(
-          ' ',
-          '\t',
-          // $.block_comment,
-          // seq(optional(choice(' ', '\t', $.block_comment)), ',', optional($.block_comment)),
-          seq(optional(choice(' ', '\t')), ','),
+          $._whitespace,
+          seq(optional($._whitespace), ','),
         ),
         $.macro_parameter,
       )),
@@ -197,9 +117,7 @@ module.exports = grammar({
 
     _numeric_directive: $ => seq(
       field('mnemonic', $.numeric_mnemonic),
-      $._whitespace,
-      // optional($._whitespace),
-      // choice($.block_comment, $._whitespace),
+      choice($._whitespace, $.block_comment),
       field('operands', $.numeric_operands),
       optional(repeat(choice('\r', '\n', ' ', '\t'))),
     ),
@@ -222,8 +140,8 @@ module.exports = grammar({
         repeat(seq(
           choice(
             $._operand_separator,
-            seq(optional(choice(' ', '\t')), optional($._comment), ','),
-            seq(optional(choice(' ', '\t')), optional($._comment), $._data_separator),
+            seq(optional(choice(' ', '\t')), optional($.line_comment), ','),
+            seq(optional(choice(' ', '\t')), optional($.line_comment), $._data_separator),
           ),
           $._expression,
         )),
@@ -234,9 +152,9 @@ module.exports = grammar({
 
     _string_directive: $ => seq(
       field('mnemonic', $.string_mnemonic),
-      $._whitespace,
+      choice($._whitespace, $.block_comment),
       field('string', $._string_operand),
-      /[ \t]*/,
+      optional($._whitespace),
     ),
     string_mnemonic: $ => choice(
       '.asciz',
@@ -250,10 +168,9 @@ module.exports = grammar({
     _control_directive: $ => seq(
       field('mnemonic', $.control_mnemonic),
       optional(choice(seq(
-        optional(/[ \t]/),
-        /[ \t]+/,
+        choice($._whitespace, $.block_comment),
         field('operands', $.control_operands),
-      ), /[ \t]+/)),
+      ), $._whitespace)),
     ),
     control_mnemonic: $ => prec(-1, /\.[a-z0-9_]+/),
     control_operands: $ => seq(
@@ -284,9 +201,7 @@ module.exports = grammar({
       optional(choice(
         $._call_expression,
         seq(
-          $._whitespace,
-          // optional($._whitespace),
-          // choice($.block_comment, $._whitespace),
+          choice($._whitespace, $.block_comment),
           optional(choice(
             field('operands', $.operands),
             $._call_expression,
@@ -298,7 +213,6 @@ module.exports = grammar({
     operands: $ => seq(
       field('operand', $._operand),
       repeat(seq(
-        // choice(seq(optional($.block_comment), ','), $._operand_separator),
         choice(',', $._operand_separator),
         field('operand', $._operand),
       )),
@@ -521,7 +435,7 @@ module.exports = grammar({
 
     // Primitive data types
     octal: $ => /-?0[0-7]*/,
-    binary: $ => /-?0b[01]+/,
+    binary: $ => /-?0[bB][01]+/,
     decimal: $ => prec(-1, /-?\d+/),
     hexadecimal: $ => /-?0[xX][0-9a-fA-F]+/,
     float: $ => token(choice(
@@ -583,7 +497,7 @@ module.exports = grammar({
     macro_parameter: $ => token(/[%$\\]?[0-9a-zA-Z_:$%\\]+/),
     macro_name: $ => token(/[a-zA-Z_][a-zA-Z0-9_$]*/),
 
-    _label: $ => seq(choice($.global_label, $.local_label, $.global_numeric_label, $.local_numeric_label), /[ \t]*/),
+    _label: $ => seq(choice($.global_label, $.local_label, $.global_numeric_label, $.local_numeric_label), optional($._whitespace)),
 
     // Example: `.L122:`, `.Loop_1`
     local_label: $ => token(prec(3, /\.L[a-zA-Z0-9_$]*:/)),
