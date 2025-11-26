@@ -824,6 +824,59 @@ bool tree_sitter_mips_external_scanner_scan(void* payload,
 
         if (scan_newline_operator(lexer, valid_symbols))
             return true;
+        
+        // Handle comments as separators
+        // Block: ONLY when followed by operand (not operator) - for 1/**/2 vs 1/**/+2
+        // Line: when followed by newline then operand - for multiline directives
+        if (lexer->lookahead == '/') {
+            lexer->advance(lexer, false);
+            
+            if (!lexer->eof(lexer) && lexer->lookahead == '/') {
+                // Line comment // - consume to end of line
+                while (!is_eol_or_eof(lexer)) {
+                    lexer->advance(lexer, false);
+                }
+                if (is_eol_or_eof(lexer)) {
+                    skip_newline(lexer);
+                    skip_horizontal_space(lexer);
+                    // Mark end AFTER consuming comment and whitespace
+                    lexer->mark_end(lexer);
+                    // Check if operand follows
+                    if (!lexer->eof(lexer) && is_operand_start(lexer->lookahead)) {
+                        // Line comment followed by operand - return separator
+                        lexer->result_symbol = _OPERAND_SEPARATOR;
+                        return true;
+                    }
+                }
+                return false;
+            } else if (!lexer->eof(lexer) && lexer->lookahead == '*') {
+                // Block comment /* - consume it
+                lexer->advance(lexer, false);
+                while (!lexer->eof(lexer)) {
+                    if (lexer->lookahead == '*') {
+                        lexer->advance(lexer, false);
+                        if (!lexer->eof(lexer) && lexer->lookahead == '/') {
+                            lexer->advance(lexer, false);
+                            break;
+                        }
+                    } else {
+                        lexer->advance(lexer, false);
+                    }
+                }
+                // Mark end after consuming block comment
+                lexer->mark_end(lexer);
+                // Check what follows: if non-operator operand, return separator
+                if (!lexer->eof(lexer) && is_operand_start(lexer->lookahead) && 
+                    !is_operator_start(lexer->lookahead)) {
+                    lexer->result_symbol = _OPERAND_SEPARATOR;
+                    return true;
+                }
+                // If operator follows, return false (let block_comment be consumed as extra)
+                return false;
+            }
+            // Not a comment, return false
+            return false;
+        }
     }
 
     // Try LINE_SEPARATOR and DATA_SEPARATOR

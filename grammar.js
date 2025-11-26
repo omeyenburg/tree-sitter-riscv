@@ -30,7 +30,6 @@ module.exports = grammar({
   ],
 
   conflicts: $ => [
-    [$.numeric_operands],
     [$.macro_parameters],
     [$._operand, $.parenthesized_expression],
   ],
@@ -142,28 +141,21 @@ module.exports = grammar({
       // Floats
       '.float', '.double', '.single',
     ),
-    numeric_operands: $ => prec(10, choice(
-      seq(
-        $._expression,
-        repeat(choice(
-          seq(
-            choice(
-              $._operand_separator,
-              seq(optional(choice(' ', '\t', $.block_comment)), optional($.line_comment), ','),
-              seq(optional(choice(' ', '\t', $.block_comment)), optional($.line_comment), $._data_separator),
-            ),
-            $._expression,
-          ),
-          seq($.block_comment, $._expression),
-        )),
-        optional(choice(
-          repeat($._data_separator),
-          $.block_comment,
-          repeat(choice(' ', '\t')),
-        )),
-      ),
+    numeric_operands: $ => seq(
       $._expression,
-    )),
+      repeat(seq(
+        choice(
+          $._operand_separator,
+          $._data_separator,
+          seq(optional(choice(' ', '\t')), ','),
+        ),
+        $._expression,
+      )),
+      optional(choice(
+        repeat($._data_separator),
+        repeat(choice(' ', '\t')),
+      )),
+    ),
 
     _string_directive: $ => seq(
       field('mnemonic', $.string_mnemonic),
@@ -194,11 +186,10 @@ module.exports = grammar({
     control_mnemonic: $ => prec(-1, /\.[a-z0-9_]+/),
     control_operands: $ => seq(
       $._control_operand,
-      repeat(choice(
-        seq($._control_operand_separator, $._control_operand),
-        seq($.block_comment, $._control_operand),
+      repeat(seq(
+        $._control_operand_separator,
+        $._control_operand,
       )),
-      optional($.block_comment),
     ),
     _control_operand: $ => choice(
       $._expression,

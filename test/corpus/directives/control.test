@@ -48,7 +48,6 @@ _baz:
     mnemonic: (control_mnemonic)
     operands: (control_operands
       (decimal)
-      (block_comment)
       (decimal))))
 
 ==========

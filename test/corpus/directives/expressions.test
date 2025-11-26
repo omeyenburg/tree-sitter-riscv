@@ -14,6 +14,22 @@
         right: (decimal)))))
 
 ==========
+[directives/expressions] control directive with addition and comment before operator
+==========
+.foo 1/* bar */+2
+---
+
+(program
+  (directive
+    mnemonic: (control_mnemonic)
+    operands: (control_operands
+      (binary_expression
+        left: (decimal)
+        (block_comment)
+        operator: (additive_operator)
+        right: (decimal)))))
+
+==========
 [directives/expressions] control directive with multiplication and space before operator
 ==========
 .bar 3 *4

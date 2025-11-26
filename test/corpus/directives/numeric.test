@@ -277,7 +277,6 @@
     (numeric_mnemonic)
     (numeric_operands
       (decimal)
-      (block_comment)
       (decimal))))
 
 ==========

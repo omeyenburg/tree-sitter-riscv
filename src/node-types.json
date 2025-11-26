@@ -330,10 +330,6 @@
           "named": true
         },
         {
-          "type": "block_comment",
-          "named": true
-        },
-        {
           "type": "char",
           "named": true
         },
@@ -577,10 +573,6 @@
           "named": true
         },
         {
-          "type": "block_comment",
-          "named": true
-        },
-        {
           "type": "char",
           "named": true
         },
@@ -594,10 +586,6 @@
         },
         {
           "type": "hexadecimal",
-          "named": true
-        },
-        {
-          "type": "line_comment",
           "named": true
         },
         {
