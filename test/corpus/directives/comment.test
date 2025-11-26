@@ -123,8 +123,8 @@
   (directive
     mnemonic: (control_mnemonic)
     operands: (control_operands
-      (decimal)))
-  (block_comment))
+      (decimal)
+      (block_comment))))
 
 ==========
 [directives/comment] inline comment following directive with multiple arguments
@@ -434,8 +434,8 @@
       (decimal)
       (decimal)
       (decimal)
-      (decimal)))
-  (block_comment))
+      (decimal)
+      (block_comment))))
 
 ==========
 [directives/comment] C style block comment after multiline directive with space before
@@ -451,8 +451,8 @@
       (decimal)
       (decimal)
       (decimal)
-      (decimal)))
-  (block_comment))
+      (decimal)
+      (block_comment))))
 
 ==========
 [directives/comment] C style block comment after multiline directive with tab before
@@ -468,8 +468,8 @@
       (decimal)
       (decimal)
       (decimal)
-      (decimal)))
-  (block_comment))
+      (decimal)
+      (block_comment))))
 
 ==========
 [directives/comment] C style block comment on new line after multiline directive

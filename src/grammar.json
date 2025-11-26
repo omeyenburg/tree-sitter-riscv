@@ -703,104 +703,130 @@
               {
                 "type": "REPEAT",
                 "content": {
-                  "type": "SEQ",
+                  "type": "CHOICE",
                   "members": [
                     {
-                      "type": "CHOICE",
+                      "type": "SEQ",
                       "members": [
                         {
-                          "type": "SYMBOL",
-                          "name": "_operand_separator"
-                        },
-                        {
-                          "type": "SEQ",
+                          "type": "CHOICE",
                           "members": [
-                            {
-                              "type": "CHOICE",
-                              "members": [
-                                {
-                                  "type": "CHOICE",
-                                  "members": [
-                                    {
-                                      "type": "STRING",
-                                      "value": " "
-                                    },
-                                    {
-                                      "type": "STRING",
-                                      "value": "\t"
-                                    }
-                                  ]
-                                },
-                                {
-                                  "type": "BLANK"
-                                }
-                              ]
-                            },
-                            {
-                              "type": "CHOICE",
-                              "members": [
-                                {
-                                  "type": "SYMBOL",
-                                  "name": "line_comment"
-                                },
-                                {
-                                  "type": "BLANK"
-                                }
-                              ]
-                            },
-                            {
-                              "type": "STRING",
-                              "value": ","
-                            }
-                          ]
-                        },
-                        {
-                          "type": "SEQ",
-                          "members": [
-                            {
-                              "type": "CHOICE",
-                              "members": [
-                                {
-                                  "type": "CHOICE",
-                                  "members": [
-                                    {
-                                      "type": "STRING",
-                                      "value": " "
-                                    },
-                                    {
-                                      "type": "STRING",
-                                      "value": "\t"
-                                    }
-                                  ]
-                                },
-                                {
-                                  "type": "BLANK"
-                                }
-                              ]
-                            },
-                            {
-                              "type": "CHOICE",
-                              "members": [
-                                {
-                                  "type": "SYMBOL",
-                                  "name": "line_comment"
-                                },
-                                {
-                                  "type": "BLANK"
-                                }
-                              ]
-                            },
                             {
                               "type": "SYMBOL",
-                              "name": "_data_separator"
+                              "name": "_operand_separator"
+                            },
+                            {
+                              "type": "SEQ",
+                              "members": [
+                                {
+                                  "type": "CHOICE",
+                                  "members": [
+                                    {
+                                      "type": "CHOICE",
+                                      "members": [
+                                        {
+                                          "type": "STRING",
+                                          "value": " "
+                                        },
+                                        {
+                                          "type": "STRING",
+                                          "value": "\t"
+                                        },
+                                        {
+                                          "type": "SYMBOL",
+                                          "name": "block_comment"
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "type": "BLANK"
+                                    }
+                                  ]
+                                },
+                                {
+                                  "type": "CHOICE",
+                                  "members": [
+                                    {
+                                      "type": "SYMBOL",
+                                      "name": "line_comment"
+                                    },
+                                    {
+                                      "type": "BLANK"
+                                    }
+                                  ]
+                                },
+                                {
+                                  "type": "STRING",
+                                  "value": ","
+                                }
+                              ]
+                            },
+                            {
+                              "type": "SEQ",
+                              "members": [
+                                {
+                                  "type": "CHOICE",
+                                  "members": [
+                                    {
+                                      "type": "CHOICE",
+                                      "members": [
+                                        {
+                                          "type": "STRING",
+                                          "value": " "
+                                        },
+                                        {
+                                          "type": "STRING",
+                                          "value": "\t"
+                                        },
+                                        {
+                                          "type": "SYMBOL",
+                                          "name": "block_comment"
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "type": "BLANK"
+                                    }
+                                  ]
+                                },
+                                {
+                                  "type": "CHOICE",
+                                  "members": [
+                                    {
+                                      "type": "SYMBOL",
+                                      "name": "line_comment"
+                                    },
+                                    {
+                                      "type": "BLANK"
+                                    }
+                                  ]
+                                },
+                                {
+                                  "type": "SYMBOL",
+                                  "name": "_data_separator"
+                                }
+                              ]
                             }
                           ]
+                        },
+                        {
+                          "type": "SYMBOL",
+                          "name": "_expression"
                         }
                       ]
                     },
                     {
-                      "type": "SYMBOL",
-                      "name": "_expression"
+                      "type": "SEQ",
+                      "members": [
+                        {
+                          "type": "SYMBOL",
+                          "name": "block_comment"
+                        },
+                        {
+                          "type": "SYMBOL",
+                          "name": "_expression"
+                        }
+                      ]
                     }
                   ]
                 }
@@ -809,11 +835,20 @@
                 "type": "CHOICE",
                 "members": [
                   {
-                    "type": "REPEAT",
-                    "content": {
-                      "type": "SYMBOL",
-                      "name": "_data_separator"
-                    }
+                    "type": "CHOICE",
+                    "members": [
+                      {
+                        "type": "REPEAT",
+                        "content": {
+                          "type": "SYMBOL",
+                          "name": "_data_separator"
+                        }
+                      },
+                      {
+                        "type": "SYMBOL",
+                        "name": "block_comment"
+                      }
+                    ]
                   },
                   {
                     "type": "BLANK"
@@ -991,18 +1026,48 @@
         {
           "type": "REPEAT",
           "content": {
-            "type": "SEQ",
+            "type": "CHOICE",
             "members": [
               {
-                "type": "SYMBOL",
-                "name": "_control_operand_separator"
+                "type": "SEQ",
+                "members": [
+                  {
+                    "type": "SYMBOL",
+                    "name": "_control_operand_separator"
+                  },
+                  {
+                    "type": "SYMBOL",
+                    "name": "_control_operand"
+                  }
+                ]
               },
               {
-                "type": "SYMBOL",
-                "name": "_control_operand"
+                "type": "SEQ",
+                "members": [
+                  {
+                    "type": "SYMBOL",
+                    "name": "block_comment"
+                  },
+                  {
+                    "type": "SYMBOL",
+                    "name": "_control_operand"
+                  }
+                ]
               }
             ]
           }
+        },
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "block_comment"
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
         }
       ]
     },

@@ -140,15 +140,21 @@ module.exports = grammar({
     numeric_operands: $ => prec(10, choice(
       seq(
         $._expression,
-        repeat(seq(
-          choice(
-            $._operand_separator,
-            seq(optional(choice(' ', '\t')), optional($.line_comment), ','),
-            seq(optional(choice(' ', '\t')), optional($.line_comment), $._data_separator),
+        repeat(choice(
+          seq(
+            choice(
+              $._operand_separator,
+              seq(optional(choice(' ', '\t', $.block_comment)), optional($.line_comment), ','),
+              seq(optional(choice(' ', '\t', $.block_comment)), optional($.line_comment), $._data_separator),
+            ),
+            $._expression,
           ),
-          $._expression,
+          seq($.block_comment, $._expression),
         )),
-        optional(repeat($._data_separator)),
+        optional(choice(
+          repeat($._data_separator),
+          $.block_comment,
+        )),
       ),
       $._expression,
     )),
@@ -178,10 +184,11 @@ module.exports = grammar({
     control_mnemonic: $ => prec(-1, /\.[a-z0-9_]+/),
     control_operands: $ => seq(
       $._control_operand,
-      repeat(seq(
-        $._control_operand_separator,
-        $._control_operand,
+      repeat(choice(
+        seq($._control_operand_separator, $._control_operand),
+        seq($.block_comment, $._control_operand),
       )),
+      optional($.block_comment),
     ),
     _control_operand: $ => choice(
       $._expression,

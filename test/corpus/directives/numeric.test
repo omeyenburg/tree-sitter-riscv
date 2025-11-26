@@ -266,3 +266,16 @@
     (numeric_operands
       (decimal)
       (decimal))))
+
+==========
+[directives/numeric] block comment between operands
+==========
+.word 1/* foo */2
+---
+(program
+  (directive
+    (numeric_mnemonic)
+    (numeric_operands
+      (decimal)
+      (block_comment)
+      (decimal))))
