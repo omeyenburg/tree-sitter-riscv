@@ -291,3 +291,21 @@
     (block_comment)
     (numeric_operands
       (decimal))))
+
+==========
+[directives/numeric] block comment and space between mnemonic and operand
+==========
+.word 1 # foo
+.word 2 # bar
+---
+(program
+  (directive
+    (numeric_mnemonic)
+    (numeric_operands
+      (decimal)))
+  (line_comment)
+  (directive
+    (numeric_mnemonic)
+    (numeric_operands
+      (decimal)))
+  (line_comment))

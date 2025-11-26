@@ -182,13 +182,25 @@ static SkippedType_t skip_whitespace_and_comments(TSLexer* lexer) {
         }
 
         if (consume_hash_comment(lexer)) {
-            skipped |= SKIP_INLINE;
+            skipped |= SKIP_MULTILINE;  // Line comments end the line
             continue;
         }
 
-        if (consume_slash_comment(lexer)) {
-            skipped |= SKIP_INLINE;
-            continue;
+        if (lexer->lookahead == '/') {
+            int saved_pos = lexer->get_column(lexer);
+            if (consume_slash_comment(lexer)) {
+                // Check if it was a block comment or line comment
+                // Line comments (//) should set SKIP_MULTILINE
+                // Block comments (/* */) should set SKIP_INLINE
+                // We can't easily tell after the fact, so peek ahead
+                // If we're at EOL after comment, treat as multiline
+                if (is_eol_or_eof(lexer)) {
+                    skipped |= SKIP_MULTILINE;
+                } else {
+                    skipped |= SKIP_INLINE;
+                }
+                continue;
+            }
         }
 
         break;
@@ -436,6 +448,19 @@ static bool scan_comment_data_separator(TSLexer* lexer, const bool* valid_symbol
     skip_newline(lexer);
     skip_horizontal_space(lexer);
 
+    // Check for directive (starts with . followed by letter)
+    if (!lexer->eof(lexer) && lexer->lookahead == '.') {
+        lexer->advance(lexer, false);
+        if (!lexer->eof(lexer) && isalpha(lexer->lookahead)) {
+            // It's a directive, not an operand - don't return DATA_SEPARATOR
+            return false;
+        }
+        // It's something else (like .5 for float), treat as operand
+        lexer->mark_end(lexer);
+        lexer->result_symbol = _DATA_SEPARATOR;
+        return true;
+    }
+
     // Check for label (identifier followed by colon)
     if (!lexer->eof(lexer) && (isalpha(lexer->lookahead) || lexer->lookahead == '_')) {
         lexer->mark_end(lexer);
@@ -629,6 +654,14 @@ static bool scan_line_or_data_separator(TSLexer* lexer, const bool* valid_symbol
     }
 
     if (is_valid_data_separator) {
+        // Check if the next content is a directive (should not be treated as data)
+        if (lexer->lookahead == '.') {
+            lexer->advance(lexer, false);
+            if (!lexer->eof(lexer) && isalpha(lexer->lookahead)) {
+                // It's a directive - don't return DATA_SEPARATOR
+                return false;
+            }
+        }
         lexer->result_symbol = _DATA_SEPARATOR;
         lexer->mark_end(lexer);
         return true;
