@@ -104,8 +104,6 @@ module.exports = grammar({
     _inline_separator_comment_node: $ => alias($._inline_separator_comment, $.comment),
     _inline_end_comment_node: $ => alias($._inline_end_comment, $.comment),
 
-
-
     directive: $ => seq(choice(
       $._macro_directive,
       $._numeric_directive,
@@ -180,9 +178,15 @@ module.exports = grammar({
 
     _string_directive: $ => seq(
       field('mnemonic', $.string_mnemonic),
-      choice($._whitespace, $._immediate_block_comment),
-      field('operands', $.string_operands),
-      optional($._whitespace),
+      optional(choice(
+        seq(
+          choice($._whitespace, $._immediate_block_comment),
+          field('operands', $.string_operands),
+          optional($._whitespace),
+        ),
+        $._whitespace,
+        $._immediate_block_comment,
+      )),
     ),
     string_mnemonic: $ => choice(
       '.asciz',

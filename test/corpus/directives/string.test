@@ -138,3 +138,45 @@
       (string)
       (string)
       (string))))
+
+==========
+[directives/string] string directive without operands
+==========
+.ascii
+---
+
+(program
+  (directive
+    mnemonic: (string_mnemonic)))
+
+==========
+[directives/string] string directive with trailing space
+==========
+.ascii 
+---
+
+(program
+  (directive
+    mnemonic: (string_mnemonic)))
+
+==========
+[directives/string] string directive with trailing comment
+==========
+.ascii # comment
+---
+
+(program
+  (directive
+    mnemonic: (string_mnemonic))
+  (comment))
+
+==========
+[directives/string] string directive with block comment
+==========
+.ascii /* comment */
+---
+
+(program
+  (directive
+    mnemonic: (string_mnemonic))
+  (comment))

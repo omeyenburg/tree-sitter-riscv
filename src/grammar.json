@@ -905,29 +905,55 @@
           "type": "CHOICE",
           "members": [
             {
-              "type": "SYMBOL",
-              "name": "_whitespace"
-            },
-            {
-              "type": "SYMBOL",
-              "name": "_immediate_block_comment"
-            }
-          ]
-        },
-        {
-          "type": "FIELD",
-          "name": "operands",
-          "content": {
-            "type": "SYMBOL",
-            "name": "string_operands"
-          }
-        },
-        {
-          "type": "CHOICE",
-          "members": [
-            {
-              "type": "SYMBOL",
-              "name": "_whitespace"
+              "type": "CHOICE",
+              "members": [
+                {
+                  "type": "SEQ",
+                  "members": [
+                    {
+                      "type": "CHOICE",
+                      "members": [
+                        {
+                          "type": "SYMBOL",
+                          "name": "_whitespace"
+                        },
+                        {
+                          "type": "SYMBOL",
+                          "name": "_immediate_block_comment"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "FIELD",
+                      "name": "operands",
+                      "content": {
+                        "type": "SYMBOL",
+                        "name": "string_operands"
+                      }
+                    },
+                    {
+                      "type": "CHOICE",
+                      "members": [
+                        {
+                          "type": "SYMBOL",
+                          "name": "_whitespace"
+                        },
+                        {
+                          "type": "BLANK"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "SYMBOL",
+                  "name": "_whitespace"
+                },
+                {
+                  "type": "SYMBOL",
+                  "name": "_immediate_block_comment"
+                }
+              ]
             },
             {
               "type": "BLANK"
