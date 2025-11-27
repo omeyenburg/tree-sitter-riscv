@@ -11,8 +11,8 @@
 enum TokenType {
     _OPERAND_SEPARATOR,
     _OPERATOR_SPACE,
-    LINE_SEPARATOR,
-    DATA_SEPARATOR,
+    _LINE_SEPARATOR,
+    _DATA_SEPARATOR,
 };
 
 void* tree_sitter_mips_external_scanner_create() {
@@ -393,8 +393,8 @@ static bool scan_operand_separator(TSLexer* lexer, const bool* valid_symbols) {
  */
 static bool scan_newline_operator(TSLexer* lexer, const bool* valid_symbols) {
     const bool is_valid_operator_space = valid_symbols[_OPERATOR_SPACE];
-    const bool is_valid_data_separator = valid_symbols[DATA_SEPARATOR];
-    const bool is_valid_line_separator = valid_symbols[LINE_SEPARATOR];
+    const bool is_valid_data_separator = valid_symbols[_DATA_SEPARATOR];
+    const bool is_valid_line_separator = valid_symbols[_LINE_SEPARATOR];
 
     if (!is_valid_operator_space || !is_newline(lexer->lookahead))
         return false;
@@ -447,7 +447,7 @@ static bool scan_newline_operator(TSLexer* lexer, const bool* valid_symbols) {
         fprintf(stderr, "[scan_newline_operator] -> DATA_SEP (digit found)\n");
 #endif
         lexer->mark_end(lexer);
-        lexer->result_symbol = DATA_SEPARATOR;
+        lexer->result_symbol = _DATA_SEPARATOR;
         return true;
     }
 
@@ -465,7 +465,7 @@ static bool scan_newline_operator(TSLexer* lexer, const bool* valid_symbols) {
  * Scan for DATA_SEPARATOR after comment without preceding newline.
  */
 static bool scan_comment_data_separator(TSLexer* lexer, const bool* valid_symbols) {
-    if (!valid_symbols[DATA_SEPARATOR])
+    if (!valid_symbols[_DATA_SEPARATOR])
         return false;
 
     if (lexer->lookahead != '#' && lexer->lookahead != '/')
@@ -495,7 +495,7 @@ static bool scan_comment_data_separator(TSLexer* lexer, const bool* valid_symbol
             return false;
         }
         // It's something else (like .5 for float), treat as operand
-        lexer->result_symbol = DATA_SEPARATOR;
+        lexer->result_symbol = _DATA_SEPARATOR;
         return true;
     }
 
@@ -513,14 +513,14 @@ static bool scan_comment_data_separator(TSLexer* lexer, const bool* valid_symbol
             return false;
         }
         // It's a symbol operand, continue
-        lexer->result_symbol = DATA_SEPARATOR;
+        lexer->result_symbol = _DATA_SEPARATOR;
         return true;
     }
 
     // Check for other operand-like content
     if (!lexer->eof(lexer) &&
         (iswdigit(lexer->lookahead) || is_operand_start(lexer->lookahead))) {
-        lexer->result_symbol = DATA_SEPARATOR;
+        lexer->result_symbol = _DATA_SEPARATOR;
         return true;
     }
 
@@ -532,8 +532,8 @@ static bool scan_comment_data_separator(TSLexer* lexer, const bool* valid_symbol
  * Called when both separators are potentially valid.
  */
 static bool scan_line_or_data_separator(TSLexer* lexer, const bool* valid_symbols) {
-    const bool is_valid_line_separator = valid_symbols[LINE_SEPARATOR];
-    const bool is_valid_data_separator = valid_symbols[DATA_SEPARATOR];
+    const bool is_valid_line_separator = valid_symbols[_LINE_SEPARATOR];
+    const bool is_valid_data_separator = valid_symbols[_DATA_SEPARATOR];
 
 #if DEBUG_SCANNER
     fprintf(stderr, "[scan_line_or_data] line_sep=%d data_sep=%d\n", 
@@ -590,7 +590,7 @@ static bool scan_line_or_data_separator(TSLexer* lexer, const bool* valid_symbol
 #if DEBUG_SCANNER
             fprintf(stderr, "[scan_line_or_data] -> LINE_SEP (EOF)\n");
 #endif
-            lexer->result_symbol = LINE_SEPARATOR;
+            lexer->result_symbol = _LINE_SEPARATOR;
             lexer->mark_end(lexer);
             return true;
         }
@@ -610,7 +610,7 @@ static bool scan_line_or_data_separator(TSLexer* lexer, const bool* valid_symbol
 #if DEBUG_SCANNER
                     fprintf(stderr, "[scan_line_or_data] Not a comment, returning LINE_SEP\n");
 #endif
-                    lexer->result_symbol = LINE_SEPARATOR;
+                    lexer->result_symbol = _LINE_SEPARATOR;
                     return true;
                 }
             }
@@ -649,7 +649,7 @@ static bool scan_line_or_data_separator(TSLexer* lexer, const bool* valid_symbol
 #if DEBUG_SCANNER
                             fprintf(stderr, "[scan_line_or_data] Directive after comment, LINE_SEP\n");
 #endif
-                            lexer->result_symbol = LINE_SEPARATOR;
+                            lexer->result_symbol = _LINE_SEPARATOR;
                             return true;
                         }
                         // Fall through - could be float like .5
@@ -669,7 +669,7 @@ static bool scan_line_or_data_separator(TSLexer* lexer, const bool* valid_symbol
 #if DEBUG_SCANNER
                             fprintf(stderr, "[scan_line_or_data] Label after comment, LINE_SEP\n");
 #endif
-                            lexer->result_symbol = LINE_SEPARATOR;
+                            lexer->result_symbol = _LINE_SEPARATOR;
                             return true;
                         }
                         // Fall through - might be data
@@ -681,7 +681,7 @@ static bool scan_line_or_data_separator(TSLexer* lexer, const bool* valid_symbol
 #if DEBUG_SCANNER
                         fprintf(stderr, "[scan_line_or_data] Data after comment, DATA_SEP (swallowing comment)\n");
 #endif
-                        lexer->result_symbol = DATA_SEPARATOR;
+                        lexer->result_symbol = _DATA_SEPARATOR;
                         return true;
                     }
                 }
@@ -690,7 +690,7 @@ static bool scan_line_or_data_separator(TSLexer* lexer, const bool* valid_symbol
 #if DEBUG_SCANNER
                 fprintf(stderr, "[scan_line_or_data] Default LINE_SEP after comment\n");
 #endif
-                lexer->result_symbol = LINE_SEPARATOR;
+                lexer->result_symbol = _LINE_SEPARATOR;
                 return true;
             }
             
@@ -710,7 +710,7 @@ static bool scan_line_or_data_separator(TSLexer* lexer, const bool* valid_symbol
                 fprintf(stderr, "[scan_line_or_data] Inline comment before data, DATA_SEP\n");
 #endif
                 lexer->mark_end(lexer);
-                lexer->result_symbol = DATA_SEPARATOR;
+                lexer->result_symbol = _DATA_SEPARATOR;
                 return true;
             }
             
@@ -718,7 +718,7 @@ static bool scan_line_or_data_separator(TSLexer* lexer, const bool* valid_symbol
 #if DEBUG_SCANNER
             fprintf(stderr, "[scan_line_or_data] Inline comment, LINE_SEP\n");
 #endif
-            lexer->result_symbol = LINE_SEPARATOR;
+            lexer->result_symbol = _LINE_SEPARATOR;
             return true;
         }
 
@@ -739,14 +739,14 @@ static bool scan_line_or_data_separator(TSLexer* lexer, const bool* valid_symbol
 #if DEBUG_SCANNER
                     fprintf(stderr, "[scan_line_or_data] -> LINE_SEP (directive after blank lines)\n");
 #endif
-                    lexer->result_symbol = LINE_SEPARATOR;
+                    lexer->result_symbol = _LINE_SEPARATOR;
                     return true;
                 }
                 // It's a float like .5, treat as data
 #if DEBUG_SCANNER
                 fprintf(stderr, "[scan_line_or_data] -> DATA_SEP (float after blank lines)\n");
 #endif
-                lexer->result_symbol = DATA_SEPARATOR;
+                lexer->result_symbol = _DATA_SEPARATOR;
                 return true;
             }
 
@@ -756,7 +756,7 @@ static bool scan_line_or_data_separator(TSLexer* lexer, const bool* valid_symbol
                 fprintf(stderr, "[scan_line_or_data] -> LINE_SEP (label/instruction after blank lines)\n");
 #endif
                 lexer->mark_end(lexer);
-                lexer->result_symbol = LINE_SEPARATOR;
+                lexer->result_symbol = _LINE_SEPARATOR;
                 return true;
             }
 
@@ -765,7 +765,7 @@ static bool scan_line_or_data_separator(TSLexer* lexer, const bool* valid_symbol
                 iswdigit(lexer->lookahead) || is_operand_start(lexer->lookahead);
 
             lexer->mark_end(lexer);
-            lexer->result_symbol = found_operand ? DATA_SEPARATOR : LINE_SEPARATOR;
+            lexer->result_symbol = found_operand ? _DATA_SEPARATOR : _LINE_SEPARATOR;
             return true;
         }
 
@@ -774,7 +774,7 @@ static bool scan_line_or_data_separator(TSLexer* lexer, const bool* valid_symbol
 #if DEBUG_SCANNER
             fprintf(stderr, "[scan_line_or_data] -> LINE_SEP (found ';')\n");
 #endif
-            lexer->result_symbol = LINE_SEPARATOR;
+            lexer->result_symbol = _LINE_SEPARATOR;
             lexer->mark_end(lexer);
             return true;
         }
@@ -789,14 +789,14 @@ static bool scan_line_or_data_separator(TSLexer* lexer, const bool* valid_symbol
 #if DEBUG_SCANNER
                 fprintf(stderr, "[scan_line_or_data] -> LINE_SEP (found directive)\n");
 #endif
-                lexer->result_symbol = LINE_SEPARATOR;
+                lexer->result_symbol = _LINE_SEPARATOR;
                 return true;
             }
             // It's a float like .5, treat as data continuation
 #if DEBUG_SCANNER
             fprintf(stderr, "[scan_line_or_data] -> DATA_SEP (float literal)\n");
 #endif
-            lexer->result_symbol = DATA_SEPARATOR;
+            lexer->result_symbol = _DATA_SEPARATOR;
             return true;
         }
 
@@ -807,25 +807,25 @@ static bool scan_line_or_data_separator(TSLexer* lexer, const bool* valid_symbol
                 lexer->advance(lexer, false);
             }
             if (!lexer->eof(lexer) && lexer->lookahead == ':') {
-                lexer->result_symbol = LINE_SEPARATOR;
+                lexer->result_symbol = _LINE_SEPARATOR;
                 return true;
             }
             skip_whitespace_and_comments(lexer);
-            lexer->result_symbol = DATA_SEPARATOR;
+            lexer->result_symbol = _DATA_SEPARATOR;
             return true;
         }
 
         // Label or instruction
         if (lexer->lookahead == '\n' || lexer->lookahead == '_' ||
             isalpha(lexer->lookahead)) {
-            lexer->result_symbol = LINE_SEPARATOR;
+            lexer->result_symbol = _LINE_SEPARATOR;
             lexer->mark_end(lexer);
             return true;
         }
 
         // Default: data separator
         skip_whitespace_and_comments(lexer);
-        lexer->result_symbol = DATA_SEPARATOR;
+        lexer->result_symbol = _DATA_SEPARATOR;
         lexer->mark_end(lexer);
         return true;
     }
@@ -834,7 +834,7 @@ static bool scan_line_or_data_separator(TSLexer* lexer, const bool* valid_symbol
     if (is_valid_line_separator && !is_valid_data_separator) {
         // Mark end to not consume any comments/whitespace after newline
         lexer->mark_end(lexer);
-        lexer->result_symbol = LINE_SEPARATOR;
+        lexer->result_symbol = _LINE_SEPARATOR;
         return true;
     }
 
@@ -847,7 +847,7 @@ static bool scan_line_or_data_separator(TSLexer* lexer, const bool* valid_symbol
                 return false;
             }
         }
-        lexer->result_symbol = DATA_SEPARATOR;
+        lexer->result_symbol = _DATA_SEPARATOR;
         lexer->mark_end(lexer);
         return true;
     }
@@ -941,7 +941,7 @@ bool tree_sitter_mips_external_scanner_scan(void* payload,
     }
 
     // Try LINE_SEPARATOR and DATA_SEPARATOR
-    if (valid_symbols[LINE_SEPARATOR] || valid_symbols[DATA_SEPARATOR]) {
+    if (valid_symbols[_LINE_SEPARATOR] || valid_symbols[_DATA_SEPARATOR]) {
         return scan_line_or_data_separator(lexer, valid_symbols);
     }
 

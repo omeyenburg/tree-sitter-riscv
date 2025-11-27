@@ -334,7 +334,7 @@
           "named": true
         },
         {
-          "type": "data_separator",
+          "type": "comment",
           "named": true
         },
         {
@@ -475,7 +475,7 @@
       "required": false,
       "types": [
         {
-          "type": "block_comment",
+          "type": "comment",
           "named": true
         }
       ]
@@ -511,7 +511,7 @@
       "required": false,
       "types": [
         {
-          "type": "block_comment",
+          "type": "comment",
           "named": true
         }
       ]
@@ -567,7 +567,7 @@
           "named": true
         },
         {
-          "type": "data_separator",
+          "type": "comment",
           "named": true
         },
         {
@@ -792,6 +792,10 @@
       "required": false,
       "types": [
         {
+          "type": "comment",
+          "named": true
+        },
+        {
           "type": "directive",
           "named": true
         },
@@ -805,14 +809,6 @@
         },
         {
           "type": "instruction",
-          "named": true
-        },
-        {
-          "type": "line_comment",
-          "named": true
-        },
-        {
-          "type": "line_separator",
           "named": true
         },
         {
@@ -940,7 +936,7 @@
           "named": true
         },
         {
-          "type": "block_comment",
+          "type": "comment",
           "named": true
         },
         {
@@ -1246,11 +1242,7 @@
     "named": true
   },
   {
-    "type": "block_comment",
-    "named": true
-  },
-  {
-    "type": "data_separator",
+    "type": "comment",
     "named": true
   },
   {
@@ -1271,14 +1263,6 @@
   },
   {
     "type": "hexadecimal",
-    "named": true
-  },
-  {
-    "type": "line_comment",
-    "named": true
-  },
-  {
-    "type": "line_separator",
     "named": true
   },
   {
