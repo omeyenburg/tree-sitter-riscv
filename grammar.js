@@ -55,11 +55,13 @@ module.exports = grammar({
       choice(
         seq($.directive, choice(
           ';',
-          seq(optional($._line_comment), $._line_separator_comment),
+          seq($._line_comment, $._line_separator),
+          $._line_separator_comment,
         )),
         seq($.instruction, choice(
           ';',
-          seq(optional($._line_comment), $._line_separator_comment),
+          seq($._line_comment, $._line_separator),
+          $._line_separator_comment,
         )),
       ),
       seq($._line_comment, /\r?\n/),

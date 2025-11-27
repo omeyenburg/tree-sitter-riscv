@@ -311,7 +311,6 @@
     (numeric_operands
       (decimal)))
   (comment)
-  (comment)
   (directive
     (numeric_mnemonic)
     (numeric_operands
