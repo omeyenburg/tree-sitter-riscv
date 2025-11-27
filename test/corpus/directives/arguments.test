@@ -1,4 +1,13 @@
 ==========
+[directives/arguments] numeric directive without arguments
+==========
+.word
+---
+(program
+  (directive
+    mnemonic: (numeric_mnemonic)))
+
+==========
 [directives/arguments] multiple symbols
 ==========
 .foo bar baz

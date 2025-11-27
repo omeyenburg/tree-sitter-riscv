@@ -315,7 +315,7 @@ _label:
   (directive
     (control_mnemonic)
     (control_operands
-      (section_type)))
+      (symbol)))
   (global_label))
 
 ==========
@@ -347,7 +347,7 @@ _label:
   (directive
     (control_mnemonic)
     (control_operands
-      (section_type))))
+      (symbol))))
 
 ==========
 [directives/whitespace] directive followed by instruction

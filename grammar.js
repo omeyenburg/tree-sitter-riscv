@@ -235,7 +235,7 @@ module.exports = grammar({
     _control_operand: $ => choice(
       $._expression,
       $.string,
-      $.section_type,
+      $.elf_type_tag,
       $.option_flag,
     ),
     _control_operand_separator: $ => choice(
@@ -245,7 +245,7 @@ module.exports = grammar({
       $._inline_separator_comment_node,
     ),
 
-    section_type: $ => prec(-5, /[@.][a-z]+/),
+    elf_type_tag: $ => prec(-5, /@[a-z]+/),
     option_flag: $ => prec(-5, /\+[a-z]/),
 
     // Instruction consists of an opcode and optionally a list of operands.

@@ -72,3 +72,27 @@ _baz:
   (directive
     mnemonic: (control_mnemonic)
     (comment)))
+
+==========
+[directives/control] elf type tag operand
+==========
+.foo @bar
+---
+
+(program
+  (directive
+    mnemonic: (control_mnemonic)
+    operands: (control_operands
+      (elf_type_tag))))
+
+==========
+[directives/control] option flag operand
+==========
+.foo +a
+---
+
+(program
+  (directive
+    mnemonic: (control_mnemonic)
+    operands: (control_operands
+      (option_flag))))

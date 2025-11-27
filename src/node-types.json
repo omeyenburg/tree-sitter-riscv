@@ -342,6 +342,10 @@
           "named": true
         },
         {
+          "type": "elf_type_tag",
+          "named": true
+        },
+        {
           "type": "float",
           "named": true
         },
@@ -379,10 +383,6 @@
         },
         {
           "type": "relocation_expression",
-          "named": true
-        },
-        {
-          "type": "section_type",
           "named": true
         },
         {
@@ -480,6 +480,11 @@
         }
       ]
     }
+  },
+  {
+    "type": "elf_type_tag",
+    "named": true,
+    "fields": {}
   },
   {
     "type": "instruction",
@@ -907,11 +912,6 @@
         ]
       }
     }
-  },
-  {
-    "type": "section_type",
-    "named": true,
-    "fields": {}
   },
   {
     "type": "string",
