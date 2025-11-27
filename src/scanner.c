@@ -511,21 +511,36 @@ static bool scan_line_or_data_separator(TSLexer* lexer, const bool* valid_symbol
     if (scan_comment_data_separator(lexer, valid_symbols))
         return true;
 
-    // Consume newline and whitespace
-    if (!skip_newline(lexer)) {
+    // Check if we have a newline
+    if (!is_newline(lexer->lookahead)) {
 #if DEBUG_SCANNER
         fprintf(stderr, "[scan_line_or_data] no newline found\n");
 #endif
         return false;
     }
-
-    skip_horizontal_space(lexer);
+    
+    // Don't skip the newline yet - we might need to include it in the token
+    // if there's a comment after it that leads to data continuation
 
 #if DEBUG_SCANNER
     fprintf(stderr, "[scan_line_or_data] after skip, lookahead='%c'(%d)\n",
             (lexer->lookahead >= 32 && lexer->lookahead < 127) ? lexer->lookahead : '?',
             lexer->lookahead);
 #endif
+
+    // Consume the newline with advance(false) so it can be part of the token
+    // if we end up returning DATA_SEPARATOR
+    if (lexer->lookahead == '\r') {
+        lexer->advance(lexer, false);
+        if (!lexer->eof(lexer) && lexer->lookahead == '\n') {
+            lexer->advance(lexer, false);
+        }
+    } else if (lexer->lookahead == '\n') {
+        lexer->advance(lexer, false);
+    }
+    
+    // Skip horizontal space (might skip or include depending on what follows)
+    skip_horizontal_space(lexer);
 
     // Both separators valid - need to disambiguate
     if (is_valid_line_separator && is_valid_data_separator) {
@@ -546,10 +561,8 @@ static bool scan_line_or_data_separator(TSLexer* lexer, const bool* valid_symbol
 #if DEBUG_SCANNER
             fprintf(stderr, "[scan_line_or_data] Found comment at start\n");
 #endif
-            // Mark end BEFORE the comment
-            lexer->mark_end(lexer);
             
-            // Now skip the comment to see what comes after
+            // Consume the comment to see what comes after
             if (lexer->lookahead == '#') {
                 consume_hash_comment(lexer);
             } else {
@@ -565,9 +578,21 @@ static bool scan_line_or_data_separator(TSLexer* lexer, const bool* valid_symbol
             
             // Check what's after the comment
             if (is_eol_or_eof(lexer)) {
-                // Comment ends the line - check if we need to look further for data
-                skip_newline(lexer);
+                // Comment ends the line - consume the newline
+                if (lexer->lookahead == '\r') {
+                    lexer->advance(lexer, false);
+                    if (!lexer->eof(lexer) && lexer->lookahead == '\n') {
+                        lexer->advance(lexer, false);
+                    }
+                } else if (lexer->lookahead == '\n') {
+                    lexer->advance(lexer, false);
+                }
+                
+                // Skip horizontal space  
                 skip_horizontal_space(lexer);
+                
+                // Mark end after comment + newline - this is the separator span
+                lexer->mark_end(lexer);
                 
 #if DEBUG_SCANNER
                 fprintf(stderr, "[scan_line_or_data] After comment+newline, lookahead='%c'(%d)\n",
@@ -624,11 +649,10 @@ static bool scan_line_or_data_separator(TSLexer* lexer, const bool* valid_symbol
                     
                     // Check if it's data-like (number, symbol, etc.)
                     if (iswdigit(lexer->lookahead) || is_operand_start(lexer->lookahead)) {
-                        // Data continuation - call mark_end to swallow comment
+                        // Data continuation - comment already included via mark_end above
 #if DEBUG_SCANNER
                         fprintf(stderr, "[scan_line_or_data] Data after comment, DATA_SEP (swallowing comment)\n");
 #endif
-                        lexer->mark_end(lexer);
                         lexer->result_symbol = DATA_SEPARATOR;
                         return true;
                     }
