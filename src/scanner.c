@@ -236,8 +236,10 @@ static void skip_to_content(TSLexer* lexer) {
  * Consume (not skip) blank lines and comments to reach actual content.
  * Uses advance(lexer, false) to include everything in the token range.
  * This preserves the token start position at the first consumed character.
+ * Returns true if at least one comment was consumed.
  */
-static void consume_to_content(TSLexer* lexer) {
+static bool consume_to_content(TSLexer* lexer) {
+    bool consumed_comment = false;
     while (!lexer->eof(lexer)) {
         // Consume horizontal whitespace (include in token range)
         if (is_space(lexer->lookahead)) {
@@ -261,14 +263,19 @@ static void consume_to_content(TSLexer* lexer) {
         }
 
         // Consume comments (include in token)
-        if (consume_hash_comment(lexer))
+        if (consume_hash_comment(lexer)) {
+            consumed_comment = true;
             continue;
+        }
 
-        if (consume_slash_comment(lexer))
+        if (consume_slash_comment(lexer)) {
+            consumed_comment = true;
             continue;
+        }
 
         break;
     }
+    return consumed_comment;
 }
 
 // ============================================================================
@@ -654,7 +661,7 @@ static bool scan_line_or_data_separator(TSLexer* lexer, const bool* valid_symbol
                     if (lexer->lookahead == '.') {
                         lexer->advance(lexer, false);
                         if (!lexer->eof(lexer) && isalpha(lexer->lookahead)) {
-                            // Directive - Return _INLINE_END_COMMENT since we consumed a comment
+                            // Directive - Return _INLINE_END_COMMENT since we're in comment path
 #if DEBUG_SCANNER
                             fprintf(stderr, "[scan_line_or_data] Directive after comment, _INLINE_END_COMMENT\n");
 #endif
@@ -676,7 +683,7 @@ static bool scan_line_or_data_separator(TSLexer* lexer, const bool* valid_symbol
                             lexer->advance(lexer, false);
                         }
                         if (!lexer->eof(lexer) && lexer->lookahead == ':') {
-                            // Label - Return _INLINE_END_COMMENT since we consumed a comment
+                            // Label - Return _INLINE_END_COMMENT since we're in comment path
 #if DEBUG_SCANNER
                             fprintf(stderr, "[scan_line_or_data] Label after comment, _INLINE_END_COMMENT\n");
 #endif
@@ -690,11 +697,10 @@ static bool scan_line_or_data_separator(TSLexer* lexer, const bool* valid_symbol
                     
                     // Check if it's data-like (number, symbol, etc.)
                     if (iswdigit(lexer->lookahead) || is_operand_start(lexer->lookahead)) {
-                        // Data continuation - comment already included via mark_end above
+                        // Data continuation - return comment token since we're in comment path
 #if DEBUG_SCANNER
-                        fprintf(stderr, "[scan_line_or_data] Data after comment, _INLINE_SEPARATOR_COMMENT\n");
+                            fprintf(stderr, "[scan_line_or_data] Data after comment, _INLINE_SEPARATOR_COMMENT\n");
 #endif
-                        // Return _INLINE_SEPARATOR_COMMENT since we consumed a comment
                         lexer->result_symbol = valid_symbols[_INLINE_SEPARATOR_COMMENT]
                             ? _INLINE_SEPARATOR_COMMENT
                             : _DATA_SEPARATOR;
@@ -702,11 +708,10 @@ static bool scan_line_or_data_separator(TSLexer* lexer, const bool* valid_symbol
                     }
                 }
                 
-                // Default to _INLINE_END_COMMENT or LINE_SEPARATOR
+                // Default - return comment token since we're in comment path
 #if DEBUG_SCANNER
-                fprintf(stderr, "[scan_line_or_data] Default after comment, _INLINE_END_COMMENT or LINE_SEP\n");
+                fprintf(stderr, "[scan_line_or_data] Default after comment, _INLINE_END_COMMENT\n");
 #endif
-                // Return _INLINE_END_COMMENT since we consumed a comment
                 lexer->result_symbol = valid_symbols[_INLINE_END_COMMENT]
                     ? _INLINE_END_COMMENT
                     : _LINE_SEPARATOR;
@@ -714,37 +719,61 @@ static bool scan_line_or_data_separator(TSLexer* lexer, const bool* valid_symbol
             }
             
             // Comment is inline (not followed by newline immediately)
-            // Skip any whitespace after the comment
-            skip_horizontal_space(lexer);
-            
-            // If there's a newline, consume it and any following blank lines/comments
-            if (is_newline(lexer->lookahead)) {
-                consume_to_content(lexer);
+            // Consume any following spaces, comments, and blank lines
+            // This uses advance(false) to include everything in the token
+            while (!lexer->eof(lexer)) {
+                // Consume horizontal whitespace
+                if (is_space(lexer->lookahead)) {
+                    while (!lexer->eof(lexer) && is_space(lexer->lookahead)) {
+                        lexer->advance(lexer, false);
+                    }
+                    continue;
+                }
+                
+                // Check for more comments on same line
+                if (consume_hash_comment(lexer))
+                    continue;
+                if (consume_slash_comment(lexer))
+                    continue;
+                
+                // Check for newline - if found, consume blank lines and comments after it
+                if (is_newline(lexer->lookahead)) {
+                    consume_to_content(lexer);
+                    break;
+                }
+                
+                // No more whitespace/comments, stop
+                break;
             }
             
             // Check if data follows
             if (!lexer->eof(lexer) && (iswdigit(lexer->lookahead) || is_operand_start(lexer->lookahead))) {
                 // Data follows - mark end to include comment and blank lines
 #if DEBUG_SCANNER
-                fprintf(stderr, "[scan_line_or_data] Inline comment before data, DATA_SEP\n");
+                fprintf(stderr, "[scan_line_or_data] Inline comment before data, _INLINE_SEPARATOR_COMMENT\n");
 #endif
                 lexer->mark_end(lexer);
-                lexer->result_symbol = _DATA_SEPARATOR;
+                // Return comment token since we consumed a comment
+                lexer->result_symbol = valid_symbols[_INLINE_SEPARATOR_COMMENT]
+                    ? _INLINE_SEPARATOR_COMMENT
+                    : _DATA_SEPARATOR;
                 return true;
             }
             
-            // Otherwise return LINE_SEP (comment not swallowed)
+            // Otherwise return _INLINE_END_COMMENT since we consumed a comment
 #if DEBUG_SCANNER
-            fprintf(stderr, "[scan_line_or_data] Inline comment, LINE_SEP\n");
+            fprintf(stderr, "[scan_line_or_data] Inline comment, _INLINE_END_COMMENT\n");
 #endif
-            lexer->result_symbol = _LINE_SEPARATOR;
+            lexer->result_symbol = valid_symbols[_INLINE_END_COMMENT]
+                ? _INLINE_END_COMMENT
+                : _LINE_SEPARATOR;
             return true;
         }
 
         // Look ahead past blank lines and comments for DATA_SEP disambiguation
         if (is_newline(lexer->lookahead)) {
             // Consume blank lines and comments (include in token)
-            consume_to_content(lexer);
+            bool consumed_comment = consume_to_content(lexer);
             
             // Mark end after all blank lines and comments
             lexer->mark_end(lexer);
@@ -784,10 +813,10 @@ static bool scan_line_or_data_separator(TSLexer* lexer, const bool* valid_symbol
                 iswdigit(lexer->lookahead) || is_operand_start(lexer->lookahead);
 
             lexer->mark_end(lexer);
-            // If we consumed blank lines/comments and no operand follows, return comment token
-            if (!found_operand && valid_symbols[_INLINE_END_COMMENT]) {
+            // Return comment token only if we actually consumed a comment
+            if (!found_operand && consumed_comment && valid_symbols[_INLINE_END_COMMENT]) {
                 lexer->result_symbol = _INLINE_END_COMMENT;
-            } else if (found_operand && valid_symbols[_INLINE_SEPARATOR_COMMENT]) {
+            } else if (found_operand && consumed_comment && valid_symbols[_INLINE_SEPARATOR_COMMENT]) {
                 lexer->result_symbol = _INLINE_SEPARATOR_COMMENT;
             } else {
                 lexer->result_symbol = found_operand ? _DATA_SEPARATOR : _LINE_SEPARATOR;
@@ -924,14 +953,27 @@ bool tree_sitter_mips_external_scanner_scan(void* payload,
                     lexer->advance(lexer, false);
                 }
                 if (is_eol_or_eof(lexer)) {
-                    skip_newline(lexer);
-                    skip_horizontal_space(lexer);
-                    // Mark end AFTER consuming comment and whitespace
-                    lexer->mark_end(lexer);
+                    // Consume newline (include in token)
+                    if (lexer->lookahead == '\r') {
+                        lexer->advance(lexer, false);
+                        if (!lexer->eof(lexer) && lexer->lookahead == '\n') {
+                            lexer->advance(lexer, false);
+                        }
+                    } else if (lexer->lookahead == '\n') {
+                        lexer->advance(lexer, false);
+                    }
+                    // Consume horizontal space (include in token)
+                    while (!lexer->eof(lexer) && is_space(lexer->lookahead)) {
+                        lexer->advance(lexer, false);
+                    }
                     // Check if operand follows
                     if (!lexer->eof(lexer) && is_operand_start(lexer->lookahead)) {
-                        // Line comment followed by operand - return separator
-                        lexer->result_symbol = _OPERAND_SEPARATOR;
+                        // Mark end AFTER consuming comment and whitespace but BEFORE lookahead
+                        lexer->mark_end(lexer);
+                        // Line comment followed by operand - return comment separator
+                        lexer->result_symbol = valid_symbols[_INLINE_SEPARATOR_COMMENT]
+                            ? _INLINE_SEPARATOR_COMMENT
+                            : _OPERAND_SEPARATOR;
                         return true;
                     }
                 }
@@ -955,7 +997,10 @@ bool tree_sitter_mips_external_scanner_scan(void* payload,
                 // Check what follows: if non-operator operand, return separator
                 if (!lexer->eof(lexer) && is_operand_start(lexer->lookahead) && 
                     !is_operator_start(lexer->lookahead)) {
-                    lexer->result_symbol = _OPERAND_SEPARATOR;
+                    // Return comment separator since we consumed a comment
+                    lexer->result_symbol = valid_symbols[_INLINE_SEPARATOR_COMMENT]
+                        ? _INLINE_SEPARATOR_COMMENT
+                        : _OPERAND_SEPARATOR;
                     return true;
                 }
                 // If operator follows, return false (let block_comment be consumed as extra)

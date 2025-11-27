@@ -634,6 +634,7 @@
 .foo bar # com
 baz:
 ---
+
 (program
   (directive
     (control_mnemonic)
@@ -641,3 +642,19 @@ baz:
       (symbol)))
   (comment)
   (global_label))
+
+==========
+[directives/comment] two comments on line between two operands
+==========
+.foo 1
+/* bar */ /* baz */
+2
+---
+
+(program
+  (directive
+    (control_mnemonic)
+    (control_operands
+      (decimal)
+      (comment)
+      (decimal))))
