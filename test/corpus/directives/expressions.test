@@ -25,7 +25,7 @@
     operands: (control_operands
       (binary_expression
         left: (decimal)
-        (block_comment)
+        (comment)
         operator: (additive_operator)
         right: (decimal)))))
 

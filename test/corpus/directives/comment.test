@@ -11,7 +11,7 @@
     operands: (numeric_operands
       (decimal)
       (decimal)))
-  (line_comment))
+  (comment))
 
 ==========
 [directives/comment] comment on new line after control directive
@@ -26,7 +26,7 @@
     operands: (control_operands
       (decimal)
       (decimal)))
-  (line_comment))
+  (comment))
 
 ==========
 [directives/comment] comment on new line after empty line after numeric directive
@@ -42,7 +42,7 @@
     operands: (numeric_operands
       (decimal)
       (decimal)))
-  (line_comment))
+  (comment))
 
 ==========
 [directives/comment] comment on new line after empty line after control directive
@@ -58,7 +58,7 @@
     operands: (control_operands
       (decimal)
       (decimal)))
-  (line_comment))
+  (comment))
 
 ==========
 [directives/comment] C style comment on new line after numeric directive
@@ -73,7 +73,7 @@
     operands: (numeric_operands
       (decimal)
       (decimal)))
-  (line_comment))
+  (comment))
 
 ==========
 [directives/comment] C-style comment on new line after empty line after numeric directive
@@ -89,7 +89,7 @@
     operands: (numeric_operands
       (decimal)
       (decimal)))
-  (line_comment))
+  (comment))
 
 ==========
 [directives/comment] comment on new line after float directive
@@ -104,7 +104,7 @@
     (numeric_operands
       (float)
       (float)))
-  (line_comment))
+  (comment))
 
 ==========
 [directives/comment] C style comment on new line after float directive
@@ -119,7 +119,7 @@
     (numeric_operands
       (float)
       (float)))
-  (line_comment))
+  (comment))
 
 ==========
 [directives/comment] inline comment following directive without arguments
@@ -130,7 +130,7 @@
 (program
   (directive
     mnemonic: (control_mnemonic))
-  (line_comment))
+  (comment))
 
 ==========
 [directives/comment] inline C style comment following directive without arguments
@@ -141,7 +141,7 @@
 (program
   (directive
     mnemonic: (control_mnemonic))
-  (line_comment))
+  (comment))
 
 ==========
 [directives/comment] inline C style block comment following directive without arguments
@@ -152,7 +152,7 @@
 (program
   (directive
     mnemonic: (control_mnemonic))
-  (block_comment))
+  (comment))
 
 ==========
 [directives/comment] inline comment following directive with single argument
@@ -165,7 +165,7 @@
     mnemonic: (control_mnemonic)
     operands: (control_operands
       (decimal)))
-  (line_comment))
+  (comment))
 
 ==========
 [directives/comment] inline C style comment following directive with single argument
@@ -178,7 +178,7 @@
     mnemonic: (control_mnemonic)
     operands: (control_operands
       (decimal)))
-  (line_comment))
+  (comment))
 
 ==========
 [directives/comment] inline C style block comment following directive with single argument
@@ -191,7 +191,7 @@
     mnemonic: (control_mnemonic)
     operands: (control_operands
       (decimal)))
-  (block_comment))
+  (comment))
 
 ==========
 [directives/comment] inline comment following directive with multiple arguments
@@ -205,7 +205,7 @@
     operands: (numeric_operands
       (decimal)
       (decimal)))
-  (line_comment))
+  (comment))
 
 ==========
 [directives/comment] comment in multiline directive
@@ -220,6 +220,7 @@
     operands: (numeric_operands
       (decimal)
       (decimal)
+      (comment)
       (decimal)
       (decimal))))
 
@@ -236,6 +237,7 @@
     operands: (numeric_operands
       (decimal)
       (decimal)
+      (comment)
       (decimal)
       (decimal))))
 
@@ -252,6 +254,7 @@
     operands: (numeric_operands
       (decimal)
       (decimal)
+      (comment)
       (decimal)
       (decimal))))
 
@@ -268,9 +271,10 @@
     operands: (numeric_operands
       (decimal)
       (decimal)
+      (comment)
       (decimal)
       (decimal)))
-  (line_comment))
+  (comment))
 
 ==========
 [directives/comment] comment after multiline directive with space before
@@ -285,9 +289,10 @@
     operands: (numeric_operands
       (decimal)
       (decimal)
+      (comment)
       (decimal)
       (decimal)))
-  (line_comment))
+  (comment))
 
 ==========
 [directives/comment] comment after multiline directive with tab before
@@ -302,9 +307,10 @@
     operands: (numeric_operands
       (decimal)
       (decimal)
+      (comment)
       (decimal)
       (decimal)))
-  (line_comment))
+  (comment))
 
 ==========
 [directives/comment] comment on new line after multiline directive
@@ -320,9 +326,10 @@
     operands: (numeric_operands
       (decimal)
       (decimal)
+      (comment)
       (decimal)
       (decimal)))
-  (line_comment))
+  (comment))
 
 ==========
 [directives/comment] C style comment in multiline directive
@@ -385,9 +392,10 @@
     operands: (numeric_operands
       (decimal)
       (decimal)
+      (comment)
       (decimal)
       (decimal)))
-  (line_comment))
+  (comment))
 
 ==========
 [directives/comment] C style comment after multiline directive with space before
@@ -402,9 +410,10 @@
     operands: (numeric_operands
       (decimal)
       (decimal)
+      (comment)
       (decimal)
       (decimal)))
-  (line_comment))
+  (comment))
 
 ==========
 [directives/comment] C style comment after multiline directive with tab before
@@ -419,9 +428,10 @@
     operands: (numeric_operands
       (decimal)
       (decimal)
+      (comment)
       (decimal)
       (decimal)))
-  (line_comment))
+  (comment))
 
 ==========
 [directives/comment] C style comment on new line after multiline directive
@@ -437,9 +447,10 @@
     operands: (numeric_operands
       (decimal)
       (decimal)
+      (comment)
       (decimal)
       (decimal)))
-  (line_comment))
+  (comment))
 
 ==========
 [directives/comment] C style block comment in multiline directive
@@ -454,7 +465,8 @@
     operands: (numeric_operands
       (decimal)
       (decimal)
-      (block_comment)
+      (comment)
+      (comment)
       (decimal)
       (decimal))))
 
@@ -471,7 +483,8 @@
     operands: (numeric_operands
       (decimal)
       (decimal)
-      (block_comment)
+      (comment)
+      (comment)
       (decimal)
       (decimal))))
 
@@ -488,7 +501,8 @@
     operands: (numeric_operands
       (decimal)
       (decimal)
-      (block_comment)
+      (comment)
+      (comment)
       (decimal)
       (decimal))))
 
@@ -505,9 +519,10 @@
     operands: (numeric_operands
       (decimal)
       (decimal)
+      (comment)
       (decimal)
       (decimal)))
-  (block_comment))
+  (comment))
 
 ==========
 [directives/comment] C style block comment after multiline directive with space before
@@ -522,9 +537,10 @@
     operands: (numeric_operands
       (decimal)
       (decimal)
+      (comment)
       (decimal)
       (decimal)))
-  (block_comment))
+  (comment))
 
 ==========
 [directives/comment] C style block comment after multiline directive with tab before
@@ -539,9 +555,10 @@
     operands: (numeric_operands
       (decimal)
       (decimal)
+      (comment)
       (decimal)
       (decimal)))
-  (block_comment))
+  (comment))
 
 ==========
 [directives/comment] C style block comment on new line after multiline directive
@@ -557,9 +574,10 @@
     operands: (numeric_operands
       (decimal)
       (decimal)
+      (comment)
       (decimal)
       (decimal)))
-  (block_comment))
+  (comment))
 
 
 ==========
@@ -573,7 +591,7 @@
     mnemonic: (numeric_mnemonic)
     operands: (numeric_operands
       (decimal)
-      (block_comment)
+      (comment)
       (decimal))))
 
 ==========
@@ -589,7 +607,7 @@
     mnemonic: (numeric_mnemonic)
     operands: (numeric_operands
       (decimal)
-      (block_comment)
+      (comment)
       (decimal))))
 
 ==========
@@ -604,7 +622,7 @@
     mnemonic: (numeric_mnemonic)
     operands: (numeric_operands
       (decimal)
-      (block_comment)
+      (comment)
       (decimal))))
 
 ==========
@@ -619,7 +637,7 @@
     mnemonic: (numeric_mnemonic)
     operands: (numeric_operands
       (decimal)
-      (block_comment)
+      (comment)
       (decimal))))
 
 ==========
@@ -633,5 +651,6 @@ baz:
     (control_mnemonic)
     (control_operands
       (symbol)))
-  (line_comment)
+  (comment)
+  (comment)
   (global_label))

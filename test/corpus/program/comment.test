@@ -5,7 +5,7 @@
 ---
 
 (program
-  (line_comment))
+  (comment))
 
 ==========
 [program/comment] simple comment without space inside
@@ -14,7 +14,7 @@
 ---
 
 (program
-  (line_comment))
+  (comment))
 
 ==========
 [program/comment] C style comment
@@ -23,7 +23,7 @@
 ---
 
 (program
-  (line_comment))
+  (comment))
 
 ==========
 [program/comment] C style block comment
@@ -32,7 +32,7 @@
 ---
 
 (program
-  (block_comment))
+  (comment))
 
 ==========
 [program/comment] space before comment
@@ -41,7 +41,7 @@
 ---
 
 (program
-  (line_comment))
+  (comment))
 
 ==========
 [program/comment] tab before comment
@@ -50,7 +50,7 @@
 ---
 
 (program
-  (line_comment))
+  (comment))
 
 ==========
 [program/comment] new line after comment
@@ -60,7 +60,7 @@
 ---
 
 (program
-  (line_comment))
+  (comment))
 
 ==========
 [program/comment] new line after C style comment
@@ -70,7 +70,7 @@
 ---
 
 (program
-  (line_comment))
+  (comment))
 
 ==========
 [program/comment] new line after C style block comment
@@ -80,7 +80,7 @@
 ---
 
 (program
-  (block_comment))
+  (comment))
 
 ==========
 [program/comment] CRLF after comment
@@ -90,7 +90,7 @@
 ---
 
 (program
-  (line_comment))
+  (comment))
 
 ==========
 [program/comment] CRLF after C style comment
@@ -100,7 +100,7 @@
 ---
 
 (program
-  (line_comment))
+  (comment))
 
 ==========
 [program/comment] CRLF after C style block comment
@@ -110,7 +110,7 @@
 ---
 
 (program
-  (block_comment))
+  (comment))
 
 ==========
 [program/comment] literal escape sequence in comment
@@ -120,7 +120,7 @@
 ---
 
 (program
-  (line_comment))
+  (comment))
 
 ==========
 [program/comment] literal escape sequence in C style line comment
@@ -130,4 +130,4 @@
 ---
 
 (program
-  (line_comment))
+  (comment))

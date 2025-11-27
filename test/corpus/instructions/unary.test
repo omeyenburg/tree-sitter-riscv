@@ -85,12 +85,14 @@ foo ~bar
       operand: (unary_expression
         operator: (bitwise_not_operator)
         argument: (decimal))))
+  (comment)
   (instruction
     opcode: (opcode)
     operands: (operands
       operand: (unary_expression
         operator: (bitwise_not_operator)
         argument: (decimal))))
+  (comment)
   (instruction
     opcode: (opcode)
     operands: (operands
@@ -113,12 +115,14 @@ foo !bar
       operand: (unary_expression
         operator: (logical_not_operator)
         argument: (decimal))))
+  (comment)
   (instruction
     opcode: (opcode)
     operands: (operands
       operand: (unary_expression
         operator: (logical_not_operator)
         argument: (decimal))))
+  (comment)
   (instruction
     opcode: (opcode)
     operands: (operands
@@ -142,6 +146,7 @@ foo 1 !!1
       operand: (unary_expression
         operator: (unary_minus_operator)
         argument: (decimal))))
+  (comment)
   (instruction
     opcode: (opcode)
     operands: (operands
@@ -151,6 +156,7 @@ foo 1 !!1
         argument: (unary_expression
           operator: (bitwise_not_operator)
           argument: (decimal)))))
+  (comment)
   (instruction
     opcode: (opcode)
     operands: (operands
@@ -178,6 +184,7 @@ foo 1 !(!1)
         operator: (unary_minus_operator)
         argument: (parenthesized_expression
           argument: (decimal)))))
+  (comment)
   (instruction
     opcode: (opcode)
     operands: (operands
@@ -188,6 +195,7 @@ foo 1 !(!1)
           argument: (unary_expression
             operator: (bitwise_not_operator)
             argument: (decimal))))))
+  (comment)
   (instruction
     opcode: (opcode)
     operands: (operands
@@ -213,6 +221,7 @@ foo ~$s0
       operand: (unary_expression
         operator: (unary_minus_operator)
         argument: (register))))
+  (comment)
   (instruction
     opcode: (opcode)
     operands: (operands
@@ -235,12 +244,14 @@ foo !%flag
       operand: (unary_expression
         operator: (unary_minus_operator)
         argument: (macro_variable))))
+  (comment)
   (instruction
     opcode: (opcode)
     operands: (operands
       operand: (unary_expression
         operator: (bitwise_not_operator)
         argument: (macro_variable))))
+  (comment)
   (instruction
     opcode: (opcode)
     operands: (operands
@@ -264,6 +275,7 @@ foo ~%lo(symbol)
         argument: (relocation_expression
           type: (relocation_type)
           argument: (symbol)))))
+  (comment)
   (instruction
     opcode: (opcode)
     operands: (operands
@@ -287,6 +299,7 @@ foo 1 !1
     operands: (operands
       operand: (decimal)
       operand: (decimal)))
+  (comment)
   (instruction
     opcode: (opcode)
     operands: (operands
@@ -294,6 +307,7 @@ foo 1 !1
       operand: (unary_expression
         operator: (bitwise_not_operator)
         argument: (decimal))))
+  (comment)
   (instruction
     opcode: (opcode)
     operands: (operands

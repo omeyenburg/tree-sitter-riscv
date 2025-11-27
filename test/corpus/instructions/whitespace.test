@@ -203,20 +203,24 @@ foo ( bar, baz )
 foo
  bar:
 ---
+
 (program
   (instruction
     (opcode))
+  (comment)
   (global_label))
 
 ==========
-[instructions/whitespace] instruction followed by indented instruction  
+[instructions/whitespace] instruction followed by indented instruction
 ==========
 foo
  bar
 ---
+
 (program
   (instruction
     (opcode))
+  (comment)
   (instruction
     (opcode)))
 
@@ -226,9 +230,11 @@ foo
 foo
  .word 1
 ---
+
 (program
   (instruction
     (opcode))
+  (comment)
   (directive
     (numeric_mnemonic)
     (numeric_operands
