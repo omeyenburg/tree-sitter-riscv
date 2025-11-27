@@ -6,8 +6,10 @@
   (control_mnemonic)
 ] @keyword
 
-(section_type) @type
-(option_flag) @character.special
+[
+  (elf_type_tag)
+  (option_flag)
+] @type
 
 ;; Labels & symbols
 [
