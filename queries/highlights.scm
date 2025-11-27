@@ -48,8 +48,7 @@
 (ERROR (_) @error)
 
 [
-  (line_comment)
-  (block_comment)
+  (comment)
 ] @comment
 
 [
