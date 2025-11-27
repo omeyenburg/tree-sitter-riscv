@@ -13,6 +13,8 @@ enum TokenType {
     _OPERATOR_SPACE,
     _LINE_SEPARATOR,
     _DATA_SEPARATOR,
+    _INLINE_SEPARATOR_COMMENT,
+    _INLINE_END_COMMENT,
 };
 
 void* tree_sitter_mips_external_scanner_create() {
@@ -462,16 +464,17 @@ static bool scan_newline_operator(TSLexer* lexer, const bool* valid_symbols) {
 // ============================================================================
 
 /**
- * Scan for DATA_SEPARATOR after comment without preceding newline.
+ * Scan for inline separator comment after comment without preceding newline.
+ * This handles cases like: .word 1 [comment] newline 2
  */
 static bool scan_comment_data_separator(TSLexer* lexer, const bool* valid_symbols) {
-    if (!valid_symbols[_DATA_SEPARATOR])
+    if (!valid_symbols[_DATA_SEPARATOR] && !valid_symbols[_INLINE_SEPARATOR_COMMENT])
         return false;
 
     if (lexer->lookahead != '#' && lexer->lookahead != '/')
         return false;
 
-    // Skip the comment
+    // Consume the comment
     if (lexer->lookahead == '#') {
         if (!consume_hash_comment(lexer))
             return false;
@@ -489,18 +492,21 @@ static bool scan_comment_data_separator(TSLexer* lexer, const bool* valid_symbol
 
     // Check for directive (starts with . followed by letter)
     if (!lexer->eof(lexer) && lexer->lookahead == '.') {
+        lexer->mark_end(lexer);
         lexer->advance(lexer, false);
         if (!lexer->eof(lexer) && isalpha(lexer->lookahead)) {
             // It's a directive, not an operand - don't return separator
             return false;
         }
         // It's something else (like .5 for float), treat as operand
-        lexer->result_symbol = _DATA_SEPARATOR;
+        // Return _INLINE_SEPARATOR_COMMENT since we consumed a comment
+        lexer->result_symbol = _INLINE_SEPARATOR_COMMENT;
         return true;
     }
 
     // Check for label (identifier followed by colon)
     if (!lexer->eof(lexer) && (isalpha(lexer->lookahead) || lexer->lookahead == '_')) {
+        lexer->mark_end(lexer);
         // Scan ahead to see if it's a label
         while (!lexer->eof(lexer) && (isalnum(lexer->lookahead) || 
                                        lexer->lookahead == '_' || 
@@ -513,14 +519,17 @@ static bool scan_comment_data_separator(TSLexer* lexer, const bool* valid_symbol
             return false;
         }
         // It's a symbol operand, continue
-        lexer->result_symbol = _DATA_SEPARATOR;
+        // Return _INLINE_SEPARATOR_COMMENT since we consumed a comment
+        lexer->result_symbol = _INLINE_SEPARATOR_COMMENT;
         return true;
     }
 
     // Check for other operand-like content
     if (!lexer->eof(lexer) &&
         (iswdigit(lexer->lookahead) || is_operand_start(lexer->lookahead))) {
-        lexer->result_symbol = _DATA_SEPARATOR;
+        lexer->mark_end(lexer);
+        // Return _INLINE_SEPARATOR_COMMENT since we consumed a comment
+        lexer->result_symbol = _INLINE_SEPARATOR_COMMENT;
         return true;
     }
 
@@ -645,11 +654,13 @@ static bool scan_line_or_data_separator(TSLexer* lexer, const bool* valid_symbol
                     if (lexer->lookahead == '.') {
                         lexer->advance(lexer, false);
                         if (!lexer->eof(lexer) && isalpha(lexer->lookahead)) {
-                            // Directive - LINE_SEPARATOR
+                            // Directive - Return _INLINE_END_COMMENT since we consumed a comment
 #if DEBUG_SCANNER
-                            fprintf(stderr, "[scan_line_or_data] Directive after comment, LINE_SEP\n");
+                            fprintf(stderr, "[scan_line_or_data] Directive after comment, _INLINE_END_COMMENT\n");
 #endif
-                            lexer->result_symbol = _LINE_SEPARATOR;
+                            lexer->result_symbol = valid_symbols[_INLINE_END_COMMENT]
+                                ? _INLINE_END_COMMENT
+                                : _LINE_SEPARATOR;
                             return true;
                         }
                         // Fall through - could be float like .5
@@ -665,11 +676,13 @@ static bool scan_line_or_data_separator(TSLexer* lexer, const bool* valid_symbol
                             lexer->advance(lexer, false);
                         }
                         if (!lexer->eof(lexer) && lexer->lookahead == ':') {
-                            // Label - LINE_SEPARATOR
+                            // Label - Return _INLINE_END_COMMENT since we consumed a comment
 #if DEBUG_SCANNER
-                            fprintf(stderr, "[scan_line_or_data] Label after comment, LINE_SEP\n");
+                            fprintf(stderr, "[scan_line_or_data] Label after comment, _INLINE_END_COMMENT\n");
 #endif
-                            lexer->result_symbol = _LINE_SEPARATOR;
+                            lexer->result_symbol = valid_symbols[_INLINE_END_COMMENT]
+                                ? _INLINE_END_COMMENT
+                                : _LINE_SEPARATOR;
                             return true;
                         }
                         // Fall through - might be data
@@ -679,18 +692,24 @@ static bool scan_line_or_data_separator(TSLexer* lexer, const bool* valid_symbol
                     if (iswdigit(lexer->lookahead) || is_operand_start(lexer->lookahead)) {
                         // Data continuation - comment already included via mark_end above
 #if DEBUG_SCANNER
-                        fprintf(stderr, "[scan_line_or_data] Data after comment, DATA_SEP (swallowing comment)\n");
+                        fprintf(stderr, "[scan_line_or_data] Data after comment, _INLINE_SEPARATOR_COMMENT\n");
 #endif
-                        lexer->result_symbol = _DATA_SEPARATOR;
+                        // Return _INLINE_SEPARATOR_COMMENT since we consumed a comment
+                        lexer->result_symbol = valid_symbols[_INLINE_SEPARATOR_COMMENT]
+                            ? _INLINE_SEPARATOR_COMMENT
+                            : _DATA_SEPARATOR;
                         return true;
                     }
                 }
                 
-                // Default to LINE_SEPARATOR (comment not swallowed)
+                // Default to _INLINE_END_COMMENT or LINE_SEPARATOR
 #if DEBUG_SCANNER
-                fprintf(stderr, "[scan_line_or_data] Default LINE_SEP after comment\n");
+                fprintf(stderr, "[scan_line_or_data] Default after comment, _INLINE_END_COMMENT or LINE_SEP\n");
 #endif
-                lexer->result_symbol = _LINE_SEPARATOR;
+                // Return _INLINE_END_COMMENT since we consumed a comment
+                lexer->result_symbol = valid_symbols[_INLINE_END_COMMENT]
+                    ? _INLINE_END_COMMENT
+                    : _LINE_SEPARATOR;
                 return true;
             }
             
@@ -765,7 +784,14 @@ static bool scan_line_or_data_separator(TSLexer* lexer, const bool* valid_symbol
                 iswdigit(lexer->lookahead) || is_operand_start(lexer->lookahead);
 
             lexer->mark_end(lexer);
-            lexer->result_symbol = found_operand ? _DATA_SEPARATOR : _LINE_SEPARATOR;
+            // If we consumed blank lines/comments and no operand follows, return comment token
+            if (!found_operand && valid_symbols[_INLINE_END_COMMENT]) {
+                lexer->result_symbol = _INLINE_END_COMMENT;
+            } else if (found_operand && valid_symbols[_INLINE_SEPARATOR_COMMENT]) {
+                lexer->result_symbol = _INLINE_SEPARATOR_COMMENT;
+            } else {
+                lexer->result_symbol = found_operand ? _DATA_SEPARATOR : _LINE_SEPARATOR;
+            }
             return true;
         }
 
