@@ -13,8 +13,8 @@ module.exports = grammar({
   externals: $ => [
     $._operand_separator,
     $._operator_space,
-    $._line_separator,
-    $._data_separator,
+    $.line_separator,
+    $.data_separator,
   ],
 
   extras: $ => [
@@ -55,11 +55,11 @@ module.exports = grammar({
       choice(
         seq($.directive, choice(
           ';',
-          seq(optional($.line_comment), $._line_separator),
+          seq(optional($.line_comment), $.line_separator),
         )),
         seq($.instruction, choice(
           ';',
-          seq(optional($.line_comment), $._line_separator),
+          seq(optional($.line_comment), $.line_separator),
         )),
       ),
       seq($.line_comment, /\r?\n/),
@@ -147,13 +147,13 @@ module.exports = grammar({
       repeat(seq(
         choice(
           $._operand_separator,
-          $._data_separator,
+          $.data_separator,
           seq(optional(choice(' ', '\t')), ','),
         ),
         $._expression,
       )),
       optional(choice(
-        repeat($._data_separator),
+        repeat($.data_separator),
         repeat(choice(' ', '\t')),
       )),
     ),
@@ -217,7 +217,7 @@ module.exports = grammar({
     _control_operand_separator: $ => choice(
       $._operand_separator,
       /[ \t]*,[ \t]*/,
-      $._data_separator,
+      $.data_separator,
     ),
 
     section_type: $ => prec(-5, /[@.][a-z]+/),

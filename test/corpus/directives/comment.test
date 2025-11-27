@@ -577,6 +577,52 @@
       (decimal))))
 
 ==========
+[directives/comment] second operand on new line after C-style block comment on new line
+==========
+.word 1
+/* bar */
+2
+---
+
+(program
+  (directive
+    mnemonic: (numeric_mnemonic)
+    operands: (numeric_operands
+      (decimal)
+      (block_comment)
+      (decimal))))
+
+==========
+[directives/comment] second operand directly after C-style block comment on new line
+==========
+.word 1
+/* bar */2
+---
+
+(program
+  (directive
+    mnemonic: (numeric_mnemonic)
+    operands: (numeric_operands
+      (decimal)
+      (block_comment)
+      (decimal))))
+
+==========
+[directives/comment] second operand separated by space from C-style block comment on new line
+==========
+.word 1
+/* bar */ 2
+---
+
+(program
+  (directive
+    mnemonic: (numeric_mnemonic)
+    operands: (numeric_operands
+      (decimal)
+      (block_comment)
+      (decimal))))
+
+==========
 [directives/comment] directive with comment followed by label
 ==========
 .foo bar # com

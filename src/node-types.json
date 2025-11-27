@@ -334,6 +334,10 @@
           "named": true
         },
         {
+          "type": "data_separator",
+          "named": true
+        },
+        {
           "type": "decimal",
           "named": true
         },
@@ -560,6 +564,10 @@
         },
         {
           "type": "char",
+          "named": true
+        },
+        {
+          "type": "data_separator",
           "named": true
         },
         {
@@ -801,6 +809,10 @@
         },
         {
           "type": "line_comment",
+          "named": true
+        },
+        {
+          "type": "line_separator",
           "named": true
         },
         {
@@ -1238,6 +1250,10 @@
     "named": true
   },
   {
+    "type": "data_separator",
+    "named": true
+  },
+  {
     "type": "equality_operator",
     "named": true
   },
@@ -1259,6 +1275,10 @@
   },
   {
     "type": "line_comment",
+    "named": true
+  },
+  {
+    "type": "line_separator",
     "named": true
   },
   {
