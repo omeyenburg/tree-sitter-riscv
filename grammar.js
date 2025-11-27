@@ -90,6 +90,16 @@ module.exports = grammar({
       '*/',
     )), $.comment),
 
+    _immediate_block_comment: $ => alias(token.immediate(seq(
+      '/*',
+      repeat(choice(
+        /[^*]/,
+        seq('*', /[^/]/),
+      )),
+      optional('*'),
+      '*/',
+    )), $.comment),
+
     directive: $ => seq(choice(
       $._macro_directive,
       $._numeric_directive,
@@ -123,11 +133,11 @@ module.exports = grammar({
         field('mnemonic', $.numeric_mnemonic),
         optional(choice(
           seq(
-            choice($._whitespace, $._block_comment),
+            choice($._whitespace, $._block_comment, $._immediate_block_comment),
             field('operands', $.numeric_operands),
           ),
           $._whitespace,
-          $._block_comment,
+          choice($._block_comment, $._immediate_block_comment),
         )),
       ),
       field('mnemonic', $.numeric_mnemonic),
@@ -163,7 +173,7 @@ module.exports = grammar({
 
     _string_directive: $ => seq(
       field('mnemonic', $.string_mnemonic),
-      choice($._whitespace, $._block_comment),
+      choice($._whitespace, $._block_comment, $._immediate_block_comment),
       field('operands', $.string_operands),
       optional($._whitespace),
     ),
@@ -183,6 +193,7 @@ module.exports = grammar({
             ',',
             $._whitespace,
             $._block_comment,
+            $._immediate_block_comment,
           )),
           $.string,
         )),
@@ -200,7 +211,7 @@ module.exports = grammar({
           field('operands', $.control_operands),
         ),
         $._whitespace,
-        $._block_comment,
+        choice($._block_comment, $._immediate_block_comment),
       )),
     ),
     control_mnemonic: $ => prec(-1, /\.[a-z0-9_]+/),
@@ -232,12 +243,13 @@ module.exports = grammar({
       optional(choice(
         $._call_expression,
         seq(
-          choice($._whitespace, $._block_comment),
+          choice($._whitespace, $._block_comment, $._immediate_block_comment),
           optional(choice(
             field('operands', $.operands),
             $._call_expression,
           )),
         ),
+        choice($._block_comment, $._immediate_block_comment),
       )),
     ),
     opcode: $ => token(prec(1, /%?[a-zA-Z_][a-zA-Z0-9_.]*/)),
