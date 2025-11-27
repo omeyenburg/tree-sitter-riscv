@@ -15,7 +15,6 @@ foo 4 %2
         left: (decimal)
         operator: (multiplicative_operator)
         right: (decimal))))
-  (comment)
   (instruction
     opcode: (opcode)
     operands: (operands
@@ -23,7 +22,6 @@ foo 4 %2
         left: (decimal)
         operator: (multiplicative_operator)
         right: (decimal))))
-  (comment)
   (instruction
     opcode: (opcode)
     operands: (operands
@@ -31,7 +29,6 @@ foo 4 %2
         left: (decimal)
         operator: (multiplicative_operator)
         right: (decimal))))
-  (comment)
   (instruction
     opcode: (opcode)
     operands: (operands
@@ -57,7 +54,6 @@ foo %1 % %2 % %3
           right: (decimal))
         operator: (multiplicative_operator)
         right: (decimal))))
-  (comment)
   (instruction
     opcode: (opcode)
     operands: (operands
@@ -68,7 +64,6 @@ foo %1 % %2 % %3
           right: (decimal))
         operator: (multiplicative_operator)
         right: (decimal))))
-  (comment)
   (instruction
     opcode: (opcode)
     operands: (operands
@@ -120,7 +115,6 @@ foo (10 % 5) % 2
             left: (decimal)
             operator: (multiplicative_operator)
             right: (decimal))))))
-  (comment)
   (instruction
     opcode: (opcode)
     operands: (operands
@@ -155,7 +149,6 @@ foo 10 % 3 / 2
           left: (decimal)
           operator: (multiplicative_operator)
           right: (decimal)))))
-  (comment)
   (instruction
     opcode: (opcode)
     operands: (operands
@@ -166,7 +159,6 @@ foo 10 % 3 / 2
           right: (decimal))
         operator: (multiplicative_operator)
         right: (decimal))))
-  (comment)
   (instruction
     opcode: (opcode)
     operands: (operands
@@ -213,7 +205,6 @@ foo 1 % %2
         left: (decimal)
         operator: (multiplicative_operator)
         right: (macro_variable))))
-  (comment)
   (instruction
     opcode: (opcode)
     operands: (operands
@@ -221,7 +212,6 @@ foo 1 % %2
         left: (decimal)
         operator: (multiplicative_operator)
         right: (macro_variable))))
-  (comment)
   (instruction
     opcode: (opcode)
     operands: (operands
@@ -229,7 +219,6 @@ foo 1 % %2
         left: (macro_variable)
         operator: (multiplicative_operator)
         right: (decimal))))
-  (comment)
   (instruction
     opcode: (opcode)
     operands: (operands
@@ -237,7 +226,6 @@ foo 1 % %2
         left: (macro_variable)
         operator: (multiplicative_operator)
         right: (decimal))))
-  (comment)
   (instruction
     opcode: (opcode)
     operands: (operands
@@ -245,7 +233,6 @@ foo 1 % %2
         left: (macro_variable)
         operator: (multiplicative_operator)
         right: (decimal))))
-  (comment)
   (instruction
     opcode: (opcode)
     operands: (operands
@@ -268,13 +255,11 @@ foo %1 %2%3
     operands: (operands
       operand: (macro_variable)
       operand: (macro_variable)))
-  (comment)
   (instruction
     opcode: (opcode)
     operands: (operands
       operand: (macro_variable)
       operand: (macro_variable)))
-  (comment)
   (instruction
     opcode: (opcode)
     operands: (operands

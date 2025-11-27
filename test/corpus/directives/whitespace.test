@@ -10,10 +10,8 @@
     mnemonic: (numeric_mnemonic)
     operands: (numeric_operands
       (decimal)))
-  (comment)
   (directive
-    mnemonic: (control_mnemonic))
-  (comment))
+    mnemonic: (control_mnemonic)))
 
 ==========
 [directives/whitespace] CRLF after directive with indented directive in next line
@@ -27,10 +25,8 @@
     mnemonic: (numeric_mnemonic)
     operands: (numeric_operands
       (decimal)))
-  (comment)
   (directive
-    mnemonic: (control_mnemonic))
-  (comment))
+    mnemonic: (control_mnemonic)))
 
 ==========
 [directives/whitespace] CRLF after multiline directive
@@ -45,10 +41,8 @@
     operands: (numeric_operands
       (decimal)
       (decimal)
-      (comment)
       (decimal)
-      (decimal)))
-  (comment))
+      (decimal))))
 
 ==========
 [directives/whitespace] trailing space after string directive before new line
@@ -61,8 +55,7 @@
   (directive
     mnemonic: (string_mnemonic)
     operands: (string_operands
-      (string)))
-  (comment))
+      (string))))
 
 ==========
 [directives/whitespace] trailing tab after string directive before new line
@@ -75,8 +68,7 @@
   (directive
     mnemonic: (string_mnemonic)
     operands: (string_operands
-      (string)))
-  (comment))
+      (string))))
 
 ==========
 [directives/whitespace] directive without operands with semicolon
@@ -186,8 +178,7 @@
   (directive
     mnemonic: (control_mnemonic)
     operands: (control_operands
-      (symbol)))
-  (comment))
+      (symbol))))
 
 ==========
 [directives/whitespace] space before comma with decimals in control directive
@@ -279,7 +270,6 @@
     mnemonic: (numeric_mnemonic)
     operands: (numeric_operands
       (decimal)))
-  (comment)
   (directive
     mnemonic: (control_mnemonic)))
 
@@ -295,7 +285,6 @@
     mnemonic: (numeric_mnemonic)
     operands: (numeric_operands
       (decimal)))
-  (comment)
   (directive
     mnemonic: (control_mnemonic)))
 
@@ -312,7 +301,6 @@
     operands: (numeric_operands
       (decimal)
       (decimal)
-      (comment)
       (decimal)
       (decimal))))
 
@@ -328,7 +316,6 @@ _label:
     (control_mnemonic)
     (control_operands
       (section_type)))
-  (comment)
   (global_label))
 
 ==========
@@ -343,7 +330,6 @@ _label:
     (numeric_mnemonic)
     (numeric_operands
       (decimal)))
-  (comment)
   (global_numeric_label))
 
 ==========
@@ -358,7 +344,6 @@ _label:
     (numeric_mnemonic)
     (numeric_operands
       (decimal)))
-  (comment)
   (directive
     (control_mnemonic)
     (control_operands
@@ -376,7 +361,6 @@ nop
     (numeric_mnemonic)
     (numeric_operands
       (decimal)))
-  (comment)
   (instruction
     (opcode)))
 
@@ -392,7 +376,6 @@ main:
     (numeric_mnemonic)
     (numeric_operands
       (decimal)))
-  (comment)
   (global_label))
 
 ==========
@@ -408,7 +391,6 @@ main:
     (numeric_mnemonic)
     (numeric_operands
       (decimal)))
-  (comment)
   (directive
     (control_mnemonic)))
 

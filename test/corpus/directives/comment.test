@@ -271,7 +271,6 @@
     operands: (numeric_operands
       (decimal)
       (decimal)
-      (comment)
       (decimal)
       (decimal)))
   (comment))
@@ -289,7 +288,6 @@
     operands: (numeric_operands
       (decimal)
       (decimal)
-      (comment)
       (decimal)
       (decimal)))
   (comment))
@@ -307,7 +305,6 @@
     operands: (numeric_operands
       (decimal)
       (decimal)
-      (comment)
       (decimal)
       (decimal)))
   (comment))
@@ -326,7 +323,6 @@
     operands: (numeric_operands
       (decimal)
       (decimal)
-      (comment)
       (decimal)
       (decimal)))
   (comment))
@@ -344,6 +340,7 @@
     operands: (numeric_operands
       (decimal)
       (decimal)
+      (comment)
       (decimal)
       (decimal))))
 
@@ -360,6 +357,7 @@
     operands: (numeric_operands
       (decimal)
       (decimal)
+      (comment)
       (decimal)
       (decimal))))
 
@@ -376,6 +374,7 @@
     operands: (numeric_operands
       (decimal)
       (decimal)
+      (comment)
       (decimal)
       (decimal))))
 
@@ -392,7 +391,6 @@
     operands: (numeric_operands
       (decimal)
       (decimal)
-      (comment)
       (decimal)
       (decimal)))
   (comment))
@@ -410,7 +408,6 @@
     operands: (numeric_operands
       (decimal)
       (decimal)
-      (comment)
       (decimal)
       (decimal)))
   (comment))
@@ -428,7 +425,6 @@
     operands: (numeric_operands
       (decimal)
       (decimal)
-      (comment)
       (decimal)
       (decimal)))
   (comment))
@@ -447,7 +443,6 @@
     operands: (numeric_operands
       (decimal)
       (decimal)
-      (comment)
       (decimal)
       (decimal)))
   (comment))
@@ -516,7 +511,6 @@
     operands: (numeric_operands
       (decimal)
       (decimal)
-      (comment)
       (decimal)
       (decimal)))
   (comment))
@@ -534,7 +528,6 @@
     operands: (numeric_operands
       (decimal)
       (decimal)
-      (comment)
       (decimal)
       (decimal)))
   (comment))
@@ -552,7 +545,6 @@
     operands: (numeric_operands
       (decimal)
       (decimal)
-      (comment)
       (decimal)
       (decimal)))
   (comment))
@@ -571,7 +563,6 @@
     operands: (numeric_operands
       (decimal)
       (decimal)
-      (comment)
       (decimal)
       (decimal)))
   (comment))

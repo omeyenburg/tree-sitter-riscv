@@ -21,7 +21,6 @@ _baz:
     mnemonic: (control_mnemonic)
     operands: (control_operands
       (symbol)))
-  (comment)
   (global_label))
 
 ==========
@@ -36,7 +35,6 @@ _baz:
     mnemonic: (control_mnemonic)
     operands: (control_operands
       (symbol)))
-  (comment)
   (local_numeric_label))
 
 ==========
@@ -50,6 +48,7 @@ _baz:
     mnemonic: (control_mnemonic)
     operands: (control_operands
       (decimal)
+      (comment)
       (decimal))))
 
 ==========

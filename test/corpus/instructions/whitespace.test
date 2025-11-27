@@ -207,7 +207,6 @@ foo
 (program
   (instruction
     (opcode))
-  (comment)
   (global_label))
 
 ==========
@@ -220,7 +219,6 @@ foo
 (program
   (instruction
     (opcode))
-  (comment)
   (instruction
     (opcode)))
 
@@ -234,7 +232,6 @@ foo
 (program
   (instruction
     (opcode))
-  (comment)
   (directive
     (numeric_mnemonic)
     (numeric_operands
