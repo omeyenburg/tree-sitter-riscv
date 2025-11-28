@@ -547,7 +547,16 @@ module.exports = grammar({
       seq('\\', /[0-9a-zA-Z_:%$\\]+/),
       seq('$', /[0-9a-zA-Z_:%$\\]+/),
     )),
-    macro_parameter: $ => token(/[%$\\]?[0-9a-zA-Z_:$%\\]+/),
+    macro_parameter: $ => seq(
+      field('name', $.macro_parameter_name),
+      optional(field('qualifier', $.macro_parameter_qualifier)),
+      optional(field('value', seq('=', $._expression))),
+    ),
+    macro_parameter_name: $ => token(/[%$\\]?[0-9a-zA-Z_$%\\]+/),
+    macro_parameter_qualifier: $ => token(':req'),
+
+    // required_macro_parameter: $ => token(/[%$\\]?[0-9a-zA-Z_$%\\]+:req/),
+    // default_macro_parameter: $ => seq(),
     macro_name: $ => token(/[a-zA-Z_][a-zA-Z0-9_$]*/),
 
     _label: $ => seq(choice($.global_label, $.local_label, $.global_numeric_label, $.local_numeric_label), optional($._whitespace)),
