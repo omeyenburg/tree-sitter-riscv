@@ -48,6 +48,7 @@ jobs:
           git clone https://github.com/erenulas/mips-assembly-examples --single-branch --depth=1 --filter=blob:none
           git clone https://github.com/rohitdwivedula/mips-exercises --single-branch --depth=1 --filter=blob:none
           git clone https://github.com/gsauthof/riscv --single-branch --depth=1 --filter=blob:none
+          git clone https://github.com/tenstorrent/riscv_arch_tests --single-branch --depth=1 --filter=blob:none
       - name: Run tests
         uses: tree-sitter/parser-test-action@v2
         with:
@@ -64,10 +65,9 @@ jobs:
         with:
           files: |
             **/*.s
+            **/*.S
             **/*.asm
           invalid-files: |
             MIPS-Assembly-Language-Examples/mips-6-ifElseAdder.asm
             MIPS-Assembly-Projects/GuessingGame.asm
-            MIPS-Assembly-Projects/RoboQueSegueLinha.asm
-            mips-asm-examples/macros.asm
             riscv/x86_64/*
