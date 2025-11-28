@@ -9,8 +9,10 @@
     mnemonic: (macro_mnemonic)
     name: (macro_name)
     parameters: (macro_parameters
-      (macro_parameter)
-      (macro_parameter))))
+      (macro_parameter
+        name: (macro_parameter_name))
+      (macro_parameter
+        name: (macro_parameter_name)))))
 
 ==========
 [directives/macro] macro definition with backslash (\) prefix
@@ -23,8 +25,10 @@
     mnemonic: (macro_mnemonic)
     name: (macro_name)
     parameters: (macro_parameters
-      (macro_parameter)
-      (macro_parameter))))
+      (macro_parameter
+        name: (macro_parameter_name))
+      (macro_parameter
+        name: (macro_parameter_name)))))
 
 ==========
 [directives/macro] macro definition with dollar ($) prefix
@@ -37,8 +41,10 @@
     mnemonic: (macro_mnemonic)
     name: (macro_name)
     parameters: (macro_parameters
-      (macro_parameter)
-      (macro_parameter))))
+      (macro_parameter
+        name: (macro_parameter_name))
+      (macro_parameter
+        name: (macro_parameter_name)))))
 
 ==========
 [directives/macro] macro definition with mixed prefixes
@@ -48,15 +54,21 @@
 
 (program
   (directive
-    (macro_mnemonic)
-    (macro_name)
-    (macro_parameters
-      (macro_parameter)
-      (macro_parameter)
-      (macro_parameter)
-      (macro_parameter)
-      (macro_parameter)
-      (macro_parameter))))
+    mnemonic: (macro_mnemonic)
+    name: (macro_name)
+    parameters: (macro_parameters
+      (macro_parameter
+        name: (macro_parameter_name))
+      (macro_parameter
+        name: (macro_parameter_name))
+      (macro_parameter
+        name: (macro_parameter_name))
+      (macro_parameter
+        name: (macro_parameter_name))
+      (macro_parameter
+        name: (macro_parameter_name))
+      (macro_parameter
+        name: (macro_parameter_name)))))
 
 ==========
 [directives/macro] macro definition with parentheses without space before
@@ -69,8 +81,10 @@
     mnemonic: (macro_mnemonic)
     name: (macro_name)
     parameters: (macro_parameters
-      (macro_parameter)
-      (macro_parameter))))
+      (macro_parameter
+        name: (macro_parameter_name))
+      (macro_parameter
+        name: (macro_parameter_name)))))
 
 ==========
 [directives/macro] macro definition with parentheses with space before
@@ -83,8 +97,10 @@
     mnemonic: (macro_mnemonic)
     name: (macro_name)
     parameters: (macro_parameters
-      (macro_parameter)
-      (macro_parameter))))
+      (macro_parameter
+        name: (macro_parameter_name))
+      (macro_parameter
+        name: (macro_parameter_name)))))
 
 ==========
 [directives/macro] macro definition with parentheses and comma separation
@@ -97,8 +113,10 @@
     mnemonic: (macro_mnemonic)
     name: (macro_name)
     parameters: (macro_parameters
-      (macro_parameter)
-      (macro_parameter))))
+      (macro_parameter
+        name: (macro_parameter_name))
+      (macro_parameter
+        name: (macro_parameter_name)))))
 
 ==========
 [directives/macro] integer directive with macro variable

@@ -34,7 +34,6 @@ module.exports = grammar({
   ],
 
   conflicts: $ => [
-    [$.macro_parameters],
     [$._operand, $.parenthesized_expression],
     [$.string_operands],
   ],
@@ -116,19 +115,16 @@ module.exports = grammar({
       choice(/[ \t]+/, $._immediate_block_comment),
       field('name', $.macro_name),
       optional(choice(
-        seq(optional($._whitespace), '(', optional(field('parameters', $.macro_parameters)), optional($._whitespace), ')'),
+        seq(optional($._whitespace), '(', field('parameters', $.macro_parameters), ')'),
         seq($._whitespace, field('parameters', $.macro_parameters)),
       )),
     ),
     macro_mnemonic: $ => '.macro',
     macro_parameters: $ => seq(
       $.macro_parameter,
-      repeat(seq(
-        choice(
-          $._whitespace,
-          seq(optional($._whitespace), ','),
-        ),
-        $.macro_parameter,
+      repeat(choice(
+        seq($._whitespace, $.macro_parameter),
+        seq(optional($._whitespace), ',', optional($._whitespace), $.macro_parameter),
       )),
     ),
 
@@ -250,7 +246,7 @@ module.exports = grammar({
 
     // Instruction consists of an opcode and optionally a list of operands.
     instruction: $ => seq(
-      field('opcode', $.opcode),
+      field('opcode', choice($.opcode, $.macro_variable)),
       optional(choice(
         $._call_expression,
         seq(
@@ -262,7 +258,7 @@ module.exports = grammar({
         ),
       )),
     ),
-    opcode: $ => token(prec(1, /%?[a-zA-Z_][a-zA-Z0-9_.]*/)),
+    opcode: $ => token(/[a-zA-Z_][a-zA-Z0-9_.]*/),
     operands: $ => seq(
       field('operand', $._operand),
       repeat(seq(
@@ -278,8 +274,13 @@ module.exports = grammar({
 
     // Support macro-style calling.
     // Examples: `exit(0)`, `for($t0, 0, 3)`
-    // _call_expression: $ => prec(20, seq('(', optional($._block_comment), optional(field('operands', $.operands)), optional($._block_comment), ')')),
-    _call_expression: $ => prec(20, seq('(', optional(field('operands', $.operands)), ')')),
+    _call_expression: $ => prec(20, seq(
+      '(',
+      optional($._immediate_block_comment),
+      optional(field('operands', $.operands)),
+      optional($._immediate_block_comment),
+      ')'
+    )),
 
     // Matches primitives, registers, macro variables and compound expressions.
     //
@@ -541,25 +542,30 @@ module.exports = grammar({
       ),
     )),
 
-    // Macro variables can start with percent, dollar and backslash.
+    // Macro variables:
+    // - start with percent, dollar or backslash.
+    // - may include \() marking the end of the macro identifier.
     macro_variable: $ => token(choice(
-      seq('%', /[0-9a-zA-Z_:$\\]+/),
-      seq('\\', /[0-9a-zA-Z_:%$\\]+/),
-      seq('$', /[0-9a-zA-Z_:%$\\]+/),
+      /[%][0-9a-zA-Z_:$\\]+(\\\(\)[0-9a-zA-Z_:%$]*)?/,
+      /[$\\][0-9a-zA-Z_:$\\%]+(\\\(\)[0-9a-zA-Z_:%$]*)?/
     )),
-    macro_parameter: $ => seq(
+
+    macro_name: $ => token(/[a-zA-Z_][a-zA-Z0-9_$]*/),
+    macro_parameter: $ => prec.right(seq(
       field('name', $.macro_parameter_name),
       optional(field('qualifier', $.macro_parameter_qualifier)),
       optional(field('value', seq('=', $._expression))),
-    ),
+    )),
     macro_parameter_name: $ => token(/[%$\\]?[0-9a-zA-Z_$%\\]+/),
     macro_parameter_qualifier: $ => token(':req'),
 
-    // required_macro_parameter: $ => token(/[%$\\]?[0-9a-zA-Z_$%\\]+:req/),
-    // default_macro_parameter: $ => seq(),
-    macro_name: $ => token(/[a-zA-Z_][a-zA-Z0-9_$]*/),
+    _label: $ => seq(
+      choice($.macro_label, $.global_label, $.local_label, $.global_numeric_label, $.local_numeric_label),
+      optional($._whitespace),
+    ),
 
-    _label: $ => seq(choice($.global_label, $.local_label, $.global_numeric_label, $.local_numeric_label), optional($._whitespace)),
+    // Example: `\foo:`, `\foo\()_bar:`
+    macro_label: $ => token(/[%$\\][0-9a-zA-Z_:$\\]+(\\\(\)[0-9a-zA-Z_:%$]*)?:/),
 
     // Example: `.L122:`, `.Loop_1`
     local_label: $ => token(prec(3, /\.L[a-zA-Z0-9_$]*:/)),

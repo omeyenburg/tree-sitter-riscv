@@ -799,9 +799,11 @@ static bool scan_line_or_data_separator(TSLexer* lexer, const bool* valid_symbol
             }
 
             // Check for other line-ending constructs
-            if (lexer->lookahead == '_' || isalpha(lexer->lookahead)) {
+            // Check for identifiers (labels/instructions) or macro variables/registers
+            if (lexer->lookahead == '_' || isalpha(lexer->lookahead) ||
+                lexer->lookahead == '%' || lexer->lookahead == '$' || lexer->lookahead == '\\') {
 #if DEBUG_SCANNER
-                fprintf(stderr, "[scan_line_or_data] -> LINE_SEP (label/instruction after blank lines)\n");
+                fprintf(stderr, "[scan_line_or_data] -> LINE_SEP (label/instruction/macro after blank lines)\n");
 #endif
                 lexer->mark_end(lexer);
                 lexer->result_symbol = _LINE_SEPARATOR;
@@ -870,8 +872,9 @@ static bool scan_line_or_data_separator(TSLexer* lexer, const bool* valid_symbol
             return true;
         }
 
-        // Label or instruction
+        // Label or instruction (including macro variables/registers)
         if (lexer->lookahead == '\n' || lexer->lookahead == '_' ||
+            lexer->lookahead == '%' || lexer->lookahead == '$' || lexer->lookahead == '\\' ||
             isalpha(lexer->lookahead)) {
             lexer->result_symbol = _LINE_SEPARATOR;
             lexer->mark_end(lexer);

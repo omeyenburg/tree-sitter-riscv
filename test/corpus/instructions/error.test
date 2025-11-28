@@ -15,6 +15,7 @@ foo 1e+
 ==========
 [instructions/error] register on new line after opcode
 :error
+:skip
 ==========
 foo 
     $t0

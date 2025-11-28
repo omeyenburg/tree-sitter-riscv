@@ -500,6 +500,10 @@
         "required": true,
         "types": [
           {
+            "type": "macro_variable",
+            "named": true
+          },
+          {
             "type": "opcode",
             "named": true
           }
@@ -517,7 +521,7 @@
       }
     },
     "children": {
-      "multiple": false,
+      "multiple": true,
       "required": false,
       "types": [
         {
@@ -927,6 +931,10 @@
         },
         {
           "type": "local_numeric_label",
+          "named": true
+        },
+        {
+          "type": "macro_label",
           "named": true
         }
       ]
@@ -1392,6 +1400,10 @@
   },
   {
     "type": "logical_or_operator",
+    "named": true
+  },
+  {
+    "type": "macro_label",
     "named": true
   },
   {

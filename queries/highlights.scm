@@ -13,6 +13,7 @@
 
 ;; Labels & symbols
 [
+  (macro_label)
   (global_label)
   (local_label)
   (local_label_reference)

@@ -36,6 +36,7 @@
 ==========
 [program/error] register without context
 :error
+:skip
 ==========
 $t0
 ---

@@ -185,3 +185,19 @@ foo("bar")
     opcode: (opcode)
     operands: (operands
       operand: (string))))
+
+==========
+[instructions/macro] macro variable as instruction opcode
+==========
+.foo 1 2
+%bar
+---
+
+(program
+  (directive
+    mnemonic: (control_mnemonic)
+    operands: (control_operands
+      (decimal)
+      (decimal)))
+  (instruction
+    opcode: (macro_variable)))
