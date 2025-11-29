@@ -2090,24 +2090,36 @@
       }
     },
     "multiplicative_operator": {
-      "type": "TOKEN",
-      "content": {
-        "type": "CHOICE",
-        "members": [
-          {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "TOKEN",
+          "content": {
             "type": "STRING",
             "value": "*"
+          }
+        },
+        {
+          "type": "ALIAS",
+          "content": {
+            "type": "SYMBOL",
+            "name": "_modulo_operator"
           },
-          {
-            "type": "STRING",
-            "value": "%"
-          },
-          {
+          "named": false,
+          "value": "%"
+        },
+        {
+          "type": "TOKEN",
+          "content": {
             "type": "STRING",
             "value": "/"
           }
-        ]
-      }
+        }
+      ]
+    },
+    "_modulo_operator": {
+      "type": "STRING",
+      "value": "%"
     },
     "_wrapped_multiplicative_expression": {
       "type": "CHOICE",
@@ -2934,7 +2946,7 @@
   "extras": [
     {
       "type": "PATTERN",
-      "value": "\\s|\\\\\\r?\\n"
+      "value": "[ \\t]|\\\\\\r?\\n"
     },
     {
       "type": "SYMBOL",
@@ -2988,6 +3000,5 @@
     "_inline_end_comment_node",
     "_expression_argument"
   ],
-  "supertypes": [],
-  "reserved": {}
+  "supertypes": []
 }

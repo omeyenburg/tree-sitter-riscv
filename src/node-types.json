@@ -1,5 +1,10 @@
 [
   {
+    "type": "%",
+    "named": false,
+    "fields": {}
+  },
+  {
     "type": "address",
     "named": true,
     "fields": {
@@ -652,6 +657,11 @@
     }
   },
   {
+    "type": "multiplicative_operator",
+    "named": true,
+    "fields": {}
+  },
+  {
     "type": "numeric_mnemonic",
     "named": true,
     "fields": {}
@@ -1183,6 +1193,10 @@
     "named": false
   },
   {
+    "type": "%",
+    "named": false
+  },
+  {
     "type": "'",
     "named": false
   },
@@ -1192,6 +1206,10 @@
   },
   {
     "type": ")",
+    "named": false
+  },
+  {
+    "type": "*",
     "named": false
   },
   {
@@ -1323,6 +1341,10 @@
     "named": false
   },
   {
+    "type": "/",
+    "named": false
+  },
+  {
     "type": ";",
     "named": false
   },
@@ -1424,10 +1446,6 @@
   },
   {
     "type": "macro_variable",
-    "named": true
-  },
-  {
-    "type": "multiplicative_operator",
     "named": true
   },
   {

@@ -153,3 +153,177 @@
     mnemonic: (string_mnemonic)
     operands: (string_operands
       (macro_variable))))
+
+==========
+[directives/macro] control directive followed by macro call with % prefix on next line
+==========
+.foo
+%bar
+---
+
+(program
+  (directive
+    (control_mnemonic))
+  (instruction
+    (macro_variable)))
+
+==========
+[directives/macro] control directive followed by macro call with \ prefix on next line
+==========
+.foo
+\bar
+---
+
+(program
+  (directive
+    (control_mnemonic))
+  (instruction
+    (macro_variable)))
+
+==========
+[directives/macro] control directive followed by macro call with $ prefix on next line
+==========
+.foo
+$bar
+---
+
+(program
+  (directive
+    (control_mnemonic))
+  (instruction
+    (macro_variable)))
+
+==========
+[directives/macro] control directive with operand followed by macro call with % prefix on next line
+==========
+.foo 1
+%bar
+---
+
+(program
+  (directive
+    (control_mnemonic)
+    (control_operands
+      (decimal)))
+  (instruction
+    (macro_variable)))
+
+==========
+[directives/macro] control directive with operand followed by macro call with \ prefix on next line
+==========
+.foo 1
+\bar
+---
+
+(program
+  (directive
+    (control_mnemonic)
+    (control_operands
+      (decimal)))
+  (instruction
+    (macro_variable)))
+
+==========
+[directives/macro] control directive with operand followed by macro call with $ prefix on next line
+==========
+.foo 1
+$bar
+---
+
+(program
+  (directive
+    (control_mnemonic)
+    (control_operands
+      (decimal)))
+  (instruction
+    (macro_variable)))
+
+==========
+[directives/macro] numeric directive with operand followed by macro call with % prefix on next line
+==========
+.word 1
+%bar
+---
+
+(program
+  (directive
+    (numeric_mnemonic)
+    (numeric_operands
+      (decimal)))
+  (instruction
+    (macro_variable)))
+
+==========
+[directives/macro] numeric directive with operand followed by macro call with \ prefix on next line
+==========
+.word 1
+\bar
+---
+
+(program
+  (directive
+    (numeric_mnemonic)
+    (numeric_operands
+      (decimal)))
+  (instruction
+    (macro_variable)))
+
+==========
+[directives/macro] numeric directive with operand followed by macro call with $ prefix on next line
+==========
+.word 1
+$bar
+---
+
+(program
+  (directive
+    (numeric_mnemonic)
+    (numeric_operands
+      (decimal)))
+  (instruction
+    (macro_variable)))
+
+==========
+[directives/macro] string directive with operand followed by macro call with % prefix on next line
+==========
+.string "foo"
+%bar
+---
+
+(program
+  (directive
+    (string_mnemonic)
+    (string_operands
+      (string)))
+  (instruction
+    (macro_variable)))
+
+==========
+[directives/macro] string directive with operand followed by macro call with \ prefix on next line
+==========
+.string "foo"
+\bar
+---
+
+(program
+  (directive
+    (string_mnemonic)
+    (string_operands
+      (string)))
+  (instruction
+    (macro_variable)))
+
+==========
+[directives/macro] string directive with operand followed by macro call with $ prefix on next line
+==========
+.string "foo"
+$bar
+---
+
+(program
+  (directive
+    (string_mnemonic)
+    (string_operands
+      (string)))
+  (instruction
+    (macro_variable)))

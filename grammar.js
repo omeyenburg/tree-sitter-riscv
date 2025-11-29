@@ -20,7 +20,7 @@ module.exports = grammar({
   ],
 
   extras: $ => [
-    /\s|\\\r?\n/,
+    /[ \t]|\\\r?\n/,
     $._block_comment,
     $._operator_space,
   ],
@@ -408,7 +408,8 @@ module.exports = grammar({
       field('operator', $.multiplicative_operator),
       field('right', $._simple_expression),
     )),
-    multiplicative_operator: $ => token(choice('*', '%', '/')),
+    multiplicative_operator: $ => choice(token('*'), alias($._modulo_operator, '%'), token('/')),
+    _modulo_operator: $ => '%',
     _wrapped_multiplicative_expression: $ => choice(
       alias($._multiplicative_expression, $.binary_expression),
       $._simple_expression,

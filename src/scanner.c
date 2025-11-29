@@ -292,6 +292,28 @@ static bool check_operator_after_space(TSLexer* lexer,
     if (!is_operator_start(lexer->lookahead))
         return false;
 
+    // Special case: %, $, \ followed by identifier chars are macro variables, not operators
+    if (lexer->lookahead == '%' || lexer->lookahead == '$' || lexer->lookahead == '\\') {
+        lexer->mark_end(lexer);
+        lexer->advance(lexer, false);
+        if (!lexer->eof(lexer) && (iswalnum(lexer->lookahead) || lexer->lookahead == '_' ||
+                                   lexer->lookahead == ':' || lexer->lookahead == '$' || lexer->lookahead == '\\')) {
+            // It's a macro variable, not an operator
+            return false;
+        }
+        // Not followed by identifier char, continue as operator
+        int operator_char = '%'; // or '$' or '\\'
+        bool next_is_space = !lexer->eof(lexer) && is_space(lexer->lookahead);
+        bool next_is_operator = !lexer->eof(lexer) && is_operator_start(lexer->lookahead);
+        
+        // These can't be unary, so treat as binary
+        if (is_valid_operator_space) {
+            lexer->result_symbol = _OPERATOR_SPACE;
+            return true;
+        }
+        return false;
+    }
+
     lexer->mark_end(lexer);
     int operator_char = lexer->lookahead;
     lexer->advance(lexer, false);
@@ -445,6 +467,34 @@ static bool scan_newline_operator(TSLexer* lexer, const bool* valid_symbols) {
     }
 
     if (is_operator_start(lexer->lookahead)) {
+        // Special case: %, $, \ followed by identifier chars are macro variables, not operators
+        if (lexer->lookahead == '%' || lexer->lookahead == '$' || lexer->lookahead == '\\') {
+#if DEBUG_SCANNER
+            fprintf(stderr, "[scan_newline_operator] checking macro variable lookahead='%c'\n", lexer->lookahead);
+#endif
+            // Peek ahead to see if followed by identifier character
+            lexer->mark_end(lexer);
+            lexer->advance(lexer, false);
+#if DEBUG_SCANNER
+            fprintf(stderr, "[scan_newline_operator] next char='%c'(%d)\n", 
+                    (lexer->lookahead >= 32 && lexer->lookahead < 127) ? lexer->lookahead : '?',
+                    lexer->lookahead);
+#endif
+            if (!lexer->eof(lexer) && (iswalnum(lexer->lookahead) || lexer->lookahead == '_' ||
+                                       lexer->lookahead == ':' || lexer->lookahead == '$' || lexer->lookahead == '\\')) {
+                // It's a macro variable, not an operator - don't consume as operator space
+#if DEBUG_SCANNER
+                fprintf(stderr, "[scan_newline_operator] -> FALSE (macro variable detected)\n");
+#endif
+                return false;
+            }
+            // Not followed by identifier char, treat as operator
+#if DEBUG_SCANNER
+            fprintf(stderr, "[scan_newline_operator] -> OPERATOR_SPACE (not macro variable)\n");
+#endif
+            lexer->result_symbol = _OPERATOR_SPACE;
+            return true;
+        }
         lexer->mark_end(lexer);
         lexer->result_symbol = _OPERATOR_SPACE;
         return true;
