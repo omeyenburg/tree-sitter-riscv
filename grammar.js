@@ -13,10 +13,10 @@ module.exports = grammar({
   externals: $ => [
     $._operand_separator,
     $._operator_space,
-    $._line_separator,
-    $._data_separator,
-    $._inline_separator_comment, // comment inside statement between operands, but might be on the end of a line
-    $._inline_end_comment, // comment at end of statement after operands
+    $._statement_separator_no_comment,
+    $._multiline_operand_separator_no_comment,
+    $._statement_separator_with_comment,
+    $._multiline_operand_separator_with_comment,
   ],
 
   extras: $ => [
@@ -28,8 +28,8 @@ module.exports = grammar({
   inline: $ => [
     $._whitespace,
     $._expression,
-    $._inline_separator_comment_node, // "inline" in the node name means here the comment is in the line, do not confuse.
-    $._inline_end_comment_node,
+    $._multiline_operand_separator_with_comment_node, // "inline" in the node name means here the comment is in the line, do not confuse.
+    $._statement_separator_with_comment_node,
     $._expression_argument,
   ],
 
@@ -58,11 +58,11 @@ module.exports = grammar({
       choice(
         seq($.directive, choice(
           ';',
-          seq(optional($._line_comment), choice($._line_separator, $._inline_end_comment_node)),
+          seq(optional($._line_comment), choice($._statement_separator_no_comment, $._statement_separator_with_comment_node)),
         )),
         seq($.instruction, choice(
           ';',
-          seq(optional($._line_comment), choice($._line_separator, $._inline_end_comment_node)),
+          seq(optional($._line_comment), choice($._statement_separator_no_comment, $._statement_separator_with_comment_node)),
         )),
       ),
       seq($._line_comment, /\r?\n/),
@@ -100,8 +100,8 @@ module.exports = grammar({
       '*/',
     )), $.comment),
 
-    _inline_separator_comment_node: $ => alias($._inline_separator_comment, $.comment),
-    _inline_end_comment_node: $ => alias($._inline_end_comment, $.comment),
+    _multiline_operand_separator_with_comment_node: $ => alias($._multiline_operand_separator_with_comment, $.comment),
+    _statement_separator_with_comment_node: $ => alias($._statement_separator_with_comment, $.comment),
 
     directive: $ => seq(choice(
       $._macro_directive,
@@ -162,14 +162,14 @@ module.exports = grammar({
       repeat(seq(
         choice(
           $._operand_separator,
-          $._data_separator,
-          $._inline_separator_comment_node,
+          $._multiline_operand_separator_no_comment,
+          $._multiline_operand_separator_with_comment_node,
           seq(optional(choice(' ', '\t')), ','),
         ),
         $._expression,
       )),
       optional(choice(
-        repeat(choice($._data_separator, $._inline_separator_comment_node)),
+        repeat(choice($._multiline_operand_separator_no_comment, $._multiline_operand_separator_with_comment_node)),
         repeat(choice(' ', '\t')),
       )),
     ),
@@ -239,8 +239,8 @@ module.exports = grammar({
     _control_operand_separator: $ => choice(
       $._operand_separator,
       ',',
-      $._data_separator,
-      $._inline_separator_comment_node,
+      $._multiline_operand_separator_no_comment,
+      $._multiline_operand_separator_with_comment_node,
     ),
 
     elf_type_tag: $ => prec(-5, /@[a-z]+/),
@@ -264,7 +264,7 @@ module.exports = grammar({
     operands: $ => seq(
       field('operand', $._operand),
       repeat(seq(
-        choice($._inline_separator_comment_node, ',', $._operand_separator),
+        choice($._multiline_operand_separator_with_comment_node, ',', $._operand_separator),
         field('operand', $._operand),
       )),
       optional($._operand_separator),

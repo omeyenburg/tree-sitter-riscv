@@ -253,7 +253,6 @@ foo(1, 2/* baz */)
       operand: (decimal))
     (comment)))
 
-
 ==========
 [instructions/comment] comment after operands followed by next instruction
 ==========
@@ -271,3 +270,33 @@ foo 1
     opcode: (opcode)
     operands: (operands
       operand: (decimal))))
+
+==========
+[instructions/comment] hash comment between operands
+==========
+foo 1 # asd
+2
+---
+
+(program
+  (instruction
+    opcode: (opcode)
+    operands: (operands
+      operand: (decimal)
+      (comment)
+      operand: (decimal))))
+
+==========
+[instructions/comment] hash comment after operand followed by empty line
+==========
+foo 1 # asd
+
+
+---
+
+(program
+  (instruction
+    opcode: (opcode)
+    operands: (operands
+      operand: (decimal)))
+  (comment))

@@ -293,7 +293,7 @@
       (decimal))))
 
 ==========
-[directives/numeric] block comment and space between mnemonic and operand
+[directives/numeric] hash comment after operand on line end between directives
 ==========
 .word 1 # foo
 .word 2 # bar
@@ -307,5 +307,19 @@
   (directive
     (numeric_mnemonic)
     (numeric_operands
+      (decimal)))
+  (comment))
+
+==========
+[directives/numeric] hash comment after operand followed by 2 new lines
+==========
+.foo 2 # bar
+
+
+---
+(program
+  (directive
+    (control_mnemonic)
+    (control_operands
       (decimal)))
   (comment))

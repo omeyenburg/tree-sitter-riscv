@@ -111,11 +111,11 @@
                             "members": [
                               {
                                 "type": "SYMBOL",
-                                "name": "_line_separator"
+                                "name": "_statement_separator_no_comment"
                               },
                               {
                                 "type": "SYMBOL",
-                                "name": "_inline_end_comment_node"
+                                "name": "_statement_separator_with_comment_node"
                               }
                             ]
                           }
@@ -159,11 +159,11 @@
                             "members": [
                               {
                                 "type": "SYMBOL",
-                                "name": "_line_separator"
+                                "name": "_statement_separator_no_comment"
                               },
                               {
                                 "type": "SYMBOL",
-                                "name": "_inline_end_comment_node"
+                                "name": "_statement_separator_with_comment_node"
                               }
                             ]
                           }
@@ -379,20 +379,20 @@
       "named": true,
       "value": "comment"
     },
-    "_inline_separator_comment_node": {
+    "_multiline_operand_separator_with_comment_node": {
       "type": "ALIAS",
       "content": {
         "type": "SYMBOL",
-        "name": "_inline_separator_comment"
+        "name": "_multiline_operand_separator_with_comment"
       },
       "named": true,
       "value": "comment"
     },
-    "_inline_end_comment_node": {
+    "_statement_separator_with_comment_node": {
       "type": "ALIAS",
       "content": {
         "type": "SYMBOL",
-        "name": "_inline_end_comment"
+        "name": "_statement_separator_with_comment"
       },
       "named": true,
       "value": "comment"
@@ -811,11 +811,11 @@
                   },
                   {
                     "type": "SYMBOL",
-                    "name": "_data_separator"
+                    "name": "_multiline_operand_separator_no_comment"
                   },
                   {
                     "type": "SYMBOL",
-                    "name": "_inline_separator_comment_node"
+                    "name": "_multiline_operand_separator_with_comment_node"
                   },
                   {
                     "type": "SEQ",
@@ -869,11 +869,11 @@
                     "members": [
                       {
                         "type": "SYMBOL",
-                        "name": "_data_separator"
+                        "name": "_multiline_operand_separator_no_comment"
                       },
                       {
                         "type": "SYMBOL",
-                        "name": "_inline_separator_comment_node"
+                        "name": "_multiline_operand_separator_with_comment_node"
                       }
                     ]
                   }
@@ -1208,11 +1208,11 @@
         },
         {
           "type": "SYMBOL",
-          "name": "_data_separator"
+          "name": "_multiline_operand_separator_no_comment"
         },
         {
           "type": "SYMBOL",
-          "name": "_inline_separator_comment_node"
+          "name": "_multiline_operand_separator_with_comment_node"
         }
       ]
     },
@@ -1342,7 +1342,7 @@
                 "members": [
                   {
                     "type": "SYMBOL",
-                    "name": "_inline_separator_comment_node"
+                    "name": "_multiline_operand_separator_with_comment_node"
                   },
                   {
                     "type": "STRING",
@@ -2987,26 +2987,26 @@
     },
     {
       "type": "SYMBOL",
-      "name": "_line_separator"
+      "name": "_statement_separator_no_comment"
     },
     {
       "type": "SYMBOL",
-      "name": "_data_separator"
+      "name": "_multiline_operand_separator_no_comment"
     },
     {
       "type": "SYMBOL",
-      "name": "_inline_separator_comment"
+      "name": "_statement_separator_with_comment"
     },
     {
       "type": "SYMBOL",
-      "name": "_inline_end_comment"
+      "name": "_multiline_operand_separator_with_comment"
     }
   ],
   "inline": [
     "_whitespace",
     "_expression",
-    "_inline_separator_comment_node",
-    "_inline_end_comment_node",
+    "_multiline_operand_separator_with_comment_node",
+    "_statement_separator_with_comment_node",
     "_expression_argument"
   ],
   "supertypes": []
