@@ -1,9 +1,11 @@
 ==========
 [labels/error] space before colon
-:error
 ==========
 foo :
 ---
+
+(program
+  (global_label))
 
 ==========
 [labels/error] local label reference with colon

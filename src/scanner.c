@@ -561,7 +561,35 @@ static bool scan_comment_data_separator(TSLexer* lexer, const bool* valid_symbol
         return true;
     }
 
-    // Check for label (identifier followed by colon)
+    // Check for macro label (starts with %, $, or \ followed by identifier and optional whitespace and colon)
+    if (!lexer->eof(lexer) && (lexer->lookahead == '%' || lexer->lookahead == '$' || lexer->lookahead == '\\')) {
+        lexer->mark_end(lexer);
+        lexer->advance(lexer, false);
+        // Check if followed by identifier character
+        if (!lexer->eof(lexer) && (iswalnum(lexer->lookahead) || lexer->lookahead == '_' || 
+                                   lexer->lookahead == '$' || lexer->lookahead == '\\')) {
+            // Scan the identifier part
+            while (!lexer->eof(lexer) && (iswalnum(lexer->lookahead) || 
+                                         lexer->lookahead == '_' || 
+                                         lexer->lookahead == '$' || 
+                                         lexer->lookahead == '\\')) {
+                lexer->advance(lexer, false);
+            }
+            // Skip optional whitespace before colon
+            while (!lexer->eof(lexer) && (lexer->lookahead == ' ' || lexer->lookahead == '\t')) {
+                lexer->advance(lexer, false);
+            }
+            if (!lexer->eof(lexer) && lexer->lookahead == ':') {
+                // It's a macro label, not an operand - don't return separator
+                return false;
+            }
+        }
+        // It's a macro variable or operator, treat as operand
+        lexer->result_symbol = _INLINE_SEPARATOR_COMMENT;
+        return true;
+    }
+
+    // Check for label (identifier followed by optional whitespace and colon)
     if (!lexer->eof(lexer) && (isalpha(lexer->lookahead) || lexer->lookahead == '_')) {
         lexer->mark_end(lexer);
         // Scan ahead to see if it's a label
@@ -569,6 +597,10 @@ static bool scan_comment_data_separator(TSLexer* lexer, const bool* valid_symbol
                                        lexer->lookahead == '_' || 
                                        lexer->lookahead == '.' ||
                                        lexer->lookahead == '$')) {
+            lexer->advance(lexer, false);
+        }
+        // Skip optional whitespace before colon
+        while (!lexer->eof(lexer) && (lexer->lookahead == ' ' || lexer->lookahead == '\t')) {
             lexer->advance(lexer, false);
         }
         if (!lexer->eof(lexer) && lexer->lookahead == ':') {
@@ -581,9 +613,29 @@ static bool scan_comment_data_separator(TSLexer* lexer, const bool* valid_symbol
         return true;
     }
 
+    // Check for numeric label (digit(s) followed by optional whitespace and colon)
+    if (!lexer->eof(lexer) && iswdigit(lexer->lookahead)) {
+        lexer->mark_end(lexer);
+        // Scan past digits
+        while (!lexer->eof(lexer) && iswdigit(lexer->lookahead)) {
+            lexer->advance(lexer, false);
+        }
+        // Skip optional whitespace before colon
+        while (!lexer->eof(lexer) && (lexer->lookahead == ' ' || lexer->lookahead == '\t')) {
+            lexer->advance(lexer, false);
+        }
+        if (!lexer->eof(lexer) && lexer->lookahead == ':') {
+            // It's a numeric label, not an operand - don't return separator
+            return false;
+        }
+        // It's a numeric operand, continue
+        // Return _INLINE_SEPARATOR_COMMENT since we consumed a comment
+        lexer->result_symbol = _INLINE_SEPARATOR_COMMENT;
+        return true;
+    }
+
     // Check for other operand-like content
-    if (!lexer->eof(lexer) &&
-        (iswdigit(lexer->lookahead) || is_operand_start(lexer->lookahead))) {
+    if (!lexer->eof(lexer) && is_operand_start(lexer->lookahead)) {
         lexer->mark_end(lexer);
         // Return _INLINE_SEPARATOR_COMMENT since we consumed a comment
         lexer->result_symbol = _INLINE_SEPARATOR_COMMENT;
@@ -732,6 +784,10 @@ static bool scan_line_or_data_separator(TSLexer* lexer, const bool* valid_symbol
                                                        lexer->lookahead == '$')) {
                             lexer->advance(lexer, false);
                         }
+                        // Skip optional whitespace before colon
+                        while (!lexer->eof(lexer) && (lexer->lookahead == ' ' || lexer->lookahead == '\t')) {
+                            lexer->advance(lexer, false);
+                        }
                         if (!lexer->eof(lexer) && lexer->lookahead == ':') {
                             // Label - Return _INLINE_END_COMMENT since we're in comment path
 #if DEBUG_SCANNER
@@ -745,8 +801,38 @@ static bool scan_line_or_data_separator(TSLexer* lexer, const bool* valid_symbol
                         // Fall through - might be data
                     }
                     
-                    // Check if it's data-like (number, symbol, etc.)
-                    if (iswdigit(lexer->lookahead) || is_operand_start(lexer->lookahead)) {
+                    // Check for numeric label
+                    if (iswdigit(lexer->lookahead)) {
+                        // Scan past digits
+                        while (!lexer->eof(lexer) && iswdigit(lexer->lookahead)) {
+                            lexer->advance(lexer, false);
+                        }
+                        // Skip optional whitespace before colon
+                        while (!lexer->eof(lexer) && (lexer->lookahead == ' ' || lexer->lookahead == '\t')) {
+                            lexer->advance(lexer, false);
+                        }
+                        if (!lexer->eof(lexer) && lexer->lookahead == ':') {
+                            // Numeric label - Return _INLINE_END_COMMENT since we're in comment path
+#if DEBUG_SCANNER
+                            fprintf(stderr, "[scan_line_or_data] Numeric label after comment, _INLINE_END_COMMENT\n");
+#endif
+                            lexer->result_symbol = valid_symbols[_INLINE_END_COMMENT]
+                                ? _INLINE_END_COMMENT
+                                : _LINE_SEPARATOR;
+                            return true;
+                        }
+                        // It's numeric data - return separator comment
+#if DEBUG_SCANNER
+                        fprintf(stderr, "[scan_line_or_data] Numeric data after comment, _INLINE_SEPARATOR_COMMENT\n");
+#endif
+                        lexer->result_symbol = valid_symbols[_INLINE_SEPARATOR_COMMENT]
+                            ? _INLINE_SEPARATOR_COMMENT
+                            : _DATA_SEPARATOR;
+                        return true;
+                    }
+                    
+                    // Check if it's data-like (other operand starts, digits already checked above)
+                    if (is_operand_start(lexer->lookahead)) {
                         // Data continuation - return comment token since we're in comment path
 #if DEBUG_SCANNER
                             fprintf(stderr, "[scan_line_or_data] Data after comment, _INLINE_SEPARATOR_COMMENT\n");
@@ -911,6 +997,10 @@ static bool scan_line_or_data_separator(TSLexer* lexer, const bool* valid_symbol
         if (iswdigit(lexer->lookahead)) {
             lexer->mark_end(lexer);
             while (!lexer->eof(lexer) && iswdigit(lexer->lookahead)) {
+                lexer->advance(lexer, false);
+            }
+            // Skip optional whitespace before colon
+            while (!lexer->eof(lexer) && (lexer->lookahead == ' ' || lexer->lookahead == '\t')) {
                 lexer->advance(lexer, false);
             }
             if (!lexer->eof(lexer) && lexer->lookahead == ':') {
