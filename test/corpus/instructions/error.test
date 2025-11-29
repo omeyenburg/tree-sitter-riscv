@@ -13,15 +13,6 @@ foo 1e+
 ---
 
 ==========
-[instructions/error] register on new line after opcode
-:error
-:skip
-==========
-foo 
-    $t0
----
-
-==========
 [instructions/error] instruction without space between opcode and register
 :error
 ==========
