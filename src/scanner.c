@@ -233,6 +233,59 @@ static void skip_to_content(TSLexer* lexer) {
 }
 
 /**
+ * Consume (not skip) whitespace and comments for separator tokens.
+ * Uses advance(lexer, false) to include everything in the token range.
+ * Returns type of content skipped (for disambiguation).
+ */
+static SkippedType_t consume_whitespace_and_comments(TSLexer* lexer) {
+    SkippedType_t skipped = SKIP_NONE;
+
+    while (!lexer->eof(lexer)) {
+        if (is_space(lexer->lookahead)) {
+            skipped |= SKIP_INLINE;
+            while (!lexer->eof(lexer) && is_space(lexer->lookahead)) {
+                lexer->advance(lexer, false);  // Include in token
+            }
+            continue;
+        }
+
+        if (is_newline(lexer->lookahead)) {
+            skipped |= SKIP_MULTILINE;
+            if (lexer->lookahead == '\r') {
+                lexer->advance(lexer, false);  // Include in token
+                if (!lexer->eof(lexer) && lexer->lookahead == '\n') {
+                    lexer->advance(lexer, false);  // Include in token
+                }
+            } else if (lexer->lookahead == '\n') {
+                lexer->advance(lexer, false);  // Include in token
+            }
+            continue;
+        }
+
+        if (consume_hash_comment(lexer)) {
+            skipped |= SKIP_MULTILINE;  // Line comments end the line
+            continue;
+        }
+
+        if (lexer->lookahead == '/') {
+            if (consume_slash_comment(lexer)) {
+                // consume_slash_comment uses advance(lexer, false), so comments are included
+                if (is_eol_or_eof(lexer)) {
+                    skipped |= SKIP_MULTILINE;
+                } else {
+                    skipped |= SKIP_INLINE;
+                }
+                continue;
+            }
+        }
+
+        break;
+    }
+
+    return skipped;
+}
+
+/**
  * Consume (not skip) blank lines and comments to reach actual content.
  * Uses advance(lexer, false) to include everything in the token range.
  * This preserves the token start position at the first consumed character.
@@ -945,9 +998,11 @@ static bool scan_line_or_data_separator(TSLexer* lexer, const bool* valid_symbol
                 if (!lexer->eof(lexer) && isalpha(lexer->lookahead)) {
                     // It's a directive
 #if DEBUG_SCANNER
-                    fprintf(stderr, "[scan_line_or_data] -> LINE_SEP (directive after blank lines)\n");
+                    fprintf(stderr, "[scan_line_or_data] -> END_COMMENT or LINE_SEP (directive after blank lines)\n");
 #endif
-                    lexer->result_symbol = _LINE_SEPARATOR;
+                    lexer->result_symbol = consumed_comment && valid_symbols[_INLINE_END_COMMENT]
+                        ? _INLINE_END_COMMENT
+                        : _LINE_SEPARATOR;
                     return true;
                 }
                 // It's a float like .5, treat as data
@@ -963,10 +1018,12 @@ static bool scan_line_or_data_separator(TSLexer* lexer, const bool* valid_symbol
             if (lexer->lookahead == '_' || isalpha(lexer->lookahead) ||
                 lexer->lookahead == '%' || lexer->lookahead == '$' || lexer->lookahead == '\\') {
 #if DEBUG_SCANNER
-                fprintf(stderr, "[scan_line_or_data] -> LINE_SEP (label/instruction/macro after blank lines)\n");
+                fprintf(stderr, "[scan_line_or_data] -> END_COMMENT or LINE_SEP (label/instruction/macro after blank lines)\n");
 #endif
                 lexer->mark_end(lexer);
-                lexer->result_symbol = _LINE_SEPARATOR;
+                lexer->result_symbol = consumed_comment && valid_symbols[_INLINE_END_COMMENT]
+                    ? _INLINE_END_COMMENT
+                    : _LINE_SEPARATOR;
                 return true;
             }
 
@@ -1031,8 +1088,10 @@ static bool scan_line_or_data_separator(TSLexer* lexer, const bool* valid_symbol
                 lexer->result_symbol = _LINE_SEPARATOR;
                 return true;
             }
-            skip_whitespace_and_comments(lexer);
-            lexer->result_symbol = _DATA_SEPARATOR;
+            SkippedType_t skipped = consume_whitespace_and_comments(lexer);
+            lexer->result_symbol = (skipped & SKIP_MULTILINE) && valid_symbols[_INLINE_SEPARATOR_COMMENT] 
+                ? _INLINE_SEPARATOR_COMMENT 
+                : _DATA_SEPARATOR;
             return true;
         }
 
@@ -1046,8 +1105,10 @@ static bool scan_line_or_data_separator(TSLexer* lexer, const bool* valid_symbol
         }
 
         // Default: data separator
-        skip_whitespace_and_comments(lexer);
-        lexer->result_symbol = _DATA_SEPARATOR;
+        SkippedType_t skipped = consume_whitespace_and_comments(lexer);
+        lexer->result_symbol = (skipped & SKIP_MULTILINE) && valid_symbols[_INLINE_SEPARATOR_COMMENT]
+            ? _INLINE_SEPARATOR_COMMENT
+            : _DATA_SEPARATOR;
         lexer->mark_end(lexer);
         return true;
     }
