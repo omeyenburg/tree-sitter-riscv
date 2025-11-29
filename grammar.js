@@ -238,7 +238,7 @@ module.exports = grammar({
     ),
     _control_operand_separator: $ => choice(
       $._operand_separator,
-      /[ \t]*,[ \t]*/,
+      ',',
       $._data_separator,
       $._inline_separator_comment_node,
     ),

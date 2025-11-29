@@ -1203,8 +1203,8 @@
           "name": "_operand_separator"
         },
         {
-          "type": "PATTERN",
-          "value": "[ \\t]*,[ \\t]*"
+          "type": "STRING",
+          "value": ","
         },
         {
           "type": "SYMBOL",
