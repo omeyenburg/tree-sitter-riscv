@@ -15,8 +15,8 @@ module.exports = grammar({
     $._operator_space,
     $._line_separator,
     $._data_separator,
-    $._inline_separator_comment,
-    $._inline_end_comment,
+    $._inline_separator_comment, // comment inside statement between operands, but might be on the end of a line
+    $._inline_end_comment, // comment at end of statement after operands
   ],
 
   extras: $ => [
@@ -28,7 +28,7 @@ module.exports = grammar({
   inline: $ => [
     $._whitespace,
     $._expression,
-    $._inline_separator_comment_node,
+    $._inline_separator_comment_node, // "inline" in the node name means here the comment is in the line, do not confuse.
     $._inline_end_comment_node,
     $._expression_argument,
   ],
@@ -280,7 +280,7 @@ module.exports = grammar({
       '(',
       optional($._immediate_block_comment),
       optional(field('operands', $.operands)),
-      ')'
+      ')',
     )),
 
     // Matches primitives, registers, macro variables and compound expressions.
@@ -549,7 +549,7 @@ module.exports = grammar({
     // - may include \() marking the end of the macro identifier.
     macro_variable: $ => token(choice(
       /[%][0-9a-zA-Z_$\\]+(\\\(\)[0-9a-zA-Z_%$]*)?/,
-      /[$\\][0-9a-zA-Z_$\\%]+(\\\(\)[0-9a-zA-Z_%$]*)?/
+      /[$\\][0-9a-zA-Z_$\\%]+(\\\(\)[0-9a-zA-Z_%$]*)?/,
     )),
 
     macro_name: $ => token(/[a-zA-Z_][a-zA-Z0-9_$]*/),

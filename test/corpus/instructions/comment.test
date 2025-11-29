@@ -252,3 +252,22 @@ foo(1, 2/* baz */)
       operand: (decimal)
       operand: (decimal))
     (comment)))
+
+
+==========
+[instructions/comment] comment after operands followed by next instruction
+==========
+foo 1 # asd
+foo 1
+---
+
+(program
+  (instruction
+    opcode: (opcode)
+    operands: (operands
+      operand: (decimal)))
+  (comment)
+  (instruction
+    opcode: (opcode)
+    operands: (operands
+      operand: (decimal))))
