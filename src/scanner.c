@@ -580,13 +580,13 @@ static bool scan_comment_data_separator(TSLexer* lexer, const bool* valid_symbol
                 lexer->advance(lexer, false);
             }
             if (!lexer->eof(lexer) && lexer->lookahead == ':') {
-                // It's a macro label, not an operand - don't return separator
+                // It's a macro label, not data - don't return separator
                 return false;
             }
         }
-        // It's a macro variable or operator, treat as operand
-        lexer->result_symbol = _INLINE_SEPARATOR_COMMENT;
-        return true;
+        // It's a macro variable at statement position (like %foo, $foo, \foo as an opcode or label)
+        // Macro variables/macros ARE statements, not data - don't treat as data separator
+        return false;
     }
 
     // Check for label (identifier followed by optional whitespace and colon)
@@ -607,10 +607,12 @@ static bool scan_comment_data_separator(TSLexer* lexer, const bool* valid_symbol
             // It's a label, not an operand - don't return separator
             return false;
         }
-        // It's a symbol operand, continue
-        // Return _INLINE_SEPARATOR_COMMENT since we consumed a comment
-        lexer->result_symbol = _INLINE_SEPARATOR_COMMENT;
-        return true;
+        // It's not a label (no colon follows)
+        // Could be: opcode/mnemonic, or data operand
+        // Since we can't easily distinguish, and opcodes ARE statements,
+        // we should return false (don't treat as data separator)
+        // Let the main parser handle it
+        return false;
     }
 
     // Check for numeric label (digit(s) followed by optional whitespace and colon)
@@ -667,6 +669,14 @@ static bool scan_line_or_data_separator(TSLexer* lexer, const bool* valid_symbol
     // Handle comment without newline
     if (scan_comment_data_separator(lexer, valid_symbols))
         return true;
+
+    // Early return: if only line_sep is valid and we see a hash comment,
+    // return LINE_SEPARATOR immediately to prevent hash comments from allowing operand continuation
+    if (is_valid_line_separator && !is_valid_data_separator && lexer->lookahead == '#') {
+        lexer->result_symbol = _LINE_SEPARATOR;
+        lexer->mark_end(lexer);
+        return true;
+    }
 
     // Check if we have a newline
     if (!is_newline(lexer->lookahead)) {
@@ -831,15 +841,29 @@ static bool scan_line_or_data_separator(TSLexer* lexer, const bool* valid_symbol
                         return true;
                     }
                     
-                    // Check if it's data-like (other operand starts, digits already checked above)
-                    if (is_operand_start(lexer->lookahead)) {
-                        // Data continuation - return comment token since we're in comment path
+                    // Check if it's a statement start (macro variable, opcode, etc.)
+                    // Macro variables (%foo, $foo, \foo) are statements
+                    if (lexer->lookahead == '%' || lexer->lookahead == '$' || lexer->lookahead == '\\') {
+                        // Macro variable at statement start - return END_COMMENT
 #if DEBUG_SCANNER
-                            fprintf(stderr, "[scan_line_or_data] Data after comment, _INLINE_SEPARATOR_COMMENT\n");
+                            fprintf(stderr, "[scan_line_or_data] Macro variable after comment, _INLINE_END_COMMENT\n");
 #endif
-                        lexer->result_symbol = valid_symbols[_INLINE_SEPARATOR_COMMENT]
-                            ? _INLINE_SEPARATOR_COMMENT
-                            : _DATA_SEPARATOR;
+                        lexer->result_symbol = valid_symbols[_INLINE_END_COMMENT]
+                            ? _INLINE_END_COMMENT
+                            : _LINE_SEPARATOR;
+                        return true;
+                    }
+                    
+                    // Any other operand_start at statement position (like opcode identifiers) is a statement
+                    if (is_operand_start(lexer->lookahead)) {
+                        // Could be opcode or data - conservatively treat as statement end
+                        // (parser will handle if it's actually data in context)
+#if DEBUG_SCANNER
+                            fprintf(stderr, "[scan_line_or_data] Operand-like after comment (assumed statement), _INLINE_END_COMMENT\n");
+#endif
+                        lexer->result_symbol = valid_symbols[_INLINE_END_COMMENT]
+                            ? _INLINE_END_COMMENT
+                            : _LINE_SEPARATOR;
                         return true;
                     }
                 }
@@ -1030,9 +1054,8 @@ static bool scan_line_or_data_separator(TSLexer* lexer, const bool* valid_symbol
 
     // Only LINE_SEPARATOR valid
     if (is_valid_line_separator && !is_valid_data_separator) {
-        // Mark end to not consume any comments/whitespace after newline
-        lexer->mark_end(lexer);
         lexer->result_symbol = _LINE_SEPARATOR;
+        lexer->mark_end(lexer);
         return true;
     }
 
