@@ -125,6 +125,8 @@ module.exports = grammar({
       repeat(choice(
         seq($._whitespace, $.macro_parameter),
         seq(optional($._whitespace), ',', optional($._whitespace), $.macro_parameter),
+        seq($._immediate_block_comment, $.macro_parameter),
+        $._immediate_block_comment,
       )),
     ),
 
@@ -262,7 +264,7 @@ module.exports = grammar({
     operands: $ => seq(
       field('operand', $._operand),
       repeat(seq(
-        choice(',', $._operand_separator),
+        choice($._inline_separator_comment_node, ',', $._operand_separator),
         field('operand', $._operand),
       )),
       optional($._operand_separator),
@@ -278,7 +280,6 @@ module.exports = grammar({
       '(',
       optional($._immediate_block_comment),
       optional(field('operands', $.operands)),
-      optional($._immediate_block_comment),
       ')'
     )),
 

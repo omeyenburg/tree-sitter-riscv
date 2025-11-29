@@ -585,6 +585,23 @@
                     "name": "macro_parameter"
                   }
                 ]
+              },
+              {
+                "type": "SEQ",
+                "members": [
+                  {
+                    "type": "SYMBOL",
+                    "name": "_immediate_block_comment"
+                  },
+                  {
+                    "type": "SYMBOL",
+                    "name": "macro_parameter"
+                  }
+                ]
+              },
+              {
+                "type": "SYMBOL",
+                "name": "_immediate_block_comment"
               }
             ]
           }
@@ -1324,6 +1341,10 @@
                 "type": "CHOICE",
                 "members": [
                   {
+                    "type": "SYMBOL",
+                    "name": "_inline_separator_comment_node"
+                  },
+                  {
                     "type": "STRING",
                     "value": ","
                   },
@@ -1403,18 +1424,6 @@
                   "type": "SYMBOL",
                   "name": "operands"
                 }
-              },
-              {
-                "type": "BLANK"
-              }
-            ]
-          },
-          {
-            "type": "CHOICE",
-            "members": [
-              {
-                "type": "SYMBOL",
-                "name": "_immediate_block_comment"
               },
               {
                 "type": "BLANK"

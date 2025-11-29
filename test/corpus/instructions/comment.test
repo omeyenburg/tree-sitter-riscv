@@ -250,4 +250,5 @@ foo(1, 2/* baz */)
     opcode: (opcode)
     operands: (operands
       operand: (decimal)
-      operand: (decimal))))
+      operand: (decimal))
+    (comment)))

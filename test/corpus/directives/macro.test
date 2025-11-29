@@ -119,6 +119,44 @@
         name: (macro_parameter_name)))))
 
 ==========
+[directives/macro] macro definition with parentheses and comment separation
+==========
+.macro foo(%bar/**/%baz)
+---
+
+(program
+  (directive
+    mnemonic: (macro_mnemonic)
+    name: (macro_name)
+    parameters: (macro_parameters
+      (macro_parameter
+        name: (macro_parameter_name))
+      (comment)
+      (macro_parameter
+        name: (macro_parameter_name)))))
+
+==========
+[directives/macro] macro definition with parentheses, comma separation and comments
+==========
+.macro foo/**/(/**/%bar/**/,/**/%baz/**/)
+---
+
+(program
+  (directive
+    mnemonic: (macro_mnemonic)
+    name: (macro_name)
+    (comment)
+    (comment)
+    parameters: (macro_parameters
+      (macro_parameter
+        name: (macro_parameter_name))
+      (comment)
+      (comment)
+      (macro_parameter
+        name: (macro_parameter_name))
+      (comment))))
+
+==========
 [directives/macro] integer directive with macro variable
 ==========
 .word %foo

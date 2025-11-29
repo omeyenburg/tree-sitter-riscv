@@ -1137,16 +1137,17 @@ bool tree_sitter_mips_external_scanner_scan(void* payload,
                 }
                 // Mark end after consuming block comment
                 lexer->mark_end(lexer);
-                // Check what follows: if non-operator operand, return separator
+                // Check what follows: if non-operator operand (and not closing paren), return separator
                 if (!lexer->eof(lexer) && is_operand_start(lexer->lookahead) && 
-                    !is_operator_start(lexer->lookahead)) {
+                    !is_operator_start(lexer->lookahead) &&
+                    lexer->lookahead != ')') {
                     // Return comment separator since we consumed a comment
                     lexer->result_symbol = valid_symbols[_INLINE_SEPARATOR_COMMENT]
                         ? _INLINE_SEPARATOR_COMMENT
                         : _OPERAND_SEPARATOR;
                     return true;
                 }
-                // If operator follows, return false (let block_comment be consumed as extra)
+                // If operator follows or closing paren, return false (let block_comment be consumed as extra)
                 return false;
             }
             // Not a comment, return false

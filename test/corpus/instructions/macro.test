@@ -175,7 +175,7 @@ foo 4($x)
         base: (macro_variable)))))
 
 ==========
-[instructions/macro] macro call with string
+[instructions/macro] parenthesized macro call with string
 ==========
 foo("bar")
 ---
@@ -185,6 +185,38 @@ foo("bar")
     opcode: (opcode)
     operands: (operands
       operand: (string))))
+
+==========
+[instructions/macro] parenthesized macro call with comment operand separator
+==========
+foo(1/**/2)
+---
+
+(program
+  (instruction
+    opcode: (opcode)
+    operands: (operands
+      operand: (decimal)
+      (comment)
+      operand: (decimal))))
+
+==========
+[instructions/macro] parenthesized macro call with comma operand separator and comments
+==========
+foo/**/(/**/1/**/,/**/2/**/)
+---
+
+(program
+  (instruction
+    opcode: (opcode)
+    (comment)
+    (comment)
+    operands: (operands
+      operand: (decimal)
+      (comment)
+      (comment)
+      operand: (decimal))
+    (comment)))
 
 ==========
 [instructions/macro] macro variable as instruction opcode
