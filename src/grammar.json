@@ -806,18 +806,6 @@
                 "type": "CHOICE",
                 "members": [
                   {
-                    "type": "SYMBOL",
-                    "name": "_operand_separator"
-                  },
-                  {
-                    "type": "SYMBOL",
-                    "name": "_multiline_operand_separator_no_comment"
-                  },
-                  {
-                    "type": "SYMBOL",
-                    "name": "_multiline_operand_separator_with_comment_node"
-                  },
-                  {
                     "type": "SEQ",
                     "members": [
                       {
@@ -846,6 +834,18 @@
                         "value": ","
                       }
                     ]
+                  },
+                  {
+                    "type": "SYMBOL",
+                    "name": "_operand_separator"
+                  },
+                  {
+                    "type": "SYMBOL",
+                    "name": "_multiline_operand_separator_no_comment"
+                  },
+                  {
+                    "type": "SYMBOL",
+                    "name": "_multiline_operand_separator_with_comment_node"
                   }
                 ]
               },
@@ -1199,12 +1199,12 @@
       "type": "CHOICE",
       "members": [
         {
-          "type": "SYMBOL",
-          "name": "_operand_separator"
-        },
-        {
           "type": "STRING",
           "value": ","
+        },
+        {
+          "type": "SYMBOL",
+          "name": "_operand_separator"
         },
         {
           "type": "SYMBOL",
@@ -1341,16 +1341,16 @@
                 "type": "CHOICE",
                 "members": [
                   {
-                    "type": "SYMBOL",
-                    "name": "_multiline_operand_separator_with_comment_node"
-                  },
-                  {
                     "type": "STRING",
                     "value": ","
                   },
                   {
                     "type": "SYMBOL",
                     "name": "_operand_separator"
+                  },
+                  {
+                    "type": "SYMBOL",
+                    "name": "_multiline_operand_separator_with_comment_node"
                   }
                 ]
               },

@@ -17,6 +17,14 @@ enum TokenType {
     _MULTILINE_OPERAND_SEPARATOR_WITH_COMMENT,
 };
 
+typedef enum {
+    CONSUMED_NONE = 0b00,     // Consumed nothing or whitespace
+    CONSUMED_NEW_LINE = 0b01, // Consumed atleast one '\n'
+    CONSUMED_COMMENT = 0b10,  // Consumed atleast one comment, but may consume multiple
+    CONSUMED_NEW_LINE_COMMENT = 0b11,
+} Consumed_t;
+Consumed_t consumed;
+
 void* tree_sitter_mips_external_scanner_create() {
     return NULL;
 }
@@ -43,15 +51,22 @@ void tree_sitter_mips_external_scanner_deserialize(void* payload,
 // Character Classification
 // ============================================================================
 
+/**
+ * Does not imply invalid operand start.
+ */
 static inline bool is_operator_start(int32_t c) {
     return c == '+' || c == '-' || c == '*' || c == '%' || c == '/' || c == '&' ||
            c == '|' || c == '^' || c == '~' || c == '!' || c == '<' || c == '>' ||
            c == '=';
 }
 
+/**
+ * Does not imply invalid operator start.
+ */
 static inline bool is_operand_start(int32_t c) {
     return iswalnum(c) || c == '_' || c == '\\' || c == '%' || c == '$' || c == '.' ||
-           c == '\'' || c == '"' || c == '(' || c == ')' || c == '-';
+           c == '\'' || c == '"' || c == '(' || c == ')' || c == '-' || c == '+' ||
+           c == '@';
 }
 
 static inline bool is_space(int32_t c) {
@@ -70,26 +85,21 @@ static inline bool is_eol_or_eof(const TSLexer* lexer) {
 // Whitespace and Comment Skipping
 // ============================================================================
 
-typedef enum {
-    SKIP_NONE = 0,
-    SKIP_INLINE = 1,
-    SKIP_MULTILINE = 2,
-} SkippedType_t;
-
 /**
- * Skip horizontal whitespace (space, tab).
+ * Skips or consumes consecutive space and tab characters.
  */
-static void skip_horizontal_space(TSLexer* lexer, bool consumed_comment) {
+static void consume_whitespace(TSLexer* lexer, bool skip) {
     while (!lexer->eof(lexer) && is_space(lexer->lookahead)) {
-        lexer->advance(lexer, !consumed_comment); // Skip whitespace unless we consumed a comment;
+        lexer->advance(lexer, skip);
     }
 }
 
 /**
- * Skip a single newline (handles CRLF and LF).
+ * Attempts to consume a single newline (handles CRLF and LF).
+ * Modifies global consumed flags indicating what was consumed.
  * Returns true if a newline was consumed.
  */
-static bool skip_newline(TSLexer* lexer) {
+static bool consume_newline(TSLexer* lexer, bool skip) {
 #if DEBUG_SCANNER
     fprintf(stderr,
             "[skip_newline] lookahead=%d (\\r=%d \\n=%d)\n",
@@ -98,20 +108,24 @@ static bool skip_newline(TSLexer* lexer) {
             '\n');
 #endif
     if (lexer->lookahead == '\r') {
-        lexer->advance(lexer, false);  // Include in token
+        lexer->advance(lexer, skip);
         if (!lexer->eof(lexer) && lexer->lookahead == '\n') {
-            lexer->advance(lexer, false);  // Include in token
+            lexer->advance(lexer, skip);
         }
+
+        consumed |= CONSUMED_NEW_LINE;
         return true;
     } else if (lexer->lookahead == '\n') {
-        lexer->advance(lexer, false);  // Include in token
+        lexer->advance(lexer, skip);
+        consumed |= CONSUMED_NEW_LINE;
         return true;
     }
     return false;
 }
 
 /**
- * Skip a # comment (to end of line).
+ * Consume a # comment (to end of line).
+ * Modifies global consumed flags indicating what was consumed.
  * Returns true if a comment was consumed.
  */
 static bool consume_hash_comment(TSLexer* lexer) {
@@ -122,13 +136,16 @@ static bool consume_hash_comment(TSLexer* lexer) {
     while (!is_eol_or_eof(lexer)) {
         lexer->advance(lexer, false);
     }
+
+    consumed |= CONSUMED_NEW_LINE_COMMENT;
     return true;
 }
 
 /**
- * Skip C++ or C-style block comments.
+ * Consume C-style line and block comments.
+ * Modifies global consumed flags indicating what was consumed.
  * Returns true if a comment was consumed.
- * If '/' is not followed by '/' or '*', returns false and leaves lexer at '/'.
+ * If '/' is not followed by '/' or '*', returns false but consumes '/'!
  */
 static bool consume_slash_comment(TSLexer* lexer) {
     if (lexer->lookahead != '/')
@@ -137,11 +154,15 @@ static bool consume_slash_comment(TSLexer* lexer) {
     lexer->advance(lexer, false);
 
     if (!lexer->eof(lexer) && lexer->lookahead == '/') {
-        // C++ comment
+        // C comment
         lexer->advance(lexer, false);
         while (!is_eol_or_eof(lexer)) {
             lexer->advance(lexer, false);
         }
+
+        // Line comment implies new line
+        consumed |= CONSUMED_NEW_LINE_COMMENT;
+
         return true;
     }
 
@@ -159,186 +180,42 @@ static bool consume_slash_comment(TSLexer* lexer) {
                 lexer->advance(lexer, false);
             }
         }
+
+        consumed |= CONSUMED_COMMENT;
+        if (is_eol_or_eof(lexer)) {
+            consumed |= CONSUMED_NEW_LINE;
+        }
+
         return true;
     }
 
-    // Not a comment - '/' is an operator
+    // Not a comment, '/' is an operator
     return false;
 }
 
 /**
- * Skip any combination of whitespace and comments.
- * Returns flags indicating what was skipped.
+ * Consume any combination of whitespace and comments.
+ * Modifies global consumed flags indicating what was consumed.
  */
-static SkippedType_t skip_whitespace_and_comments(TSLexer* lexer) {
-    SkippedType_t skipped = SKIP_NONE;
-
+static void consume_whitespace_and_comments(TSLexer* lexer) {
     while (!lexer->eof(lexer)) {
-        if (is_space(lexer->lookahead)) {
-            skipped |= SKIP_INLINE;
-            skip_horizontal_space(lexer, skipped != SKIP_NONE);
-            continue;
-        }
+        consume_whitespace(lexer, !(consumed & CONSUMED_COMMENT));
 
         if (is_newline(lexer->lookahead)) {
-            skipped |= SKIP_MULTILINE;
-            skip_newline(lexer);
+            consume_newline(lexer, !(consumed & CONSUMED_COMMENT));
             continue;
         }
 
         if (consume_hash_comment(lexer)) {
-            skipped |= SKIP_MULTILINE; // Line comments end the line
             continue;
         }
 
-        if (lexer->lookahead == '/') {
-            int saved_pos = lexer->get_column(lexer);
-            if (consume_slash_comment(lexer)) {
-                // Check if it was a block comment or line comment
-                // Line comments (//) should set SKIP_MULTILINE
-                // Block comments (/* */) should set SKIP_INLINE
-                // We can't easily tell after the fact, so peek ahead
-                // If we're at EOL after comment, treat as multiline
-                if (is_eol_or_eof(lexer)) {
-                    skipped |= SKIP_MULTILINE;
-                } else {
-                    skipped |= SKIP_INLINE;
-                }
-                continue;
-            }
-        }
-
-        break;
-    }
-
-    return skipped;
-}
-
-/**
- * Skip blank lines and comments to find next non-empty line.
- * Leaves lexer positioned at first non-whitespace, non-comment character.
- */
-static void skip_to_content(TSLexer* lexer) {
-    bool consumed_comment = false;
-
-    while (!lexer->eof(lexer)) {
-        skip_horizontal_space(lexer, consumed_comment);
-
-        if (skip_newline(lexer))
-            continue;
-
-        if (consume_hash_comment(lexer)) {
-            consumed_comment = true;
-            continue;
-        }
-
-        if (consume_slash_comment(lexer)) {
-            consumed_comment = true;
+        if (lexer->lookahead == '/' && consume_slash_comment(lexer)) {
             continue;
         }
 
         break;
     }
-}
-
-/**
- * Consume (not skip) whitespace and comments for separator tokens.
- * Uses advance(lexer, false) to include everything in the token range.
- * Returns type of content skipped (for disambiguation).
- */
-static SkippedType_t consume_whitespace_and_comments(TSLexer* lexer) {
-    SkippedType_t skipped = SKIP_NONE;
-
-    while (!lexer->eof(lexer)) {
-        if (is_space(lexer->lookahead)) {
-            skipped |= SKIP_INLINE;
-            while (!lexer->eof(lexer) && is_space(lexer->lookahead)) {
-                lexer->advance(lexer, false); // Include in token
-            }
-            continue;
-        }
-
-        if (is_newline(lexer->lookahead)) {
-            skipped |= SKIP_MULTILINE;
-            if (lexer->lookahead == '\r') {
-                lexer->advance(lexer, false); // Include in token
-                if (!lexer->eof(lexer) && lexer->lookahead == '\n') {
-                    lexer->advance(lexer, false); // Include in token
-                }
-            } else if (lexer->lookahead == '\n') {
-                lexer->advance(lexer, false); // Include in token
-            }
-            continue;
-        }
-
-        if (consume_hash_comment(lexer)) {
-            skipped |= SKIP_MULTILINE; // Line comments end the line
-            continue;
-        }
-
-        if (lexer->lookahead == '/') {
-            if (consume_slash_comment(lexer)) {
-                // consume_slash_comment uses advance(lexer, false), so comments are
-                // included
-                if (is_eol_or_eof(lexer)) {
-                    skipped |= SKIP_MULTILINE;
-                } else {
-                    skipped |= SKIP_INLINE;
-                }
-                continue;
-            }
-        }
-
-        break;
-    }
-
-    return skipped;
-}
-
-/**
- * Consume (not skip) blank lines and comments to reach actual content.
- * Uses advance(lexer, false) to include everything in the token range.
- * This preserves the token start position at the first consumed character.
- * Returns true if at least one comment was consumed.
- */
-static bool consume_to_content(TSLexer* lexer) {
-    bool consumed_comment = false;
-    while (!lexer->eof(lexer)) {
-        // Consume horizontal whitespace (include in token range)
-        if (is_space(lexer->lookahead)) {
-            while (!lexer->eof(lexer) && is_space(lexer->lookahead)) {
-                lexer->advance(lexer, false);
-            }
-            continue;
-        }
-
-        // Consume newlines (include in token)
-        if (is_newline(lexer->lookahead)) {
-            if (lexer->lookahead == '\r') {
-                lexer->advance(lexer, false);
-                if (!lexer->eof(lexer) && lexer->lookahead == '\n') {
-                    lexer->advance(lexer, false);
-                }
-            } else if (lexer->lookahead == '\n') {
-                lexer->advance(lexer, false);
-            }
-            continue;
-        }
-
-        // Consume comments (include in token)
-        if (consume_hash_comment(lexer)) {
-            consumed_comment = true;
-            continue;
-        }
-
-        if (consume_slash_comment(lexer)) {
-            consumed_comment = true;
-            continue;
-        }
-
-        break;
-    }
-    return consumed_comment;
 }
 
 // ============================================================================
@@ -440,7 +317,7 @@ static bool scan_operand_separator(TSLexer* lexer, const bool* valid_symbols) {
     bool found_space = false;
     while (!lexer->eof(lexer) && is_space(lexer->lookahead)) {
         found_space = true;
-        lexer->advance(lexer, false);
+        lexer->advance(lexer, true);
     }
 
     if (!found_space || lexer->eof(lexer))
@@ -516,8 +393,8 @@ static bool scan_newline_operator(TSLexer* lexer, const bool* valid_symbols) {
         return false;
     }
 
-    skip_newline(lexer);
-    skip_to_content(lexer);
+    consume_newline(lexer, true);
+    consume_whitespace_and_comments(lexer);
 
 #if DEBUG_SCANNER
     fprintf(stderr,
@@ -618,24 +495,24 @@ static bool scan_multiline_operand_separator_with_comment(TSLexer* lexer,
         !valid_symbols[_MULTILINE_OPERAND_SEPARATOR_WITH_COMMENT])
         return false;
 
-    if (lexer->lookahead != '#' && lexer->lookahead != '/')
-        return false;
-
     // Consume the comment
     if (lexer->lookahead == '#') {
         if (!consume_hash_comment(lexer))
             return false;
-    } else {
+    } else if (lexer->lookahead == '/') {
         if (!consume_slash_comment(lexer))
             return false;
+    } else {
+        // Not a comment
+        return false;
     }
 
     // Must have newline after comment
     if (!is_eol_or_eof(lexer))
         return false;
 
-    skip_newline(lexer);
-    skip_horizontal_space(lexer, false);
+    // Consume further comments whitespace and new lines
+    consume_whitespace_and_comments(lexer);
 
     // Check for directive (starts with . followed by letter)
     if (!lexer->eof(lexer) && lexer->lookahead == '.') {
@@ -749,9 +626,9 @@ static bool scan_multiline_operand_separator_with_comment(TSLexer* lexer,
  */
 static bool scan_statement_or_multiline_operand_sep(TSLexer* lexer,
                                                     const bool* valid_symbols) {
-    const bool is_valid_statement_separator_no_comment =
+    const bool is_valid_statement_separator =
         valid_symbols[_STATEMENT_SEPARATOR_NO_COMMENT];
-    const bool is_valid_multiline_operand_separator_no_comment =
+    const bool is_valid_multiline_operand_separator =
         valid_symbols[_MULTILINE_OPERAND_SEPARATOR_NO_COMMENT];
 
 #if DEBUG_SCANNER
@@ -762,12 +639,11 @@ static bool scan_statement_or_multiline_operand_sep(TSLexer* lexer,
             is_valid_multiline_operand_separator_no_comment);
 #endif
 
-    if (!is_valid_statement_separator_no_comment &&
-        !is_valid_multiline_operand_separator_no_comment)
+    if (!is_valid_statement_separator && !is_valid_multiline_operand_separator)
         return false;
 
     // Skip any leading horizontal space
-    skip_horizontal_space(lexer, false);
+    consume_whitespace(lexer, true);
 
     // Check if there's a comment at this position (before calling the comment handler)
     bool comment_at_start = (lexer->lookahead == '#' || lexer->lookahead == '/');
@@ -776,14 +652,17 @@ static bool scan_statement_or_multiline_operand_sep(TSLexer* lexer,
     if (scan_multiline_operand_separator_with_comment(lexer, valid_symbols))
         return true;
 
-    // If there was a comment at the start and it's gone now (consumed), check if we should
-    // return it as a statement separator with comment
-    bool comment_was_consumed = (comment_at_start && lexer->lookahead != '#' && lexer->lookahead != '/');
+    // If there was a comment at the start and it's gone now (consumed), check if we
+    // should return it as a statement separator with comment
 
-    if (comment_was_consumed && is_valid_statement_separator_no_comment &&
-        !is_valid_multiline_operand_separator_no_comment) {
+    if (comment_at_start && lexer->lookahead != '#' && lexer->lookahead != '/') {
+        consumed |= CONSUMED_COMMENT;
+    }
+
+    if ((consumed & CONSUMED_COMMENT) && is_valid_statement_separator) {
         // A comment was consumed but no operand followed
-        // Only return as separator if we're at definite end-of-statement (EOF or newline)
+        // Only return as separator if we're at definite end-of-statement (EOF or
+        // newline)
         if (lexer->eof(lexer) || is_newline(lexer->lookahead)) {
             lexer->mark_end(lexer);
             lexer->result_symbol = _STATEMENT_SEPARATOR_WITH_COMMENT;
@@ -792,24 +671,15 @@ static bool scan_statement_or_multiline_operand_sep(TSLexer* lexer,
     }
 
     // Also handle multiline case: if comment was consumed and both separators are valid
-    if (comment_was_consumed && is_valid_statement_separator_no_comment &&
-        is_valid_multiline_operand_separator_no_comment) {
-        // A comment was consumed in multiline context
-        // scan_multiline_operand_separator_with_comment returned false, meaning NO operand follows
-        // So this should be treated as a statement separator, not a multiline operand separator
-        lexer->result_symbol = _STATEMENT_SEPARATOR_WITH_COMMENT;
-        return true;
-    }
-
-    // Early return: if only statement_separator is valid and we see a hash comment,
-    // return statement_separator_no_comment immediately to prevent hash comments from
-    // allowing operand continuation
-    if (is_valid_statement_separator_no_comment &&
-        !is_valid_multiline_operand_separator_no_comment && lexer->lookahead == '#') {
-        lexer->result_symbol = _STATEMENT_SEPARATOR_NO_COMMENT;
-        lexer->mark_end(lexer);
-        return true;
-    }
+    // if (comment_was_consumed && is_valid_statement_separator_no_comment &&
+    //     is_valid_multiline_operand_separator_no_comment) {
+    //     // A comment was consumed in multiline context
+    //     // scan_multiline_operand_separator_with_comment returned false, meaning NO
+    //     operand follows
+    //     // So this should be treated as a statement separator, not a multiline
+    //     operand separator lexer->result_symbol = _STATEMENT_SEPARATOR_WITH_COMMENT;
+    //     return true;
+    // }
 
     // Check if we have a newline
     if (!is_newline(lexer->lookahead)) {
@@ -841,12 +711,11 @@ static bool scan_statement_or_multiline_operand_sep(TSLexer* lexer,
         lexer->advance(lexer, false);
     }
 
-    // Skip horizontal space (might skip or include depending on what follows)
-    skip_horizontal_space(lexer, comment_was_consumed);
+    // Consume inline whitespace
+    consume_whitespace(lexer, !(consumed & CONSUMED_COMMENT));
 
     // Both separators valid - need to disambiguate
-    if (is_valid_statement_separator_no_comment &&
-        is_valid_multiline_operand_separator_no_comment) {
+    if (is_valid_statement_separator && is_valid_multiline_operand_separator) {
 #if DEBUG_SCANNER
         fprintf(
             stderr,
@@ -873,17 +742,15 @@ static bool scan_statement_or_multiline_operand_sep(TSLexer* lexer,
             // Consume the comment to see what comes after
             if (lexer->lookahead == '#') {
                 consume_hash_comment(lexer);
-            } else {
-                if (!consume_slash_comment(lexer)) {
-                    // Not actually a comment, '/' is something else
+            } else if (!consume_slash_comment(lexer)) {
+                // Not actually a comment, '/' is something else
 #if DEBUG_SCANNER
-                    fprintf(stderr,
-                            "[scan_statement_or_multiline_operand_sep] Not a comment, "
-                            "returning LINE_SEP\n");
+                fprintf(stderr,
+                        "[scan_statement_or_multiline_operand_sep] Not a comment, "
+                        "returning LINE_SEP\n");
 #endif
-                    lexer->result_symbol = _STATEMENT_SEPARATOR_NO_COMMENT;
-                    return true;
-                }
+                lexer->result_symbol = _STATEMENT_SEPARATOR_NO_COMMENT;
+                return true;
             }
 
             // Check what's after the comment
@@ -899,25 +766,26 @@ static bool scan_statement_or_multiline_operand_sep(TSLexer* lexer,
                 }
 
                 // Continue consuming blank lines and additional comments
-                consume_to_content(lexer);
+                // consume_to_content(lexer);
+                consume_whitespace_and_comments(lexer);
 
 #if DEBUG_SCANNER
                 fprintf(stderr,
                         "[scan_statement_or_multiline_operand_sep] After "
-                        "consume_to_content, lookahead='%c'(%d)\n",
+                        "consume_whitespace_and_comments, lookahead='%c'(%d)\n",
                         (lexer->lookahead >= 32 && lexer->lookahead < 127)
                             ? lexer->lookahead
                             : '?',
                         lexer->lookahead);
 #endif
 
-                // Mark end after all comments and blank lines - this is the separator
-                // span
+                // Mark end after all comments and blank lines
                 lexer->mark_end(lexer);
 
-                // Check if what follows is data continuation
+                // If operands follow, it is an operand separator.
+                // Otherwise it is a statement separator.
                 if (!lexer->eof(lexer)) {
-                    // Check for directive (should be LINE_SEP)
+                    // Check for directive
                     if (lexer->lookahead == '.') {
                         lexer->advance(lexer, false);
                         if (!lexer->eof(lexer) && isalpha(lexer->lookahead)) {
@@ -938,9 +806,9 @@ static bool scan_statement_or_multiline_operand_sep(TSLexer* lexer,
                         // Fall through - could be float like .5
                     }
 
-                    // Check for label
+                    // Check for non-numeric label
                     if (lexer->lookahead == '_' || isalpha(lexer->lookahead)) {
-                        // Could be label or instruction - check for colon
+                        // Could be label or instruction; check for colon
                         while (!lexer->eof(lexer) &&
                                (isalnum(lexer->lookahead) || lexer->lookahead == '_' ||
                                 lexer->lookahead == '.' || lexer->lookahead == '$')) {
@@ -966,7 +834,7 @@ static bool scan_statement_or_multiline_operand_sep(TSLexer* lexer,
                                     : _STATEMENT_SEPARATOR_NO_COMMENT;
                             return true;
                         }
-                        // Fall through - might be data
+                        // Fall through - might be an operand
                     }
 
                     // Check for numeric label
@@ -981,8 +849,8 @@ static bool scan_statement_or_multiline_operand_sep(TSLexer* lexer,
                             lexer->advance(lexer, false);
                         }
                         if (!lexer->eof(lexer) && lexer->lookahead == ':') {
-                            // Numeric label - Return _statement_separator_with_comment
-                            // since we're in comment path
+                            // It is a numeric label.
+                            // Return _with_comment because we're in comment path
 #if DEBUG_SCANNER
                             fprintf(stderr,
                                     "[scan_statement_or_multiline_operand_sep] Numeric "
@@ -995,7 +863,7 @@ static bool scan_statement_or_multiline_operand_sep(TSLexer* lexer,
                                     : _STATEMENT_SEPARATOR_NO_COMMENT;
                             return true;
                         }
-                        // It's numeric data - return separator comment
+                        // It is a numeric operand
 #if DEBUG_SCANNER
                         fprintf(stderr,
                                 "[scan_statement_or_multiline_operand_sep] Numeric "
@@ -1060,32 +928,7 @@ static bool scan_statement_or_multiline_operand_sep(TSLexer* lexer,
 
             // Comment is inline (not followed by newline immediately)
             // Consume any following spaces, comments, and blank lines
-            // This uses advance(false) to include everything in the token
-            while (!lexer->eof(lexer)) {
-                // Consume horizontal whitespace
-                if (is_space(lexer->lookahead)) {
-                    while (!lexer->eof(lexer) && is_space(lexer->lookahead)) {
-                        lexer->advance(lexer, false);
-                    }
-                    continue;
-                }
-
-                // Check for more comments on same line
-                if (consume_hash_comment(lexer))
-                    continue;
-                if (consume_slash_comment(lexer))
-                    continue;
-
-                // Check for newline - if found, consume blank lines and comments after
-                // it
-                if (is_newline(lexer->lookahead)) {
-                    consume_to_content(lexer);
-                    break;
-                }
-
-                // No more whitespace/comments, stop
-                break;
-            }
+            consume_whitespace_and_comments(lexer);
 
             // Check if data follows
             if (!lexer->eof(lexer) &&
@@ -1121,7 +964,8 @@ static bool scan_statement_or_multiline_operand_sep(TSLexer* lexer,
         // Look ahead past blank lines and comments for DATA_SEP disambiguation
         if (is_newline(lexer->lookahead)) {
             // Consume blank lines and comments (include in token)
-            bool consumed_comment = consume_to_content(lexer);
+            // bool consumed_comment = consume_to_content(lexer);
+            consume_whitespace_and_comments(lexer);
 
             // Mark end after all blank lines and comments
             lexer->mark_end(lexer);
@@ -1138,7 +982,7 @@ static bool scan_statement_or_multiline_operand_sep(TSLexer* lexer,
                             "or LINE_SEP (directive after blank lines)\n");
 #endif
                     lexer->result_symbol =
-                        consumed_comment &&
+                        (consumed & CONSUMED_COMMENT) &&
                                 valid_symbols[_STATEMENT_SEPARATOR_WITH_COMMENT]
                             ? _STATEMENT_SEPARATOR_WITH_COMMENT
                             : _STATEMENT_SEPARATOR_NO_COMMENT;
@@ -1166,7 +1010,8 @@ static bool scan_statement_or_multiline_operand_sep(TSLexer* lexer,
 #endif
                 lexer->mark_end(lexer);
                 lexer->result_symbol =
-                    consumed_comment && valid_symbols[_STATEMENT_SEPARATOR_WITH_COMMENT]
+                    (consumed & CONSUMED_COMMENT) &&
+                            valid_symbols[_STATEMENT_SEPARATOR_WITH_COMMENT]
                         ? _STATEMENT_SEPARATOR_WITH_COMMENT
                         : _STATEMENT_SEPARATOR_NO_COMMENT;
                 return true;
@@ -1178,10 +1023,10 @@ static bool scan_statement_or_multiline_operand_sep(TSLexer* lexer,
 
             lexer->mark_end(lexer);
             // Return comment token only if we actually consumed a comment
-            if (!found_operand && consumed_comment &&
+            if (!found_operand && (consumed & CONSUMED_COMMENT) &&
                 valid_symbols[_STATEMENT_SEPARATOR_WITH_COMMENT]) {
                 lexer->result_symbol = _STATEMENT_SEPARATOR_WITH_COMMENT;
-            } else if (found_operand && consumed_comment &&
+            } else if (found_operand && (consumed & CONSUMED_COMMENT) &&
                        valid_symbols[_MULTILINE_OPERAND_SEPARATOR_WITH_COMMENT]) {
                 lexer->result_symbol = _MULTILINE_OPERAND_SEPARATOR_WITH_COMMENT;
             } else {
@@ -1245,9 +1090,9 @@ static bool scan_statement_or_multiline_operand_sep(TSLexer* lexer,
                 lexer->result_symbol = _STATEMENT_SEPARATOR_NO_COMMENT;
                 return true;
             }
-            SkippedType_t skipped = consume_whitespace_and_comments(lexer);
+            consume_whitespace_and_comments(lexer);
             lexer->result_symbol =
-                (skipped & SKIP_MULTILINE) &&
+                (consumed & CONSUMED_COMMENT) &&
                         valid_symbols[_MULTILINE_OPERAND_SEPARATOR_WITH_COMMENT]
                     ? _MULTILINE_OPERAND_SEPARATOR_WITH_COMMENT
                     : _MULTILINE_OPERAND_SEPARATOR_NO_COMMENT;
@@ -1264,9 +1109,9 @@ static bool scan_statement_or_multiline_operand_sep(TSLexer* lexer,
         }
 
         // Default: data separator
-        SkippedType_t skipped = consume_whitespace_and_comments(lexer);
+        consume_whitespace_and_comments(lexer);
         lexer->result_symbol =
-            (skipped & SKIP_MULTILINE) &&
+            (consumed & CONSUMED_COMMENT) &&
                     valid_symbols[_MULTILINE_OPERAND_SEPARATOR_WITH_COMMENT]
                 ? _MULTILINE_OPERAND_SEPARATOR_WITH_COMMENT
                 : _MULTILINE_OPERAND_SEPARATOR_NO_COMMENT;
@@ -1275,14 +1120,13 @@ static bool scan_statement_or_multiline_operand_sep(TSLexer* lexer,
     }
 
     // Only statement_separator_no_comment valid
-    if (is_valid_statement_separator_no_comment &&
-        !is_valid_multiline_operand_separator_no_comment) {
+    if (is_valid_statement_separator && !is_valid_multiline_operand_separator) {
         lexer->result_symbol = _STATEMENT_SEPARATOR_NO_COMMENT;
         lexer->mark_end(lexer);
         return true;
     }
 
-    if (is_valid_multiline_operand_separator_no_comment) {
+    if (is_valid_multiline_operand_separator) {
         // Check if the next content is a directive (should not be treated as data)
         if (lexer->lookahead == '.') {
             lexer->advance(lexer, false);
@@ -1312,6 +1156,8 @@ bool tree_sitter_mips_external_scanner_scan(void* payload,
     if (lexer->eof(lexer))
         return false;
 
+    consumed = CONSUMED_NONE;
+
 #if DEBUG_SCANNER
     fprintf(stderr,
             "[SCAN] col=%d, lookahead='%c'(%d), valid: op_sep=%d op_space=%d "
@@ -1325,8 +1171,8 @@ bool tree_sitter_mips_external_scanner_scan(void* payload,
             valid_symbols[_multiline_operand_separator_no_comment]);
 #endif
 
-    // Try OPERAND_SEPARATOR first (space/tab between operands)
     if (valid_symbols[_OPERAND_SEPARATOR]) {
+        // Try operand separator first (space/tab between operands)
         if (scan_operand_separator(lexer, valid_symbols))
             return true;
 
@@ -1335,7 +1181,7 @@ bool tree_sitter_mips_external_scanner_scan(void* payload,
 
         // Handle comments as separators
         // Block: ONLY when followed by operand (not operator) - for 1/**/2 vs 1/**/+2
-        // Line: when followed by newline then operand - for multiline directives
+        // Line: when followed by newline then operand
         if (lexer->lookahead == '/') {
             lexer->advance(lexer, false);
 
@@ -1373,7 +1219,7 @@ bool tree_sitter_mips_external_scanner_scan(void* payload,
                 }
                 return false;
             } else if (!lexer->eof(lexer) && lexer->lookahead == '*') {
-                // Block comment /* - consume it
+                // Found block comment to consume
                 lexer->advance(lexer, false);
                 while (!lexer->eof(lexer)) {
                     if (lexer->lookahead == '*') {

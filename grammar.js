@@ -161,10 +161,10 @@ module.exports = grammar({
       $._expression,
       repeat(seq(
         choice(
+          seq(optional(choice(' ', '\t')), ','),
           $._operand_separator,
           $._multiline_operand_separator_no_comment,
           $._multiline_operand_separator_with_comment_node,
-          seq(optional(choice(' ', '\t')), ','),
         ),
         $._expression,
       )),
@@ -237,8 +237,8 @@ module.exports = grammar({
       $.option_flag,
     ),
     _control_operand_separator: $ => choice(
-      $._operand_separator,
       ',',
+      $._operand_separator,
       $._multiline_operand_separator_no_comment,
       $._multiline_operand_separator_with_comment_node,
     ),
@@ -264,7 +264,11 @@ module.exports = grammar({
     operands: $ => seq(
       field('operand', $._operand),
       repeat(seq(
-        choice($._multiline_operand_separator_with_comment_node, ',', $._operand_separator),
+        choice(
+          ',',
+          $._operand_separator,
+          $._multiline_operand_separator_with_comment_node,
+        ),
         field('operand', $._operand),
       )),
       optional($._operand_separator),
