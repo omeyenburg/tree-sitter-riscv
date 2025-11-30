@@ -46,17 +46,14 @@ void tree_sitter_mips_external_scanner_deserialize(void* payload,
 // Character classification
 // ============================================================================
 
-static inline bool is_ascii_alpha(int32_t c) __attribute__((always_inline));
 static inline bool is_ascii_alpha(int32_t c) {
     return ('a' <= c && c <= 'z') || ('A' <= c && c <= 'Z');
 }
 
-static inline bool is_ascii_digit(int32_t c) __attribute__((always_inline));
 static inline bool is_ascii_digit(int32_t c) {
     return '0' <= c && c <= '9';
 }
 
-static inline bool is_ascii_alnum(int32_t c) __attribute__((always_inline));
 static inline bool is_ascii_alnum(int32_t c) {
     return is_ascii_alpha(c) || is_ascii_digit(c);
 }
@@ -64,7 +61,6 @@ static inline bool is_ascii_alnum(int32_t c) {
 /**
  * Does not imply invalid operand start.
  */
-static inline bool is_operator_start(int32_t c) __attribute__((always_inline));
 static inline bool is_operator_start(int32_t c) {
     return c == '+' || c == '-' || c == '*' || c == '%' || c == '/' || c == '&' ||
            c == '|' || c == '^' || c == '~' || c == '!' || c == '<' || c == '>' ||
@@ -74,24 +70,20 @@ static inline bool is_operator_start(int32_t c) {
 /**
  * Does not imply invalid operator start.
  */
-static inline bool is_operand_start(int32_t c) __attribute__((always_inline));
 static inline bool is_operand_start(int32_t c) {
     return is_ascii_alnum(c) || c == '_' || c == '\\' || c == '%' || c == '$' ||
            c == '.' || c == '\'' || c == '"' || c == '(' || c == ')' || c == '-' ||
            c == '+' || c == '@';
 }
 
-static inline bool is_space(int32_t c) __attribute__((always_inline));
 static inline bool is_space(int32_t c) {
     return c == ' ' || c == '\t';
 }
 
-static inline bool is_newline(int32_t c) __attribute__((always_inline));
 static inline bool is_newline(int32_t c) {
     return c == '\r' || c == '\n';
 }
 
-static inline bool is_eol_or_eof(const TSLexer* lexer) __attribute__((always_inline));
 static inline bool is_eol_or_eof(const TSLexer* lexer) {
     return lexer->eof(lexer) || is_newline(lexer->lookahead);
 }
