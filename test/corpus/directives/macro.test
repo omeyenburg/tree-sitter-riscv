@@ -71,6 +71,17 @@
         name: (macro_parameter_name)))))
 
 ==========
+[directives/macro] macro definition with empty parentheses
+==========
+.macro foo ()
+---
+
+(program
+  (directive
+    mnemonic: (macro_mnemonic)
+    name: (macro_name)))
+
+==========
 [directives/macro] macro definition with parentheses without space before
 ==========
 .macro foo(%bar %baz)

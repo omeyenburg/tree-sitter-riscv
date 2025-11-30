@@ -405,12 +405,20 @@
                       "value": "("
                     },
                     {
-                      "type": "FIELD",
-                      "name": "parameters",
-                      "content": {
-                        "type": "SYMBOL",
-                        "name": "macro_parameters"
-                      }
+                      "type": "CHOICE",
+                      "members": [
+                        {
+                          "type": "FIELD",
+                          "name": "parameters",
+                          "content": {
+                            "type": "SYMBOL",
+                            "name": "macro_parameters"
+                          }
+                        },
+                        {
+                          "type": "BLANK"
+                        }
+                      ]
                     },
                     {
                       "type": "STRING",

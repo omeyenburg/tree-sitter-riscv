@@ -105,7 +105,7 @@ module.exports = grammar({
       choice(/[ \t]+/, $._block_comment),
       field('name', $.macro_name),
       optional(choice(
-        seq(optional($._whitespace), '(', field('parameters', $.macro_parameters), ')'),
+        seq(optional($._whitespace), '(', optional(field('parameters', $.macro_parameters)), ')'),
         seq($._whitespace, field('parameters', $.macro_parameters)),
       )),
     ),
