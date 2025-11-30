@@ -259,6 +259,48 @@
       (float))))
 
 ==========
+[directives/whitespace] control directive with new line after comma between operands
+==========
+.foo 1 ,
+     1
+---
+
+(program
+  (directive
+    mnemonic: (control_mnemonic)
+    operands: (control_operands
+      (decimal)
+      (decimal))))
+
+==========
+[directives/whitespace] numeric directive with new line after comma between operands
+==========
+.word 1 ,
+      1
+---
+
+(program
+  (directive
+    mnemonic: (numeric_mnemonic)
+    operands: (numeric_operands
+      (decimal)
+      (decimal))))
+
+==========
+[directives/whitespace] string directive with new line after comma between operands
+==========
+.ascii "foo" ,
+       "bar"
+---
+
+(program
+  (directive
+    mnemonic: (string_mnemonic)
+    operands: (string_operands
+      (string)
+      (string))))
+
+==========
 [directives/whitespace] CRLF after directive with directive in next line
 ==========
 .word 1

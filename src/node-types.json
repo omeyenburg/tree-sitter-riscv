@@ -1187,19 +1187,11 @@
     }
   },
   {
-    "type": "\t",
-    "named": false
-  },
-  {
     "type": "\n",
     "named": false
   },
   {
     "type": "\r",
-    "named": false
-  },
-  {
-    "type": " ",
     "named": false
   },
   {

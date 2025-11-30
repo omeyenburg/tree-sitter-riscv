@@ -28,14 +28,14 @@ module.exports = grammar({
   inline: $ => [
     $._whitespace,
     $._expression,
-    $._multiline_operand_separator_with_comment_node,
-    $._statement_separator_with_comment_node,
     $._expression_argument,
+    $._statement_separator_with_comment_node,
+    $._multiline_operand_separator_with_comment_node,
+
   ],
 
   conflicts: $ => [
     [$._operand, $.parenthesized_expression],
-    [$.string_operands],
   ],
 
   rules: {
@@ -90,8 +90,8 @@ module.exports = grammar({
       '*/',
     )), $.comment),
 
-    _multiline_operand_separator_with_comment_node: $ => alias($._multiline_operand_separator_with_comment, $.comment),
     _statement_separator_with_comment_node: $ => alias($._statement_separator_with_comment, $.comment),
+    _multiline_operand_separator_with_comment_node: $ => alias($._multiline_operand_separator_with_comment, $.comment),
 
     directive: $ => seq(choice(
       $._macro_directive,
@@ -151,7 +151,10 @@ module.exports = grammar({
       $._expression,
       repeat(seq(
         choice(
-          seq(optional(choice(' ', '\t')), ','),
+          seq(',', optional(choice(
+            $._multiline_operand_separator_no_comment,
+            $._multiline_operand_separator_with_comment_node,
+          ))),
           $._operand_separator,
           $._multiline_operand_separator_no_comment,
           $._multiline_operand_separator_with_comment_node,
@@ -160,7 +163,6 @@ module.exports = grammar({
       )),
       optional(choice(
         repeat(choice($._multiline_operand_separator_no_comment, $._multiline_operand_separator_with_comment_node)),
-        repeat(choice(' ', '\t')),
       )),
     ),
 
@@ -183,22 +185,24 @@ module.exports = grammar({
       '.string',
       '.stringz',
     ),
-    string_operands: $ => choice(
+    string_operands: $ => prec.right(choice(
       // Multiple strings with optional separators
       seq(
         $.string,
         repeat(seq(
-          optional(choice(
+          optional(repeat1(choice(
             ',',
             $._whitespace,
             $._block_comment,
-          )),
+            $._multiline_operand_separator_no_comment,
+            $._multiline_operand_separator_with_comment_node,
+          ))),
           $.string,
         )),
       ),
       // Single non-string operand
       choice($.macro_variable, $.address),
-    ),
+    )),
     _string_operand: $ => choice($.string, $.macro_variable, $.address),
 
     _control_directive: $ => seq(
@@ -227,7 +231,10 @@ module.exports = grammar({
       $.option_flag,
     ),
     _control_operand_separator: $ => choice(
-      ',',
+      seq(',', optional(choice(
+        $._multiline_operand_separator_no_comment,
+        $._multiline_operand_separator_with_comment_node,
+      ))),
       $._operand_separator,
       $._multiline_operand_separator_no_comment,
       $._multiline_operand_separator_with_comment_node,
