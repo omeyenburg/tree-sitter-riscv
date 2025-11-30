@@ -5,9 +5,6 @@
 #include <string.h>
 #include <wctype.h>
 
-// Debug flag - set to 1 to enable debug output
-#define DEBUG_SCANNER 0
-
 enum TokenType {
     _OPERAND_SEPARATOR,
     _OPERATOR_SPACE,
@@ -100,13 +97,6 @@ static void consume_whitespace(TSLexer* lexer, bool skip) {
  * Returns true if a newline was consumed.
  */
 static bool consume_newline(TSLexer* lexer, bool skip) {
-#if DEBUG_SCANNER
-    fprintf(stderr,
-            "[skip_newline] lookahead=%d (\\r=%d \\n=%d)\n",
-            lexer->lookahead,
-            '\r',
-            '\n');
-#endif
     if (lexer->lookahead == '\r') {
         lexer->advance(lexer, skip);
         if (!lexer->eof(lexer) && lexer->lookahead == '\n') {
@@ -377,31 +367,17 @@ static bool scan_newline_operator(TSLexer* lexer, const bool* valid_symbols) {
     if (!is_valid_operator_space || !is_newline(lexer->lookahead))
         return false;
 
-#if DEBUG_SCANNER
-    fprintf(stderr, "[scan_newline_operator] called\n");
-#endif
-
     // IMPORTANT: Check if _multiline_operand_separator_no_comment is also valid.
     // If so, we should NOT consume the newline here - let
     // scan_line_or_multiline_operand_separator_no_comment handle it (But
     // _statement_separator_no_comment being valid is OK - we can still check for
     // operators)
     if (is_valid_multiline_operand_separator_no_comment) {
-#if DEBUG_SCANNER
-        fprintf(stderr, "[scan_newline_operator] -> FALSE (data sep also valid)\n");
-#endif
         return false;
     }
 
     consume_newline(lexer, true);
     consume_whitespace_and_comments(lexer);
-
-#if DEBUG_SCANNER
-    fprintf(stderr,
-            "[scan_newline_operator] after skip, lookahead='%c'(%d)\n",
-            (lexer->lookahead >= 32 && lexer->lookahead < 127) ? lexer->lookahead : '?',
-            lexer->lookahead);
-#endif
 
     // Check for operators (including /)
     if (lexer->lookahead == '/') {
@@ -421,39 +397,21 @@ static bool scan_newline_operator(TSLexer* lexer, const bool* valid_symbols) {
         // operators
         if (lexer->lookahead == '%' || lexer->lookahead == '$' ||
             lexer->lookahead == '\\') {
-#if DEBUG_SCANNER
-            fprintf(stderr,
-                    "[scan_newline_operator] checking macro variable lookahead='%c'\n",
-                    lexer->lookahead);
-#endif
+
             // Peek ahead to see if followed by identifier character
             lexer->mark_end(lexer);
             lexer->advance(lexer, false);
-#if DEBUG_SCANNER
-            fprintf(stderr,
-                    "[scan_newline_operator] next char='%c'(%d)\n",
-                    (lexer->lookahead >= 32 && lexer->lookahead < 127)
-                        ? lexer->lookahead
-                        : '?',
-                    lexer->lookahead);
-#endif
+
             if (!lexer->eof(lexer) &&
                 (iswalnum(lexer->lookahead) || lexer->lookahead == '_' ||
                  lexer->lookahead == ':' || lexer->lookahead == '$' ||
                  lexer->lookahead == '\\')) {
                 // It's a macro variable, not an operator - don't consume as operator
                 // space
-#if DEBUG_SCANNER
-                fprintf(stderr,
-                        "[scan_newline_operator] -> FALSE (macro variable detected)\n");
-#endif
                 return false;
             }
+
             // Not followed by identifier char, treat as operator
-#if DEBUG_SCANNER
-            fprintf(stderr,
-                    "[scan_newline_operator] -> OPERATOR_SPACE (not macro variable)\n");
-#endif
             lexer->result_symbol = _OPERATOR_SPACE;
             return true;
         }
@@ -465,19 +423,12 @@ static bool scan_newline_operator(TSLexer* lexer, const bool* valid_symbols) {
     // Check for operand continuation
     if (is_valid_multiline_operand_separator_no_comment && !lexer->eof(lexer) &&
         iswdigit(lexer->lookahead)) {
-#if DEBUG_SCANNER
-        fprintf(stderr,
-                "[scan_newline_operator] -> multiline_operand_separator_no_comment "
-                "(digit found)\n");
-#endif
+
         lexer->mark_end(lexer);
         lexer->result_symbol = _MULTILINE_OPERAND_SEPARATOR_NO_COMMENT;
         return true;
     }
 
-#if DEBUG_SCANNER
-    fprintf(stderr, "[scan_newline_operator] -> FALSE\n");
-#endif
     return false;
 }
 
@@ -631,14 +582,6 @@ static bool scan_statement_or_multiline_operand_sep(TSLexer* lexer,
     const bool is_valid_multiline_operand_separator =
         valid_symbols[_MULTILINE_OPERAND_SEPARATOR_NO_COMMENT];
 
-#if DEBUG_SCANNER
-    fprintf(stderr,
-            "[scan_statement_or_multiline_operand_sep] statement_sep=%d "
-            "multiline_operand_sep=%d\n",
-            is_valid_statement_separator_no_comment,
-            is_valid_multiline_operand_separator_no_comment);
-#endif
-
     if (!is_valid_statement_separator && !is_valid_multiline_operand_separator)
         return false;
 
@@ -683,22 +626,11 @@ static bool scan_statement_or_multiline_operand_sep(TSLexer* lexer,
 
     // Check if we have a newline
     if (!is_newline(lexer->lookahead)) {
-#if DEBUG_SCANNER
-        fprintf(stderr, "[scan_statement_or_multiline_operand_sep] no newline found\n");
-#endif
         return false;
     }
 
     // Don't skip the newline yet - we might need to include it in the token
     // if there's a comment after it that leads to data continuation
-
-#if DEBUG_SCANNER
-    fprintf(
-        stderr,
-        "[scan_statement_or_multiline_operand_sep] after skip, lookahead='%c'(%d)\n",
-        (lexer->lookahead >= 32 && lexer->lookahead < 127) ? lexer->lookahead : '?',
-        lexer->lookahead);
-#endif
 
     // Consume the newline with advance(false) so it can be part of the token
     // if we end up returning multiline_operand_separator_no_comment
@@ -716,16 +648,7 @@ static bool scan_statement_or_multiline_operand_sep(TSLexer* lexer,
 
     // Both separators valid - need to disambiguate
     if (is_valid_statement_separator && is_valid_multiline_operand_separator) {
-#if DEBUG_SCANNER
-        fprintf(
-            stderr,
-            "[scan_statement_or_multiline_operand_sep] BOTH valid, disambiguating\n");
-#endif
         if (lexer->eof(lexer)) {
-#if DEBUG_SCANNER
-            fprintf(stderr,
-                    "[scan_statement_or_multiline_operand_sep] -> LINE_SEP (EOF)\n");
-#endif
             lexer->result_symbol = _STATEMENT_SEPARATOR_NO_COMMENT;
             lexer->mark_end(lexer);
             return true;
@@ -733,22 +656,12 @@ static bool scan_statement_or_multiline_operand_sep(TSLexer* lexer,
 
         // Check if we're at a comment
         if (lexer->lookahead == '#' || lexer->lookahead == '/') {
-#if DEBUG_SCANNER
-            fprintf(
-                stderr,
-                "[scan_statement_or_multiline_operand_sep] Found comment at start\n");
-#endif
 
             // Consume the comment to see what comes after
             if (lexer->lookahead == '#') {
                 consume_hash_comment(lexer);
             } else if (!consume_slash_comment(lexer)) {
                 // Not actually a comment, '/' is something else
-#if DEBUG_SCANNER
-                fprintf(stderr,
-                        "[scan_statement_or_multiline_operand_sep] Not a comment, "
-                        "returning LINE_SEP\n");
-#endif
                 lexer->result_symbol = _STATEMENT_SEPARATOR_NO_COMMENT;
                 return true;
             }
@@ -769,16 +682,6 @@ static bool scan_statement_or_multiline_operand_sep(TSLexer* lexer,
                 // consume_to_content(lexer);
                 consume_whitespace_and_comments(lexer);
 
-#if DEBUG_SCANNER
-                fprintf(stderr,
-                        "[scan_statement_or_multiline_operand_sep] After "
-                        "consume_whitespace_and_comments, lookahead='%c'(%d)\n",
-                        (lexer->lookahead >= 32 && lexer->lookahead < 127)
-                            ? lexer->lookahead
-                            : '?',
-                        lexer->lookahead);
-#endif
-
                 // Mark end after all comments and blank lines
                 lexer->mark_end(lexer);
 
@@ -791,12 +694,6 @@ static bool scan_statement_or_multiline_operand_sep(TSLexer* lexer,
                         if (!lexer->eof(lexer) && isalpha(lexer->lookahead)) {
                             // Directive - Return _statement_separator_with_comment
                             // since we're in comment path
-#if DEBUG_SCANNER
-                            fprintf(
-                                stderr,
-                                "[scan_statement_or_multiline_operand_sep] Directive "
-                                "after comment, _statement_separator_with_comment\n");
-#endif
                             lexer->result_symbol =
                                 valid_symbols[_STATEMENT_SEPARATOR_WITH_COMMENT]
                                     ? _STATEMENT_SEPARATOR_WITH_COMMENT
@@ -822,12 +719,6 @@ static bool scan_statement_or_multiline_operand_sep(TSLexer* lexer,
                         if (!lexer->eof(lexer) && lexer->lookahead == ':') {
                             // Label - Return _statement_separator_with_comment since
                             // we're in comment path
-#if DEBUG_SCANNER
-                            fprintf(
-                                stderr,
-                                "[scan_statement_or_multiline_operand_sep] Label after "
-                                "comment, _statement_separator_with_comment\n");
-#endif
                             lexer->result_symbol =
                                 valid_symbols[_STATEMENT_SEPARATOR_WITH_COMMENT]
                                     ? _STATEMENT_SEPARATOR_WITH_COMMENT
@@ -851,12 +742,6 @@ static bool scan_statement_or_multiline_operand_sep(TSLexer* lexer,
                         if (!lexer->eof(lexer) && lexer->lookahead == ':') {
                             // It is a numeric label.
                             // Return _with_comment because we're in comment path
-#if DEBUG_SCANNER
-                            fprintf(stderr,
-                                    "[scan_statement_or_multiline_operand_sep] Numeric "
-                                    "label after comment, "
-                                    "_statement_separator_with_comment\n");
-#endif
                             lexer->result_symbol =
                                 valid_symbols[_STATEMENT_SEPARATOR_WITH_COMMENT]
                                     ? _STATEMENT_SEPARATOR_WITH_COMMENT
@@ -864,12 +749,6 @@ static bool scan_statement_or_multiline_operand_sep(TSLexer* lexer,
                             return true;
                         }
                         // It is a numeric operand
-#if DEBUG_SCANNER
-                        fprintf(stderr,
-                                "[scan_statement_or_multiline_operand_sep] Numeric "
-                                "data after comment, "
-                                "_multiline_operand_separator_with_comment\n");
-#endif
                         lexer->result_symbol =
                             valid_symbols[_MULTILINE_OPERAND_SEPARATOR_WITH_COMMENT]
                                 ? _MULTILINE_OPERAND_SEPARATOR_WITH_COMMENT
@@ -882,12 +761,6 @@ static bool scan_statement_or_multiline_operand_sep(TSLexer* lexer,
                     if (lexer->lookahead == '%' || lexer->lookahead == '$' ||
                         lexer->lookahead == '\\') {
                         // Macro variable at statement start - return END_COMMENT
-#if DEBUG_SCANNER
-                        fprintf(
-                            stderr,
-                            "[scan_statement_or_multiline_operand_sep] Macro variable "
-                            "after comment, _statement_separator_with_comment\n");
-#endif
                         lexer->result_symbol =
                             valid_symbols[_STATEMENT_SEPARATOR_WITH_COMMENT]
                                 ? _STATEMENT_SEPARATOR_WITH_COMMENT
@@ -900,12 +773,6 @@ static bool scan_statement_or_multiline_operand_sep(TSLexer* lexer,
                     if (is_operand_start(lexer->lookahead)) {
                         // Could be opcode or data - conservatively treat as statement
                         // end (parser will handle if it's actually data in context)
-#if DEBUG_SCANNER
-                        fprintf(stderr,
-                                "[scan_statement_or_multiline_operand_sep] "
-                                "Operand-like after comment (assumed statement), "
-                                "_statement_separator_with_comment\n");
-#endif
                         lexer->result_symbol =
                             valid_symbols[_STATEMENT_SEPARATOR_WITH_COMMENT]
                                 ? _STATEMENT_SEPARATOR_WITH_COMMENT
@@ -915,11 +782,6 @@ static bool scan_statement_or_multiline_operand_sep(TSLexer* lexer,
                 }
 
                 // Default - return comment token since we're in comment path
-#if DEBUG_SCANNER
-                fprintf(stderr,
-                        "[scan_statement_or_multiline_operand_sep] Default after "
-                        "comment, _statement_separator_with_comment\n");
-#endif
                 lexer->result_symbol = valid_symbols[_STATEMENT_SEPARATOR_WITH_COMMENT]
                                            ? _STATEMENT_SEPARATOR_WITH_COMMENT
                                            : _STATEMENT_SEPARATOR_NO_COMMENT;
@@ -934,11 +796,6 @@ static bool scan_statement_or_multiline_operand_sep(TSLexer* lexer,
             if (!lexer->eof(lexer) &&
                 (iswdigit(lexer->lookahead) || is_operand_start(lexer->lookahead))) {
                 // Data follows - mark end to include comment and blank lines
-#if DEBUG_SCANNER
-                fprintf(stderr,
-                        "[scan_statement_or_multiline_operand_sep] Inline comment "
-                        "before data, _multiline_operand_separator_with_comment\n");
-#endif
                 lexer->mark_end(lexer);
                 // Return comment token since we consumed a comment
                 lexer->result_symbol =
@@ -950,11 +807,6 @@ static bool scan_statement_or_multiline_operand_sep(TSLexer* lexer,
 
             // Otherwise return _statement_separator_with_comment since we consumed a
             // comment
-#if DEBUG_SCANNER
-            fprintf(stderr,
-                    "[scan_statement_or_multiline_operand_sep] Inline comment, "
-                    "_statement_separator_with_comment\n");
-#endif
             lexer->result_symbol = valid_symbols[_STATEMENT_SEPARATOR_WITH_COMMENT]
                                        ? _STATEMENT_SEPARATOR_WITH_COMMENT
                                        : _STATEMENT_SEPARATOR_NO_COMMENT;
@@ -976,11 +828,6 @@ static bool scan_statement_or_multiline_operand_sep(TSLexer* lexer,
                 lexer->advance(lexer, false);
                 if (!lexer->eof(lexer) && isalpha(lexer->lookahead)) {
                     // It's a directive
-#if DEBUG_SCANNER
-                    fprintf(stderr,
-                            "[scan_statement_or_multiline_operand_sep] -> END_COMMENT "
-                            "or LINE_SEP (directive after blank lines)\n");
-#endif
                     lexer->result_symbol =
                         (consumed & CONSUMED_COMMENT) &&
                                 valid_symbols[_STATEMENT_SEPARATOR_WITH_COMMENT]
@@ -989,11 +836,6 @@ static bool scan_statement_or_multiline_operand_sep(TSLexer* lexer,
                     return true;
                 }
                 // It's a float like .5, treat as data
-#if DEBUG_SCANNER
-                fprintf(stderr,
-                        "[scan_statement_or_multiline_operand_sep] -> DATA_SEP (float "
-                        "after blank lines)\n");
-#endif
                 lexer->result_symbol = _MULTILINE_OPERAND_SEPARATOR_NO_COMMENT;
                 return true;
             }
@@ -1003,11 +845,6 @@ static bool scan_statement_or_multiline_operand_sep(TSLexer* lexer,
             if (lexer->lookahead == '_' || isalpha(lexer->lookahead) ||
                 lexer->lookahead == '%' || lexer->lookahead == '$' ||
                 lexer->lookahead == '\\') {
-#if DEBUG_SCANNER
-                fprintf(stderr,
-                        "[scan_statement_or_multiline_operand_sep] -> END_COMMENT or "
-                        "LINE_SEP (label/instruction/macro after blank lines)\n");
-#endif
                 lexer->mark_end(lexer);
                 lexer->result_symbol =
                     (consumed & CONSUMED_COMMENT) &&
@@ -1039,11 +876,6 @@ static bool scan_statement_or_multiline_operand_sep(TSLexer* lexer,
 
         // Check for line-ending constructs
         if (lexer->lookahead == ';') {
-#if DEBUG_SCANNER
-            fprintf(
-                stderr,
-                "[scan_statement_or_multiline_operand_sep] -> LINE_SEP (found ';')\n");
-#endif
             lexer->result_symbol = _STATEMENT_SEPARATOR_NO_COMMENT;
             lexer->mark_end(lexer);
             return true;
@@ -1057,20 +889,10 @@ static bool scan_statement_or_multiline_operand_sep(TSLexer* lexer,
             lexer->advance(lexer, false);
             if (!lexer->eof(lexer) && isalpha(lexer->lookahead)) {
                 // It's a directive like .word, .section
-#if DEBUG_SCANNER
-                fprintf(stderr,
-                        "[scan_statement_or_multiline_operand_sep] -> LINE_SEP (found "
-                        "directive)\n");
-#endif
                 lexer->result_symbol = _STATEMENT_SEPARATOR_NO_COMMENT;
                 return true;
             }
             // It's a float like .5, treat as data continuation
-#if DEBUG_SCANNER
-            fprintf(stderr,
-                    "[scan_statement_or_multiline_operand_sep] -> DATA_SEP (float "
-                    "literal)\n");
-#endif
             lexer->result_symbol = _MULTILINE_OPERAND_SEPARATOR_NO_COMMENT;
             return true;
         }
@@ -1158,19 +980,6 @@ bool tree_sitter_mips_external_scanner_scan(void* payload,
 
     consumed = CONSUMED_NONE;
 
-#if DEBUG_SCANNER
-    fprintf(stderr,
-            "[SCAN] col=%d, lookahead='%c'(%d), valid: op_sep=%d op_space=%d "
-            "line_sep=%d data_sep=%d\n",
-            lexer->get_column(lexer),
-            (lexer->lookahead >= 32 && lexer->lookahead < 127) ? lexer->lookahead : '?',
-            lexer->lookahead,
-            valid_symbols[_OPERAND_SEPARATOR],
-            valid_symbols[_OPERATOR_SPACE],
-            valid_symbols[_statement_separator_no_comment],
-            valid_symbols[_multiline_operand_separator_no_comment]);
-#endif
-
     if (valid_symbols[_OPERAND_SEPARATOR]) {
         // Try operand separator first (space/tab between operands)
         if (scan_operand_separator(lexer, valid_symbols))
@@ -1232,8 +1041,10 @@ bool tree_sitter_mips_external_scanner_scan(void* payload,
                         lexer->advance(lexer, false);
                     }
                 }
+
                 // Mark end after consuming block comment
                 lexer->mark_end(lexer);
+
                 // Check what follows: if non-operator operand (and not closing paren),
                 // return separator
                 if (!lexer->eof(lexer) && is_operand_start(lexer->lookahead) &&
@@ -1245,6 +1056,7 @@ bool tree_sitter_mips_external_scanner_scan(void* payload,
                             : _OPERAND_SEPARATOR;
                     return true;
                 }
+
                 // If operator follows or closing paren, return false (let block_comment
                 // be consumed as extra)
                 return false;
