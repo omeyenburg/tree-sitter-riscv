@@ -21,14 +21,14 @@ module.exports = grammar({
 
   extras: $ => [
     /[ \t]|\\\r?\n/,
-    $._block_comment,
+    $._extra_block_comment,
     $._operator_space,
   ],
 
   inline: $ => [
     $._whitespace,
     $._expression,
-    $._multiline_operand_separator_with_comment_node, // "inline" in the node name means here the comment is in the line, do not confuse.
+    $._multiline_operand_separator_with_comment_node,
     $._statement_separator_with_comment_node,
     $._expression_argument,
   ],
@@ -73,29 +73,19 @@ module.exports = grammar({
 
     _line_comment: $ => alias(token(seq(
       choice('#', '//'),
-      repeat(choice(
-        /[^\\\n]/,
-        seq('\\', /\r?\n/),
-        seq('\\', /./),
-      )),
+      /(?:[^\\\n]|\\\r?\n|\\.)*/,
     )), $.comment),
 
-    _block_comment: $ => alias(token(seq(
+    _block_comment: $ => alias(token.immediate(seq(
       '/*',
-      repeat(choice(
-        /[^*]/,
-        seq('*', /[^/]/),
-      )),
+      /(?:[^*]|\*[^/])*/,
       optional('*'),
       '*/',
     )), $.comment),
 
-    _immediate_block_comment: $ => alias(token.immediate(seq(
+    _extra_block_comment: $ => alias(token.immediate(seq(
       '/*',
-      repeat(choice(
-        /[^*]/,
-        seq('*', /[^/]/),
-      )),
+      /(?:[^*]|\*[^/])*/,
       optional('*'),
       '*/',
     )), $.comment),
@@ -112,7 +102,7 @@ module.exports = grammar({
 
     _macro_directive: $ => seq(
       field('mnemonic', $.macro_mnemonic),
-      choice(/[ \t]+/, $._immediate_block_comment),
+      choice(/[ \t]+/, $._block_comment),
       field('name', $.macro_name),
       optional(choice(
         seq(optional($._whitespace), '(', field('parameters', $.macro_parameters), ')'),
@@ -125,8 +115,8 @@ module.exports = grammar({
       repeat(choice(
         seq($._whitespace, $.macro_parameter),
         seq(optional($._whitespace), ',', optional($._whitespace), $.macro_parameter),
-        seq($._immediate_block_comment, $.macro_parameter),
-        $._immediate_block_comment,
+        seq($._block_comment, $.macro_parameter),
+        $._block_comment,
       )),
     ),
 
@@ -135,11 +125,11 @@ module.exports = grammar({
         field('mnemonic', $.numeric_mnemonic),
         optional(choice(
           seq(
-            choice($._whitespace, $._immediate_block_comment),
+            choice($._whitespace, $._block_comment),
             field('operands', $.numeric_operands),
           ),
           $._whitespace,
-          $._immediate_block_comment,
+          $._block_comment,
         )),
       ),
       field('mnemonic', $.numeric_mnemonic),
@@ -178,12 +168,12 @@ module.exports = grammar({
       field('mnemonic', $.string_mnemonic),
       optional(choice(
         seq(
-          choice($._whitespace, $._immediate_block_comment),
+          choice($._whitespace, $._block_comment),
           field('operands', $.string_operands),
           optional($._whitespace),
         ),
         $._whitespace,
-        $._immediate_block_comment,
+        $._block_comment,
       )),
     ),
     string_mnemonic: $ => choice(
@@ -201,7 +191,7 @@ module.exports = grammar({
           optional(choice(
             ',',
             $._whitespace,
-            $._immediate_block_comment,
+            $._block_comment,
           )),
           $.string,
         )),
@@ -215,11 +205,11 @@ module.exports = grammar({
       field('mnemonic', $.control_mnemonic),
       optional(choice(
         seq(
-          choice($._whitespace, $._immediate_block_comment),
+          choice($._whitespace, $._block_comment),
           field('operands', $.control_operands),
         ),
         $._whitespace,
-        $._immediate_block_comment,
+        $._block_comment,
       )),
     ),
     control_mnemonic: $ => prec(-1, /\.[a-z0-9_]+/),
@@ -252,7 +242,7 @@ module.exports = grammar({
       optional(choice(
         $._call_expression,
         seq(
-          choice($._whitespace, $._immediate_block_comment),
+          choice($._whitespace, $._block_comment),
           optional(choice(
             field('operands', $.operands),
             $._call_expression,
@@ -282,7 +272,7 @@ module.exports = grammar({
     // Examples: `exit(0)`, `for($t0, 0, 3)`
     _call_expression: $ => prec(20, seq(
       '(',
-      optional($._immediate_block_comment),
+      optional($._block_comment),
       optional(field('operands', $.operands)),
       ')',
     )),

@@ -1,9 +1,7 @@
 #include "tree_sitter/parser.h"
 
-#include <ctype.h>
 #include <stdio.h>
 #include <string.h>
-#include <wctype.h>
 
 enum TokenType {
     _OPERAND_SEPARATOR,
@@ -16,8 +14,8 @@ enum TokenType {
 
 typedef enum {
     CONSUMED_NONE = 0b00,     // Consumed nothing or whitespace
-    CONSUMED_NEW_LINE = 0b01, // Consumed atleast one '\n'
-    CONSUMED_COMMENT = 0b10,  // Consumed atleast one comment, but may consume multiple
+    CONSUMED_NEW_LINE = 0b01, // Consumed at least one new line
+    CONSUMED_COMMENT = 0b10,  // Consumed at least one comment, but may consume multiple
     CONSUMED_NEW_LINE_COMMENT = 0b11,
 } Consumed_t;
 Consumed_t consumed;
@@ -45,12 +43,28 @@ void tree_sitter_mips_external_scanner_deserialize(void* payload,
 }
 
 // ============================================================================
-// Character Classification
+// Character classification
 // ============================================================================
+
+static inline bool is_ascii_alpha(int32_t c) __attribute__((always_inline));
+static inline bool is_ascii_alpha(int32_t c) {
+    return ('a' <= c && c <= 'z') || ('A' <= c && c <= 'Z');
+}
+
+static inline bool is_ascii_digit(int32_t c) __attribute__((always_inline));
+static inline bool is_ascii_digit(int32_t c) {
+    return '0' <= c && c <= '9';
+}
+
+static inline bool is_ascii_alnum(int32_t c) __attribute__((always_inline));
+static inline bool is_ascii_alnum(int32_t c) {
+    return is_ascii_alpha(c) || is_ascii_digit(c);
+}
 
 /**
  * Does not imply invalid operand start.
  */
+static inline bool is_operator_start(int32_t c) __attribute__((always_inline));
 static inline bool is_operator_start(int32_t c) {
     return c == '+' || c == '-' || c == '*' || c == '%' || c == '/' || c == '&' ||
            c == '|' || c == '^' || c == '~' || c == '!' || c == '<' || c == '>' ||
@@ -60,26 +74,30 @@ static inline bool is_operator_start(int32_t c) {
 /**
  * Does not imply invalid operator start.
  */
+static inline bool is_operand_start(int32_t c) __attribute__((always_inline));
 static inline bool is_operand_start(int32_t c) {
-    return iswalnum(c) || c == '_' || c == '\\' || c == '%' || c == '$' || c == '.' ||
-           c == '\'' || c == '"' || c == '(' || c == ')' || c == '-' || c == '+' ||
-           c == '@';
+    return is_ascii_alnum(c) || c == '_' || c == '\\' || c == '%' || c == '$' ||
+           c == '.' || c == '\'' || c == '"' || c == '(' || c == ')' || c == '-' ||
+           c == '+' || c == '@';
 }
 
+static inline bool is_space(int32_t c) __attribute__((always_inline));
 static inline bool is_space(int32_t c) {
     return c == ' ' || c == '\t';
 }
 
+static inline bool is_newline(int32_t c) __attribute__((always_inline));
 static inline bool is_newline(int32_t c) {
     return c == '\r' || c == '\n';
 }
 
+static inline bool is_eol_or_eof(const TSLexer* lexer) __attribute__((always_inline));
 static inline bool is_eol_or_eof(const TSLexer* lexer) {
     return lexer->eof(lexer) || is_newline(lexer->lookahead);
 }
 
 // ============================================================================
-// Whitespace and Comment Skipping
+// General whitespace and comment consuming
 // ============================================================================
 
 /**
@@ -102,15 +120,14 @@ static bool consume_newline(TSLexer* lexer, bool skip) {
         if (!lexer->eof(lexer) && lexer->lookahead == '\n') {
             lexer->advance(lexer, skip);
         }
-
-        consumed |= CONSUMED_NEW_LINE;
-        return true;
     } else if (lexer->lookahead == '\n') {
         lexer->advance(lexer, skip);
-        consumed |= CONSUMED_NEW_LINE;
-        return true;
+    } else {
+        return false;
     }
-    return false;
+
+    consumed |= CONSUMED_NEW_LINE;
+    return true;
 }
 
 /**
@@ -209,7 +226,7 @@ static void consume_whitespace_and_comments(TSLexer* lexer) {
 }
 
 // ============================================================================
-// Operand Separator Handling
+// Operand separator handling
 // ============================================================================
 
 /**
@@ -229,7 +246,7 @@ static bool check_operator_after_space(TSLexer* lexer,
         lexer->mark_end(lexer);
         lexer->advance(lexer, false);
         if (!lexer->eof(lexer) &&
-            (iswalnum(lexer->lookahead) || lexer->lookahead == '_' ||
+            (is_ascii_alnum(lexer->lookahead) || lexer->lookahead == '_' ||
              lexer->lookahead == ':' || lexer->lookahead == '$' ||
              lexer->lookahead == '\\')) {
             // It's a macro variable, not an operator
@@ -403,7 +420,7 @@ static bool scan_newline_operator(TSLexer* lexer, const bool* valid_symbols) {
             lexer->advance(lexer, false);
 
             if (!lexer->eof(lexer) &&
-                (iswalnum(lexer->lookahead) || lexer->lookahead == '_' ||
+                (is_ascii_alnum(lexer->lookahead) || lexer->lookahead == '_' ||
                  lexer->lookahead == ':' || lexer->lookahead == '$' ||
                  lexer->lookahead == '\\')) {
                 // It's a macro variable, not an operator - don't consume as operator
@@ -422,7 +439,7 @@ static bool scan_newline_operator(TSLexer* lexer, const bool* valid_symbols) {
 
     // Check for operand continuation
     if (is_valid_multiline_operand_separator_no_comment && !lexer->eof(lexer) &&
-        iswdigit(lexer->lookahead)) {
+        is_ascii_digit(lexer->lookahead)) {
 
         lexer->mark_end(lexer);
         lexer->result_symbol = _MULTILINE_OPERAND_SEPARATOR_NO_COMMENT;
@@ -433,7 +450,7 @@ static bool scan_newline_operator(TSLexer* lexer, const bool* valid_symbols) {
 }
 
 // ============================================================================
-// multiline-operand/statement Separator Handling
+// Multiline-operand/statement separator handling
 // ============================================================================
 
 /**
@@ -469,7 +486,7 @@ static bool scan_multiline_operand_separator_with_comment(TSLexer* lexer,
     if (!lexer->eof(lexer) && lexer->lookahead == '.') {
         lexer->mark_end(lexer);
         lexer->advance(lexer, false);
-        if (!lexer->eof(lexer) && isalpha(lexer->lookahead)) {
+        if (!lexer->eof(lexer) && is_ascii_alpha(lexer->lookahead)) {
             // It's a directive, not an operand - don't return separator
             return false;
         }
@@ -487,11 +504,11 @@ static bool scan_multiline_operand_separator_with_comment(TSLexer* lexer,
         lexer->advance(lexer, false);
         // Check if followed by identifier character
         if (!lexer->eof(lexer) &&
-            (iswalnum(lexer->lookahead) || lexer->lookahead == '_' ||
+            (is_ascii_alnum(lexer->lookahead) || lexer->lookahead == '_' ||
              lexer->lookahead == '$' || lexer->lookahead == '\\')) {
             // Scan the identifier part
             while (!lexer->eof(lexer) &&
-                   (iswalnum(lexer->lookahead) || lexer->lookahead == '_' ||
+                   (is_ascii_alnum(lexer->lookahead) || lexer->lookahead == '_' ||
                     lexer->lookahead == '$' || lexer->lookahead == '\\')) {
                 lexer->advance(lexer, false);
             }
@@ -512,11 +529,12 @@ static bool scan_multiline_operand_separator_with_comment(TSLexer* lexer,
     }
 
     // Check for label (identifier followed by optional whitespace and colon)
-    if (!lexer->eof(lexer) && (isalpha(lexer->lookahead) || lexer->lookahead == '_')) {
+    if (!lexer->eof(lexer) &&
+        (is_ascii_alpha(lexer->lookahead) || lexer->lookahead == '_')) {
         lexer->mark_end(lexer);
         // Scan ahead to see if it's a label
         while (!lexer->eof(lexer) &&
-               (isalnum(lexer->lookahead) || lexer->lookahead == '_' ||
+               (is_ascii_alnum(lexer->lookahead) || lexer->lookahead == '_' ||
                 lexer->lookahead == '.' || lexer->lookahead == '$')) {
             lexer->advance(lexer, false);
         }
@@ -538,10 +556,10 @@ static bool scan_multiline_operand_separator_with_comment(TSLexer* lexer,
     }
 
     // Check for numeric label (digit(s) followed by optional whitespace and colon)
-    if (!lexer->eof(lexer) && iswdigit(lexer->lookahead)) {
+    if (!lexer->eof(lexer) && is_ascii_digit(lexer->lookahead)) {
         lexer->mark_end(lexer);
         // Scan past digits
-        while (!lexer->eof(lexer) && iswdigit(lexer->lookahead)) {
+        while (!lexer->eof(lexer) && is_ascii_digit(lexer->lookahead)) {
             lexer->advance(lexer, false);
         }
         // Skip optional whitespace before colon
@@ -613,17 +631,6 @@ static bool scan_statement_or_multiline_operand_sep(TSLexer* lexer,
         }
     }
 
-    // Also handle multiline case: if comment was consumed and both separators are valid
-    // if (comment_was_consumed && is_valid_statement_separator_no_comment &&
-    //     is_valid_multiline_operand_separator_no_comment) {
-    //     // A comment was consumed in multiline context
-    //     // scan_multiline_operand_separator_with_comment returned false, meaning NO
-    //     operand follows
-    //     // So this should be treated as a statement separator, not a multiline
-    //     operand separator lexer->result_symbol = _STATEMENT_SEPARATOR_WITH_COMMENT;
-    //     return true;
-    // }
-
     // Check if we have a newline
     if (!is_newline(lexer->lookahead)) {
         return false;
@@ -691,7 +698,7 @@ static bool scan_statement_or_multiline_operand_sep(TSLexer* lexer,
                     // Check for directive
                     if (lexer->lookahead == '.') {
                         lexer->advance(lexer, false);
-                        if (!lexer->eof(lexer) && isalpha(lexer->lookahead)) {
+                        if (!lexer->eof(lexer) && is_ascii_alpha(lexer->lookahead)) {
                             // Directive - Return _statement_separator_with_comment
                             // since we're in comment path
                             lexer->result_symbol =
@@ -704,11 +711,12 @@ static bool scan_statement_or_multiline_operand_sep(TSLexer* lexer,
                     }
 
                     // Check for non-numeric label
-                    if (lexer->lookahead == '_' || isalpha(lexer->lookahead)) {
+                    if (lexer->lookahead == '_' || is_ascii_alpha(lexer->lookahead)) {
                         // Could be label or instruction; check for colon
                         while (!lexer->eof(lexer) &&
-                               (isalnum(lexer->lookahead) || lexer->lookahead == '_' ||
-                                lexer->lookahead == '.' || lexer->lookahead == '$')) {
+                               (is_ascii_alnum(lexer->lookahead) ||
+                                lexer->lookahead == '_' || lexer->lookahead == '.' ||
+                                lexer->lookahead == '$')) {
                             lexer->advance(lexer, false);
                         }
                         // Skip optional whitespace before colon
@@ -729,9 +737,9 @@ static bool scan_statement_or_multiline_operand_sep(TSLexer* lexer,
                     }
 
                     // Check for numeric label
-                    if (iswdigit(lexer->lookahead)) {
+                    if (is_ascii_digit(lexer->lookahead)) {
                         // Scan past digits
-                        while (!lexer->eof(lexer) && iswdigit(lexer->lookahead)) {
+                        while (!lexer->eof(lexer) && is_ascii_digit(lexer->lookahead)) {
                             lexer->advance(lexer, false);
                         }
                         // Skip optional whitespace before colon
@@ -793,8 +801,8 @@ static bool scan_statement_or_multiline_operand_sep(TSLexer* lexer,
             consume_whitespace_and_comments(lexer);
 
             // Check if data follows
-            if (!lexer->eof(lexer) &&
-                (iswdigit(lexer->lookahead) || is_operand_start(lexer->lookahead))) {
+            if (!lexer->eof(lexer) && (is_ascii_digit(lexer->lookahead) ||
+                                       is_operand_start(lexer->lookahead))) {
                 // Data follows - mark end to include comment and blank lines
                 lexer->mark_end(lexer);
                 // Return comment token since we consumed a comment
@@ -826,7 +834,7 @@ static bool scan_statement_or_multiline_operand_sep(TSLexer* lexer,
             if (lexer->lookahead == '.') {
                 lexer->mark_end(lexer);
                 lexer->advance(lexer, false);
-                if (!lexer->eof(lexer) && isalpha(lexer->lookahead)) {
+                if (!lexer->eof(lexer) && is_ascii_alpha(lexer->lookahead)) {
                     // It's a directive
                     lexer->result_symbol =
                         (consumed & CONSUMED_COMMENT) &&
@@ -842,7 +850,7 @@ static bool scan_statement_or_multiline_operand_sep(TSLexer* lexer,
 
             // Check for other line-ending constructs
             // Check for identifiers (labels/instructions) or macro variables/registers
-            if (lexer->lookahead == '_' || isalpha(lexer->lookahead) ||
+            if (lexer->lookahead == '_' || is_ascii_alpha(lexer->lookahead) ||
                 lexer->lookahead == '%' || lexer->lookahead == '$' ||
                 lexer->lookahead == '\\') {
                 lexer->mark_end(lexer);
@@ -856,7 +864,7 @@ static bool scan_statement_or_multiline_operand_sep(TSLexer* lexer,
 
             // Check for operand-like content
             bool found_operand =
-                iswdigit(lexer->lookahead) || is_operand_start(lexer->lookahead);
+                is_ascii_digit(lexer->lookahead) || is_operand_start(lexer->lookahead);
 
             lexer->mark_end(lexer);
             // Return comment token only if we actually consumed a comment
@@ -887,7 +895,7 @@ static bool scan_statement_or_multiline_operand_sep(TSLexer* lexer,
             // (float)
             lexer->mark_end(lexer);
             lexer->advance(lexer, false);
-            if (!lexer->eof(lexer) && isalpha(lexer->lookahead)) {
+            if (!lexer->eof(lexer) && is_ascii_alpha(lexer->lookahead)) {
                 // It's a directive like .word, .section
                 lexer->result_symbol = _STATEMENT_SEPARATOR_NO_COMMENT;
                 return true;
@@ -898,9 +906,9 @@ static bool scan_statement_or_multiline_operand_sep(TSLexer* lexer,
         }
 
         // Numeric label (123:) vs number (123)
-        if (iswdigit(lexer->lookahead)) {
+        if (is_ascii_digit(lexer->lookahead)) {
             lexer->mark_end(lexer);
-            while (!lexer->eof(lexer) && iswdigit(lexer->lookahead)) {
+            while (!lexer->eof(lexer) && is_ascii_digit(lexer->lookahead)) {
                 lexer->advance(lexer, false);
             }
             // Skip optional whitespace before colon
@@ -924,7 +932,7 @@ static bool scan_statement_or_multiline_operand_sep(TSLexer* lexer,
         // Label or instruction (including macro variables/registers)
         if (lexer->lookahead == '\n' || lexer->lookahead == '_' ||
             lexer->lookahead == '%' || lexer->lookahead == '$' ||
-            lexer->lookahead == '\\' || isalpha(lexer->lookahead)) {
+            lexer->lookahead == '\\' || is_ascii_alpha(lexer->lookahead)) {
             lexer->result_symbol = _STATEMENT_SEPARATOR_NO_COMMENT;
             lexer->mark_end(lexer);
             return true;
@@ -952,7 +960,7 @@ static bool scan_statement_or_multiline_operand_sep(TSLexer* lexer,
         // Check if the next content is a directive (should not be treated as data)
         if (lexer->lookahead == '.') {
             lexer->advance(lexer, false);
-            if (!lexer->eof(lexer) && isalpha(lexer->lookahead)) {
+            if (!lexer->eof(lexer) && is_ascii_alpha(lexer->lookahead)) {
                 // It's a directive - don't return
                 // multiline_operand_separator_no_comment
                 return false;
@@ -967,7 +975,7 @@ static bool scan_statement_or_multiline_operand_sep(TSLexer* lexer,
 }
 
 // ============================================================================
-// Main Scanner Entry Point
+// Scanner entry point
 // ============================================================================
 
 bool tree_sitter_mips_external_scanner_scan(void* payload,
