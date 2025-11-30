@@ -35,6 +35,19 @@
       (string))))
 
 ==========
+[directives/string] hash comment after string directive with space before
+==========
+.asciiz "foo" #
+---
+
+(program
+  (directive
+    mnemonic: (string_mnemonic)
+    operands: (string_operands
+      (string)))
+  (comment))
+
+==========
 [directives/string] string containing escaped character
 ==========
 .asciiz "\n"

@@ -479,10 +479,6 @@ static bool scan_multiline_operand_separator_with_comment(TSLexer* lexer,
         return false;
     }
 
-    // Must have newline after comment
-    if (!is_eol_or_eof(lexer))
-        return false;
-
     // Consume further comments whitespace and new lines
     consume_whitespace_and_comments(lexer);
 
@@ -964,6 +960,7 @@ bool tree_sitter_mips_external_scanner_scan(void* payload,
 
     if (lexer->eof(lexer))
         return false;
+
 
     consumed = CONSUMED_NONE;
 

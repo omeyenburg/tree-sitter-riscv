@@ -859,18 +859,6 @@
                         "type": "SYMBOL",
                         "name": "string_operands"
                       }
-                    },
-                    {
-                      "type": "CHOICE",
-                      "members": [
-                        {
-                          "type": "SYMBOL",
-                          "name": "_whitespace"
-                        },
-                        {
-                          "type": "BLANK"
-                        }
-                      ]
                     }
                   ]
                 },
@@ -945,10 +933,6 @@
                               {
                                 "type": "STRING",
                                 "value": ","
-                              },
-                              {
-                                "type": "SYMBOL",
-                                "name": "_whitespace"
                               },
                               {
                                 "type": "SYMBOL",

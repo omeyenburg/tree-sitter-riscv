@@ -172,7 +172,6 @@ module.exports = grammar({
         seq(
           choice($._whitespace, $._block_comment),
           field('operands', $.string_operands),
-          optional($._whitespace),
         ),
         $._whitespace,
         $._block_comment,
@@ -192,7 +191,6 @@ module.exports = grammar({
         repeat(seq(
           optional(repeat1(choice(
             ',',
-            $._whitespace,
             $._block_comment,
             $._multiline_operand_separator_no_comment,
             $._multiline_operand_separator_with_comment_node,
