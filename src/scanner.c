@@ -12,13 +12,12 @@ enum TokenType {
     _MULTILINE_OPERAND_SEPARATOR_WITH_COMMENT,
 };
 
-typedef enum {
+enum {
     CONSUMED_NONE = 0b00,     // Consumed nothing or whitespace
     CONSUMED_NEW_LINE = 0b01, // Consumed at least one new line
     CONSUMED_COMMENT = 0b10,  // Consumed at least one comment, but may consume multiple
     CONSUMED_NEW_LINE_COMMENT = 0b11,
-} Consumed_t;
-Consumed_t consumed;
+} consumed;
 
 void* tree_sitter_mips_external_scanner_create() {
     return NULL;
@@ -525,6 +524,9 @@ static bool scan_multiline_operand_separator_with_comment(TSLexer* lexer,
     if (!lexer->eof(lexer) &&
         (is_ascii_alpha(lexer->lookahead) || lexer->lookahead == '_')) {
         lexer->mark_end(lexer);
+
+        // NOTE: this code is probably not necessary, as we return false anyways.
+
         // Scan ahead to see if it's a label
         while (!lexer->eof(lexer) &&
                (is_ascii_alnum(lexer->lookahead) || lexer->lookahead == '_' ||
@@ -536,10 +538,12 @@ static bool scan_multiline_operand_separator_with_comment(TSLexer* lexer,
                (lexer->lookahead == ' ' || lexer->lookahead == '\t')) {
             lexer->advance(lexer, false);
         }
+
         if (!lexer->eof(lexer) && lexer->lookahead == ':') {
             // It's a label, not an operand - don't return separator
             return false;
         }
+
         // It's not a label (no colon follows)
         // Could be: opcode/mnemonic, or data operand
         // Since we can't easily distinguish, and opcodes ARE statements,
@@ -551,19 +555,23 @@ static bool scan_multiline_operand_separator_with_comment(TSLexer* lexer,
     // Check for numeric label (digit(s) followed by optional whitespace and colon)
     if (!lexer->eof(lexer) && is_ascii_digit(lexer->lookahead)) {
         lexer->mark_end(lexer);
+
         // Scan past digits
         while (!lexer->eof(lexer) && is_ascii_digit(lexer->lookahead)) {
             lexer->advance(lexer, false);
         }
+
         // Skip optional whitespace before colon
         while (!lexer->eof(lexer) &&
                (lexer->lookahead == ' ' || lexer->lookahead == '\t')) {
             lexer->advance(lexer, false);
         }
+
         if (!lexer->eof(lexer) && lexer->lookahead == ':') {
             // It's a numeric label, not an operand - don't return separator
             return false;
         }
+
         // It's a numeric operand, continue
         // Return _multiline_operand_separator_with_comment since we consumed a comment
         lexer->result_symbol = _MULTILINE_OPERAND_SEPARATOR_WITH_COMMENT;
@@ -607,10 +615,14 @@ static bool scan_statement_or_multiline_operand_sep(TSLexer* lexer,
         // Only return as separator if we're at definite end-of-statement (EOF or
         // newline)
         if (lexer->eof(lexer) || is_newline(lexer->lookahead)) {
-            lexer->mark_end(lexer);
             lexer->result_symbol = _STATEMENT_SEPARATOR_WITH_COMMENT;
             return true;
         }
+    }
+
+    if (lexer->eof(lexer)) {
+        lexer->result_symbol = _STATEMENT_SEPARATOR_NO_COMMENT;
+        return true;
     }
 
     // Check if we have a newline
@@ -952,7 +964,6 @@ bool tree_sitter_mips_external_scanner_scan(void* payload,
 
     if (lexer->eof(lexer))
         return false;
-
 
     consumed = CONSUMED_NONE;
 

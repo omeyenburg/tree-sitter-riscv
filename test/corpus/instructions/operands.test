@@ -81,3 +81,16 @@ foo(bar, baz)
     operands: (operands
       operand: (symbol)
       operand: (symbol))))
+
+==========
+[instructions/operands] instruction with string operand
+==========
+foo "bar"
+
+---
+
+(program
+  (instruction
+    opcode: (opcode)
+    operands: (operands
+      operand: (string))))
