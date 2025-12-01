@@ -70,10 +70,23 @@ jobs:
         uses: tree-sitter/parse-action@v4
         with:
           files: |
-            **/*.s
-            **/*.S
-            **/*.asm
+            MIPS-Linked-List/linkedList.s
+            MIPS-Assembly-Projects/*.asm
+            rcore_step_by_step/**/*.s
+            mips-asm-examples/*.asm
+            mch2022-firmware-ice40/**/*.s
+            mips-assembly-examples/*.s
+            MIPS-Assembly-Language-Examples/*.asm
+            uldso/*.S
+            riscv/*.s
+            arch-test/mips*.s
+            arch-test/riscv*.s
+            simple-vector-riscv/output/**/*.s
+            mips-exercises/*.asm
           invalid-files: |
             MIPS-Assembly-Language-Examples/mips-6-ifElseAdder.asm
             MIPS-Assembly-Projects/GuessingGame.asm
-            riscv/x86_64/*
+            simple-vector-riscv/output/mips_p8700_g_O1/dotproduct_fp32.s
+            simple-vector-riscv/output/mips_p8700_g_O2/dotproduct_fp32.s
+            simple-vector-riscv/output/rv64gc_g_O1/dotproduct_fp32.s
+            mch2022-firmware-ice40/projects/RISCV-Playground/fw/forth/common/forth-core.s
