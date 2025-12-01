@@ -18,21 +18,21 @@ enum {
     CONSUMED_NEW_LINE_COMMENT = 0b11,
 } consumed;
 
-void* tree_sitter_mips_external_scanner_create() {
+void* tree_sitter_riscv_external_scanner_create() {
     return NULL;
 }
 
-void tree_sitter_mips_external_scanner_destroy(void* payload) {
+void tree_sitter_riscv_external_scanner_destroy(void* payload) {
     (void) payload;
 }
 
-unsigned tree_sitter_mips_external_scanner_serialize(void* payload, char* buffer) {
+unsigned tree_sitter_riscv_external_scanner_serialize(void* payload, char* buffer) {
     (void) payload;
     (void) buffer;
     return 0;
 }
 
-void tree_sitter_mips_external_scanner_deserialize(void* payload,
+void tree_sitter_riscv_external_scanner_deserialize(void* payload,
                                                    const char* buffer,
                                                    unsigned length) {
     (void) payload;
@@ -757,7 +757,7 @@ static bool scan_statement_or_multiline_operand_sep(TSLexer* lexer,
     return true;
 }
 
-bool tree_sitter_mips_external_scanner_scan(void* payload,
+bool tree_sitter_riscv_external_scanner_scan(void* payload,
                                             TSLexer* lexer,
                                             const bool* valid_symbols) {
     (void) payload;

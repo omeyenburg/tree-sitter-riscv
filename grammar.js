@@ -1,5 +1,5 @@
 /**
- * @file A syntax parser for the MIPS Instruction Set Architecture.
+ * @file A syntax parser for the RISC-V Instruction Set Architecture.
  * @author Oskar Meyenburg <omeyenburg@gmail.com>
  * @license MIT
  */
@@ -8,7 +8,7 @@
 // @ts-check
 
 module.exports = grammar({
-  name: 'mips',
+  name: 'riscv',
 
   externals: $ => [
     $._operand_separator,
@@ -532,7 +532,7 @@ module.exports = grammar({
         /[kK][0-1]/, // k0–k1
         /[cC][0-3]/, // c0–c3
 
-        // RISC-V
+        // RISC V
         'tp',
         /f[ts](?:[0-9]|1[01])/, // ft0–ft11 and fs0–fs11
         /fa[0-7]/, // fa0–fa7

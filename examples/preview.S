@@ -1,4 +1,4 @@
-text
+.text
 .macro LOAD reg, val
     li \reg, \val
 .end_macro

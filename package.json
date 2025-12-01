@@ -1,12 +1,12 @@
 {
-  "name": "tree-sitter-mips",
+  "name": "tree-sitter-riscv",
   "version": "0.2.0",
-  "description": "A syntax parser for the MIPS Instruction Set Architecture.",
-  "repository": "github:tree-sitter/tree-sitter-mips",
+  "description": "A syntax parser for the RISC-V Instruction Set Architecture.",
+  "repository": "github:tree-sitter/tree-sitter-riscv",
   "license": "MIT",
   "author": {
     "name": "Oskar Meyenburg",
-    "email": "oskar.meyenburg@gmail.com"
+    "email": "omeyenburg@gmail.com"
   },
   "main": "bindings/node",
   "types": "bindings/node",
@@ -14,7 +14,7 @@
     "incremental",
     "parsing",
     "tree-sitter",
-    "mips"
+    "riscv"
   ],
   "files": [
     "grammar.js",
@@ -65,8 +65,8 @@
   },
   "tree-sitter": [
     {
-      "scope": "source.mips",
-      "injection-regex": "^mips$"
+      "scope": "source.riscv",
+      "injection-regex": "^riscv$"
     }
   ]
 }

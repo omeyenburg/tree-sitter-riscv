@@ -1,9 +1,9 @@
 cmake_minimum_required(VERSION 3.13)
 
-project(tree-sitter-mips
+project(tree-sitter-riscv
         VERSION "0.2.0"
-        DESCRIPTION "A syntax parser for the MIPS Instruction Set Architecture."
-        HOMEPAGE_URL "https://github.com/omeyenburg/tree-sitter-mips"
+        DESCRIPTION "A syntax parser for the RISC-V Instruction Set Architecture."
+        HOMEPAGE_URL "https://github.com/omeyenburg/tree-sitter-riscv"
         LANGUAGES C)
 
 option(BUILD_SHARED_LIBS "Build using shared libraries" ON)
@@ -24,33 +24,33 @@ add_custom_command(OUTPUT "${CMAKE_CURRENT_SOURCE_DIR}/src/parser.c"
                    WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
                    COMMENT "Generating parser.c")
 
-add_library(tree-sitter-mips src/parser.c)
+add_library(tree-sitter-riscv src/parser.c)
 if(EXISTS src/scanner.c)
-  target_sources(tree-sitter-mips PRIVATE src/scanner.c)
+  target_sources(tree-sitter-riscv PRIVATE src/scanner.c)
 endif()
-target_include_directories(tree-sitter-mips PRIVATE src)
+target_include_directories(tree-sitter-riscv PRIVATE src)
 
-target_compile_definitions(tree-sitter-mips PRIVATE
+target_compile_definitions(tree-sitter-riscv PRIVATE
                            $<$<BOOL:${TREE_SITTER_REUSE_ALLOCATOR}>:TREE_SITTER_REUSE_ALLOCATOR>
                            $<$<CONFIG:Debug>:TREE_SITTER_DEBUG>)
 
-set_target_properties(tree-sitter-mips
+set_target_properties(tree-sitter-riscv
                       PROPERTIES
                       C_STANDARD 11
                       POSITION_INDEPENDENT_CODE ON
                       SOVERSION "${TREE_SITTER_ABI_VERSION}.${PROJECT_VERSION_MAJOR}"
                       DEFINE_SYMBOL "")
 
-configure_file(bindings/c/tree-sitter-mips.pc.in
-               "${CMAKE_CURRENT_BINARY_DIR}/tree-sitter-mips.pc" @ONLY)
+configure_file(bindings/c/tree-sitter-riscv.pc.in
+               "${CMAKE_CURRENT_BINARY_DIR}/tree-sitter-riscv.pc" @ONLY)
 
 include(GNUInstallDirs)
 
-install(FILES bindings/c/tree-sitter-mips.h
+install(FILES bindings/c/tree-sitter-riscv.h
         DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/tree_sitter")
-install(FILES "${CMAKE_CURRENT_BINARY_DIR}/tree-sitter-mips.pc"
+install(FILES "${CMAKE_CURRENT_BINARY_DIR}/tree-sitter-riscv.pc"
         DESTINATION "${CMAKE_INSTALL_DATAROOTDIR}/pkgconfig")
-install(TARGETS tree-sitter-mips
+install(TARGETS tree-sitter-riscv
         LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}")
 
 add_custom_target(test "${TREE_SITTER_CLI}" test

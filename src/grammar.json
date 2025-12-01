@@ -1,6 +1,6 @@
 {
   "$schema": "https://tree-sitter.github.io/tree-sitter/assets/schemas/grammar.schema.json",
-  "name": "mips",
+  "name": "riscv",
   "rules": {
     "program": {
       "type": "SEQ",
@@ -3012,5 +3012,6 @@
     "_statement_separator_with_comment_node",
     "_multiline_operand_separator_with_comment_node"
   ],
-  "supertypes": []
+  "supertypes": [],
+  "reserved": {}
 }

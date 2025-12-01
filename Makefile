@@ -2,8 +2,8 @@ ifeq ($(OS),Windows_NT)
 $(error Windows is not supported)
 endif
 
-LANGUAGE_NAME := tree-sitter-mips
-HOMEPAGE_URL := https://github.com/omeyenburg/tree-sitter-mips
+LANGUAGE_NAME := tree-sitter-riscv
+HOMEPAGE_URL := https://github.com/omeyenburg/tree-sitter-riscv
 VERSION := 0.2.0
 
 # repository

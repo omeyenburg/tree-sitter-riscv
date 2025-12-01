@@ -1,6 +1,6 @@
 # AST Reference
 
-Complete reference of node types produced by tree-sitter-mips.
+Complete reference of node types produced by tree-sitter-riscv.
 
 ## Table of Contents
 
@@ -17,7 +17,7 @@ Complete reference of node types produced by tree-sitter-mips.
 ---
 
 ## Instructions
-Represents a MIPS instruction with opcode and operands.
+Represents a RISC-V instruction with opcode and operands.
 
 ```scheme
 (instruction
@@ -58,7 +58,7 @@ Macro mnemonic: `.macro`
 ```
 
 **Example:**
-```mips
+```asm
 .macro loop(x, y, z)
 ```
 
@@ -74,7 +74,7 @@ Integer data directives: `.byte`, `.half`, `.word`, `.dword`, `.long`, `.quad`, 
 ```
 
 **Example:**
-```mips
+```asm
 .word 1, 2, 3
 ```
 
@@ -99,7 +99,7 @@ String data: `.ascii`, `.asciz`, `.asciiz`, `.string`, `.stringz`
 ```
 
 **Example:**
-```mips
+```asm
 .asciiz "Hello, World!\n"
 ```
 
@@ -113,7 +113,7 @@ All other directives (e.g., `.text`, `.data`, `.globl`, `.section`)
     (symbol)))
 ```
 
-```mips
+```asm
 .global _start
 ```
 
@@ -131,7 +131,7 @@ Standard global labels.
 **Pattern:** `[a-zA-Z_.][a-zA-Z0-9_.$]*:`
 
 **Example:**
-```mips
+```asm
 _start:
 ```
 
@@ -145,7 +145,7 @@ Local labels starting with dot.
 **Pattern:** `\.[A-Z][a-zA-Z0-9_]*:`
 
 **Example:**
-```mips
+```asm
 .L1:
 ```
 
@@ -157,7 +157,7 @@ Multi-digit numeric labels.
 ```
 
 **Example:**
-```mips
+```asm
 10:
 ```
 
@@ -173,7 +173,7 @@ Single-digit numeric labels.
 **Pattern:** `[0-9]:`
 
 **Example:**
-```mips
+```asm
 1:
 ```
 
@@ -255,7 +255,7 @@ Macro/function calls.
 ```
 
 **Example:**
-```mips
+```asm
 print_int($t0)
 ```
 
@@ -334,7 +334,7 @@ Memory address with optional offset expression and base register.
 - `%offset($s0)` - Macro offset
 
 ### Register
-MIPS registers.
+Registers for RISC V and asm.
 
 ```scheme
 (register)
@@ -355,7 +355,7 @@ Single-line comments.
 ```
 
 **Examples:**
-```mips
+```asm
 # hash comment
 // C-style line comment
 ```
@@ -379,7 +379,7 @@ C preprocessor directives.
 **Directives:** `#include`, `#define`, `#undef`, `#if`, `#ifdef`, `#ifndef`, `#else`, `#elif`, `#endif`, `#error`, `#warning`, `#pragma`, `#line`
 
 **Example:**
-```mips
+```asm
 #define MAX 100
 ```
 
@@ -405,7 +405,7 @@ C preprocessor directives.
 
 ## Example
 
-```mips
+```asm
 .data
     array: .word 1, 2, 3, 4, 5
 

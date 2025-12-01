@@ -4,18 +4,18 @@
 
 Install dependencies:
 ```sh
-npm install tree-sitter@^0.25.0 tree-sitter-mips
+npm install tree-sitter@^0.25.0 tree-sitter-riscv
 ```
 
 **Example:**
 ```javascript
 const Parser = require('tree-sitter');
-const mips = require('tree-sitter-mips');
+const riscv = require('tree-sitter-riscv');
 
 const code = "li $t0, 2";
 
 const parser = new Parser();
-parser.setLanguage(mips);
+parser.setLanguage(riscv);
 
 const tree = parser.parse(code);
 
@@ -27,13 +27,13 @@ console.log(tree.rootNode.toString());
 
 Install dependencies:
 ```sh
-pip install tree-sitter tree-sitter-mips
+pip install tree-sitter tree-sitter-riscv
 ```
 
 **Example:**
 ```python
 import tree_sitter
-from tree_sitter_mips import language
+from tree_sitter_riscv import language
 
 source = b"li $t0, 2"
 
@@ -55,7 +55,7 @@ Requires `tree-sitter` version `0.23.0` or higher.
 Add to `Cargo.toml`:
 ```toml
 tree-sitter = "0.25.8"
-tree-sitter-mips = "0.2.0"
+tree-sitter-riscv = "0.2.0"
 ```
 
 **Example:**
@@ -67,8 +67,8 @@ fn main() {
 
     let mut parser = Parser::new();
     parser
-        .set_language(&tree_sitter_mips::LANGUAGE.into())
-        .expect("Error loading Mips parser");
+        .set_language(&tree_sitter_riscv::LANGUAGE.into())
+        .expect("Error loading RISC-V parser");
 
     let tree = parser.parse(code, None).unwrap();
 
@@ -84,7 +84,7 @@ Requires Go >=1.22.
 Add to `go.mod`:
 ```gomod
 require github.com/tree-sitter/go-tree-sitter v0.24.0
-require github.com/omeyenburg/tree-sitter-mips v0.2.0
+require github.com/omeyenburg/tree-sitter-riscv v0.2.0
 ```
 
 **Example:**
@@ -95,7 +95,7 @@ import (
     "fmt"
 
     tree_sitter "github.com/tree-sitter/go-tree-sitter"
-    tree_sitter_mips "github.com/omeyenburg/tree-sitter-mips/bindings/go"
+    tree_sitter_riscv "github.com/omeyenburg/tree-sitter-riscv/bindings/go"
 )
 
 func main() {
@@ -103,7 +103,7 @@ func main() {
 
     parser := tree_sitter.NewParser()
     defer parser.Close()
-    parser.SetLanguage(tree_sitter.NewLanguage(tree_sitter_mips.Language()))
+    parser.SetLanguage(tree_sitter.NewLanguage(tree_sitter_riscv.Language()))
 
     tree := parser.Parse(code, nil)
     defer tree.Close()
@@ -124,12 +124,12 @@ You can find a template repository to use this grammar in C [here](https://githu
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "tree-sitter-mips.h"
+#include "tree-sitter-riscv.h"
 #include "tree_sitter/api.h"
 
 int main(void) {
     TSParser* parser = ts_parser_new();
-    ts_parser_set_language(parser, tree_sitter_mips());
+    ts_parser_set_language(parser, tree_sitter_riscv());
 
     const char* code = "li $t0, 2";
     TSTree* tree = ts_parser_parse_string(parser, NULL, code, strlen(code));

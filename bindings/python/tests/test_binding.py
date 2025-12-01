@@ -1,11 +1,11 @@
 from unittest import TestCase
 
-import tree_sitter, tree_sitter_mips
+import tree_sitter, tree_sitter_riscv
 
 
 class TestLanguage(TestCase):
     def test_can_load_grammar(self):
         try:
-            tree_sitter.Language(tree_sitter_mips.language())
+            tree_sitter.Language(tree_sitter_riscv.language())
         except Exception:
-            self.fail("Error loading Mips grammar")
+            self.fail("Error loading RISC-V grammar")

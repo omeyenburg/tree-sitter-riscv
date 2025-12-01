@@ -1,4 +1,4 @@
-module github.com/omeyenburg/tree-sitter-mips
+module github.com/omeyenburg/tree-sitter-riscv
 
 go 1.22
 

@@ -1,4 +1,4 @@
-"""A syntax parser for the MIPS Instruction Set Architecture."""
+"""A syntax parser for the RISC-V Instruction Set Architecture."""
 
 from importlib.resources import files as _files
 

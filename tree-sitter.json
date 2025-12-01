@@ -1,28 +1,28 @@
 {
   "grammars": [
     {
-      "name": "mips",
-      "camelcase": "Mips",
-      "scope": "source.mips",
+      "name": "riscv",
+      "camelcase": "RiscV",
+      "scope": "source.riscv",
       "path": ".",
       "file-types": null,
       "highlights": "queries/highlights.scm",
       "indents": "queries/indents.scm",
-      "injection-regex": "^mips$"
+      "injection-regex": "^riscv$"
     }
   ],
   "metadata": {
     "version": "0.2.0",
     "license": "MIT",
-    "description": "A syntax parser for the MIPS Instruction Set Architecture.",
+    "description": "A syntax parser for the RISC-V Instruction Set Architecture.",
     "authors": [
       {
         "name": "Oskar Meyenburg",
-        "email": "oskar.meyenburg@gmail.com"
+        "email": "omeyenburg@gmail.com"
       }
     ],
     "links": {
-      "repository": "https://github.com/omeyenburg/tree-sitter-mips"
+      "repository": "https://github.com/omeyenburg/tree-sitter-riscv"
     }
   },
   "bindings": {

@@ -1,13 +1,13 @@
 [package]
-name = "tree-sitter-mips"
-description = "A syntax parser for the MIPS Instruction Set Architecture."
+name = "tree-sitter-riscv"
+description = "A syntax parser for the RISC-V Instruction Set Architecture."
 version = "0.2.0"
 authors = ["Oskar Meyenburg <oskar.meyenburg@gmail.com>"]
 license = "MIT"
 readme = "README.md"
-keywords = ["incremental", "parsing", "tree-sitter", "mips"]
+keywords = ["incremental", "parsing", "tree-sitter", "riscv"]
 categories = ["parsing", "text-editors"]
-repository = "https://github.com/omeyenburg/tree-sitter-mips"
+repository = "https://github.com/omeyenburg/tree-sitter-riscv"
 edition = "2021"
 autoexamples = false
 
