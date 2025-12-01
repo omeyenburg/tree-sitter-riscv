@@ -17,6 +17,7 @@ on:
 jobs:
   mirror:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout tree-sitter-riscv
         uses: actions/checkout@v4
@@ -30,7 +31,7 @@ jobs:
           repository: omeyenburg/tree-sitter-mips
           path: mips-repo
           ref: main
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.MIRROR_TOKEN }}
 
       - name: Set up Python
         uses: actions/setup-python@v4
@@ -52,6 +53,5 @@ jobs:
           fi
 
           git add -A
-          git commit -m "Mirror from tree-sitter-riscv: $(git log -1 --format=%h ../riscv-repo)"
-          git remote set-url origin https://x-access-token:${{ secrets.MIRROR_TOKEN }}@github.com/omeyenburg/tree-sitter-mips.git
+          git commit -m "Mirror from tree-sitter-riscv: $(git -C ../riscv-repo log -1 --format=%h)"
           git push
