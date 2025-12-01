@@ -53,4 +53,5 @@ jobs:
 
           git add -A
           git commit -m "Mirror from tree-sitter-riscv: $(git log -1 --format=%h ../riscv-repo)"
+          git remote set-url origin https://x-access-token:${{ secrets.MIRROR_TOKEN }}@github.com/omeyenburg/tree-sitter-mips.git
           git push
