@@ -434,12 +434,20 @@
                       "name": "_whitespace"
                     },
                     {
-                      "type": "FIELD",
-                      "name": "parameters",
-                      "content": {
-                        "type": "SYMBOL",
-                        "name": "macro_parameters"
-                      }
+                      "type": "CHOICE",
+                      "members": [
+                        {
+                          "type": "FIELD",
+                          "name": "parameters",
+                          "content": {
+                            "type": "SYMBOL",
+                            "name": "macro_parameters"
+                          }
+                        },
+                        {
+                          "type": "BLANK"
+                        }
+                      ]
                     }
                   ]
                 }
@@ -532,8 +540,42 @@
                 ]
               },
               {
+                "type": "SEQ",
+                "members": [
+                  {
+                    "type": "SYMBOL",
+                    "name": "_line_comment"
+                  },
+                  {
+                    "type": "SYMBOL",
+                    "name": "macro_parameter"
+                  }
+                ]
+              },
+              {
                 "type": "SYMBOL",
                 "name": "_block_comment"
+              },
+              {
+                "type": "SEQ",
+                "members": [
+                  {
+                    "type": "CHOICE",
+                    "members": [
+                      {
+                        "type": "SYMBOL",
+                        "name": "_whitespace"
+                      },
+                      {
+                        "type": "BLANK"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "SYMBOL",
+                    "name": "_line_comment"
+                  }
+                ]
               }
             ]
           }
@@ -2441,8 +2483,8 @@
           "type": "CHOICE",
           "members": [
             {
-              "type": "SYMBOL",
-              "name": "_escape_sequence"
+              "type": "PATTERN",
+              "value": "\\\\."
             },
             {
               "type": "PATTERN",
@@ -2471,6 +2513,10 @@
               {
                 "type": "SYMBOL",
                 "name": "_escape_sequence"
+              },
+              {
+                "type": "SYMBOL",
+                "name": "string_macro_variable"
               },
               {
                 "type": "PATTERN",
@@ -2618,13 +2664,24 @@
         "members": [
           {
             "type": "PATTERN",
-            "value": "[%][0-9a-zA-Z_$\\\\]+(\\\\\\(\\)[0-9a-zA-Z_%$]*)?"
+            "value": "[%][0-9a-zA-Z_$\\\\@]+(\\\\\\(\\)[0-9a-zA-Z_%$\\\\@]*)?"
           },
           {
             "type": "PATTERN",
-            "value": "[$\\\\][0-9a-zA-Z_$\\\\%]+(\\\\\\(\\)[0-9a-zA-Z_%$]*)?"
+            "value": "[$\\\\][0-9a-zA-Z_$%@]+(\\\\\\(\\)[0-9a-zA-Z_%$@]*)?"
+          },
+          {
+            "type": "PATTERN",
+            "value": "[0-9a-zA-Z_$\\\\%@]+[\\\\][0-9a-zA-Z_$%@]+(\\\\\\(\\)[0-9a-zA-Z_%$@]*)?"
           }
         ]
+      }
+    },
+    "string_macro_variable": {
+      "type": "TOKEN",
+      "content": {
+        "type": "PATTERN",
+        "value": "\\\\[0-9a-zA-Z_$%]+(\\\\\\(\\))?"
       }
     },
     "macro_name": {
@@ -2911,6 +2968,9 @@
     [
       "_operand",
       "parenthesized_expression"
+    ],
+    [
+      "macro_parameters"
     ]
   ],
   "precedences": [],

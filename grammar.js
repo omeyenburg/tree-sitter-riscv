@@ -36,6 +36,7 @@ module.exports = grammar({
 
   conflicts: $ => [
     [$._operand, $.parenthesized_expression],
+    [$.macro_parameters],
   ],
 
   rules: {
@@ -106,7 +107,7 @@ module.exports = grammar({
       field('name', $.macro_name),
       optional(choice(
         seq(optional($._whitespace), '(', optional(field('parameters', $.macro_parameters)), ')'),
-        seq($._whitespace, field('parameters', $.macro_parameters)),
+        seq($._whitespace, optional(field('parameters', $.macro_parameters))),
       )),
     ),
     macro_mnemonic: $ => '.macro',
@@ -116,7 +117,9 @@ module.exports = grammar({
         seq($._whitespace, $.macro_parameter),
         seq(optional($._whitespace), ',', optional($._whitespace), $.macro_parameter),
         seq($._block_comment, $.macro_parameter),
+        seq($._line_comment, $.macro_parameter),
         $._block_comment,
+        seq(optional($._whitespace), $._line_comment),
       )),
     ),
 
@@ -502,10 +505,10 @@ module.exports = grammar({
       /-?\d+[eE][+-]?\d+f?/,
     )),
 
-    char: $ => seq('\'', choice($._escape_sequence, /[^'\\]/), '\''),
+    char: $ => seq('\'', choice(/\\./, /[^'\\]/), '\''),
     string: $ => seq(
       '"',
-      repeat(choice($._escape_sequence, /[^"\\]/)),
+      repeat(choice($._escape_sequence, $.string_macro_variable, /[^"\\]/)),
       '"',
     ),
     _escape_sequence: $ => token(
@@ -547,9 +550,11 @@ module.exports = grammar({
     // - start with percent, dollar or backslash.
     // - may include \() marking the end of the macro identifier.
     macro_variable: $ => token(choice(
-      /[%][0-9a-zA-Z_$\\]+(\\\(\)[0-9a-zA-Z_%$]*)?/,
-      /[$\\][0-9a-zA-Z_$\\%]+(\\\(\)[0-9a-zA-Z_%$]*)?/,
+      /[%][0-9a-zA-Z_$\\@]+(\\\(\)[0-9a-zA-Z_%$\\@]*)?/,
+      /[$\\][0-9a-zA-Z_$%@]+(\\\(\)[0-9a-zA-Z_%$@]*)?/,
+      /[0-9a-zA-Z_$\\%@]+[\\][0-9a-zA-Z_$%@]+(\\\(\)[0-9a-zA-Z_%$@]*)?/,
     )),
+    string_macro_variable: $ => token(/\\[0-9a-zA-Z_$%]+(\\\(\))?/),
 
     macro_name: $ => token(/[a-zA-Z_][a-zA-Z0-9_$]*/),
     macro_parameter: $ => prec.right(seq(

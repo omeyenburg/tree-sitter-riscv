@@ -1053,7 +1053,17 @@
   {
     "type": "string",
     "named": true,
-    "fields": {}
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "string_macro_variable",
+          "named": true
+        }
+      ]
+    }
   },
   {
     "type": "string_mnemonic",
@@ -1476,6 +1486,10 @@
   },
   {
     "type": "shift_operator",
+    "named": true
+  },
+  {
+    "type": "string_macro_variable",
     "named": true
   },
   {
