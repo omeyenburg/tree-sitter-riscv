@@ -1,0 +1,56 @@
+name: Mirror to tree-sitter-mips
+
+on:
+  push:
+    paths:
+      - '.github/mirror.py'
+      - '.github/workflows/publish.yml'
+      - 'grammar.js'
+      - 'src/**'
+      - 'test/**'
+      - 'queries/**'
+      - 'examples/**'
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  mirror:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout tree-sitter-riscv
+        uses: actions/checkout@v4
+        with:
+          path: riscv-repo
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Checkout tree-sitter-mips
+        uses: actions/checkout@v4
+        with:
+          repository: omeyenburg/tree-sitter-mips
+          path: mips-repo
+          ref: main
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Mirror files
+        run: python3 riscv-repo/.github/mirror.py
+
+      - name: Push to tree-sitter-mips
+        working-directory: mips-repo
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          if [ -z "$(git status --porcelain)" ]; then
+            echo "No changes to commit"
+            exit 0
+          fi
+
+          git add -A
+          git commit -m "Mirror from tree-sitter-riscv: $(git log -1 --format=%h ../riscv-repo)"
+          git push
