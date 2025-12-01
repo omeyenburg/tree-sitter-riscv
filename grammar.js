@@ -551,7 +551,8 @@ module.exports = grammar({
     // - may include \() marking the end of the macro identifier.
     macro_variable: $ => token(choice(
       /[%][0-9a-zA-Z_$\\@]+(\\\(\)[0-9a-zA-Z_%$\\@]*)?/,
-      /[$\\][0-9a-zA-Z_$%@]+(\\\(\)[0-9a-zA-Z_%$@]*)?/,
+      /[$][0-9a-zA-Z_%\\@]+(\\\(\)[0-9a-zA-Z_%$\\@]*)?/,
+      /[\\][0-9a-zA-Z_$%@]+(\\\(\)[0-9a-zA-Z_%$@]*)?/,
       /[0-9a-zA-Z_$\\%@]+[\\][0-9a-zA-Z_$%@]+(\\\(\)[0-9a-zA-Z_%$@]*)?/,
     )),
     string_macro_variable: $ => token(/\\[0-9a-zA-Z_$%]+(\\\(\))?/),
