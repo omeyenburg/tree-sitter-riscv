@@ -72,6 +72,20 @@
       (string))))
 
 ==========
+[directives/string] string containing backslash
+==========
+.asciiz "\Foo"
+
+---
+
+(program
+  (directive
+    mnemonic: (string_mnemonic)
+    operands: (string_operands
+      (string
+        (string_macro_variable)))))
+
+==========
 [directives/string] multiple strings with space separator
 ==========
 .string "a" "b"

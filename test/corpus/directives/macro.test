@@ -376,3 +376,55 @@ $bar
       (string)))
   (instruction
     (macro_variable)))
+
+==========
+[directives/macro] macro definition without parameters followed by comment
+==========
+.macro foo # bar
+---
+
+(program
+  (directive
+    mnemonic: (macro_mnemonic)
+    name: (macro_name))
+  (comment))
+
+==========
+[directives/macro] macro definition with parameter followed by comment
+==========
+.macro foo bar # baz
+---
+
+(program
+  (directive
+    mnemonic: (macro_mnemonic)
+    name: (macro_name)
+    parameters: (macro_parameters
+      (macro_parameter
+        name: (macro_parameter_name))
+      (comment))))
+
+==========
+[directives/macro] macro variable starting inside of a symbol
+==========
+foo bar\baz
+---
+
+(program
+  (instruction
+    opcode: (opcode)
+    operands: (operands
+      operand: (macro_variable))))
+
+==========
+[directives/macro] macro variable starting inside of a string
+==========
+.string "foo\bar\()baz"
+---
+
+(program
+  (directive
+    mnemonic: (string_mnemonic)
+    operands: (string_operands
+      (string
+        (string_macro_variable)))))

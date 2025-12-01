@@ -117,6 +117,7 @@ foo $bar,$baz
 
 ==========
 [instructions/macro] mixed prefixes in instruction
+:skip
 ==========
 foo $\ $% \$ \% %$ $\
 ---

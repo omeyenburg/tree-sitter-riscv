@@ -94,3 +94,18 @@ foo "bar"
     opcode: (opcode)
     operands: (operands
       operand: (string))))
+
+==========
+[instructions/operands] instruction with string operand followed by instruction
+==========
+foo "bar"
+baz
+---
+
+(program
+  (instruction
+    opcode: (opcode)
+    operands: (operands
+      operand: (string)))
+  (instruction
+    opcode: (opcode)))
