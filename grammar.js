@@ -36,7 +36,6 @@ module.exports = grammar({
 
   conflicts: $ => [
     [$._operand, $.parenthesized_expression],
-    [$.macro_parameters],
   ],
 
   rules: {
@@ -111,7 +110,7 @@ module.exports = grammar({
       )),
     ),
     macro_mnemonic: $ => '.macro',
-    macro_parameters: $ => seq(
+    macro_parameters: $ => prec.left(seq(
       $.macro_parameter,
       repeat(choice(
         seq($._whitespace, $.macro_parameter),
@@ -121,7 +120,7 @@ module.exports = grammar({
         $._block_comment,
         seq(optional($._whitespace), $._line_comment),
       )),
-    ),
+    )),
 
     _numeric_directive: $ => choice(
       seq(
