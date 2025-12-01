@@ -50,7 +50,6 @@ jobs:
           git clone https://github.com/badgeteam/mch2022-firmware-ice40 --single-branch --depth=1 --filter=blob:none
           git clone https://github.com/erenulas/mips-assembly-examples --single-branch --depth=1 --filter=blob:none
           git clone https://github.com/ffcabbar/MIPS-Assembly-Language-Examples --single-branch --depth=1 --filter=blob:none
-          git clone https://github.com/gregungerer/uldso --single-branch --depth=1 --filter=blob:none
           git clone https://github.com/gsauthof/riscv --single-branch --depth=1 --filter=blob:none
           git clone https://github.com/kilobyte/arch-test --single-branch --depth=1 --filter=blob:none
           git clone https://github.com/preames/simple-vector-riscv --single-branch --depth=1 --filter=blob:none
@@ -77,7 +76,6 @@ jobs:
             mch2022-firmware-ice40/**/*.s
             mips-assembly-examples/*.s
             MIPS-Assembly-Language-Examples/*.asm
-            uldso/*.S
             riscv/*.s
             arch-test/mips*.s
             arch-test/riscv*.s
@@ -86,7 +84,34 @@ jobs:
           invalid-files: |
             MIPS-Assembly-Language-Examples/mips-6-ifElseAdder.asm
             MIPS-Assembly-Projects/GuessingGame.asm
+            mch2022-firmware-ice40/projects/RISCV-Playground/fw/forth/common/forth-core.s
             simple-vector-riscv/output/mips_p8700_g_O1/dotproduct_fp32.s
             simple-vector-riscv/output/mips_p8700_g_O2/dotproduct_fp32.s
             simple-vector-riscv/output/rv64gc_g_O1/dotproduct_fp32.s
-            mch2022-firmware-ice40/projects/RISCV-Playground/fw/forth/common/forth-core.s
+            simple-vector-riscv/output/rv64gc_g_O2/dotproduct_fp32.s
+            simple-vector-riscv/output/rv64gcb_zve32x_zvl128b_g_O1/dotproduct_fp32.s
+            simple-vector-riscv/output/rv64gcb_zve32x_zvl128b_g_O2/dotproduct_fp32.s
+            simple-vector-riscv/output/rv64gcvb_g_O1/dotproduct_fp32.s
+            simple-vector-riscv/output/rv64gcvb_g_O2/dotproduct_fp32.s
+            simple-vector-riscv/output/rva22u64_g_O1/dotproduct_fp32.s
+            simple-vector-riscv/output/rva22u64_g_O2/dotproduct_fp32.s
+            simple-vector-riscv/output/rva22u64_v_g_O1/dotproduct_fp32.s
+            simple-vector-riscv/output/rva22u64_v_g_O2/dotproduct_fp32.s
+            simple-vector-riscv/output/rva23u64_g_O1/dotproduct_fp32.s
+            simple-vector-riscv/output/rva23u64_g_O2/dotproduct_fp32.s
+            simple-vector-riscv/output/rva23u64_zvl256b_g_O1/dotproduct_fp32.s
+            simple-vector-riscv/output/rva23u64_zvl256b_g_O2/dotproduct_fp32.s
+            simple-vector-riscv/output/rva23u64_zvl4096b_g_O1/dotproduct_fp32.s
+            simple-vector-riscv/output/rva23u64_zvl4096b_g_O2/dotproduct_fp32.s
+            simple-vector-riscv/output/rva23u64_zvl512b_g_O1/dotproduct_fp32.s
+            simple-vector-riscv/output/rva23u64_zvl512b_g_O2/dotproduct_fp32.s
+            simple-vector-riscv/output/sifive_p550_g_O1/dotproduct_fp32.s
+            simple-vector-riscv/output/sifive_p550_g_O2/dotproduct_fp32.s
+            simple-vector-riscv/output/sifive_x280_g_O1/dotproduct_fp32.s
+            simple-vector-riscv/output/sifive_x280_g_O2/dotproduct_fp32.s
+            simple-vector-riscv/output/spacemit_x60_g_O1/dotproduct_fp32.s
+            simple-vector-riscv/output/spacemit_x60_g_O2/dotproduct_fp32.s
+            simple-vector-riscv/output/tt_ascalon_d8_g_O1/dotproduct_fp32.s
+            simple-vector-riscv/output/tt_ascalon_d8_g_O2/dotproduct_fp32.s
+            simple-vector-riscv/output/veyron_v1_g_O1/dotproduct_fp32.s
+            simple-vector-riscv/output/veyron_v1_g_O2/dotproduct_fp32.s
