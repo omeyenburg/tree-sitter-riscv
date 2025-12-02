@@ -5,9 +5,9 @@
 
 main: # Comment
     LOAD $t0, 0x42
-    la $a0, msg
-    l.s $f0, pi
-    jal func / 12
+    la   $a0, msg
+    l.s  $f0, pi
+    jal  func / 12
 
 func:   jr $ra
 
