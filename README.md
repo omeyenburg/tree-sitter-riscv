@@ -6,7 +6,7 @@ A [tree-sitter](https://github.com/tree-sitter/tree-sitter) parser for the RISC-
 [![crates](https://img.shields.io/crates/v/tree-sitter-riscv?logo=rust)](https://crates.io/crates/tree-sitter-riscv)
 [![npm](https://img.shields.io/npm/v/tree-sitter-riscv?logo=npm)](https://www.npmjs.com/package/tree-sitter-riscv)
 [![pypi](https://img.shields.io/pypi/v/tree-sitter-riscv?logo=pypi&logoColor=white)](https://pypi.org/project/tree-sitter-riscv)
-[![go](https://img.shields.io/badge/go-v0.2.0-fe7d37?logo=go&logoColor=white)](https://pkg.go.dev/github.com/omeyenburg/tree-sitter-riscv)
+[![go](https://img.shields.io/badge/go-v0.3.0-fe7d37?logo=go&logoColor=white)](https://pkg.go.dev/github.com/omeyenburg/tree-sitter-riscv)
 
 ![Syntax highlighting in NeoVim](assets/riscv.png)
 

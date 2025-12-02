@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.13)
 
 project(tree-sitter-riscv
-        VERSION "0.2.0"
+        VERSION "0.3.0"
         DESCRIPTION "A syntax parser for the RISC-V Instruction Set Architecture."
         HOMEPAGE_URL "https://github.com/omeyenburg/tree-sitter-riscv"
         LANGUAGES C)
