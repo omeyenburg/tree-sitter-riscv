@@ -22,7 +22,9 @@ To use `tree-sitter-riscv` in NeoVim, use the plugin [nvim-treesitter](https://g
     }
   ```
 2. Run `:TSInstall riscv` to install or update the parser.
-3. Copy the queries to enable highlighting:
+3. Copy the queries into `<your-nvim-config>/queries/riscv/` to enable highlighting.  
+
+You can copy `queries/*` manually to `<your-nvim-config>/queries/riscv/` or use these commands:  
 
 **Linux/Unix:**
 ```sh
@@ -37,3 +39,5 @@ mkdir "%LOCALAPPDATA%\nvim\queries\riscv"
 curl -L -o "%LOCALAPPDATA%\nvim\queries\riscv\highlights.scm" https://raw.githubusercontent.com/omeyenburg/tree-sitter-riscv/main/queries/highlights.scm
 curl -L -o "%LOCALAPPDATA%\nvim\queries\riscv\indents.scm" https://raw.githubusercontent.com/omeyenburg/tree-sitter-riscv/main/queries/indents.scm
 ```
+
+Now any `.asm`, `.s` and `.S` files will have beautiful highlighting :)
