@@ -1223,6 +1223,10 @@
     "named": false
   },
   {
+    "type": ".fill",
+    "named": false
+  },
+  {
     "type": ".float",
     "named": false
   },
@@ -1244,6 +1248,14 @@
   },
   {
     "type": ".long",
+    "named": false
+  },
+  {
+    "type": ".null",
+    "named": false
+  },
+  {
+    "type": ".octa",
     "named": false
   },
   {
@@ -1288,6 +1300,10 @@
   },
   {
     "type": ".word",
+    "named": false
+  },
+  {
+    "type": ".zero",
     "named": false
   },
   {

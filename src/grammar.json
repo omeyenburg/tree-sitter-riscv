@@ -735,6 +735,10 @@
         },
         {
           "type": "STRING",
+          "value": ".octa"
+        },
+        {
+          "type": "STRING",
           "value": ".2byte"
         },
         {
@@ -787,6 +791,26 @@
         },
         {
           "type": "STRING",
+          "value": ".fill"
+        },
+        {
+          "type": "STRING",
+          "value": ".skip"
+        },
+        {
+          "type": "STRING",
+          "value": ".space"
+        },
+        {
+          "type": "STRING",
+          "value": ".null"
+        },
+        {
+          "type": "STRING",
+          "value": ".zero"
+        },
+        {
+          "type": "STRING",
           "value": ".align"
         },
         {
@@ -812,14 +836,6 @@
         {
           "type": "STRING",
           "value": ".dtpreldword"
-        },
-        {
-          "type": "STRING",
-          "value": ".skip"
-        },
-        {
-          "type": "STRING",
-          "value": ".space"
         }
       ]
     },
