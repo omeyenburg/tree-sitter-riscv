@@ -68,6 +68,18 @@ module.exports = grammar({
       ),
       seq($._line_comment, /\r?\n/),
       $._label,
+
+      // Allow invalid primitives for better parsing and feedback
+      prec(-10, choice(
+        $.string,
+        $.char,
+        $.octal,
+        $.binary,
+        $.decimal,
+        $.hexadecimal,
+        $.float,
+        $.register,
+      )),
     )),
 
     _whitespace: $ => /[ \t]+/,
