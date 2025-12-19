@@ -36,6 +36,7 @@ module.exports = grammar({
 
   conflicts: $ => [
     [$._operand, $.parenthesized_expression],
+    [$._operand_list],
   ],
 
   rules: {
@@ -96,8 +97,8 @@ module.exports = grammar({
     directive: $ => seq(choice(
       $._macro_directive,
       $._numeric_directive,
-      $._string_directive,
-      $._control_directive,
+      // $._string_directive,
+      // $._control_directive,
     )),
 
     _macro_directive: $ => seq(
@@ -124,7 +125,7 @@ module.exports = grammar({
 
     _numeric_directive: $ => choice(
       seq(
-        field('mnemonic', $.numeric_mnemonic),
+        field('mnemonic', $.control_mnemonic),
         optional(choice(
           seq(
             choice($._whitespace, $._block_comment),
@@ -134,7 +135,7 @@ module.exports = grammar({
           $._block_comment,
         )),
       ),
-      field('mnemonic', $.numeric_mnemonic),
+      field('mnemonic', $.control_mnemonic),
     ),
     numeric_mnemonic: $ => choice(
       '.byte',
@@ -150,7 +151,7 @@ module.exports = grammar({
       '.float', '.double', '.single',
     ),
     numeric_operands: $ => seq(
-      field('operand', $._expression),
+      field('operand', $._numeric_operand),
       repeat(seq(
         choice(
           seq(',', optional(choice(
@@ -161,11 +162,17 @@ module.exports = grammar({
           $._multiline_operand_separator_no_comment,
           $._multiline_operand_separator_with_comment_node,
         ),
-        field('operand', $._expression),
+        field('operand', $._numeric_operand),
       )),
       optional(choice(
         repeat(choice($._multiline_operand_separator_no_comment, $._multiline_operand_separator_with_comment_node)),
       )),
+    ),
+    _numeric_operand: $ => choice(
+      $._expression,
+      $._concat_string,
+      $.elf_type_tag,
+      $.option_flag,
     ),
 
     _string_directive: $ => seq(
@@ -173,7 +180,7 @@ module.exports = grammar({
       optional(choice(
         seq(
           choice($._whitespace, $._block_comment),
-          field('operands', $.string_operands),
+          field('operands', $.control_operands),
         ),
         $._whitespace,
         $._block_comment,
@@ -187,23 +194,37 @@ module.exports = grammar({
       '.stringz',
     ),
     string_operands: $ => prec.right(choice(
-      // Multiple strings with optional separators
-      seq(
-        $.string,
-        repeat(seq(
-          optional(repeat1(choice(
-            ',',
-            $._block_comment,
-            $._multiline_operand_separator_no_comment,
-            $._multiline_operand_separator_with_comment_node,
-          ))),
-          $.string,
-        )),
-      ),
-      // Single non-string operand
-      choice($.macro_variable, $.address),
+      $._concat_string,
+      $.address,
     )),
-    _string_operand: $ => field('operand', choice($.string, $.macro_variable, $.address)),
+
+    _concat_string: $ => choice(
+      $._string_start, // starts with string or var+string
+      seq($._string_start, repeat(prec.left($._concat_tail))),
+    ),
+
+    _string_start: $ => choice(
+      $.string, // just string
+      seq($.macro_variable, $.string), // var followed by string
+    ),
+
+    _concat_tail: $ => repeat1(choice(
+      $.string, // string after anything
+      seq($.string, $.macro_variable), // string then var
+      seq($.macro_variable, $.string), // var then string
+    )),
+
+    _concat_string: $ => $._operand_list,
+
+    _operand_list: $ => prec(10, choice(
+      $.string,
+      $.macro_variable, // lone variable is allowed
+      seq($.string, $._operand_list), // string followed by anything
+      seq($.macro_variable, $.string, $._operand_list), // var then string then anything
+      seq($.string, $.macro_variable, $._operand_list), // string then var then anything
+      seq($.string, $.macro_variable, $.string, $._operand_list), // optional: multi alternation
+      seq($.string, $.string, $._operand_list), // multi strings
+    )),
 
     _control_directive: $ => seq(
       field('mnemonic', $.control_mnemonic),
@@ -226,7 +247,7 @@ module.exports = grammar({
     ),
     _control_operand: $ => field('operand', choice(
       $._expression,
-      $.string,
+      $._concat_string,
       $.elf_type_tag,
       $.option_flag,
     )),
@@ -272,7 +293,7 @@ module.exports = grammar({
     ),
     _operand: $ => field('operand', choice(
       $._expression,
-      $.string,
+      $._concat_string,
     )),
 
     // Support macro-style calling.
@@ -600,9 +621,21 @@ module.exports = grammar({
         field('base', $.register),
         field('base', $.macro_variable),
         field('base', $.symbol),
-        field('operands', $.operands),
+        field('operands', alias('operands', $._multiple_operands)), // Some sort of macro call
       ),
       ')',
     )),
+    _multiple_operands: $ => seq(
+      $._operand,
+      repeat1(seq(
+        choice(
+          ',',
+          $._operand_separator,
+          $._multiline_operand_separator_with_comment_node,
+        ),
+        $._operand,
+      )),
+      optional($._operand_separator),
+    ),
   },
 });

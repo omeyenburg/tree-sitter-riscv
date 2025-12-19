@@ -101,7 +101,7 @@
         "required": false,
         "types": [
           {
-            "type": "operands",
+            "type": "_multiple_operands",
             "named": true
           }
         ]
@@ -320,104 +320,6 @@
     "fields": {}
   },
   {
-    "type": "control_operands",
-    "named": true,
-    "fields": {
-      "operand": {
-        "multiple": true,
-        "required": true,
-        "types": [
-          {
-            "type": "address",
-            "named": true
-          },
-          {
-            "type": "binary",
-            "named": true
-          },
-          {
-            "type": "binary_expression",
-            "named": true
-          },
-          {
-            "type": "char",
-            "named": true
-          },
-          {
-            "type": "decimal",
-            "named": true
-          },
-          {
-            "type": "elf_type_tag",
-            "named": true
-          },
-          {
-            "type": "float",
-            "named": true
-          },
-          {
-            "type": "hexadecimal",
-            "named": true
-          },
-          {
-            "type": "local_label_reference",
-            "named": true
-          },
-          {
-            "type": "local_numeric_label_reference",
-            "named": true
-          },
-          {
-            "type": "macro_variable",
-            "named": true
-          },
-          {
-            "type": "octal",
-            "named": true
-          },
-          {
-            "type": "option_flag",
-            "named": true
-          },
-          {
-            "type": "parenthesized_expression",
-            "named": true
-          },
-          {
-            "type": "register",
-            "named": true
-          },
-          {
-            "type": "relocation_expression",
-            "named": true
-          },
-          {
-            "type": "string",
-            "named": true
-          },
-          {
-            "type": "symbol",
-            "named": true
-          },
-          {
-            "type": "unary_expression",
-            "named": true
-          }
-        ]
-      }
-    },
-    "children": {
-      "multiple": true,
-      "required": false,
-      "types": [
-        {
-          "type": "comment",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
     "type": "decimal",
     "named": true,
     "fields": {}
@@ -437,14 +339,6 @@
           {
             "type": "macro_mnemonic",
             "named": true
-          },
-          {
-            "type": "numeric_mnemonic",
-            "named": true
-          },
-          {
-            "type": "string_mnemonic",
-            "named": true
           }
         ]
       },
@@ -463,15 +357,7 @@
         "required": false,
         "types": [
           {
-            "type": "control_operands",
-            "named": true
-          },
-          {
             "type": "numeric_operands",
-            "named": true
-          },
-          {
-            "type": "string_operands",
             "named": true
           }
         ]
@@ -673,11 +559,6 @@
     "fields": {}
   },
   {
-    "type": "numeric_mnemonic",
-    "named": true,
-    "fields": {}
-  },
-  {
     "type": "numeric_operands",
     "named": true,
     "fields": {
@@ -706,6 +587,10 @@
             "named": true
           },
           {
+            "type": "elf_type_tag",
+            "named": true
+          },
+          {
             "type": "float",
             "named": true
           },
@@ -730,6 +615,10 @@
             "named": true
           },
           {
+            "type": "option_flag",
+            "named": true
+          },
+          {
             "type": "parenthesized_expression",
             "named": true
           },
@@ -739,6 +628,10 @@
           },
           {
             "type": "relocation_expression",
+            "named": true
+          },
+          {
+            "type": "string",
             "named": true
           },
           {
@@ -1080,38 +973,6 @@
     }
   },
   {
-    "type": "string_mnemonic",
-    "named": true,
-    "fields": {}
-  },
-  {
-    "type": "string_operands",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": true,
-      "types": [
-        {
-          "type": "address",
-          "named": true
-        },
-        {
-          "type": "comment",
-          "named": true
-        },
-        {
-          "type": "macro_variable",
-          "named": true
-        },
-        {
-          "type": "string",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
     "type": "symbol",
     "named": true,
     "fields": {}
@@ -1247,130 +1108,6 @@
     "named": false
   },
   {
-    "type": ".2byte",
-    "named": false
-  },
-  {
-    "type": ".4byte",
-    "named": false
-  },
-  {
-    "type": ".8byte",
-    "named": false
-  },
-  {
-    "type": ".align",
-    "named": false
-  },
-  {
-    "type": ".ascii",
-    "named": false
-  },
-  {
-    "type": ".asciiz",
-    "named": false
-  },
-  {
-    "type": ".asciz",
-    "named": false
-  },
-  {
-    "type": ".balign",
-    "named": false
-  },
-  {
-    "type": ".byte",
-    "named": false
-  },
-  {
-    "type": ".comm",
-    "named": false
-  },
-  {
-    "type": ".double",
-    "named": false
-  },
-  {
-    "type": ".dtpreldword",
-    "named": false
-  },
-  {
-    "type": ".dtprelword",
-    "named": false
-  },
-  {
-    "type": ".dword",
-    "named": false
-  },
-  {
-    "type": ".float",
-    "named": false
-  },
-  {
-    "type": ".half",
-    "named": false
-  },
-  {
-    "type": ".hword",
-    "named": false
-  },
-  {
-    "type": ".int",
-    "named": false
-  },
-  {
-    "type": ".lcomm",
-    "named": false
-  },
-  {
-    "type": ".long",
-    "named": false
-  },
-  {
-    "type": ".p2align",
-    "named": false
-  },
-  {
-    "type": ".quad",
-    "named": false
-  },
-  {
-    "type": ".short",
-    "named": false
-  },
-  {
-    "type": ".single",
-    "named": false
-  },
-  {
-    "type": ".skip",
-    "named": false
-  },
-  {
-    "type": ".sleb128",
-    "named": false
-  },
-  {
-    "type": ".space",
-    "named": false
-  },
-  {
-    "type": ".string",
-    "named": false
-  },
-  {
-    "type": ".stringz",
-    "named": false
-  },
-  {
-    "type": ".uleb128",
-    "named": false
-  },
-  {
-    "type": ".word",
-    "named": false
-  },
-  {
     "type": "/",
     "named": false
   },
@@ -1381,6 +1118,10 @@
   {
     "type": "=",
     "named": false
+  },
+  {
+    "type": "_multiple_operands",
+    "named": true
   },
   {
     "type": "additive_operator",
