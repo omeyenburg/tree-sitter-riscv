@@ -207,12 +207,12 @@ module.exports = grammar({
       optional(choice(
         seq(
           choice($._whitespace, $._block_comment),
-          optional(field('operands', $.instruction_operands)),
+          optional(field('operands', $.operands)),
         ),
       )),
     ),
     instruction_mnemonic: $ => token(/[a-zA-Z_][a-zA-Z0-9_.]*/),
-    instruction_operands: $ => seq(
+    operands: $ => seq(
       $._expression,
       repeat(seq(
         choice(
@@ -236,7 +236,7 @@ module.exports = grammar({
       optional(field('head', $._expression)),
       '(',
       optional($._block_comment),
-      optional(field('arguments', $.instruction_operands)),
+      optional(field('arguments', $.operands)),
       ')',
     )),
 
@@ -248,7 +248,7 @@ module.exports = grammar({
       )),
       '(',
       optional($._block_comment),
-      optional(field('operands', $.instruction_operands)),
+      optional(field('operands', $.operands)),
       ')',
     ),
 
@@ -456,7 +456,7 @@ module.exports = grammar({
     ),
 
     // Support string concatenation
-    // Examples: `"a""b"`, `"a"`
+    // Examples: `"a""b"`
     string_concatenation: $ => seq(
       choice($.string, $.macro_variable),
       repeat1(seq(

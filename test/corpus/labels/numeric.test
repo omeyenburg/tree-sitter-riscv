@@ -25,7 +25,7 @@ foo 1f
 (program
   (instruction
     mnemonic: (instruction_mnemonic)
-    operands: (instruction_operands
+    operands: (operands
       (local_numeric_label_reference))))
 
 ==========
@@ -37,5 +37,5 @@ foo 1b
 (program
   (instruction
     mnemonic: (instruction_mnemonic)
-    operands: (instruction_operands
+    operands: (operands
       (local_numeric_label_reference))))

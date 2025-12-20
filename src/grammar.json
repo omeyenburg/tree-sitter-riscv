@@ -1066,7 +1066,7 @@
                           "name": "operands",
                           "content": {
                             "type": "SYMBOL",
-                            "name": "instruction_operands"
+                            "name": "operands"
                           }
                         },
                         {
@@ -1092,7 +1092,7 @@
         "value": "[a-zA-Z_][a-zA-Z0-9_.]*"
       }
     },
-    "instruction_operands": {
+    "operands": {
       "type": "SEQ",
       "members": [
         {
@@ -1188,7 +1188,7 @@
                 "name": "arguments",
                 "content": {
                   "type": "SYMBOL",
-                  "name": "instruction_operands"
+                  "name": "operands"
                 }
               },
               {
@@ -1256,7 +1256,7 @@
               "name": "operands",
               "content": {
                 "type": "SYMBOL",
-                "name": "instruction_operands"
+                "name": "operands"
               }
             },
             {

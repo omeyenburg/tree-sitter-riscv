@@ -26,5 +26,5 @@ foo .L123
 (program
   (instruction
     mnemonic: (instruction_mnemonic)
-    operands: (instruction_operands
+    operands: (operands
       (local_label_reference))))
