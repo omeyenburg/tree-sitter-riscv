@@ -416,7 +416,7 @@ module.exports = grammar({
     // Parenthesized expression:
     // Contains a new expression with any binary operations.
     // Example: `(2 * 3)`
-    parenthesized_expression: $ => seq('(', $._expression_argument, ')'),
+    parenthesized_expression: $ => seq('(', optional($._expression_argument), ')'),
 
     // Unary expression:
     // Supports recursive nesting.
@@ -571,30 +571,16 @@ module.exports = grammar({
 
     // Examples: `main($s4)`, `value+4($s1)`, `($v1)`, `-0x10($a0)`
     // Cannot match expression-like addresses: main, main+2
-    // This also matches macro calls in instructions.
-    // Example: `foo bar($t0, 1, 5)`
+    // We allow empty parentthesis, which would be semantically invalid.
     address: $ => prec(1, seq(
       optional(field('offset', $._expression)),
       '(',
-      choice(
+      optional(choice(
         field('base', $.register),
         field('base', $.macro_variable),
         field('base', $.symbol),
-        field('operands', alias('operands', $._multiple_operands)), // Some sort of macro call
-      ),
+      )),
       ')',
     )),
-    _multiple_operands: $ => seq(
-      $._instruction_operand,
-      repeat1(seq(
-        choice(
-          ',',
-          $._operand_separator,
-          $._multiline_operand_separator_with_comment_node,
-        ),
-        $._instruction_operand,
-      )),
-      optional($._operand_separator),
-    ),
   },
 });
