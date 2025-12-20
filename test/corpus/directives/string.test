@@ -121,8 +121,9 @@
   (directive
     mnemonic: (string_mnemonic)
     operands: (directive_operands
-      (string)
-      (string))))
+      (string_concatenation
+        (string)
+        (string)))))
 
 ==========
 [directives/string] multiple strings with block comment separator

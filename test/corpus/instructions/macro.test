@@ -8,8 +8,8 @@ foo %bar %baz
   (instruction
     mnemonic: (instruction_mnemonic)
     operands: (instruction_operands
-      operand: (macro_variable)
-      operand: (macro_variable))))
+      (macro_variable)
+      (macro_variable))))
 
 ==========
 [instructions/macro] multiple macro variables with percent (%) prefix separated with tab
@@ -21,8 +21,8 @@ foo %bar	%baz
   (instruction
     mnemonic: (instruction_mnemonic)
     operands: (instruction_operands
-      operand: (macro_variable)
-      operand: (macro_variable))))
+      (macro_variable)
+      (macro_variable))))
 
 ==========
 [instructions/macro] multiple macro variables with percent (%) prefix separated with comma
@@ -34,8 +34,8 @@ foo %bar,%baz
   (instruction
     mnemonic: (instruction_mnemonic)
     operands: (instruction_operands
-      operand: (macro_variable)
-      operand: (macro_variable))))
+      (macro_variable)
+      (macro_variable))))
 
 ==========
 [instructions/macro] multiple macro variables with backslash (\) prefix separated with space
@@ -47,8 +47,8 @@ foo \bar \baz
   (instruction
     mnemonic: (instruction_mnemonic)
     operands: (instruction_operands
-      operand: (macro_variable)
-      operand: (macro_variable))))
+      (macro_variable)
+      (macro_variable))))
 
 ==========
 [instructions/macro] multiple macro variables with backslash (\) prefix separated with tab
@@ -60,8 +60,8 @@ foo \bar	\baz
   (instruction
     mnemonic: (instruction_mnemonic)
     operands: (instruction_operands
-      operand: (macro_variable)
-      operand: (macro_variable))))
+      (macro_variable)
+      (macro_variable))))
 
 ==========
 [instructions/macro] multiple macro variables with backslash (\) prefix separated with comma
@@ -73,8 +73,8 @@ foo \bar,\baz
   (instruction
     mnemonic: (instruction_mnemonic)
     operands: (instruction_operands
-      operand: (macro_variable)
-      operand: (macro_variable))))
+      (macro_variable)
+      (macro_variable))))
 
 ==========
 [instructions/macro] multiple macro variables with dollar ($) prefix separated with space
@@ -86,8 +86,8 @@ foo $bar $baz
   (instruction
     mnemonic: (instruction_mnemonic)
     operands: (instruction_operands
-      operand: (macro_variable)
-      operand: (macro_variable))))
+      (macro_variable)
+      (macro_variable))))
 
 ==========
 [instructions/macro] multiple macro variables with dollar ($) prefix separated with tab
@@ -99,8 +99,8 @@ foo $bar	$baz
   (instruction
     mnemonic: (instruction_mnemonic)
     operands: (instruction_operands
-      operand: (macro_variable)
-      operand: (macro_variable))))
+      (macro_variable)
+      (macro_variable))))
 
 ==========
 [instructions/macro] multiple macro variables with dollar ($) prefix separated with comma
@@ -112,8 +112,8 @@ foo $bar,$baz
   (instruction
     mnemonic: (instruction_mnemonic)
     operands: (instruction_operands
-      operand: (macro_variable)
-      operand: (macro_variable))))
+      (macro_variable)
+      (macro_variable))))
 
 ==========
 [instructions/macro] mixed prefixes in instruction
@@ -125,12 +125,12 @@ foo $\ $% \$ \% %$ $\
   (instruction
     mnemonic: (instruction_mnemonic)
     operands: (instruction_operands
-      operand: (macro_variable)
-      operand: (macro_variable)
-      operand: (macro_variable)
-      operand: (macro_variable)
-      operand: (macro_variable)
-      operand: (macro_variable))))
+      (macro_variable)
+      (macro_variable)
+      (macro_variable)
+      (macro_variable)
+      (macro_variable)
+      (macro_variable))))
 
 ==========
 [instructions/macro] address with macro_variable as register with percent (%) prefix
@@ -142,10 +142,10 @@ foo 4(%x)
   (instruction
     mnemonic: (instruction_mnemonic)
     operands: (instruction_operands
-      operand: (parenthesized_expr
+      (parenthesized_expression
         head: (decimal)
         arguments: (instruction_operands
-          operand: (macro_variable))))))
+          (macro_variable))))))
 
 ==========
 [instructions/macro] address with macro_variable as register with backslash (\) prefix
@@ -157,10 +157,10 @@ foo 4(\x)
   (instruction
     mnemonic: (instruction_mnemonic)
     operands: (instruction_operands
-      operand: (parenthesized_expr
+      (parenthesized_expression
         head: (decimal)
         arguments: (instruction_operands
-          operand: (macro_variable))))))
+          (macro_variable))))))
 
 ==========
 [instructions/macro] address with macro_variable as register with dollar ($) prefix
@@ -172,10 +172,10 @@ foo 4($x)
   (instruction
     mnemonic: (instruction_mnemonic)
     operands: (instruction_operands
-      operand: (parenthesized_expr
+      (parenthesized_expression
         head: (decimal)
         arguments: (instruction_operands
-          operand: (macro_variable))))))
+          (macro_variable))))))
 
 ==========
 [instructions/macro] parenthesized macro call with string
@@ -187,7 +187,7 @@ foo("bar")
   (call_statement
     name: (symbol)
     operands: (instruction_operands
-      operand: (string))))
+      (string))))
 
 ==========
 [instructions/macro] parenthesized macro call with comment operand separator
@@ -199,9 +199,9 @@ foo(1/**/2)
   (call_statement
     name: (symbol)
     operands: (instruction_operands
-      operand: (decimal)
+      (decimal)
       (comment)
-      operand: (decimal))))
+      (decimal))))
 
 ==========
 [instructions/macro] parenthesized macro call with comma operand separator and comments
@@ -214,13 +214,13 @@ foo/**/(/**/1/**/,/**/2/**/)
     mnemonic: (instruction_mnemonic)
     (comment)
     operands: (instruction_operands
-      operand: (parenthesized_expr
+      (parenthesized_expression
         (comment)
         arguments: (instruction_operands
-          operand: (decimal)
+          (decimal)
           (comment)
           (comment)
-          operand: (decimal))
+          (decimal))
         (comment)))))
 
 ==========

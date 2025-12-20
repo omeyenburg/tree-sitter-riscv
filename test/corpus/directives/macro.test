@@ -414,7 +414,7 @@ foo bar\baz
   (instruction
     mnemonic: (instruction_mnemonic)
     operands: (instruction_operands
-      operand: (macro_variable))))
+      (macro_variable))))
 
 ==========
 [directives/macro] macro variable starting inside of a string
