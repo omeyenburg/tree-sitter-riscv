@@ -181,8 +181,10 @@ foo (bar, baz)
   (instruction
     mnemonic: (instruction_mnemonic)
     operands: (instruction_operands
-      operand: (symbol)
-      operand: (symbol))))
+      operand: (parenthesized_expr
+        arguments: (instruction_operands
+          operand: (symbol)
+          operand: (symbol))))))
 
 ==========
 [instructions/whitespace] call expression with spaces around operands
@@ -194,8 +196,10 @@ foo ( bar, baz )
   (instruction
     mnemonic: (instruction_mnemonic)
     operands: (instruction_operands
-      operand: (symbol)
-      operand: (symbol))))
+      operand: (parenthesized_expr
+        arguments: (instruction_operands
+          operand: (symbol)
+          operand: (symbol))))))
 
 ==========
 [instructions/whitespace] instruction followed by indented label

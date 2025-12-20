@@ -63,11 +63,12 @@ foo (bar+4)
   (instruction
     mnemonic: (instruction_mnemonic)
     operands: (instruction_operands
-      operand: (parenthesized_expression
-        argument: (binary_expression
-          left: (symbol)
-          operator: (additive_operator)
-          right: (decimal))))))
+      operand: (parenthesized_expr
+        arguments: (instruction_operands
+          operand: (binary_expression
+            left: (symbol)
+            operator: (additive_operator)
+            right: (decimal)))))))
 
 ==========
 [instructions/operands] call expression
@@ -76,8 +77,8 @@ foo(bar, baz)
 ---
 
 (program
-  (instruction
-    mnemonic: (instruction_mnemonic)
+  (call_statement
+    name: (symbol)
     operands: (instruction_operands
       operand: (symbol)
       operand: (symbol))))

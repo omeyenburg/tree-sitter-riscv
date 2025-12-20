@@ -110,20 +110,22 @@ foo (10 % 5) % 2
       operand: (binary_expression
         left: (decimal)
         operator: (multiplicative_operator)
-        right: (parenthesized_expression
-          argument: (binary_expression
-            left: (decimal)
-            operator: (multiplicative_operator)
-            right: (decimal))))))
+        right: (parenthesized_expr
+          arguments: (instruction_operands
+            operand: (binary_expression
+              left: (decimal)
+              operator: (multiplicative_operator)
+              right: (decimal)))))))
   (instruction
     mnemonic: (instruction_mnemonic)
     operands: (instruction_operands
       operand: (binary_expression
-        left: (parenthesized_expression
-          argument: (binary_expression
-            left: (decimal)
-            operator: (multiplicative_operator)
-            right: (decimal)))
+        left: (parenthesized_expr
+          arguments: (instruction_operands
+            operand: (binary_expression
+              left: (decimal)
+              operator: (multiplicative_operator)
+              right: (decimal))))
         operator: (multiplicative_operator)
         right: (decimal)))))
 
@@ -180,11 +182,12 @@ foo (4 % 2)
   (instruction
     mnemonic: (instruction_mnemonic)
     operands: (instruction_operands
-      operand: (parenthesized_expression
-        argument: (binary_expression
-          left: (decimal)
-          operator: (multiplicative_operator)
-          right: (decimal))))))
+      operand: (parenthesized_expr
+        arguments: (instruction_operands
+          operand: (binary_expression
+            left: (decimal)
+            operator: (multiplicative_operator)
+            right: (decimal)))))))
 
 ==========
 [instructions/modulo] modulo with macro variables

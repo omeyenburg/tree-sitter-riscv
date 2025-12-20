@@ -222,8 +222,10 @@ foo/* bar */(1, 2)
     mnemonic: (instruction_mnemonic)
     (comment)
     operands: (instruction_operands
-      operand: (decimal)
-      operand: (decimal))))
+      operand: (parenthesized_expr
+        arguments: (instruction_operands
+          operand: (decimal)
+          operand: (decimal))))))
 
 ==========
 [instructions/comment] call expression with C style block comment before operands
@@ -232,8 +234,8 @@ foo(/* bar */1, 2)
 ---
 
 (program
-  (instruction
-    mnemonic: (instruction_mnemonic)
+  (call_statement
+    name: (symbol)
     (comment)
     operands: (instruction_operands
       operand: (decimal)
@@ -246,8 +248,8 @@ foo(1, 2/* baz */)
 ---
 
 (program
-  (instruction
-    mnemonic: (instruction_mnemonic)
+  (call_statement
+    name: (symbol)
     operands: (instruction_operands
       operand: (decimal)
       operand: (decimal))

@@ -50,8 +50,9 @@ foo 1 -(-1)
       operand: (decimal)
       operand: (unary_expression
         operator: (unary_minus_operator)
-        argument: (parenthesized_expression
-          argument: (decimal))))))
+        argument: (parenthesized_expr
+          arguments: (instruction_operands
+            operand: (decimal)))))))
 
 ==========
 [instructions/unary] unary in binary expression
@@ -176,28 +177,31 @@ foo 1 !(!1)
       operand: (decimal)
       operand: (unary_expression
         operator: (unary_minus_operator)
-        argument: (parenthesized_expression
-          argument: (decimal)))))
+        argument: (parenthesized_expr
+          arguments: (instruction_operands
+            operand: (decimal))))))
   (instruction
     mnemonic: (instruction_mnemonic)
     operands: (instruction_operands
       operand: (decimal)
       operand: (unary_expression
         operator: (bitwise_not_operator)
-        argument: (parenthesized_expression
-          argument: (unary_expression
-            operator: (bitwise_not_operator)
-            argument: (decimal))))))
+        argument: (parenthesized_expr
+          arguments: (instruction_operands
+            operand: (unary_expression
+              operator: (bitwise_not_operator)
+              argument: (decimal)))))))
   (instruction
     mnemonic: (instruction_mnemonic)
     operands: (instruction_operands
       operand: (decimal)
       operand: (unary_expression
         operator: (logical_not_operator)
-        argument: (parenthesized_expression
-          argument: (unary_expression
-            operator: (logical_not_operator)
-            argument: (decimal)))))))
+        argument: (parenthesized_expr
+          arguments: (instruction_operands
+            operand: (unary_expression
+              operator: (logical_not_operator)
+              argument: (decimal))))))))
 
 ==========
 [instructions/unary] unary on register
@@ -261,17 +265,19 @@ foo ~%lo(symbol)
     operands: (instruction_operands
       operand: (unary_expression
         operator: (unary_minus_operator)
-        argument: (relocation_expression
-          type: (relocation_type)
-          argument: (symbol)))))
+        argument: (parenthesized_expr
+          head: (macro_variable)
+          arguments: (instruction_operands
+            operand: (symbol))))))
   (instruction
     mnemonic: (instruction_mnemonic)
     operands: (instruction_operands
       operand: (unary_expression
         operator: (bitwise_not_operator)
-        argument: (relocation_expression
-          type: (relocation_type)
-          argument: (symbol))))))
+        argument: (parenthesized_expr
+          head: (macro_variable)
+          arguments: (instruction_operands
+            operand: (symbol)))))))
 
 ==========
 [instructions/unary] unary with leading whitespace (should be separate operands)
