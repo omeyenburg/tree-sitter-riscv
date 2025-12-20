@@ -1013,10 +1013,6 @@
         {
           "type": "SYMBOL",
           "name": "option_flag"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "_concat_string"
         }
       ]
     },
@@ -1101,7 +1097,7 @@
       "members": [
         {
           "type": "SYMBOL",
-          "name": "_instruction_operand"
+          "name": "_expression"
         },
         {
           "type": "REPEAT",
@@ -1127,7 +1123,7 @@
               },
               {
                 "type": "SYMBOL",
-                "name": "_instruction_operand"
+                "name": "_expression"
               }
             ]
           }
@@ -1146,23 +1142,6 @@
         }
       ]
     },
-    "_instruction_operand": {
-      "type": "FIELD",
-      "name": "operand",
-      "content": {
-        "type": "CHOICE",
-        "members": [
-          {
-            "type": "SYMBOL",
-            "name": "_expression"
-          },
-          {
-            "type": "SYMBOL",
-            "name": "_concat_string"
-          }
-        ]
-      }
-    },
     "parenthesized_expr": {
       "type": "PREC",
       "value": 20,
@@ -1176,13 +1155,8 @@
                 "type": "FIELD",
                 "name": "head",
                 "content": {
-                  "type": "CHOICE",
-                  "members": [
-                    {
-                      "type": "SYMBOL",
-                      "name": "_expression"
-                    }
-                  ]
+                  "type": "SYMBOL",
+                  "name": "_expression"
                 }
               },
               {
@@ -2008,61 +1982,73 @@
       ]
     },
     "_simple_expression": {
-      "type": "CHOICE",
-      "members": [
-        {
-          "type": "SYMBOL",
-          "name": "unary_expression"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "parenthesized_expr"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "macro_variable"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "register"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "local_label_reference"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "symbol"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "local_numeric_label_reference"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "char"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "octal"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "binary"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "decimal"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "hexadecimal"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "float"
-        }
-      ]
+      "type": "PREC_DYNAMIC",
+      "value": 1,
+      "content": {
+        "type": "CHOICE",
+        "members": [
+          {
+            "type": "SYMBOL",
+            "name": "unary_expression"
+          },
+          {
+            "type": "SYMBOL",
+            "name": "parenthesized_expr"
+          },
+          {
+            "type": "SYMBOL",
+            "name": "macro_variable"
+          },
+          {
+            "type": "SYMBOL",
+            "name": "register"
+          },
+          {
+            "type": "SYMBOL",
+            "name": "local_label_reference"
+          },
+          {
+            "type": "SYMBOL",
+            "name": "symbol"
+          },
+          {
+            "type": "SYMBOL",
+            "name": "local_numeric_label_reference"
+          },
+          {
+            "type": "SYMBOL",
+            "name": "char"
+          },
+          {
+            "type": "SYMBOL",
+            "name": "string_concatenation"
+          },
+          {
+            "type": "SYMBOL",
+            "name": "string"
+          },
+          {
+            "type": "SYMBOL",
+            "name": "octal"
+          },
+          {
+            "type": "SYMBOL",
+            "name": "binary"
+          },
+          {
+            "type": "SYMBOL",
+            "name": "decimal"
+          },
+          {
+            "type": "SYMBOL",
+            "name": "hexadecimal"
+          },
+          {
+            "type": "SYMBOL",
+            "name": "float"
+          }
+        ]
+      }
     },
     "unary_expression": {
       "type": "SEQ",
@@ -2314,34 +2300,25 @@
         ]
       }
     },
-    "_concat_string": {
-      "type": "PREC",
-      "value": 10,
-      "content": {
-        "type": "CHOICE",
-        "members": [
-          {
-            "type": "SYMBOL",
-            "name": "string"
-          },
-          {
-            "type": "SYMBOL",
-            "name": "macro_variable"
-          },
-          {
-            "type": "SEQ",
-            "members": [
-              {
-                "type": "SYMBOL",
-                "name": "macro_variable"
-              },
-              {
-                "type": "SYMBOL",
-                "name": "string"
-              }
-            ]
-          },
-          {
+    "string_concatenation": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "string"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "macro_variable"
+            }
+          ]
+        },
+        {
+          "type": "REPEAT1",
+          "content": {
             "type": "SEQ",
             "members": [
               {
@@ -2349,30 +2326,21 @@
                 "name": "string"
               },
               {
-                "type": "SYMBOL",
-                "name": "_concat_string"
-              }
-            ]
-          },
-          {
-            "type": "SEQ",
-            "members": [
-              {
-                "type": "SYMBOL",
-                "name": "macro_variable"
-              },
-              {
-                "type": "SYMBOL",
-                "name": "string"
-              },
-              {
-                "type": "SYMBOL",
-                "name": "_concat_string"
+                "type": "CHOICE",
+                "members": [
+                  {
+                    "type": "SYMBOL",
+                    "name": "macro_variable"
+                  },
+                  {
+                    "type": "BLANK"
+                  }
+                ]
               }
             ]
           }
-        ]
-      }
+        }
+      ]
     },
     "register": {
       "type": "TOKEN",

@@ -66,6 +66,14 @@
             "named": true
           },
           {
+            "type": "string",
+            "named": true
+          },
+          {
+            "type": "string_concatenation",
+            "named": true
+          },
+          {
             "type": "symbol",
             "named": true
           },
@@ -175,6 +183,14 @@
           },
           {
             "type": "register",
+            "named": true
+          },
+          {
+            "type": "string",
+            "named": true
+          },
+          {
+            "type": "string_concatenation",
             "named": true
           },
           {
@@ -389,6 +405,10 @@
           "named": true
         },
         {
+          "type": "string_concatenation",
+          "named": true
+        },
+        {
           "type": "symbol",
           "named": true
         },
@@ -452,80 +472,77 @@
   {
     "type": "instruction_operands",
     "named": true,
-    "fields": {
-      "operand": {
-        "multiple": true,
-        "required": true,
-        "types": [
-          {
-            "type": "binary",
-            "named": true
-          },
-          {
-            "type": "binary_expression",
-            "named": true
-          },
-          {
-            "type": "char",
-            "named": true
-          },
-          {
-            "type": "decimal",
-            "named": true
-          },
-          {
-            "type": "float",
-            "named": true
-          },
-          {
-            "type": "hexadecimal",
-            "named": true
-          },
-          {
-            "type": "local_label_reference",
-            "named": true
-          },
-          {
-            "type": "local_numeric_label_reference",
-            "named": true
-          },
-          {
-            "type": "macro_variable",
-            "named": true
-          },
-          {
-            "type": "octal",
-            "named": true
-          },
-          {
-            "type": "parenthesized_expr",
-            "named": true
-          },
-          {
-            "type": "register",
-            "named": true
-          },
-          {
-            "type": "string",
-            "named": true
-          },
-          {
-            "type": "symbol",
-            "named": true
-          },
-          {
-            "type": "unary_expression",
-            "named": true
-          }
-        ]
-      }
-    },
+    "fields": {},
     "children": {
       "multiple": true,
       "required": false,
       "types": [
         {
+          "type": "binary",
+          "named": true
+        },
+        {
+          "type": "binary_expression",
+          "named": true
+        },
+        {
+          "type": "char",
+          "named": true
+        },
+        {
           "type": "comment",
+          "named": true
+        },
+        {
+          "type": "decimal",
+          "named": true
+        },
+        {
+          "type": "float",
+          "named": true
+        },
+        {
+          "type": "hexadecimal",
+          "named": true
+        },
+        {
+          "type": "local_label_reference",
+          "named": true
+        },
+        {
+          "type": "local_numeric_label_reference",
+          "named": true
+        },
+        {
+          "type": "macro_variable",
+          "named": true
+        },
+        {
+          "type": "octal",
+          "named": true
+        },
+        {
+          "type": "parenthesized_expr",
+          "named": true
+        },
+        {
+          "type": "register",
+          "named": true
+        },
+        {
+          "type": "string",
+          "named": true
+        },
+        {
+          "type": "string_concatenation",
+          "named": true
+        },
+        {
+          "type": "symbol",
+          "named": true
+        },
+        {
+          "type": "unary_expression",
           "named": true
         }
       ]
@@ -619,6 +636,14 @@
           },
           {
             "type": "register",
+            "named": true
+          },
+          {
+            "type": "string",
+            "named": true
+          },
+          {
+            "type": "string_concatenation",
             "named": true
           },
           {
@@ -726,6 +751,14 @@
           },
           {
             "type": "register",
+            "named": true
+          },
+          {
+            "type": "string",
+            "named": true
+          },
+          {
+            "type": "string_concatenation",
             "named": true
           },
           {
@@ -846,6 +879,25 @@
     }
   },
   {
+    "type": "string_concatenation",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "macro_variable",
+          "named": true
+        },
+        {
+          "type": "string",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "string_mnemonic",
     "named": true,
     "fields": {}
@@ -909,6 +961,14 @@
           },
           {
             "type": "register",
+            "named": true
+          },
+          {
+            "type": "string",
+            "named": true
+          },
+          {
+            "type": "string_concatenation",
             "named": true
           },
           {

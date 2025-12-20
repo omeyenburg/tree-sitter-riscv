@@ -32,8 +32,6 @@ module.exports = grammar({
     $._multiline_operand_separator_with_comment_node,
   ],
 
-  conflicts: $ => [],
-
   rules: {
     program: $ => seq(
       repeat($._statement),
@@ -201,7 +199,6 @@ module.exports = grammar({
       $._expression,
       $.elf_type_tag,
       $.option_flag,
-      $._concat_string,
     ),
 
     // Instruction consists of an mnemonic and optionally a list of operands
@@ -216,21 +213,17 @@ module.exports = grammar({
     ),
     instruction_mnemonic: $ => token(/[a-zA-Z_][a-zA-Z0-9_.]*/),
     instruction_operands: $ => seq(
-      $._instruction_operand,
+      $._expression,
       repeat(seq(
         choice(
           ',',
           $._operand_separator,
           $._multiline_operand_separator_with_comment_node,
         ),
-        $._instruction_operand,
+        $._expression,
       )),
       optional($._operand_separator),
     ),
-    _instruction_operand: $ => field('operand', choice(
-      $._expression,
-      $._concat_string,
-    )),
 
     // Any type of parenthesized expression
     // - relocation expressions: `foo %hi(bar)`
@@ -240,7 +233,7 @@ module.exports = grammar({
     // - addresses with offest expression: `foo offset+4($t0)`
     // - macro calls as operand: `foo bar($t0, 1, 2)`
     parenthesized_expr: $ => prec(20, seq(
-      optional(field('head', choice($._expression))),
+      optional(field('head', $._expression)),
       '(',
       optional($._block_comment),
       optional(field('arguments', $.instruction_operands)),
@@ -393,7 +386,7 @@ module.exports = grammar({
     ),
 
     // Any non-binary expression and primitive
-    _simple_expression: $ => choice(
+    _simple_expression: $ => prec.dynamic(1, choice(
       $.unary_expression,
       $.parenthesized_expr,
       $.macro_variable,
@@ -402,18 +395,14 @@ module.exports = grammar({
       $.symbol,
       $.local_numeric_label_reference,
       $.char,
+      $.string_concatenation,
+      $.string,
       $.octal,
       $.binary,
       $.decimal,
       $.hexadecimal,
       $.float,
-      // $._concat_string,
-    ),
-
-    // Parenthesized expression:
-    // Contains a new expression with any binary operations.
-    // Example: `(2 * 3)`
-    // parenthesized_expression: $ => seq('(', $._expression_argument, ')'),
+    )),
 
     // Unary expression:
     // Supports recursive nesting.
@@ -467,15 +456,14 @@ module.exports = grammar({
     ),
 
     // Support string concatenation
-    // Examples: `"a""b"`, `"a" "b"`
-    // Also supports macro variables: `"a"%foo`
-    _concat_string: $ => prec(10, choice(
-      $.string,
-      $.macro_variable,
-      seq($.macro_variable, $.string),
-      seq($.string, $._concat_string),
-      seq($.macro_variable, $.string, $._concat_string),
-    )),
+    // Examples: `"a""b"`, `"a"`
+    string_concatenation: $ => seq(
+      choice($.string, $.macro_variable),
+      repeat1(seq(
+        $.string,
+        optional($. macro_variable),
+      )),
+    ),
 
     register: $ => token(seq(
       optional('$'),
