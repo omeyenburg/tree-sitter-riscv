@@ -1142,7 +1142,7 @@
         }
       ]
     },
-    "parenthesized_expr": {
+    "parenthesized_expression": {
       "type": "PREC",
       "value": 20,
       "content": {
@@ -1993,7 +1993,7 @@
           },
           {
             "type": "SYMBOL",
-            "name": "parenthesized_expr"
+            "name": "parenthesized_expression"
           },
           {
             "type": "SYMBOL",

@@ -58,7 +58,7 @@
             "named": true
           },
           {
-            "type": "parenthesized_expr",
+            "type": "parenthesized_expression",
             "named": true
           },
           {
@@ -178,7 +178,7 @@
             "named": true
           },
           {
-            "type": "parenthesized_expr",
+            "type": "parenthesized_expression",
             "named": true
           },
           {
@@ -393,7 +393,7 @@
           "named": true
         },
         {
-          "type": "parenthesized_expr",
+          "type": "parenthesized_expression",
           "named": true
         },
         {
@@ -522,7 +522,7 @@
           "named": true
         },
         {
-          "type": "parenthesized_expr",
+          "type": "parenthesized_expression",
           "named": true
         },
         {
@@ -631,7 +631,7 @@
             "named": true
           },
           {
-            "type": "parenthesized_expr",
+            "type": "parenthesized_expression",
             "named": true
           },
           {
@@ -688,7 +688,7 @@
     "fields": {}
   },
   {
-    "type": "parenthesized_expr",
+    "type": "parenthesized_expression",
     "named": true,
     "fields": {
       "arguments": {
@@ -746,7 +746,7 @@
             "named": true
           },
           {
-            "type": "parenthesized_expr",
+            "type": "parenthesized_expression",
             "named": true
           },
           {
@@ -956,7 +956,7 @@
             "named": true
           },
           {
-            "type": "parenthesized_expr",
+            "type": "parenthesized_expression",
             "named": true
           },
           {

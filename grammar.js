@@ -232,7 +232,7 @@ module.exports = grammar({
     // - addresses with offest: `foo offset($t0)`
     // - addresses with offest expression: `foo offset+4($t0)`
     // - macro calls as operand: `foo bar($t0, 1, 2)`
-    parenthesized_expr: $ => prec(20, seq(
+    parenthesized_expression: $ => prec(20, seq(
       optional(field('head', $._expression)),
       '(',
       optional($._block_comment),
@@ -388,7 +388,7 @@ module.exports = grammar({
     // Any non-binary expression and primitive
     _simple_expression: $ => prec.dynamic(1, choice(
       $.unary_expression,
-      $.parenthesized_expr,
+      $.parenthesized_expression,
       $.macro_variable,
       $.register,
       $.local_label_reference,
