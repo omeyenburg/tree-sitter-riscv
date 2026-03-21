@@ -461,7 +461,7 @@ module.exports = grammar({
       choice($.string, $.macro_variable),
       repeat1(seq(
         $.string,
-        optional($. macro_variable),
+        optional($.macro_variable),
       )),
     ),
 
@@ -499,11 +499,11 @@ module.exports = grammar({
     string_macro_variable: $ => token(/\\[0-9a-zA-Z_$%]+(\\\(\))?/),
 
     macro_name: $ => token(/[a-zA-Z_][a-zA-Z0-9_$]*/),
-    macro_parameter: $ => field('parameter', prec.right(seq(
+    macro_parameter: $ => prec.right(seq(
       field('name', $.macro_parameter_name),
       optional(field('qualifier', $.macro_parameter_qualifier)),
-      optional(field('value', seq('=', $._expression))),
-    ))),
+      optional(seq('=', field('value', $._expression))),
+    )),
     macro_parameter_name: $ => token(/[%$\\]?[0-9a-zA-Z_$%\\]+/),
     macro_parameter_qualifier: $ => token(':req'),
 

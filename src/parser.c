@@ -1221,9 +1221,9 @@ static const TSFieldMapSlice ts_field_map_slices[PRODUCTION_ID_COUNT] = {
   [19] = {.index = 30, .length = 1},
   [20] = {.index = 31, .length = 2},
   [21] = {.index = 33, .length = 3},
-  [22] = {.index = 36, .length = 3},
-  [23] = {.index = 39, .length = 2},
-  [24] = {.index = 41, .length = 4},
+  [22] = {.index = 36, .length = 2},
+  [23] = {.index = 38, .length = 2},
+  [24] = {.index = 40, .length = 3},
 };
 
 static const TSFieldMapEntry ts_field_map_entries[] = {
@@ -1283,15 +1283,13 @@ static const TSFieldMapEntry ts_field_map_entries[] = {
     {field_parameters, 5},
   [36] =
     {field_name, 0},
-    {field_value, 1},
     {field_value, 2},
-  [39] =
+  [38] =
     {field_arguments, 3},
     {field_head, 0},
-  [41] =
+  [40] =
     {field_name, 0},
     {field_qualifier, 1},
-    {field_value, 2},
     {field_value, 3},
 };
 
