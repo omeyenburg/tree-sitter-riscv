@@ -42,15 +42,11 @@
             "named": true
           },
           {
-            "type": "local_label_reference",
-            "named": true
-          },
-          {
-            "type": "local_numeric_label_reference",
-            "named": true
-          },
-          {
             "type": "macro_variable",
+            "named": true
+          },
+          {
+            "type": "numeric_label_reference",
             "named": true
           },
           {
@@ -162,15 +158,11 @@
             "named": true
           },
           {
-            "type": "local_label_reference",
-            "named": true
-          },
-          {
-            "type": "local_numeric_label_reference",
-            "named": true
-          },
-          {
             "type": "macro_variable",
+            "named": true
+          },
+          {
+            "type": "numeric_label_reference",
             "named": true
           },
           {
@@ -373,15 +365,11 @@
           "named": true
         },
         {
-          "type": "local_label_reference",
-          "named": true
-        },
-        {
-          "type": "local_numeric_label_reference",
-          "named": true
-        },
-        {
           "type": "macro_variable",
+          "named": true
+        },
+        {
+          "type": "numeric_label_reference",
           "named": true
         },
         {
@@ -475,11 +463,6 @@
     "fields": {}
   },
   {
-    "type": "local_label_reference",
-    "named": true,
-    "fields": {}
-  },
-  {
     "type": "macro_parameter",
     "named": true,
     "fields": {
@@ -532,15 +515,11 @@
             "named": true
           },
           {
-            "type": "local_label_reference",
-            "named": true
-          },
-          {
-            "type": "local_numeric_label_reference",
-            "named": true
-          },
-          {
             "type": "macro_variable",
+            "named": true
+          },
+          {
+            "type": "numeric_label_reference",
             "named": true
           },
           {
@@ -636,15 +615,11 @@
           "named": true
         },
         {
-          "type": "local_label_reference",
-          "named": true
-        },
-        {
-          "type": "local_numeric_label_reference",
-          "named": true
-        },
-        {
           "type": "macro_variable",
+          "named": true
+        },
+        {
+          "type": "numeric_label_reference",
           "named": true
         },
         {
@@ -726,15 +701,11 @@
             "named": true
           },
           {
-            "type": "local_label_reference",
-            "named": true
-          },
-          {
-            "type": "local_numeric_label_reference",
-            "named": true
-          },
-          {
             "type": "macro_variable",
+            "named": true
+          },
+          {
+            "type": "numeric_label_reference",
             "named": true
           },
           {
@@ -817,14 +788,6 @@
           "named": true
         },
         {
-          "type": "global_label",
-          "named": true
-        },
-        {
-          "type": "global_numeric_label",
-          "named": true
-        },
-        {
           "type": "hexadecimal",
           "named": true
         },
@@ -833,15 +796,15 @@
           "named": true
         },
         {
-          "type": "local_label",
-          "named": true
-        },
-        {
-          "type": "local_numeric_label",
+          "type": "label",
           "named": true
         },
         {
           "type": "macro_label",
+          "named": true
+        },
+        {
+          "type": "numeric_label",
           "named": true
         },
         {
@@ -936,15 +899,11 @@
             "named": true
           },
           {
-            "type": "local_label_reference",
-            "named": true
-          },
-          {
-            "type": "local_numeric_label_reference",
-            "named": true
-          },
-          {
             "type": "macro_variable",
+            "named": true
+          },
+          {
+            "type": "numeric_label_reference",
             "named": true
           },
           {
@@ -1222,14 +1181,6 @@
     "named": true
   },
   {
-    "type": "global_label",
-    "named": true
-  },
-  {
-    "type": "global_numeric_label",
-    "named": true
-  },
-  {
     "type": "hexadecimal",
     "named": true
   },
@@ -1238,15 +1189,7 @@
     "named": true
   },
   {
-    "type": "local_label",
-    "named": true
-  },
-  {
-    "type": "local_numeric_label",
-    "named": true
-  },
-  {
-    "type": "local_numeric_label_reference",
+    "type": "label",
     "named": true
   },
   {
@@ -1283,6 +1226,14 @@
   },
   {
     "type": "macro_variable",
+    "named": true
+  },
+  {
+    "type": "numeric_label",
+    "named": true
+  },
+  {
+    "type": "numeric_label_reference",
     "named": true
   },
   {

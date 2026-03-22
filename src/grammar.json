@@ -2005,15 +2005,11 @@
           },
           {
             "type": "SYMBOL",
-            "name": "local_label_reference"
-          },
-          {
-            "type": "SYMBOL",
             "name": "symbol"
           },
           {
             "type": "SYMBOL",
-            "name": "local_numeric_label_reference"
+            "name": "numeric_label_reference"
           },
           {
             "type": "SYMBOL",
@@ -2541,6 +2537,14 @@
         "value": ":req"
       }
     },
+    "symbol": {
+      "type": "PREC",
+      "value": -1,
+      "content": {
+        "type": "PATTERN",
+        "value": "[a-zA-Z_.][a-zA-Z0-9_.$@]*"
+      }
+    },
     "_label": {
       "type": "SEQ",
       "members": [
@@ -2549,23 +2553,15 @@
           "members": [
             {
               "type": "SYMBOL",
+              "name": "label"
+            },
+            {
+              "type": "SYMBOL",
               "name": "macro_label"
             },
             {
               "type": "SYMBOL",
-              "name": "global_label"
-            },
-            {
-              "type": "SYMBOL",
-              "name": "local_label"
-            },
-            {
-              "type": "SYMBOL",
-              "name": "global_numeric_label"
-            },
-            {
-              "type": "SYMBOL",
-              "name": "local_numeric_label"
+              "name": "numeric_label"
             }
           ]
         },
@@ -2583,6 +2579,17 @@
         }
       ]
     },
+    "label": {
+      "type": "TOKEN",
+      "content": {
+        "type": "PREC",
+        "value": 2,
+        "content": {
+          "type": "PATTERN",
+          "value": "[a-zA-Z0-9_.][a-zA-Z0-9_.$]*[ \\t]*:"
+        }
+      }
+    },
     "macro_label": {
       "type": "TOKEN",
       "content": {
@@ -2590,56 +2597,7 @@
         "value": "[%$\\\\][0-9a-zA-Z_$\\\\]+(\\\\\\(\\)[0-9a-zA-Z_%$]*)?[ \\t]*:"
       }
     },
-    "local_label": {
-      "type": "TOKEN",
-      "content": {
-        "type": "PREC",
-        "value": 3,
-        "content": {
-          "type": "PATTERN",
-          "value": "\\.L[a-zA-Z0-9_$]*[ \\t]*:"
-        }
-      }
-    },
-    "local_label_reference": {
-      "type": "PREC",
-      "value": 1,
-      "content": {
-        "type": "PATTERN",
-        "value": "\\.L[a-zA-Z0-9_$]*"
-      }
-    },
-    "global_label": {
-      "type": "TOKEN",
-      "content": {
-        "type": "PREC",
-        "value": 2,
-        "content": {
-          "type": "PATTERN",
-          "value": "[a-zA-Z_.][a-zA-Z0-9_.$]*[ \\t]*:"
-        }
-      }
-    },
-    "symbol": {
-      "type": "PREC",
-      "value": -1,
-      "content": {
-        "type": "PATTERN",
-        "value": "[a-zA-Z_.][a-zA-Z0-9_.$@]*"
-      }
-    },
-    "global_numeric_label": {
-      "type": "TOKEN",
-      "content": {
-        "type": "PREC",
-        "value": 2,
-        "content": {
-          "type": "PATTERN",
-          "value": "[1-9][0-9]+[ \\t]*:"
-        }
-      }
-    },
-    "local_numeric_label": {
+    "numeric_label": {
       "type": "TOKEN",
       "content": {
         "type": "PREC",
@@ -2650,7 +2608,7 @@
         }
       }
     },
-    "local_numeric_label_reference": {
+    "numeric_label_reference": {
       "type": "TOKEN",
       "content": {
         "type": "PATTERN",
