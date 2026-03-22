@@ -211,7 +211,7 @@ foo
 (program
   (instruction
     (instruction_mnemonic))
-  (global_label))
+  (label))
 
 ==========
 [instructions/whitespace] instruction followed by indented instruction

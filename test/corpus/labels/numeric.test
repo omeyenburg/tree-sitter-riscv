@@ -5,7 +5,7 @@
 ---
 
 (program
-  (global_numeric_label))
+  (label))
 
 ==========
 [labels/numeric] local numeric label
@@ -14,7 +14,7 @@
 ---
 
 (program
-  (local_numeric_label))
+  (numeric_label))
 
 ==========
 [labels/numeric] local numeric label forward reference
@@ -26,7 +26,7 @@ foo 1f
   (instruction
     mnemonic: (instruction_mnemonic)
     operands: (operands
-      (local_numeric_label_reference))))
+      (numeric_label_reference))))
 
 ==========
 [labels/numeric] local numeric label backward reference
@@ -38,4 +38,4 @@ foo 1b
   (instruction
     mnemonic: (instruction_mnemonic)
     operands: (operands
-      (local_numeric_label_reference))))
+      (numeric_label_reference))))
