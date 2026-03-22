@@ -39,7 +39,7 @@ Instruction mnemonic (e.g., `add`, `lw`, `beq`).
 ### Operands
 List of operands separated by commas or whitespace.
 
-Operand types: `(register)`, `(decimal)`, `(hexadecimal)`, `(octal)`, `(float)`, `(symbol)`, `(macro_variable)`, `(string)`, `(binary_expression)`, `(unary_expression)`, `(parenthesized_expression)`
+Operand types: `(register)`, `(decimal)`, `(hexadecimal)`, `(octal)`, `(float)`, `(char)`, `(symbol)`, `(macro_variable)`, `(string)`, `(binary_expression)`, `(unary_expression)`, `(parenthesized_expression)`
 
 ---
 
@@ -93,8 +93,8 @@ Macro mnemonic: `.macro`
 
 ## Labels
 
-### Global label
-Standard global labels.
+### Label
+Simple labels.
 
 **Pattern:** `[a-zA-Z_.][a-zA-Z0-9_.$]*:`
 
@@ -104,38 +104,10 @@ _start:
 ```
 
 ```scheme
-(global_label)
+(label)
 ```
 
-### Local label
-Local labels starting with dot.
-
-**Pattern:** `\.[A-Z][a-zA-Z0-9_]*:`
-
-**Example:**
-```asm
-.L1:
-```
-
-```scheme
-(local_label)
-```
-
-### Global numeric label
-Multi-digit numeric labels.
-
-**Pattern:** `[1-9][0-9]+:`
-
-**Example:**
-```asm
-10:
-```
-
-```scheme
-(global_numeric_label)
-```
-
-### Local numeric label
+### Numeric label
 Single-digit numeric labels.
 
 **Pattern:** `[0-9]:`
@@ -146,10 +118,10 @@ Single-digit numeric labels.
 ```
 
 ```scheme
-(local_numeric_label)
+(numeric_label)
 ```
 
-### Local numeric label reference
+### Numeric label reference
 Reference to numeric labels.
 
 **Examples:**
@@ -157,7 +129,7 @@ Reference to numeric labels.
 - `1f` - forward reference (next label 1:)
 
 ```scheme
-(local_numeric_label_reference)
+(numeric_label_reference)
 ```
 
 ---
@@ -394,4 +366,88 @@ main:
 1:  bne $t0, $zero, 1b      # Branch loop
     li $v0, 10
     syscall
+```
+
+Output tree:
+
+```scheme
+(program
+  (directive
+    mnemonic: (control_mnemonic))
+  (label)
+  (directive
+    mnemonic: (integer_mnemonic)
+    operands: (directive_operands
+      (decimal)
+      (decimal)
+      (decimal)
+      (decimal)
+      (decimal)))
+  (directive
+    mnemonic: (control_mnemonic))
+  (directive
+    mnemonic: (control_mnemonic)
+    operands: (directive_operands
+      (symbol)))
+  (label)
+  (instruction
+    mnemonic: (instruction_mnemonic)
+    operands: (operands
+      (register)
+      (decimal)))
+  (comment)
+  (instruction
+    mnemonic: (instruction_mnemonic)
+    operands: (operands
+      (register)
+      (register)
+      (register)))
+  (comment)
+  (instruction
+    mnemonic: (instruction_mnemonic)
+    operands: (operands
+      (register)
+      (register)
+      (binary_expression
+        left: (decimal)
+        operator: (additive_operator)
+        right: (decimal))))
+  (comment)
+  (instruction
+    mnemonic: (instruction_mnemonic)
+    operands: (operands
+      (register)
+      (parenthesized_expression
+        head: (binary_expression
+          left: (decimal)
+          operator: (additive_operator)
+          right: (decimal))
+        arguments: (operands
+          (register)))))
+  (comment)
+  (instruction
+    mnemonic: (instruction_mnemonic)
+    operands: (operands
+      (register)
+      (register)
+      (binary_expression
+        left: (decimal)
+        operator: (multiplicative_operator)
+        right: (decimal))))
+  (comment)
+  (numeric_label)
+  (instruction
+    mnemonic: (instruction_mnemonic)
+    operands: (operands
+      (register)
+      (register)
+      (numeric_label_reference)))
+  (comment)
+  (instruction
+    mnemonic: (instruction_mnemonic)
+    operands: (operands
+      (register)
+      (decimal)))
+  (instruction
+    mnemonic: (instruction_mnemonic)))
 ```
